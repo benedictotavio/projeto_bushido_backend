@@ -12,8 +12,6 @@ import br.org.institutobushido.enums.Turno;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Document(collection = "alunos")
 public class Aluno {
 
