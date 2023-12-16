@@ -1,4 +1,4 @@
-package br.org.institutobushido.institutobushido;
+package br.org.institutobushido;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,5 +8,4 @@ public class InstitutobushidoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(InstitutobushidoApplication.class, args);
 	}
-
 }
