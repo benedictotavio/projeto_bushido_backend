@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TransportType;
 import br.org.institutobushido.enums.Turno;
-import br.org.institutobushido.model.Aluno;
+import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
 @SpringBootTest
@@ -45,9 +45,9 @@ class AlunoServicesTest {
         // Act
         Aluno result = alunoServices.adicionarAluno(aluno);
 
+        // Assert
         assertNotNull(result);
         assertEquals(aluno, result);
-
         verify(alunoRepositorio, times(1)).save(aluno);
     }
 
