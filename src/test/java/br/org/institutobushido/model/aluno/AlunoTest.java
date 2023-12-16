@@ -65,7 +65,7 @@ class AlunoTest {
     }
 
     @Test
-    @DisplayName("Deve alterar o status se o aluno tem mais de 5 falta")
+    @DisplayName("Deve alterar o status se o aluno tem mais de 5 faltas")
     void deveAlterarStatusSeTiverMaisDeCincoFaltas() {
         // Arrange
         aluno.setStatus(true);
