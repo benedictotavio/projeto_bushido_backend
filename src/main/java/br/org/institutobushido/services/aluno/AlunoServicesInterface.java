@@ -1,7 +1,7 @@
 package br.org.institutobushido.services.aluno;
 
-import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 
 public interface AlunoServicesInterface {
-    Aluno adicionarAluno(Aluno aluno);
+    AlunoDTORequest adicionarAluno(AlunoDTORequest alunoDTORequest);
 }

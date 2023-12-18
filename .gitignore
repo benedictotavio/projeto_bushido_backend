@@ -23,3 +23,6 @@ target/
 .vscode/
 .env
 *.http
+
+target
+.metadata
