@@ -1,11 +1,10 @@
-package br.org.institutobushido.services;
+package br.org.institutobushido.services.aluno;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.org.institutobushido.model.Aluno;
+import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.repositories.AlunoRepositorio;
-import br.org.institutobushido.services.interfaces.AlunoServicesInterface;
 
 @Service
 public class AlunoServices implements AlunoServicesInterface {

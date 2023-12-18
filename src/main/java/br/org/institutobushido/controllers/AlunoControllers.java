@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.org.institutobushido.model.Aluno;
-import br.org.institutobushido.services.AlunoServices;
+import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.services.aluno.AlunoServices;
 
 @RestController
 @RequestMapping("api/V1/aluno")

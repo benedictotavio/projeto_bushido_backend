@@ -1,19 +1,21 @@
-package br.org.institutobushido.model;
+package br.org.institutobushido.model.aluno;
 
 import java.util.Date;
 
-import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TransportType;
 import br.org.institutobushido.enums.Turno;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "alunos")
-public class Aluno {
+public class Aluno implements AlunoInterface {
 
     private String nome;
     private boolean bolsaFamilia;
@@ -34,10 +36,24 @@ public class Aluno {
     private int faltas;
     private boolean status;
 
-    private void atribuirFaltasNoStatus(){
-        // TODO
+    @Override
+    public void adicionarFalta() {
+        this.faltas = (getFaltas() + 1);
     }
 
+    @Override
+    public void retiraFalta() {
+        if (this.faltas > 0) {
+            this.faltas = getFaltas() - 1;
+        }
+    }
+
+    @Override
+    public boolean checarStatus() {
+        if (this.getFaltas() >= 5) {
+            this.setStatus(false);
+            return false;
+        }
+        return true;
+    }
 }
-
-
