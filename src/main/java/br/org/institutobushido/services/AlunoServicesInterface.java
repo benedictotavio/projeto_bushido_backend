@@ -1,4 +1,4 @@
-package br.org.institutobushido.services.interfaces;
+package br.org.institutobushido.services;
 
 import br.org.institutobushido.model.aluno.Aluno;
 
