@@ -1,6 +1,6 @@
 package br.org.institutobushido.enums;
 
-public enum TransportType {
+public enum TipoDeTransporte {
     PEDESTRE,
     BICICLETA,
     MOTO,
