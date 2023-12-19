@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mongodb.MongoException;
+
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
+import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.services.aluno.AlunoServices;
 
 @RestController
@@ -24,12 +27,11 @@ public class AlunoControllers {
     @PostMapping()
     ResponseEntity<?> adicionarAluno(@RequestBody AlunoDTORequest alunoDTORequest) {
         try {
-            AlunoDTORequest novoAluno = alunoServices.adicionarAluno(alunoDTORequest);
+            AlunoDTOResponse novoAluno = alunoServices.adicionarAluno(alunoDTORequest);
             // Alterar URI
             return ResponseEntity.created(URI.create("localhost")).body(novoAluno);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e);
+        } catch (MongoException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

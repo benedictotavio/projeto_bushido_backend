@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import br.org.institutobushido.enums.Imovel;
-import br.org.institutobushido.enums.TransportType;
+import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class Aluno implements AlunoInterface {
     private int contribuintesDaRendaFamiliar;
     private boolean alunoContribuiParaRenda;
     private int rendaFamiliarEmSalariosMinimos;
-    private TransportType transporte;
+    private TipoDeTransporte transporte;
     private boolean vemAcompanhado;
     private Turno turno;
     private Date dataPreenchimento;

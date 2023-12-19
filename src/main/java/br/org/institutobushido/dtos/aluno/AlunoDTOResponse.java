@@ -6,7 +6,7 @@ import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 
-public record AlunoDTORequest(
+public record AlunoDTOResponse(
         String nome,
         boolean bolsaFamilia,
         boolean auxilioBrasil,
