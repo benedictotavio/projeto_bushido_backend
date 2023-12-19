@@ -116,4 +116,9 @@ class AlunoServicesTest {
         assertEquals(aluno.getFaltas(), result.faltas());
         assertEquals(aluno.getCpfResponsavel(), result.cpfResponsavel());
     }
+
+    @Test
+    void deveRetornarMongoDbExceptionQuandoRgJaExistirNoBancoDeDados() {
+        // TODO - fazer teste de rg repetido
+    }
 }
