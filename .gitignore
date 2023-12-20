@@ -3,6 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+.env
+*.http
 
 ### STS ###
 .apt_generated
@@ -21,8 +23,17 @@ target/
 
 ### VS Code ###
 .vscode/
-.env
-*.http
+.history/
 
-target
+### Eclipse ###
 .metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
