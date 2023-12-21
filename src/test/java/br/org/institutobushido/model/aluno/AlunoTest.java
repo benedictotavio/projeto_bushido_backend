@@ -16,7 +16,7 @@ import br.org.institutobushido.enums.Turno;
 
 @SpringBootTest
 class AlunoTest {
-     private Aluno aluno;
+    private Aluno aluno;
 
     @BeforeEach
     void setUp() {
@@ -38,10 +38,10 @@ class AlunoTest {
         aluno.setRg("123456789");
         aluno.setCpfResponsavel("987654321");
         aluno.setFaltas(2);
-        aluno.setStatus(true);
+        aluno.setActive(false);
+        ;
     }
 
-    
     @Test
     @DisplayName("Deve adicionar uma falta ao aluno")
     void deveAdicionarFaltaAoAluno() {
@@ -71,13 +71,13 @@ class AlunoTest {
     @DisplayName("Deve alterar o status se o aluno tem mais de 5 faltas")
     void deveAlterarStatusSeTiverMaisDeCincoFaltas() {
         // Arrange
-        aluno.setStatus(true);
+        aluno.setActive(true);
         aluno.setFaltas(5);
 
         // Act
         aluno.checarStatus();
 
         // Assert
-        assertFalse(aluno.isStatus());
+        assertFalse(aluno.isActive());
     }
 }
