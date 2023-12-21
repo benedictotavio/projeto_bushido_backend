@@ -2,6 +2,7 @@ package br.org.institutobushido.model.aluno;
 
 import java.util.Date;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import br.org.institutobushido.enums.Imovel;
@@ -16,25 +17,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Document(collection = "alunos")
 public class Aluno implements AlunoInterface {
-
     private String nome;
-    private boolean bolsaFamilia;
-    private boolean auxilioBrasil;
+    private boolean bolsaFamilia = false;
+    private boolean auxilioBrasil = false;
     private Imovel imovel;
     private int numerosDePessoasNaCasa;
     private int contribuintesDaRendaFamiliar;
-    private boolean alunoContribuiParaRenda;
+    private boolean alunoContribuiParaRenda = false;
     private int rendaFamiliarEmSalariosMinimos;
     private TipoDeTransporte transporte;
-    private boolean vemAcompanhado;
+    private boolean vemAcompanhado = true;
     private Turno turno;
     private Date dataPreenchimento;
     private String cidade;
     private String estado;
+
+    @Indexed(unique = true, background = true)
     private String rg;
+
     private String cpfResponsavel;
-    private int faltas;
-    private boolean status;
+    private int faltas = 0;
+    private boolean active = true;
 
     @Override
     public void adicionarFalta() {
@@ -51,7 +54,7 @@ public class Aluno implements AlunoInterface {
     @Override
     public boolean checarStatus() {
         if (this.getFaltas() >= 5) {
-            this.setStatus(false);
+            this.setActive(false);
             return false;
         }
         return true;

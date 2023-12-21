@@ -5,4 +5,6 @@ import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 
 public interface AlunoServicesInterface {
     AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest);
+
+    AlunoDTOResponse buscarAlunoPorRg(String rg);
 }

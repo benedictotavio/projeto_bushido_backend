@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,7 +71,7 @@ class AlunoServicesTest {
         aluno.setTurno(alunoDtoRequest.turno());
         aluno.setRg(alunoDtoRequest.rg());
         aluno.setFaltas(alunoDtoRequest.faltas());
-        aluno.setStatus(alunoDtoRequest.status());
+        aluno.setActive(alunoDtoRequest.status());
 
     }
 
@@ -83,7 +84,6 @@ class AlunoServicesTest {
     @Test
     void deveRetornarTrueParaMetodoSaveForChamado() {
         // Arrange
-
         when(alunoRepositorio.save(aluno)).thenReturn(aluno);
 
         // Act
@@ -95,7 +95,7 @@ class AlunoServicesTest {
                 aluno.getRendaFamiliarEmSalariosMinimos(), aluno.getTransporte(), aluno.isVemAcompanhado(),
                 aluno.getTurno(), aluno.getDataPreenchimento(),
                 aluno.getCidade(), aluno.getEstado(), aluno.getRg(), aluno.getCpfResponsavel(),
-                aluno.getFaltas(), aluno.isStatus());
+                aluno.getFaltas(), aluno.isActive());
 
         // Assert
         assertNotNull(result);
@@ -112,13 +112,22 @@ class AlunoServicesTest {
         assertEquals(aluno.getImovel(), result.imovel());
         assertEquals(aluno.getRendaFamiliarEmSalariosMinimos(), result.rendaFamiliarEmSalariosMinimos());
         assertEquals(aluno.getDataPreenchimento(), result.dataPreenchimento());
-        assertEquals(aluno.isStatus(), result.status());
+        assertEquals(aluno.isActive(), result.status());
         assertEquals(aluno.getFaltas(), result.faltas());
         assertEquals(aluno.getCpfResponsavel(), result.cpfResponsavel());
     }
 
     @Test
-    void deveRetornarMongoDbExceptionQuandoRgJaExistirNoBancoDeDados() {
-        // TODO - fazer teste de rg repetido
+    void deveRetornarAlunoPorRgValido() {
+        // Arrange
+        Optional<Aluno> alunoTest = Optional.of(aluno);
+        String validRg = "123456789";
+        when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
+
+        // Act
+        AlunoDTOResponse response = alunoServices.buscarAlunoPorRg(validRg);
+
+        // Assert
+        assertNotNull(response);
     }
 }

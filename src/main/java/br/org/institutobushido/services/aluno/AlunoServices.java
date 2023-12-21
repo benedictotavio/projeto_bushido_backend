@@ -19,9 +19,7 @@ public class AlunoServices implements AlunoServicesInterface {
     private AlunoRepositorio alunoRepositorio;
 
     public AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest) {
-
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByRg(alunoDTORequest.rg());
-
         if (!alunoEncontrado.isPresent()) {
             Aluno aluno = new Aluno();
             aluno.setNome(alunoDTORequest.nome());
@@ -41,7 +39,7 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setTurno(alunoDTORequest.turno());
             aluno.setRg(alunoDTORequest.rg());
             aluno.setFaltas(alunoDTORequest.faltas());
-            aluno.setStatus(alunoDTORequest.status());
+            aluno.setActive(alunoDTORequest.status());
 
             Aluno novoAluno = alunoRepositorio.save(aluno);
 
@@ -52,10 +50,22 @@ public class AlunoServices implements AlunoServicesInterface {
                     novoAluno.isVemAcompanhado(),
                     novoAluno.getTurno(), novoAluno.getDataPreenchimento(),
                     novoAluno.getCidade(), novoAluno.getEstado(), novoAluno.getRg(), novoAluno.getCpfResponsavel(),
-                    novoAluno.getFaltas(), novoAluno.isStatus());
+                    novoAluno.getFaltas(), novoAluno.isActive());
         }
-
         throw new MongoException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
+    }
 
+    @Override
+    public AlunoDTOResponse buscarAlunoPorRg(String rg) {
+        Aluno alunoEncontrado = alunoRepositorio.findByRg(rg)
+                .orElseThrow(() -> new MongoException("Email: " + rg + " não encontrado"));
+
+        return new AlunoDTOResponse(rg, alunoEncontrado.isBolsaFamilia(), alunoEncontrado.isAuxilioBrasil(),
+                alunoEncontrado.getImovel(), alunoEncontrado.getNumerosDePessoasNaCasa(),
+                alunoEncontrado.getContribuintesDaRendaFamiliar(), alunoEncontrado.isAlunoContribuiParaRenda(),
+                alunoEncontrado.getRendaFamiliarEmSalariosMinimos(), alunoEncontrado.getTransporte(),
+                alunoEncontrado.isVemAcompanhado(), alunoEncontrado.getTurno(), alunoEncontrado.getDataPreenchimento(),
+                alunoEncontrado.getCidade(), alunoEncontrado.getEstado(), alunoEncontrado.getRg(),
+                alunoEncontrado.getCpfResponsavel(), alunoEncontrado.getFaltas(), alunoEncontrado.checarStatus());
     }
 }
