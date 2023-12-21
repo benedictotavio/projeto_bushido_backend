@@ -1,12 +1,14 @@
 package br.org.institutobushido.dtos.aluno;
 
 import java.util.Date;
+import java.util.List;
 
 import com.mongodb.lang.NonNull;
 
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
@@ -42,7 +44,8 @@ public record AlunoDTORequest(
         @NonNull() @Pattern(regexp = "^\\d{9}$", message = "Formato de rg inválido!") String rg,
         String cpfResponsavel,
 
-        int faltas,
+        @NotEmpty @NotNull(message = "Reponsaveis são obrigatórios!")
+        List<ResponsavelDTORequest> responsaveis,
 
         boolean status) {
 }

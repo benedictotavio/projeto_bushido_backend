@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
@@ -94,7 +95,7 @@ class AlunoServicesTest {
                 aluno.getContribuintesDaRendaFamiliar(), aluno.isAlunoContribuiParaRenda(),
                 aluno.getRendaFamiliarEmSalariosMinimos(), aluno.getTransporte(), aluno.isVemAcompanhado(),
                 aluno.getTurno(), aluno.getDataPreenchimento(),
-                aluno.getCidade(), aluno.getEstado(), aluno.getRg(), aluno.getCpfResponsavel(),
+                aluno.getCidade(), aluno.getEstado(), aluno.getRg(), new ArrayList<>(),
                 aluno.getFaltas(), aluno.isActive());
 
         // Assert
