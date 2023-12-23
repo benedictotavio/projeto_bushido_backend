@@ -16,46 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class ResponsavelMapperTest {
 
-    private List<Responsavel> responsaveis = new ArrayList<>();
-    private List<ResponsavelDTORequest> responsaveisDTORequest = new ArrayList<>();
-
     @BeforeEach
     void setup(){
-        Responsavel pai = new Responsavel();
-        pai.setFiliacao(FiliacaoResposavel.PAI);
-        pai.setTelefone("9999999");
-        pai.setCpf("987654321");
-        pai.setEmail("pai@pai.com");
-        pai.setNome("Pai");
-
-        Responsavel mae = new Responsavel();
-        mae.setFiliacao(FiliacaoResposavel.MAE);
-        mae.setTelefone("8888888");
-        mae.setCpf("44444444");
-        mae.setEmail("mae@mae.com");
-        mae.setNome("Mãe");
-
-        responsaveis.add(pai);
-        responsaveis.add(mae);
-
-        ResponsavelDTORequest paiDTO = ResponsavelDTORequest.builder()
-                .withFiliacao(FiliacaoResposavel.PAI)
-                .withTelefone("9999999")
-                .withCpf("987654321")
-                .withEmail("pai@pai.com")
-                .withNome("Pai")
-                .build();
-
-        ResponsavelDTORequest maeDTO = ResponsavelDTORequest.builder()
-                .withFiliacao(FiliacaoResposavel.MAE)
-                .withTelefone("8888888")
-                .withCpf("44444444")
-                .withEmail("mae@mae.com")
-                .withNome("Mãe")
-                .build();
-
-        responsaveisDTORequest.add(paiDTO);
-        responsaveisDTORequest.add(maeDTO);
     }
 
     @Test
