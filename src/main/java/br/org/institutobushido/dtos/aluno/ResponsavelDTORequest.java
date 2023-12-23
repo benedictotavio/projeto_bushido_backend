@@ -4,7 +4,9 @@ import br.org.institutobushido.model.aluno.FiliacaoResposavel;
 import com.mongodb.lang.NonNull;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 
+@Builder(setterPrefix = "with")
 public record ResponsavelDTORequest(
     @NotEmpty(message = "Nome é obrigatório!")
     String nome,

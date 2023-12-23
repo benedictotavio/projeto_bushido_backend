@@ -1,12 +1,8 @@
 package br.org.institutobushido.services.aluno;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
-import br.org.institutobushido.model.aluno.Responsavel;
+import br.org.institutobushido.mappers.ResponsavelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +18,9 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Autowired
     private AlunoRepositorio alunoRepositorio;
+
+    @Autowired
+    private ResponsavelMapper responsavelMapper;
 
     public AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest) {
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByRg(alunoDTORequest.rg());
@@ -45,7 +44,7 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setRg(alunoDTORequest.rg());
             aluno.setFaltas(alunoDTORequest.faltas());
             aluno.setActive(alunoDTORequest.status());
-            aluno.setResponsaveis(mapResponsaveisDTOToEntity(alunoDTORequest.responsaveis()));
+            aluno.setResponsaveis(responsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
 
             Aluno novoAluno = alunoRepositorio.save(aluno);
 
@@ -65,30 +64,13 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withCidade(novoAluno.getCidade())
                     .withEstado(novoAluno.getEstado())
                     .withRg(novoAluno.getRg())
-                    .withResponsaveis(mapResponsaveisToDTO(novoAluno.getResponsaveis()))
+                    .withResponsaveis(responsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
                     .withFaltas(novoAluno.getFaltas())
                     .withStatus(novoAluno.isActive())
                     .build();
         }
 
         throw new MongoException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
-    }
-
-    private List<Responsavel> mapResponsaveisDTOToEntity(List<ResponsavelDTORequest> responsaveis) {
-        if (responsaveis == null) {
-            return null;
-        }
-
-        return responsaveis.stream().map(responsavelDTORequest -> {
-            Responsavel responsavel = new Responsavel();
-            responsavel.setNome(responsavelDTORequest.nome);
-            responsavel.setCpf(responsavelDTORequest.cpf);
-            responsavel.setEmail(responsavelDTORequest.email);
-            responsavel.setTelefone(responsavelDTORequest.telefone);
-            responsavel.setFiliacao(responsavelDTORequest.filiacao);
-
-            return responsavel;
-        }).collect(Collectors.toList());
     }
 
     @Override
@@ -112,20 +94,9 @@ public class AlunoServices implements AlunoServicesInterface {
                 .withCidade(alunoEncontrado.getCidade())
                 .withEstado(alunoEncontrado.getEstado())
                 .withRg(alunoEncontrado.getRg())
-                .withResponsaveis(mapResponsaveisToDTO(alunoEncontrado.getResponsaveis()))
+                .withResponsaveis(responsavelMapper.mapToResponsaveisDTOResponse(alunoEncontrado.getResponsaveis()))
                 .withFaltas(alunoEncontrado.getFaltas())
                 .withStatus(alunoEncontrado.checarStatus())
                 .build();
-    }
-
-    private List<ResponsavelDTOResponse> mapResponsaveisToDTO(List<Responsavel> responsaveis) {
-        return responsaveis.stream().map(responsavel -> ResponsavelDTOResponse.builder()
-                    .withNome(responsavel.getNome())
-                    .withCpf(responsavel.getCpf())
-                    .withEmail(responsavel.getEmail())
-                    .withTelefone(responsavel.getTelefone())
-                    .withFiliacao(responsavel.getFiliacao().name())
-                    .build()
-                ).collect(Collectors.toList());
     }
 }
