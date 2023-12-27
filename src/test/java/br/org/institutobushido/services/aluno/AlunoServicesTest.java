@@ -6,9 +6,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
+import br.org.institutobushido.model.aluno.FiliacaoResposavel;
+import br.org.institutobushido.model.aluno.Responsavel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -27,6 +32,8 @@ import br.org.institutobushido.repositories.AlunoRepositorio;
 class AlunoServicesTest {
 
     private Aluno aluno;
+    private List<Responsavel> responsaveis = new ArrayList<>();
+    private List<ResponsavelDTORequest> responsaveisDTORequest = new ArrayList<>();
     private AlunoDTORequest alunoDtoRequest;
     private AlunoDTOResponse alunoDtoResponse;
 
@@ -34,25 +41,26 @@ class AlunoServicesTest {
     void setUp() {
         aluno = new Aluno();
 
-        alunoDtoRequest = new AlunoDTORequest(
-                "João Algo",
-                true,
-                false,
-                Imovel.CEDIDO,
-                4,
-                2,
-                true,
-                3,
-                TipoDeTransporte.ONIBUS,
-                false,
-                Turno.NOITE,
-                new Date(),
-                "CidadeTeste",
-                "EstadoTeste",
-                "123456789",
-                "98765432100",
-                2,
-                false);
+        alunoDtoRequest = AlunoDTORequest.builder()
+                .withNome("João Algo")
+                .withBolsaFamilia(true)
+                .withAuxilioBrasil(false)
+                .withImovel(Imovel.CEDIDO)
+                .withNumerosDePessoasNaCasa(4)
+                .withContribuintesDaRendaFamiliar(2)
+                .withAlunoContribuiParaRenda(true)
+                .withRendaFamiliarEmSalariosMinimos(3)
+                .withTransporte(TipoDeTransporte.ONIBUS)
+                .withVemAcompanhado(false)
+                .withTurno(Turno.NOITE)
+                .withDataPreenchimento(new Date())
+                .withCidade("CidadeTeste")
+                .withEstado("EstadoTeste")
+                .withRg("123456789")
+                .withResponsaveis(responsaveisDTORequest)
+                .withFaltas(2)
+                .withStatus(false)
+                .build();
 
         aluno.setNome(alunoDtoRequest.nome());
         aluno.setBolsaFamilia(alunoDtoRequest.bolsaFamilia());
@@ -60,7 +68,6 @@ class AlunoServicesTest {
         aluno.setAuxilioBrasil(alunoDtoRequest.auxilioBrasil());
         aluno.setNumerosDePessoasNaCasa(alunoDtoRequest.numerosDePessoasNaCasa());
         aluno.setCidade(alunoDtoRequest.cidade());
-        aluno.setCpfResponsavel(alunoDtoRequest.cpfResponsavel());
         aluno.setDataPreenchimento(alunoDtoRequest.dataPreenchimento());
         aluno.setContribuintesDaRendaFamiliar(alunoDtoRequest.contribuintesDaRendaFamiliar());
         aluno.setEstado(alunoDtoRequest.estado());
@@ -72,7 +79,7 @@ class AlunoServicesTest {
         aluno.setRg(alunoDtoRequest.rg());
         aluno.setFaltas(alunoDtoRequest.faltas());
         aluno.setActive(alunoDtoRequest.status());
-
+        aluno.setResponsaveis(responsaveis);
     }
 
     @Mock
@@ -89,13 +96,26 @@ class AlunoServicesTest {
         // Act
         AlunoDTOResponse result = alunoServices.adicionarAluno(alunoDtoRequest);
 
-        alunoDtoResponse = new AlunoDTOResponse(aluno.getNome(), aluno.isBolsaFamilia(), aluno.isAuxilioBrasil(),
-                aluno.getImovel(), aluno.getNumerosDePessoasNaCasa(),
-                aluno.getContribuintesDaRendaFamiliar(), aluno.isAlunoContribuiParaRenda(),
-                aluno.getRendaFamiliarEmSalariosMinimos(), aluno.getTransporte(), aluno.isVemAcompanhado(),
-                aluno.getTurno(), aluno.getDataPreenchimento(),
-                aluno.getCidade(), aluno.getEstado(), aluno.getRg(), aluno.getCpfResponsavel(),
-                aluno.getFaltas(), aluno.isActive());
+        alunoDtoResponse = AlunoDTOResponse.builder()
+                .withNome(aluno.getNome())
+                .withBolsaFamilia(aluno.isBolsaFamilia())
+                .withAuxilioBrasil(aluno.isAuxilioBrasil())
+                .withImovel(aluno.getImovel())
+                .withNumerosDePessoasNaCasa(aluno.getNumerosDePessoasNaCasa())
+                .withContribuintesDaRendaFamiliar(aluno.getContribuintesDaRendaFamiliar())
+                .withAlunoContribuiParaRenda(aluno.isAlunoContribuiParaRenda())
+                .withRendaFamiliarEmSalariosMinimos(aluno.getRendaFamiliarEmSalariosMinimos())
+                .withTransporte(aluno.getTransporte())
+                .withVemAcompanhado(aluno.isVemAcompanhado())
+                .withTurno(aluno.getTurno())
+                .withDataPreenchimento(aluno.getDataPreenchimento())
+                .withCidade(aluno.getCidade())
+                .withEstado(aluno.getEstado())
+                .withRg(aluno.getRg())
+                .withResponsaveis(new ArrayList<>())
+                .withFaltas(aluno.getFaltas())
+                .withStatus(aluno.isActive())
+                .build();
 
         // Assert
         assertNotNull(result);
@@ -114,7 +134,6 @@ class AlunoServicesTest {
         assertEquals(aluno.getDataPreenchimento(), result.dataPreenchimento());
         assertEquals(aluno.isActive(), result.status());
         assertEquals(aluno.getFaltas(), result.faltas());
-        assertEquals(aluno.getCpfResponsavel(), result.cpfResponsavel());
     }
 
     @Test

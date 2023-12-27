@@ -2,6 +2,7 @@ package br.org.institutobushido.services.aluno;
 
 import java.util.Optional;
 
+import br.org.institutobushido.mappers.ResponsavelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,12 @@ public class AlunoServices implements AlunoServicesInterface {
     @Autowired
     private AlunoRepositorio alunoRepositorio;
 
+    @Autowired
+    private ResponsavelMapper responsavelMapper;
+
     public AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest) {
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByRg(alunoDTORequest.rg());
+
         if (!alunoEncontrado.isPresent()) {
             Aluno aluno = new Aluno();
             aluno.setNome(alunoDTORequest.nome());
@@ -28,7 +33,6 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setAuxilioBrasil(alunoDTORequest.auxilioBrasil());
             aluno.setNumerosDePessoasNaCasa(alunoDTORequest.numerosDePessoasNaCasa());
             aluno.setCidade(alunoDTORequest.cidade());
-            aluno.setCpfResponsavel(alunoDTORequest.cpfResponsavel());
             aluno.setDataPreenchimento(alunoDTORequest.dataPreenchimento());
             aluno.setContribuintesDaRendaFamiliar(alunoDTORequest.contribuintesDaRendaFamiliar());
             aluno.setEstado(alunoDTORequest.estado());
@@ -40,18 +44,32 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setRg(alunoDTORequest.rg());
             aluno.setFaltas(alunoDTORequest.faltas());
             aluno.setActive(alunoDTORequest.status());
+            aluno.setResponsaveis(responsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
 
             Aluno novoAluno = alunoRepositorio.save(aluno);
 
-            return new AlunoDTOResponse(novoAluno.getNome(), novoAluno.isBolsaFamilia(), novoAluno.isAuxilioBrasil(),
-                    novoAluno.getImovel(), novoAluno.getNumerosDePessoasNaCasa(),
-                    novoAluno.getContribuintesDaRendaFamiliar(), novoAluno.isAlunoContribuiParaRenda(),
-                    novoAluno.getRendaFamiliarEmSalariosMinimos(), novoAluno.getTransporte(),
-                    novoAluno.isVemAcompanhado(),
-                    novoAluno.getTurno(), novoAluno.getDataPreenchimento(),
-                    novoAluno.getCidade(), novoAluno.getEstado(), novoAluno.getRg(), novoAluno.getCpfResponsavel(),
-                    novoAluno.getFaltas(), novoAluno.isActive());
+            return AlunoDTOResponse.builder()
+                    .withNome(novoAluno.getNome())
+                    .withBolsaFamilia(novoAluno.isBolsaFamilia())
+                    .withAuxilioBrasil(novoAluno.isAuxilioBrasil())
+                    .withImovel(novoAluno.getImovel())
+                    .withNumerosDePessoasNaCasa(novoAluno.getNumerosDePessoasNaCasa())
+                    .withContribuintesDaRendaFamiliar(novoAluno.getContribuintesDaRendaFamiliar())
+                    .withAlunoContribuiParaRenda(novoAluno.isAlunoContribuiParaRenda())
+                    .withRendaFamiliarEmSalariosMinimos(novoAluno.getRendaFamiliarEmSalariosMinimos())
+                    .withTransporte(novoAluno.getTransporte())
+                    .withVemAcompanhado(novoAluno.isVemAcompanhado())
+                    .withTurno(novoAluno.getTurno())
+                    .withDataPreenchimento(novoAluno.getDataPreenchimento())
+                    .withCidade(novoAluno.getCidade())
+                    .withEstado(novoAluno.getEstado())
+                    .withRg(novoAluno.getRg())
+                    .withResponsaveis(responsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
+                    .withFaltas(novoAluno.getFaltas())
+                    .withStatus(novoAluno.isActive())
+                    .build();
         }
+
         throw new MongoException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
     }
 
@@ -60,12 +78,25 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno alunoEncontrado = alunoRepositorio.findByRg(rg)
                 .orElseThrow(() -> new MongoException("Email: " + rg + " não encontrado"));
 
-        return new AlunoDTOResponse(rg, alunoEncontrado.isBolsaFamilia(), alunoEncontrado.isAuxilioBrasil(),
-                alunoEncontrado.getImovel(), alunoEncontrado.getNumerosDePessoasNaCasa(),
-                alunoEncontrado.getContribuintesDaRendaFamiliar(), alunoEncontrado.isAlunoContribuiParaRenda(),
-                alunoEncontrado.getRendaFamiliarEmSalariosMinimos(), alunoEncontrado.getTransporte(),
-                alunoEncontrado.isVemAcompanhado(), alunoEncontrado.getTurno(), alunoEncontrado.getDataPreenchimento(),
-                alunoEncontrado.getCidade(), alunoEncontrado.getEstado(), alunoEncontrado.getRg(),
-                alunoEncontrado.getCpfResponsavel(), alunoEncontrado.getFaltas(), alunoEncontrado.checarStatus());
+        return AlunoDTOResponse.builder()
+                .withNome(alunoEncontrado.getNome())
+                .withBolsaFamilia(alunoEncontrado.isBolsaFamilia())
+                .withAuxilioBrasil(alunoEncontrado.isAuxilioBrasil())
+                .withImovel(alunoEncontrado.getImovel())
+                .withNumerosDePessoasNaCasa(alunoEncontrado.getNumerosDePessoasNaCasa())
+                .withContribuintesDaRendaFamiliar(alunoEncontrado.getContribuintesDaRendaFamiliar())
+                .withAlunoContribuiParaRenda(alunoEncontrado.isAlunoContribuiParaRenda())
+                .withRendaFamiliarEmSalariosMinimos(alunoEncontrado.getRendaFamiliarEmSalariosMinimos())
+                .withTransporte(alunoEncontrado.getTransporte())
+                .withVemAcompanhado(alunoEncontrado.isVemAcompanhado())
+                .withTurno(alunoEncontrado.getTurno())
+                .withDataPreenchimento(alunoEncontrado.getDataPreenchimento())
+                .withCidade(alunoEncontrado.getCidade())
+                .withEstado(alunoEncontrado.getEstado())
+                .withRg(alunoEncontrado.getRg())
+                .withResponsaveis(responsavelMapper.mapToResponsaveisDTOResponse(alunoEncontrado.getResponsaveis()))
+                .withFaltas(alunoEncontrado.getFaltas())
+                .withStatus(alunoEncontrado.checarStatus())
+                .build();
     }
 }

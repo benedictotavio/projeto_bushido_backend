@@ -1,15 +1,19 @@
 package br.org.institutobushido.dtos.aluno;
 
 import java.util.Date;
+import java.util.List;
 
 import com.mongodb.lang.NonNull;
 
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 
+@Builder(setterPrefix = "with")
 public record AlunoDTORequest(
         @NotNull(message = "Nome é obrigatório") String nome,
 
@@ -40,7 +44,9 @@ public record AlunoDTORequest(
         String estado,
 
         @NonNull() @Pattern(regexp = "^\\d{9}$", message = "Formato de rg inválido!") String rg,
-        String cpfResponsavel,
+
+        @NotEmpty @NotNull(message = "Insira pelo menos um Responsavel!")
+        List<ResponsavelDTORequest> responsaveis,
 
         int faltas,
 

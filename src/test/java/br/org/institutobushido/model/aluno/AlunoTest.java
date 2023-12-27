@@ -36,7 +36,6 @@ class AlunoTest {
         aluno.setCidade("Example City");
         aluno.setEstado("Example State");
         aluno.setRg("123456789");
-        aluno.setCpfResponsavel("987654321");
         aluno.setFaltas(2);
         aluno.setActive(false);
         ;
