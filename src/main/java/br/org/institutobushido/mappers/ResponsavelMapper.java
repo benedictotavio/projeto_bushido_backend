@@ -1,17 +1,21 @@
 package br.org.institutobushido.mappers;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
 import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
 import br.org.institutobushido.model.aluno.Responsavel;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class ResponsavelMapper {
 
-    public static Responsavel mapToResponsavel(ResponsavelDTORequest responsavelDTORequest){
+    private ResponsavelMapper() {}
+
+    public static Responsavel mapToResponsavel(ResponsavelDTORequest responsavelDTORequest) {
         if (responsavelDTORequest == null) {
             return null;
         }
@@ -27,7 +31,7 @@ public class ResponsavelMapper {
         return responsavel;
     }
 
-    public static ResponsavelDTOResponse mapToResponsavelDTOResponse(Responsavel responsavel){
+    public static ResponsavelDTOResponse mapToResponsavelDTOResponse(Responsavel responsavel) {
         if (responsavel == null) {
             return null;
         }
@@ -43,19 +47,19 @@ public class ResponsavelMapper {
 
     public static List<ResponsavelDTOResponse> mapToResponsaveisDTOResponse(List<Responsavel> responsaveis) {
         if (responsaveis == null) {
-            return null;
+            return Collections.emptyList();
         }
 
-        return responsaveis.stream().map(responsavel -> mapToResponsavelDTOResponse(responsavel))
+        return responsaveis.stream().map(ResponsavelMapper::mapToResponsavelDTOResponse)
                 .collect(Collectors.toList());
     }
 
     public static List<Responsavel> mapToResponsaveis(List<ResponsavelDTORequest> responsaveis) {
         if (responsaveis == null) {
-            return null;
+            return Collections.emptyList();
         }
 
-        return responsaveis.stream().map(responsavelDTORequest -> mapToResponsavel(responsavelDTORequest))
+        return responsaveis.stream().map(ResponsavelMapper::mapToResponsavel)
                 .collect(Collectors.toList());
     }
 }

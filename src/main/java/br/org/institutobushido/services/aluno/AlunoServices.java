@@ -19,9 +19,6 @@ public class AlunoServices implements AlunoServicesInterface {
     @Autowired
     private AlunoRepositorio alunoRepositorio;
 
-    @Autowired
-    private ResponsavelMapper responsavelMapper;
-
     public AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest) {
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByRg(alunoDTORequest.rg());
 
@@ -44,7 +41,7 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setRg(alunoDTORequest.rg());
             aluno.setFaltas(alunoDTORequest.faltas());
             aluno.setActive(alunoDTORequest.status());
-            aluno.setResponsaveis(responsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
+            aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
 
             Aluno novoAluno = alunoRepositorio.save(aluno);
 
@@ -64,7 +61,7 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withCidade(novoAluno.getCidade())
                     .withEstado(novoAluno.getEstado())
                     .withRg(novoAluno.getRg())
-                    .withResponsaveis(responsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
+                    .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
                     .withFaltas(novoAluno.getFaltas())
                     .withStatus(novoAluno.isActive())
                     .build();
@@ -94,7 +91,7 @@ public class AlunoServices implements AlunoServicesInterface {
                 .withCidade(alunoEncontrado.getCidade())
                 .withEstado(alunoEncontrado.getEstado())
                 .withRg(alunoEncontrado.getRg())
-                .withResponsaveis(responsavelMapper.mapToResponsaveisDTOResponse(alunoEncontrado.getResponsaveis()))
+                .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(alunoEncontrado.getResponsaveis()))
                 .withFaltas(alunoEncontrado.getFaltas())
                 .withStatus(alunoEncontrado.checarStatus())
                 .build();

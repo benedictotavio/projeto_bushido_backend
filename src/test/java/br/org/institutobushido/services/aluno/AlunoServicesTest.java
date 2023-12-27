@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
-import br.org.institutobushido.model.aluno.FiliacaoResposavel;
 import br.org.institutobushido.model.aluno.Responsavel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
