@@ -11,21 +11,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
-import br.org.institutobushido.model.aluno.FiliacaoResposavel;
-import br.org.institutobushido.model.aluno.Responsavel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+
+import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.model.aluno.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
 @SpringBootTest
@@ -84,6 +87,9 @@ class AlunoServicesTest {
 
     @Mock
     private AlunoRepositorio alunoRepositorio;
+
+    @Mock
+    private MongoTemplate mongoTemplate;
 
     @InjectMocks
     private AlunoServices alunoServices;
@@ -148,5 +154,18 @@ class AlunoServicesTest {
 
         // Assert
         assertNotNull(response);
+    }
+
+    @Test
+    void deveRetornarAlunoSeForEncontradoPorRg() {
+        String rg = "43";
+        Aluno aluno = new Aluno();
+        aluno.setRg(rg);
+        Mockito.when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
+
+        Aluno result = alunoRepositorio.findByRg(rg)
+                .orElseThrow(() -> new MongoException("Email: " + rg + " não encontrado"));
+
+        assertEquals(aluno, result);
     }
 }

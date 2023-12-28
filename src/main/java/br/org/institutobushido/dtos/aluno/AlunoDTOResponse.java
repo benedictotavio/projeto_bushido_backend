@@ -7,7 +7,6 @@ import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import lombok.Builder;
-import lombok.Data;
 
 @Builder(setterPrefix = "with")
 public record AlunoDTOResponse(

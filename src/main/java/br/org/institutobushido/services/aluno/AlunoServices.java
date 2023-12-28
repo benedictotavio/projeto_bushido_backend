@@ -2,14 +2,18 @@ package br.org.institutobushido.services.aluno;
 
 import java.util.Optional;
 
-import br.org.institutobushido.mappers.ResponsavelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
@@ -20,8 +24,9 @@ public class AlunoServices implements AlunoServicesInterface {
     private AlunoRepositorio alunoRepositorio;
 
     @Autowired
-    private ResponsavelMapper responsavelMapper;
+    private MongoTemplate mongoTemplate;
 
+    @Override
     public AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest) {
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByRg(alunoDTORequest.rg());
 
@@ -44,7 +49,7 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setRg(alunoDTORequest.rg());
             aluno.setFaltas(alunoDTORequest.faltas());
             aluno.setActive(alunoDTORequest.status());
-            aluno.setResponsaveis(responsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
+            aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
 
             Aluno novoAluno = alunoRepositorio.save(aluno);
 
@@ -64,7 +69,7 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withCidade(novoAluno.getCidade())
                     .withEstado(novoAluno.getEstado())
                     .withRg(novoAluno.getRg())
-                    .withResponsaveis(responsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
+                    .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
                     .withFaltas(novoAluno.getFaltas())
                     .withStatus(novoAluno.isActive())
                     .build();
@@ -75,8 +80,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Override
     public AlunoDTOResponse buscarAlunoPorRg(String rg) {
-        Aluno alunoEncontrado = alunoRepositorio.findByRg(rg)
-                .orElseThrow(() -> new MongoException("Email: " + rg + " não encontrado"));
+        Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
 
         return AlunoDTOResponse.builder()
                 .withNome(alunoEncontrado.getNome())
@@ -94,9 +98,38 @@ public class AlunoServices implements AlunoServicesInterface {
                 .withCidade(alunoEncontrado.getCidade())
                 .withEstado(alunoEncontrado.getEstado())
                 .withRg(alunoEncontrado.getRg())
-                .withResponsaveis(responsavelMapper.mapToResponsaveisDTOResponse(alunoEncontrado.getResponsaveis()))
+                .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(alunoEncontrado.getResponsaveis()))
                 .withFaltas(alunoEncontrado.getFaltas())
                 .withStatus(alunoEncontrado.checarStatus())
                 .build();
+    }
+
+    @Override
+    public int adicionarFaltaDoAluno(String rg) {
+        Query query = new Query();
+        Aluno aluno = encontrarAlunoPorRg(rg);
+        aluno.adicionarFalta();
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update();
+        update.set("faltas", aluno.getFaltas());
+        mongoTemplate.findAndModify(query, update, Aluno.class);
+        return aluno.getFaltas();
+    }
+
+    @Override
+    public int retirarFaltaDoAluno(String rg) {
+        Query query = new Query();
+        Aluno aluno = encontrarAlunoPorRg(rg);
+        aluno.retiraFalta();
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update();
+        update.set("faltas", aluno.getFaltas());
+        mongoTemplate.findAndModify(query, update, Aluno.class);
+        return aluno.getFaltas();
+    }
+
+    protected Aluno encontrarAlunoPorRg(String rgAluno) {
+        return alunoRepositorio.findByRg(rgAluno)
+                .orElseThrow(() -> new MongoException("Email: " + rgAluno + " não encontrado"));
     }
 }
