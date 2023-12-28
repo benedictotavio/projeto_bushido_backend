@@ -1,5 +1,6 @@
 package br.org.institutobushido.model.aluno;
 
+import br.org.institutobushido.enums.FiliacaoResposavel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
