@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,7 +49,7 @@ public class AlunoControllers {
         }
     }
 
-    @PostMapping("adicionarFalta/{rg}")
+    @PatchMapping("adicionarFalta/{rg}")
     ResponseEntity<String> adicionarFalta(@PathVariable String rg) {
         try {
             int faltas = alunoServices.adicionarFaltaDoAluno(rg);
@@ -58,7 +59,7 @@ public class AlunoControllers {
         }
     }
 
-    @PostMapping("retirarFalta/{rg}")
+    @PatchMapping("retirarFalta/{rg}")
     ResponseEntity<String> retirarFalta(@PathVariable String rg) {
         try {
             int faltas = alunoServices.retirarFaltaDoAluno(rg);
