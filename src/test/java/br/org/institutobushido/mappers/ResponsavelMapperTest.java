@@ -2,7 +2,7 @@ package br.org.institutobushido.mappers;
 
 import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
-import br.org.institutobushido.model.aluno.FiliacaoResposavel;
+import br.org.institutobushido.enums.FiliacaoResposavel;
 import br.org.institutobushido.model.aluno.Responsavel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,14 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class ResponsavelMapperTest {
+class ResponsavelMapperTest {
 
     @BeforeEach
     void setup(){
     }
 
     @Test
-    public void deveMapearResponsavelDTORequestParaEntidade(){
+    void deveMapearResponsavelDTORequestParaEntidade(){
         ResponsavelDTORequest paiDTO = ResponsavelDTORequest.builder()
                 .withFiliacao(FiliacaoResposavel.PAI)
                 .withTelefone("9999999")
@@ -37,7 +37,7 @@ public class ResponsavelMapperTest {
     }
 
     @Test
-    public void deveMapearEntidadeParaResponsavelDTOResponse(){
+    void deveMapearEntidadeParaResponsavelDTOResponse(){
         Responsavel pai = new Responsavel();
         pai.setFiliacao(FiliacaoResposavel.PAI);
         pai.setTelefone("9999999");

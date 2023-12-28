@@ -7,4 +7,8 @@ public interface AlunoServicesInterface {
     AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest);
 
     AlunoDTOResponse buscarAlunoPorRg(String rg);
+
+    public int adicionarFaltaDoAluno(String rg);
+
+     public int retirarFaltaDoAluno(String rg);
 }
