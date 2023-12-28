@@ -22,7 +22,6 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Autowired
     private AlunoRepositorio alunoRepositorio;
-
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -120,12 +119,15 @@ public class AlunoServices implements AlunoServicesInterface {
     public int retirarFaltaDoAluno(String rg) {
         Query query = new Query();
         Aluno aluno = encontrarAlunoPorRg(rg);
-        aluno.retiraFalta();
-        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update();
-        update.set("faltas", aluno.getFaltas());
-        mongoTemplate.findAndModify(query, update, Aluno.class);
-        return aluno.getFaltas();
+        if (aluno.getFaltas() > 0) {
+            aluno.retiraFalta();
+            query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+            Update update = new Update();
+            update.set("faltas", aluno.getFaltas());
+            mongoTemplate.findAndModify(query, update, Aluno.class);
+            return aluno.getFaltas();
+        }
+        throw new MongoException("O aluno já não possui nenhuma falta.");
     }
 
     protected Aluno encontrarAlunoPorRg(String rgAluno) {

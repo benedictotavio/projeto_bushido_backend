@@ -2,6 +2,8 @@ package br.org.institutobushido.services.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -83,6 +85,8 @@ class AlunoServicesTest {
         aluno.setFaltas(alunoDtoRequest.faltas());
         aluno.setActive(alunoDtoRequest.status());
         aluno.setResponsaveis(responsaveis);
+
+        Mockito.reset(alunoRepositorio);
     }
 
     @Mock
@@ -166,6 +170,65 @@ class AlunoServicesTest {
         Aluno result = alunoRepositorio.findByRg(rg)
                 .orElseThrow(() -> new MongoException("Email: " + rg + " não encontrado"));
 
+        System.out.println(result);
+
         assertEquals(aluno, result);
+    }
+
+    @Test
+    void deveRetornarExceptionSeAlunoNaoForEncontrado() {
+        AlunoRepositorio alunoRepositorio = mock(AlunoRepositorio.class);
+        Mockito.when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.empty());
+
+        assertThrows(MongoException.class, () -> {
+            alunoServices.encontrarAlunoPorRg("nonexistent_rg");
+        });
+    }
+
+    @Test
+    void deveRetornarExceptionSeRgDoAlunoForPassadoComoNull() {
+        AlunoServices alunoServices = new AlunoServices();
+
+        assertThrows(NullPointerException.class, () -> {
+            alunoServices.encontrarAlunoPorRg(null);
+        });
+    }
+
+    @Test
+    void test_incrementAbsences_validRg() {
+        // Arrange
+        Optional<Aluno> alunoTest = Optional.of(aluno);
+        String validRg = "123456789";
+        when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
+
+        // Act
+        int initialAbsences = alunoServices.adicionarFaltaDoAluno(validRg);
+        int updatedAbsences = alunoServices.adicionarFaltaDoAluno(validRg);
+
+        // Assert
+        assertEquals(initialAbsences + 1, updatedAbsences);
+    }
+
+    @Test
+    void test_removeOneAbsenceFromStudentRecord() {
+        // Arrange
+        Optional<Aluno> alunoTest = Optional.of(aluno);
+        String validRg = "123456789";
+        when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
+        // Act
+        int result = alunoServices.retirarFaltaDoAluno(validRg);
+
+        // Assert
+        assertEquals(aluno.getFaltas(), result);
+    }
+
+    @Test
+    void test_raiseException_emptyRg() {
+        String emptyRg = "";
+
+        // Act & Assert
+        assertThrows(MongoException.class, () -> {
+            alunoServices.adicionarFaltaDoAluno(emptyRg);
+        });
     }
 }
