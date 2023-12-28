@@ -38,13 +38,9 @@ Content-Type: application/json
 }
 
 ###
-POST {{url}}/aluno/adicionarFalta/123456789
+PATCH {{url}}/aluno/adicionarFalta/123456789
 Content-Type: application/json
-
-{}
 
 ###
-POST {{url}}/aluno/retirarFalta/123456789
+PATCH {{url}}/aluno/retirarFalta/123456789
 Content-Type: application/json
-
-{}
