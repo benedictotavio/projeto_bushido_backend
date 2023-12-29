@@ -154,14 +154,14 @@ public class AlunoServices implements AlunoServicesInterface {
     public boolean removerResponsavel(String rg, String cpf) {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Optional<Responsavel> responsavel = encontrarResponsavelPorCpf(aluno, cpf);
-        if (responsavel.isPresent()) {
+        if (responsavel.isPresent() && aluno.getResponsaveis().size() > 1) {
             Query query = new Query();
             query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
             Update update = new Update().pull("responsaveis", Query.query(Criteria.where("cpf").is(cpf)));
             mongoTemplate.updateFirst(query, update, Aluno.class);
             return true;
         }
-        return false;
+        throw new MongoException("O aluno deve ter pelo menos 1 responsavel!");
     }
 
     protected Aluno encontrarAlunoPorRg(String rgAluno) {

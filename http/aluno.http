@@ -49,7 +49,7 @@ Content-Type: application/json
 
 {
   "nome": "Teste",
-  "cpf": "020202020200",
+  "cpf": "020202020201",
   "telefone": "123456789",
   "email": "email@email.com.br",
   "filiacao": "MAE"
