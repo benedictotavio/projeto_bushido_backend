@@ -1,8 +1,10 @@
 package br.org.institutobushido.services.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -254,4 +256,52 @@ class AlunoServicesTest {
         assertEquals("John Doe", result.nome());
         assertEquals("30003000", result.telefone());
     }
+
+    @Test
+    void deveRetornarOResponsavelSeExistir() {
+        Responsavel responsavel1 = new Responsavel();
+        responsavel1.setCpf("123456789");
+        Responsavel responsavel2 = new Responsavel();
+        responsavel2.setCpf("987654321");
+        aluno.getResponsaveis().add(responsavel1);
+        aluno.getResponsaveis().add(responsavel2);
+
+        Optional<Responsavel> result = alunoServices.encontrarResponsavelPorCpf(aluno, "123456789");
+
+        assertTrue(result.isPresent());
+        assertEquals(responsavel1, result.get());
+    }
+
+    @Test
+    void deveRetornarUmArrayVazio() {
+        Optional<Responsavel> result = alunoServices.encontrarResponsavelPorCpf(aluno, "123456789");
+        assertFalse(result.isPresent());
+    }
+    @Test
+    void deveRemoverUmResponsavel() {
+        // Arrange
+        String rg = "123456";
+        String cpf = "987654";
+        Optional<Aluno> alunoTest = Optional.of(aluno);
+        when(alunoRepositorio.findByRg(rg)).thenReturn(alunoTest);
+
+        // Mocking the aluno object
+        aluno.setRg(rg);
+        Responsavel responsavel = new Responsavel();
+        Responsavel responsavel2 = new Responsavel();
+        responsavel.setCpf(cpf);
+        aluno.getResponsaveis().add(responsavel);
+        aluno.getResponsaveis().add(responsavel2);
+
+        // Mocking the alunoRepositorio
+        AlunoRepositorio alunoRepositorio = mock(AlunoRepositorio.class);
+        when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
+
+        // Act
+        boolean result = alunoServices.removerResponsavel(rg, cpf);
+
+        // Assert
+        assertTrue(result);
+    }
+
 }

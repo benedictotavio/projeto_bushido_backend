@@ -5,6 +5,7 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,11 +73,21 @@ public class AlunoControllers {
     }
 
     @PostMapping("adicionarResponsavel/{rg}")
-    public ResponseEntity<Object> postMethodName(@PathVariable String rg,
+    public ResponseEntity<Object> adicionarResponsavel(@PathVariable String rg,
             @RequestBody ResponsavelDTORequest responsavelDTORequest) {
-
         try {
             ResponsavelDTOResponse res = alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
+            return ResponseEntity.ok().body(res);
+        } catch (MongoException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("removerResponsavel/{rg}")
+    public ResponseEntity<Object> removerResponsavel(@PathVariable String rg,
+            @RequestParam(name = "cpf") String cpf) {
+        try {
+            boolean res = alunoServices.removerResponsavel(rg, cpf);
             return ResponseEntity.ok().body(res);
         } catch (MongoException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

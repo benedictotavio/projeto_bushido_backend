@@ -17,6 +17,7 @@ import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.model.aluno.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
 @Service
@@ -101,7 +102,7 @@ public class AlunoServices implements AlunoServicesInterface {
                 .withRg(alunoEncontrado.getRg())
                 .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(alunoEncontrado.getResponsaveis()))
                 .withFaltas(alunoEncontrado.getFaltas())
-                .withStatus(alunoEncontrado.checarStatus())
+                .withStatus(alunoEncontrado.isStatus())
                 .build();
     }
 
@@ -135,7 +136,8 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        if (aluno.getResponsaveis().size() < 5) {
+        Optional<Responsavel> responsavel = encontrarResponsavelPorCpf(aluno, responsavelDTORequest.cpf());
+        if (aluno.getResponsaveis().size() < 5 && responsavel.isEmpty()) {
             Query query = new Query();
             query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
             Update update = new Update().push("responsaveis", responsavelDTORequest);
@@ -145,11 +147,31 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withNome(responsavelDTORequest.nome())
                     .withTelefone(responsavelDTORequest.telefone()).build();
         }
-        throw new MongoException("O aluno execedeu o numero de responsaveis.");
+        throw new MongoException("Não foi possivel adicionar esse responsavel");
+    }
+
+    @Override
+    public boolean removerResponsavel(String rg, String cpf) {
+        Aluno aluno = encontrarAlunoPorRg(rg);
+        Optional<Responsavel> responsavel = encontrarResponsavelPorCpf(aluno, cpf);
+        if (responsavel.isPresent() && aluno.getResponsaveis().size() > 1) {
+            Query query = new Query();
+            query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+            Update update = new Update().pull("responsaveis", Query.query(Criteria.where("cpf").is(cpf)));
+            mongoTemplate.updateFirst(query, update, Aluno.class);
+            return true;
+        }
+        throw new MongoException("O aluno deve ter pelo menos 1 responsavel!");
     }
 
     protected Aluno encontrarAlunoPorRg(String rgAluno) {
         return alunoRepositorio.findByRg(rgAluno)
                 .orElseThrow(() -> new MongoException("Email: " + rgAluno + " não encontrado"));
+    }
+
+    protected Optional<Responsavel> encontrarResponsavelPorCpf(Aluno aluno, String cpf) {
+        return aluno.getResponsaveis().stream()
+                .filter(responsaveis -> responsaveis.getCpf().equals(cpf))
+                .findFirst();
     }
 }

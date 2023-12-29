@@ -4,6 +4,4 @@ public interface AlunoInterface {
     public void adicionarFalta();
 
     public void retiraFalta();
-
-    public boolean checarStatus();
 }

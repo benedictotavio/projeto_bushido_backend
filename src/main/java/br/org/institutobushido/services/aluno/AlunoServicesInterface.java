@@ -15,4 +15,6 @@ public interface AlunoServicesInterface {
     public int retirarFaltaDoAluno(String rg);
 
     public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest);
+
+    public boolean removerResponsavel(String rg, String cpf);
 }
