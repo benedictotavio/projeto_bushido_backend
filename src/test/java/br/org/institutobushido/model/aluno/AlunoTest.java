@@ -6,10 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
@@ -37,12 +35,11 @@ class AlunoTest {
         aluno.setEstado("Example State");
         aluno.setRg("123456789");
         aluno.setFaltas(2);
-        aluno.setActive(false);
+        aluno.setActive(true);
         ;
     }
 
     @Test
-    @DisplayName("Deve adicionar uma falta ao aluno")
     void deveAdicionarFaltaAoAluno() {
         int quantidadeTotalDeFaltasAtual = aluno.getFaltas();
         aluno.adicionarFalta();
@@ -50,7 +47,6 @@ class AlunoTest {
     }
 
     @Test
-    @DisplayName("Não deve retirar uma falta do aluno")
     void nãoDeveRetirarFaltaAoAluno() {
         aluno.setFaltas(0);
         aluno.retiraFalta();
@@ -58,7 +54,6 @@ class AlunoTest {
     }
 
     @Test
-    @DisplayName("Deve retirar uma falta do aluno")
     void deveRetirarFaltaAoAluno() {
         aluno.setFaltas(5);
         int quantidadeTotalDeFaltasAtual = aluno.getFaltas();
@@ -67,14 +62,12 @@ class AlunoTest {
     }
 
     @Test
-    @DisplayName("Deve alterar o status se o aluno tem mais de 5 faltas")
     void deveAlterarStatusSeTiverMaisDeCincoFaltas() {
         // Arrange
-        aluno.setActive(true);
         aluno.setFaltas(5);
 
         // Act
-        aluno.checarStatus();
+        aluno.isStatus();
 
         // Assert
         assertFalse(aluno.isActive());

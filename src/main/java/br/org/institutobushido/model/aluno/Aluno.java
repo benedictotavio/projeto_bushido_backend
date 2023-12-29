@@ -38,7 +38,6 @@ public class Aluno implements AlunoInterface {
     private String rg;
 
     private List<Responsavel> responsaveis = new ArrayList<>();
-
     private int faltas = 0;
     private boolean active = true;
 
@@ -54,9 +53,8 @@ public class Aluno implements AlunoInterface {
         }
     }
 
-    @Override
-    public boolean checarStatus() {
-        if (this.getFaltas() >= 5) {
+    public boolean isStatus() {
+        if (getFaltas() >= 5) {
             this.setActive(false);
             return false;
         }
