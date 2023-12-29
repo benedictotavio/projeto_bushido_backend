@@ -277,32 +277,31 @@ class AlunoServicesTest {
         Optional<Responsavel> result = alunoServices.encontrarResponsavelPorCpf(aluno, "123456789");
         assertFalse(result.isPresent());
     }
-
-         // should remove a responsavel from an existing aluno
     @Test
-    void test_remove_responsavel_successfully() {
+    void deveRemoverUmResponsavel() {
         // Arrange
         String rg = "123456";
         String cpf = "987654";
         Optional<Aluno> alunoTest = Optional.of(aluno);
         when(alunoRepositorio.findByRg(rg)).thenReturn(alunoTest);
-    
+
         // Mocking the aluno object
         aluno.setRg(rg);
         Responsavel responsavel = new Responsavel();
+        Responsavel responsavel2 = new Responsavel();
         responsavel.setCpf(cpf);
         aluno.getResponsaveis().add(responsavel);
-    
+        aluno.getResponsaveis().add(responsavel2);
+
         // Mocking the alunoRepositorio
         AlunoRepositorio alunoRepositorio = mock(AlunoRepositorio.class);
         when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
 
         // Act
         boolean result = alunoServices.removerResponsavel(rg, cpf);
-    
+
         // Assert
         assertTrue(result);
     }
 
-    
 }
