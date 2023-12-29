@@ -13,6 +13,8 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.repositories.AlunoRepositorio;
@@ -128,6 +130,22 @@ public class AlunoServices implements AlunoServicesInterface {
             return aluno.getFaltas();
         }
         throw new MongoException("O aluno já não possui nenhuma falta.");
+    }
+
+    @Override
+    public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest) {
+        Aluno aluno = encontrarAlunoPorRg(rg);
+        if (aluno.getResponsaveis().size() < 5) {
+            Query query = new Query();
+            query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+            Update update = new Update().push("responsaveis", responsavelDTORequest);
+            mongoTemplate.updateFirst(query, update, Aluno.class);
+            return ResponsavelDTOResponse.builder().withCpf(responsavelDTORequest.cpf())
+                    .withEmail(responsavelDTORequest.email()).withFiliacao(responsavelDTORequest.filiacao().toString())
+                    .withNome(responsavelDTORequest.nome())
+                    .withTelefone(responsavelDTORequest.telefone()).build();
+        }
+        throw new MongoException("O aluno execedeu o numero de responsaveis.");
     }
 
     protected Aluno encontrarAlunoPorRg(String rgAluno) {
