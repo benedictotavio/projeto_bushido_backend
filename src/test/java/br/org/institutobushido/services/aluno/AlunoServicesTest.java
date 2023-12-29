@@ -26,6 +26,8 @@ import com.mongodb.MongoException;
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
+import br.org.institutobushido.enums.FiliacaoResposavel;
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
@@ -195,7 +197,7 @@ class AlunoServicesTest {
     }
 
     @Test
-    void test_incrementAbsences_validRg() {
+    void deveAdicionarFalta() {
         // Arrange
         Optional<Aluno> alunoTest = Optional.of(aluno);
         String validRg = "123456789";
@@ -210,7 +212,7 @@ class AlunoServicesTest {
     }
 
     @Test
-    void test_removeOneAbsenceFromStudentRecord() {
+    void deveRetirarFalta() {
         // Arrange
         Optional<Aluno> alunoTest = Optional.of(aluno);
         String validRg = "123456789";
@@ -223,12 +225,33 @@ class AlunoServicesTest {
     }
 
     @Test
-    void test_raiseException_emptyRg() {
+    void deveRetornarUmaExceçãoCaseEmailForVazio() {
         String emptyRg = "";
 
         // Act & Assert
         assertThrows(MongoException.class, () -> {
             alunoServices.adicionarFaltaDoAluno(emptyRg);
         });
+    }
+
+    @Test
+    void adicionarResponavelSeOAlunoPossuirMenosDe5Responsaveis() {
+        // Arrange
+        Optional<Aluno> alunoTest = Optional.of(aluno);
+        String validRg = "123456789";
+        when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
+        ResponsavelDTORequest responsavelDTORequest = ResponsavelDTORequest.builder().withCpf("123456789")
+                .withEmail("test@example.com").withFiliacao(FiliacaoResposavel.OUTRO).withNome("John Doe")
+                .withTelefone("30003000").build();
+        // Act
+        ResponsavelDTOResponse result = alunoServices.adicionarResponsavel(validRg, responsavelDTORequest);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("123456789", result.cpf());
+        assertEquals("test@example.com", result.email());
+        assertEquals("OUTRO", result.filiacao());
+        assertEquals("John Doe", result.nome());
+        assertEquals("30003000", result.telefone());
     }
 }

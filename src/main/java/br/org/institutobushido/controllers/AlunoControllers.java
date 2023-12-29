@@ -18,6 +18,8 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
 import br.org.institutobushido.services.aluno.AlunoServices;
 import jakarta.validation.Valid;
 
@@ -68,4 +70,17 @@ public class AlunoControllers {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("adicionarResponsavel/{rg}")
+    public ResponseEntity<Object> postMethodName(@PathVariable String rg,
+            @RequestBody ResponsavelDTORequest responsavelDTORequest) {
+
+        try {
+            ResponsavelDTOResponse res = alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
+            return ResponseEntity.ok().body(res);
+        } catch (MongoException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
