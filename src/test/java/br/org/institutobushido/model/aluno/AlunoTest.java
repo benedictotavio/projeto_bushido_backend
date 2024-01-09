@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import br.org.institutobushido.enums.Imovel;
-import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 
 @SpringBootTest
@@ -27,7 +26,6 @@ class AlunoTest {
         aluno.setContribuintesDaRendaFamiliar(2);
         aluno.setAlunoContribuiParaRenda(true);
         aluno.setRendaFamiliarEmSalariosMinimos(2);
-        aluno.setTransporte(TipoDeTransporte.MOTO);
         aluno.setVemAcompanhado(false);
         aluno.setTurno(Turno.TARDE);
         aluno.setDataPreenchimento(new Date());
@@ -36,7 +34,6 @@ class AlunoTest {
         aluno.setRg("123456789");
         aluno.setFaltas(2);
         aluno.setActive(true);
-        ;
     }
 
     @Test

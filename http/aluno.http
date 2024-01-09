@@ -17,7 +17,6 @@ Content-Type: application/json
   "contribuintesDaRendaFamiliar": 2,
   "alunoContribuiParaRenda": true,
   "rendaFamiliarEmSalariosMinimos": 3,
-  "transporte": "PEDESTRE",
   "vemAcompanhado": false,
   "turno": "MANHA",
   "dataPreenchimento": "2023-01-01T12:00:00",

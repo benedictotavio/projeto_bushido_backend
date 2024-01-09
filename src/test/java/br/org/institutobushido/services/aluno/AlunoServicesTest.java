@@ -31,7 +31,6 @@ import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
 import br.org.institutobushido.enums.FiliacaoResposavel;
 import br.org.institutobushido.enums.Imovel;
-import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.Responsavel;
@@ -59,7 +58,6 @@ class AlunoServicesTest {
                 .withContribuintesDaRendaFamiliar(2)
                 .withAlunoContribuiParaRenda(true)
                 .withRendaFamiliarEmSalariosMinimos(3)
-                .withTransporte(TipoDeTransporte.ONIBUS)
                 .withVemAcompanhado(false)
                 .withTurno(Turno.NOITE)
                 .withDataPreenchimento(new Date())
@@ -82,7 +80,6 @@ class AlunoServicesTest {
         aluno.setEstado(alunoDtoRequest.estado());
         aluno.setAlunoContribuiParaRenda(alunoDtoRequest.alunoContribuiParaRenda());
         aluno.setRendaFamiliarEmSalariosMinimos(alunoDtoRequest.rendaFamiliarEmSalariosMinimos());
-        aluno.setTransporte(alunoDtoRequest.transporte());
         aluno.setVemAcompanhado(alunoDtoRequest.vemAcompanhado());
         aluno.setTurno(alunoDtoRequest.turno());
         aluno.setRg(alunoDtoRequest.rg());
@@ -119,7 +116,6 @@ class AlunoServicesTest {
                 .withContribuintesDaRendaFamiliar(aluno.getContribuintesDaRendaFamiliar())
                 .withAlunoContribuiParaRenda(aluno.isAlunoContribuiParaRenda())
                 .withRendaFamiliarEmSalariosMinimos(aluno.getRendaFamiliarEmSalariosMinimos())
-                .withTransporte(aluno.getTransporte())
                 .withVemAcompanhado(aluno.isVemAcompanhado())
                 .withTurno(aluno.getTurno())
                 .withDataPreenchimento(aluno.getDataPreenchimento())

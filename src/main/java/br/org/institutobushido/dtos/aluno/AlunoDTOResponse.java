@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import br.org.institutobushido.enums.Imovel;
-import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import lombok.Builder;
 
@@ -18,7 +17,6 @@ public record AlunoDTOResponse(
         int contribuintesDaRendaFamiliar,
         boolean alunoContribuiParaRenda,
         int rendaFamiliarEmSalariosMinimos,
-        TipoDeTransporte transporte,
         boolean vemAcompanhado,
         Turno turno,
         Date dataPreenchimento,

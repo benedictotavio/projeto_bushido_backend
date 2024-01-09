@@ -6,7 +6,6 @@ import java.util.List;
 import com.mongodb.lang.NonNull;
 
 import br.org.institutobushido.enums.Imovel;
-import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -30,8 +29,6 @@ public record AlunoDTORequest(
         boolean alunoContribuiParaRenda,
 
         int rendaFamiliarEmSalariosMinimos,
-
-        TipoDeTransporte transporte,
 
         boolean vemAcompanhado,
 

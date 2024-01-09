@@ -45,7 +45,6 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setEstado(alunoDTORequest.estado());
             aluno.setAlunoContribuiParaRenda(alunoDTORequest.alunoContribuiParaRenda());
             aluno.setRendaFamiliarEmSalariosMinimos(alunoDTORequest.rendaFamiliarEmSalariosMinimos());
-            aluno.setTransporte(alunoDTORequest.transporte());
             aluno.setVemAcompanhado(alunoDTORequest.vemAcompanhado());
             aluno.setTurno(alunoDTORequest.turno());
             aluno.setRg(alunoDTORequest.rg());
@@ -64,7 +63,6 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withContribuintesDaRendaFamiliar(novoAluno.getContribuintesDaRendaFamiliar())
                     .withAlunoContribuiParaRenda(novoAluno.isAlunoContribuiParaRenda())
                     .withRendaFamiliarEmSalariosMinimos(novoAluno.getRendaFamiliarEmSalariosMinimos())
-                    .withTransporte(novoAluno.getTransporte())
                     .withVemAcompanhado(novoAluno.isVemAcompanhado())
                     .withTurno(novoAluno.getTurno())
                     .withDataPreenchimento(novoAluno.getDataPreenchimento())
@@ -93,7 +91,6 @@ public class AlunoServices implements AlunoServicesInterface {
                 .withContribuintesDaRendaFamiliar(alunoEncontrado.getContribuintesDaRendaFamiliar())
                 .withAlunoContribuiParaRenda(alunoEncontrado.isAlunoContribuiParaRenda())
                 .withRendaFamiliarEmSalariosMinimos(alunoEncontrado.getRendaFamiliarEmSalariosMinimos())
-                .withTransporte(alunoEncontrado.getTransporte())
                 .withVemAcompanhado(alunoEncontrado.isVemAcompanhado())
                 .withTurno(alunoEncontrado.getTurno())
                 .withDataPreenchimento(alunoEncontrado.getDataPreenchimento())
