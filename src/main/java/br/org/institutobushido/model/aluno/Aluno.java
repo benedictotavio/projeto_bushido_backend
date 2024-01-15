@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
+import br.org.institutobushido.model.aluno.object.Endereco;
 import br.org.institutobushido.model.aluno.object.Responsavel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,9 +33,8 @@ public class Aluno implements AlunoInterface {
     private boolean vemAcompanhado = true;
     private Turno turno;
     private Date dataPreenchimento;
-    private String cidade;
-    private String estado;
-
+    private Endereco endereco;
+    
     @Indexed(unique = true, background = true)
     private String rg;
 

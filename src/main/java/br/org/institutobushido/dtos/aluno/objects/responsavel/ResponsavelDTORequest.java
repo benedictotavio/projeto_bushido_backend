@@ -1,4 +1,4 @@
-package br.org.institutobushido.dtos.aluno;
+package br.org.institutobushido.dtos.aluno.objects.responsavel;
 
 import com.mongodb.lang.NonNull;
 
@@ -12,11 +12,11 @@ public record ResponsavelDTORequest(
     @NotEmpty(message = "Nome é obrigatório!")
     String nome,
 
-    @NonNull() @Pattern(regexp = "[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}",
+    @NonNull() @Pattern(regexp = "\\d{3}\\.?\\d{3}\\.?\\d{3}\\-?\\d{2}",
             message = "Formato de cpf inválido!")
     String cpf,
 
-    @NonNull() @Pattern(regexp = "^\\(?[1-9]{2}\\)? ?(?:[0-9]{4,5})\\-?[0-9]{4}",
+    @NonNull() @Pattern(regexp = "^\\(?[1-9]{2}\\)? ?(?:\\d{4,5})\\-?\\d{4}",
             message = "Formato de telefone inválido!")
     String telefone,
 

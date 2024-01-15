@@ -19,8 +19,8 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.services.aluno.AlunoServices;
 import jakarta.validation.Valid;
 
@@ -43,7 +43,7 @@ public class AlunoControllers {
     }
 
     @PostMapping()
-    ResponseEntity<String> adicionarAluno(@Valid @RequestBody AlunoDTORequest alunoDTORequest) {
+    ResponseEntity<String> adicionarAluno(@Valid() @RequestBody AlunoDTORequest alunoDTORequest) {
         try {
             AlunoDTOResponse novoAluno = alunoServices.adicionarAluno(alunoDTORequest);
             return ResponseEntity.created(URI.create("localhost")).body(novoAluno.rg());

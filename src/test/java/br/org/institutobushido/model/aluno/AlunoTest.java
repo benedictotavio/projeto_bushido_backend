@@ -31,8 +31,6 @@ class AlunoTest {
         aluno.setVemAcompanhado(false);
         aluno.setTurno(Turno.TARDE);
         aluno.setDataPreenchimento(new Date());
-        aluno.setCidade("Example City");
-        aluno.setEstado("Example State");
         aluno.setRg("123456789");
         aluno.setFaltas(2);
         aluno.setActive(true);

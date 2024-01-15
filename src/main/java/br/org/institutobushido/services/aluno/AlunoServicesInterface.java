@@ -2,8 +2,8 @@ package br.org.institutobushido.services.aluno;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
 
 public interface AlunoServicesInterface {
     AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest);

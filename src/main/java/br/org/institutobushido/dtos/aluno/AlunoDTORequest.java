@@ -2,9 +2,8 @@ package br.org.institutobushido.dtos.aluno;
 
 import java.util.Date;
 import java.util.List;
-
-import com.mongodb.lang.NonNull;
-
+import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
@@ -39,11 +38,9 @@ public record AlunoDTORequest(
 
         Date dataPreenchimento,
 
-        String cidade,
+        @NotNull(message = "Endereço é obrigatório!") EnderecoDTORequest endereco,
 
-        String estado,
-
-        @NonNull() @Pattern(regexp = "^\\d{9}$", message = "Formato de rg inválido!") String rg,
+        @NotEmpty @Pattern(regexp = "^\\d{9}$", message = "Formato de rg inválido!") String rg,
 
         @NotEmpty @NotNull(message = "Insira pelo menos um Responsavel!")
         List<ResponsavelDTORequest> responsaveis,

@@ -27,13 +27,16 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.enums.FiliacaoResposavel;
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.model.aluno.object.Endereco;
 import br.org.institutobushido.model.aluno.object.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
@@ -43,6 +46,8 @@ class AlunoServicesTest {
     private Aluno aluno;
     private List<Responsavel> responsaveis = new ArrayList<>();
     private List<ResponsavelDTORequest> responsaveisDTORequest = new ArrayList<>();
+    private Endereco endereco;
+    private EnderecoDTORequest enderecoDTORequest;
     private AlunoDTORequest alunoDtoRequest;
     private AlunoDTOResponse alunoDtoResponse;
 
@@ -63,8 +68,7 @@ class AlunoServicesTest {
                 .withVemAcompanhado(false)
                 .withTurno(Turno.NOITE)
                 .withDataPreenchimento(new Date())
-                .withCidade("CidadeTeste")
-                .withEstado("EstadoTeste")
+                .withEndereco(enderecoDTORequest)
                 .withRg("123456789")
                 .withResponsaveis(responsaveisDTORequest)
                 .withFaltas(2)
@@ -76,10 +80,9 @@ class AlunoServicesTest {
         aluno.setImovel(alunoDtoRequest.imovel());
         aluno.setAuxilioBrasil(alunoDtoRequest.auxilioBrasil());
         aluno.setNumerosDePessoasNaCasa(alunoDtoRequest.numerosDePessoasNaCasa());
-        aluno.setCidade(alunoDtoRequest.cidade());
+        aluno.setEndereco(endereco);
         aluno.setDataPreenchimento(alunoDtoRequest.dataPreenchimento());
         aluno.setContribuintesDaRendaFamiliar(alunoDtoRequest.contribuintesDaRendaFamiliar());
-        aluno.setEstado(alunoDtoRequest.estado());
         aluno.setAlunoContribuiParaRenda(alunoDtoRequest.alunoContribuiParaRenda());
         aluno.setRendaFamiliarEmSalariosMinimos(alunoDtoRequest.rendaFamiliarEmSalariosMinimos());
         aluno.setTransporte(alunoDtoRequest.transporte());
@@ -123,8 +126,7 @@ class AlunoServicesTest {
                 .withVemAcompanhado(aluno.isVemAcompanhado())
                 .withTurno(aluno.getTurno())
                 .withDataPreenchimento(aluno.getDataPreenchimento())
-                .withCidade(aluno.getCidade())
-                .withEstado(aluno.getEstado())
+                .withEndereco(new EnderecoDTOResponse(aluno.getEndereco().getCidade(), aluno.getEndereco().getEstado(), aluno.getEndereco().getCep(), aluno.getEndereco().getNumero()))
                 .withRg(aluno.getRg())
                 .withResponsaveis(new ArrayList<>())
                 .withFaltas(aluno.getFaltas())

@@ -3,6 +3,8 @@ package br.org.institutobushido.dtos.aluno;
 import java.util.Date;
 import java.util.List;
 
+import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
@@ -22,8 +24,7 @@ public record AlunoDTOResponse(
         boolean vemAcompanhado,
         Turno turno,
         Date dataPreenchimento,
-        String cidade,
-        String estado,
+        EnderecoDTOResponse endereco,
         String rg,
         List<ResponsavelDTOResponse> responsaveis,
         int faltas,

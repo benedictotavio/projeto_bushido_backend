@@ -13,8 +13,9 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.mappers.EnderecoMapper;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.object.Responsavel;
@@ -30,6 +31,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Override
     public AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest) {
+        
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByRg(alunoDTORequest.rg());
 
         if (!alunoEncontrado.isPresent()) {
@@ -39,10 +41,8 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setImovel(alunoDTORequest.imovel());
             aluno.setAuxilioBrasil(alunoDTORequest.auxilioBrasil());
             aluno.setNumerosDePessoasNaCasa(alunoDTORequest.numerosDePessoasNaCasa());
-            aluno.setCidade(alunoDTORequest.cidade());
             aluno.setDataPreenchimento(alunoDTORequest.dataPreenchimento());
             aluno.setContribuintesDaRendaFamiliar(alunoDTORequest.contribuintesDaRendaFamiliar());
-            aluno.setEstado(alunoDTORequest.estado());
             aluno.setAlunoContribuiParaRenda(alunoDTORequest.alunoContribuiParaRenda());
             aluno.setRendaFamiliarEmSalariosMinimos(alunoDTORequest.rendaFamiliarEmSalariosMinimos());
             aluno.setTransporte(alunoDTORequest.transporte());
@@ -52,6 +52,7 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setFaltas(alunoDTORequest.faltas());
             aluno.setActive(alunoDTORequest.status());
             aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
+            aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
 
             Aluno novoAluno = alunoRepositorio.save(aluno);
 
@@ -68,10 +69,9 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withVemAcompanhado(novoAluno.isVemAcompanhado())
                     .withTurno(novoAluno.getTurno())
                     .withDataPreenchimento(novoAluno.getDataPreenchimento())
-                    .withCidade(novoAluno.getCidade())
-                    .withEstado(novoAluno.getEstado())
                     .withRg(novoAluno.getRg())
                     .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
+                    .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(novoAluno.getEndereco()))
                     .withFaltas(novoAluno.getFaltas())
                     .withStatus(novoAluno.isActive())
                     .build();
@@ -97,10 +97,9 @@ public class AlunoServices implements AlunoServicesInterface {
                 .withVemAcompanhado(alunoEncontrado.isVemAcompanhado())
                 .withTurno(alunoEncontrado.getTurno())
                 .withDataPreenchimento(alunoEncontrado.getDataPreenchimento())
-                .withCidade(alunoEncontrado.getCidade())
-                .withEstado(alunoEncontrado.getEstado())
                 .withRg(alunoEncontrado.getRg())
                 .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(alunoEncontrado.getResponsaveis()))
+                .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(alunoEncontrado.getEndereco()))
                 .withFaltas(alunoEncontrado.getFaltas())
                 .withStatus(alunoEncontrado.isStatus())
                 .build();
