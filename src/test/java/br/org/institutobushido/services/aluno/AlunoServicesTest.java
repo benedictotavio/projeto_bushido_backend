@@ -59,7 +59,6 @@ class AlunoServicesTest {
                 .withNome("João Algo")
                 .withDadosSociais(new DadosSociaisDTORequest(false, false, null, 0, 0, false, 0))
                 .withTransporte(TipoDeTransporte.ONIBUS)
-                .withVemAcompanhado(false)
                 .withTurno(Turno.NOITE)
                 .withDataPreenchimento(new Date())
                 .withEndereco(enderecoDTORequest)
@@ -72,7 +71,6 @@ class AlunoServicesTest {
         aluno.setNome(alunoDtoRequest.nome());
         aluno.setDadosSociais(new DadosSociais());
         aluno.setTransporte(alunoDtoRequest.transporte());
-        aluno.setVemAcompanhado(alunoDtoRequest.vemAcompanhado());
         aluno.setTurno(alunoDtoRequest.turno());
         aluno.setRg(alunoDtoRequest.rg());
         aluno.setFaltas(alunoDtoRequest.faltas());
@@ -104,7 +102,6 @@ class AlunoServicesTest {
                 .withDadosSociais(
                         new DadosSociaisDTOResponse(aluno.getDadosSociais().isBolsaFamilia(),aluno.getDadosSociais().isAuxilioBrasil(),aluno.getDadosSociais().getImovel(),aluno.getDadosSociais().getNumerosDePessoasNaCasa(),aluno.getDadosSociais().getContribuintesDaRendaFamiliar(),aluno.getDadosSociais().isAlunoContribuiParaRenda(),aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos()))
                 .withTransporte(aluno.getTransporte())
-                .withVemAcompanhado(aluno.isVemAcompanhado())
                 .withTurno(aluno.getTurno())
                 .withDataPreenchimento(aluno.getDataPreenchimento())
                 .withEndereco(new EnderecoDTOResponse(aluno.getEndereco().getCidade(), aluno.getEndereco().getEstado(),

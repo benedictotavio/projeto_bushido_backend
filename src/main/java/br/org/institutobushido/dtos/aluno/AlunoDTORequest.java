@@ -21,8 +21,6 @@ public record AlunoDTORequest(
 
         TipoDeTransporte transporte,
 
-        boolean vemAcompanhado,
-
         Turno turno,
 
         Date dataPreenchimento,

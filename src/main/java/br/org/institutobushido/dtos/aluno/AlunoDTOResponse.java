@@ -15,7 +15,6 @@ public record AlunoDTOResponse(
         String nome,
         DadosSociaisDTOResponse dadosSociais,
         TipoDeTransporte transporte,
-        boolean vemAcompanhado,
         Turno turno,
         Date dataPreenchimento,
         EnderecoDTOResponse endereco,

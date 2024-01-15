@@ -22,7 +22,6 @@ class AlunoTest {
         aluno.setNome("João Lucas");
         aluno.setDadosSociais(new DadosSociais());
         aluno.setTransporte(TipoDeTransporte.MOTO);
-        aluno.setVemAcompanhado(false);
         aluno.setTurno(Turno.TARDE);
         aluno.setDataPreenchimento(new Date());
         aluno.setRg("123456789");
