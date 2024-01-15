@@ -34,7 +34,6 @@ import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.enums.FiliacaoResposavel;
-import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.object.DadosSociais;
@@ -58,7 +57,6 @@ class AlunoServicesTest {
         alunoDtoRequest = AlunoDTORequest.builder()
                 .withNome("João Algo")
                 .withDadosSociais(new DadosSociaisDTORequest(false, false, null, 0, 0, false, 0))
-                .withTransporte(TipoDeTransporte.ONIBUS)
                 .withTurno(Turno.NOITE)
                 .withDataPreenchimento(new Date())
                 .withEndereco(enderecoDTORequest)
@@ -70,7 +68,6 @@ class AlunoServicesTest {
 
         aluno.setNome(alunoDtoRequest.nome());
         aluno.setDadosSociais(new DadosSociais());
-        aluno.setTransporte(alunoDtoRequest.transporte());
         aluno.setTurno(alunoDtoRequest.turno());
         aluno.setRg(alunoDtoRequest.rg());
         aluno.setFaltas(alunoDtoRequest.faltas());
@@ -101,7 +98,6 @@ class AlunoServicesTest {
                 .withNome(aluno.getNome())
                 .withDadosSociais(
                         new DadosSociaisDTOResponse(aluno.getDadosSociais().isBolsaFamilia(),aluno.getDadosSociais().isAuxilioBrasil(),aluno.getDadosSociais().getImovel(),aluno.getDadosSociais().getNumerosDePessoasNaCasa(),aluno.getDadosSociais().getContribuintesDaRendaFamiliar(),aluno.getDadosSociais().isAlunoContribuiParaRenda(),aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos()))
-                .withTransporte(aluno.getTransporte())
                 .withTurno(aluno.getTurno())
                 .withDataPreenchimento(aluno.getDataPreenchimento())
                 .withEndereco(new EnderecoDTOResponse(aluno.getEndereco().getCidade(), aluno.getEndereco().getEstado(),

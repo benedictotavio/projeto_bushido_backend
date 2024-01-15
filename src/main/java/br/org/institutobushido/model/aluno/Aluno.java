@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.object.DadosSociais;
 import br.org.institutobushido.model.aluno.object.Endereco;
@@ -22,7 +21,6 @@ import lombok.NoArgsConstructor;
 public class Aluno implements AlunoInterface {
     private String nome;
     private DadosSociais dadosSociais;
-    private TipoDeTransporte transporte;
     private Turno turno;
     private Date dataPreenchimento;
     private Endereco endereco;

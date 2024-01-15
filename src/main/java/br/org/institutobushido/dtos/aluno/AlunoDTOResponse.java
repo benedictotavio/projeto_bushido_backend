@@ -6,7 +6,6 @@ import java.util.List;
 import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import lombok.Builder;
 
@@ -14,7 +13,6 @@ import lombok.Builder;
 public record AlunoDTOResponse(
         String nome,
         DadosSociaisDTOResponse dadosSociais,
-        TipoDeTransporte transporte,
         Turno turno,
         Date dataPreenchimento,
         EnderecoDTOResponse endereco,

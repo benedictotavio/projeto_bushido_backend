@@ -38,7 +38,6 @@ public class AlunoServices implements AlunoServicesInterface {
         if (!alunoEncontrado.isPresent()) {
             Aluno aluno = new Aluno();
             aluno.setNome(alunoDTORequest.nome());
-            aluno.setTransporte(alunoDTORequest.transporte());
             aluno.setTurno(alunoDTORequest.turno());
             aluno.setRg(alunoDTORequest.rg());
             aluno.setFaltas(alunoDTORequest.faltas());
@@ -51,7 +50,6 @@ public class AlunoServices implements AlunoServicesInterface {
 
             return AlunoDTOResponse.builder()
                     .withNome(novoAluno.getNome())
-                    .withTransporte(novoAluno.getTransporte())
                     .withTurno(novoAluno.getTurno())
                     .withDataPreenchimento(novoAluno.getDataPreenchimento())
                     .withRg(novoAluno.getRg())
@@ -73,7 +71,6 @@ public class AlunoServices implements AlunoServicesInterface {
         return AlunoDTOResponse.builder()
                 .withNome(alunoEncontrado.getNome())
                 .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(alunoEncontrado.getDadosSociais()))
-                .withTransporte(alunoEncontrado.getTransporte())
                 .withTurno(alunoEncontrado.getTurno())
                 .withDataPreenchimento(alunoEncontrado.getDataPreenchimento())
                 .withRg(alunoEncontrado.getRg())
