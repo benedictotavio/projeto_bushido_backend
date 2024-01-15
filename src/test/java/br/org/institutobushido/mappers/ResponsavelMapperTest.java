@@ -3,7 +3,8 @@ package br.org.institutobushido.mappers;
 import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
 import br.org.institutobushido.enums.FiliacaoResposavel;
-import br.org.institutobushido.model.aluno.Responsavel;
+import br.org.institutobushido.model.aluno.object.Responsavel;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
+import br.org.institutobushido.model.aluno.object.Responsavel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

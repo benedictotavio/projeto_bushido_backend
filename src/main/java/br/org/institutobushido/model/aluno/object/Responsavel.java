@@ -1,4 +1,4 @@
-package br.org.institutobushido.model.aluno;
+package br.org.institutobushido.model.aluno.object;
 
 import br.org.institutobushido.enums.FiliacaoResposavel;
 import lombok.AllArgsConstructor;
@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Responsavel {
-
     private String nome;
     private String cpf;
     private String telefone;
     private String email;
     private FiliacaoResposavel filiacao;
-
 }

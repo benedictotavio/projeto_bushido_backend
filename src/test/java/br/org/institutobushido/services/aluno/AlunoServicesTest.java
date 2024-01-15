@@ -34,7 +34,7 @@ import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.Responsavel;
+import br.org.institutobushido.model.aluno.object.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
 @SpringBootTest

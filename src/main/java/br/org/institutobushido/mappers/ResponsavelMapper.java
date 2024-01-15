@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
-import br.org.institutobushido.model.aluno.Responsavel;
+import br.org.institutobushido.model.aluno.object.Responsavel;
 
 @Component
 public class ResponsavelMapper {

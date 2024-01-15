@@ -17,7 +17,7 @@ import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.Responsavel;
+import br.org.institutobushido.model.aluno.object.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
 @Service
