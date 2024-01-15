@@ -10,13 +10,15 @@ Content-Type: application/json
 
 {
   "nome": "Luiz",
-  "bolsaFamilia": true,
-  "auxilioBrasil": false,
-  "imovel": "CEDIDO",
-  "numerosDePessoasNaCasa": 4,
-  "contribuintesDaRendaFamiliar": 2,
-  "alunoContribuiParaRenda": true,
-  "rendaFamiliarEmSalariosMinimos": 3,
+  "dadosSociais":{
+    "bolsaFamilia": true,
+    "auxilioBrasil": false,
+    "imovel": "CEDIDO",
+    "numerosDePessoasNaCasa": 4,
+    "contribuintesDaRendaFamiliar": 2,
+    "alunoContribuiParaRenda": true,
+    "rendaFamiliarEmSalariosMinimos": 3
+  },
   "transporte": "PEDESTRE",
   "vemAcompanhado": false,
   "turno": "MANHA",

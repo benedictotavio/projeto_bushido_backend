@@ -27,16 +27,17 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.enums.FiliacaoResposavel;
-import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.object.Endereco;
+import br.org.institutobushido.model.aluno.object.DadosSociais;
 import br.org.institutobushido.model.aluno.object.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
@@ -46,7 +47,6 @@ class AlunoServicesTest {
     private Aluno aluno;
     private List<Responsavel> responsaveis = new ArrayList<>();
     private List<ResponsavelDTORequest> responsaveisDTORequest = new ArrayList<>();
-    private Endereco endereco;
     private EnderecoDTORequest enderecoDTORequest;
     private AlunoDTORequest alunoDtoRequest;
     private AlunoDTOResponse alunoDtoResponse;
@@ -57,13 +57,7 @@ class AlunoServicesTest {
 
         alunoDtoRequest = AlunoDTORequest.builder()
                 .withNome("João Algo")
-                .withBolsaFamilia(true)
-                .withAuxilioBrasil(false)
-                .withImovel(Imovel.CEDIDO)
-                .withNumerosDePessoasNaCasa(4)
-                .withContribuintesDaRendaFamiliar(2)
-                .withAlunoContribuiParaRenda(true)
-                .withRendaFamiliarEmSalariosMinimos(3)
+                .withDadosSociais(new DadosSociaisDTORequest(false, false, null, 0, 0, false, 0))
                 .withTransporte(TipoDeTransporte.ONIBUS)
                 .withVemAcompanhado(false)
                 .withTurno(Turno.NOITE)
@@ -76,15 +70,7 @@ class AlunoServicesTest {
                 .build();
 
         aluno.setNome(alunoDtoRequest.nome());
-        aluno.setBolsaFamilia(alunoDtoRequest.bolsaFamilia());
-        aluno.setImovel(alunoDtoRequest.imovel());
-        aluno.setAuxilioBrasil(alunoDtoRequest.auxilioBrasil());
-        aluno.setNumerosDePessoasNaCasa(alunoDtoRequest.numerosDePessoasNaCasa());
-        aluno.setEndereco(endereco);
-        aluno.setDataPreenchimento(alunoDtoRequest.dataPreenchimento());
-        aluno.setContribuintesDaRendaFamiliar(alunoDtoRequest.contribuintesDaRendaFamiliar());
-        aluno.setAlunoContribuiParaRenda(alunoDtoRequest.alunoContribuiParaRenda());
-        aluno.setRendaFamiliarEmSalariosMinimos(alunoDtoRequest.rendaFamiliarEmSalariosMinimos());
+        aluno.setDadosSociais(new DadosSociais());
         aluno.setTransporte(alunoDtoRequest.transporte());
         aluno.setVemAcompanhado(alunoDtoRequest.vemAcompanhado());
         aluno.setTurno(alunoDtoRequest.turno());
@@ -115,18 +101,14 @@ class AlunoServicesTest {
 
         alunoDtoResponse = AlunoDTOResponse.builder()
                 .withNome(aluno.getNome())
-                .withBolsaFamilia(aluno.isBolsaFamilia())
-                .withAuxilioBrasil(aluno.isAuxilioBrasil())
-                .withImovel(aluno.getImovel())
-                .withNumerosDePessoasNaCasa(aluno.getNumerosDePessoasNaCasa())
-                .withContribuintesDaRendaFamiliar(aluno.getContribuintesDaRendaFamiliar())
-                .withAlunoContribuiParaRenda(aluno.isAlunoContribuiParaRenda())
-                .withRendaFamiliarEmSalariosMinimos(aluno.getRendaFamiliarEmSalariosMinimos())
+                .withDadosSociais(
+                        new DadosSociaisDTOResponse(aluno.getDadosSociais().isBolsaFamilia(),aluno.getDadosSociais().isAuxilioBrasil(),aluno.getDadosSociais().getImovel(),aluno.getDadosSociais().getNumerosDePessoasNaCasa(),aluno.getDadosSociais().getContribuintesDaRendaFamiliar(),aluno.getDadosSociais().isAlunoContribuiParaRenda(),aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos()))
                 .withTransporte(aluno.getTransporte())
                 .withVemAcompanhado(aluno.isVemAcompanhado())
                 .withTurno(aluno.getTurno())
                 .withDataPreenchimento(aluno.getDataPreenchimento())
-                .withEndereco(new EnderecoDTOResponse(aluno.getEndereco().getCidade(), aluno.getEndereco().getEstado(), aluno.getEndereco().getCep(), aluno.getEndereco().getNumero()))
+                .withEndereco(new EnderecoDTOResponse(aluno.getEndereco().getCidade(), aluno.getEndereco().getEstado(),
+                        aluno.getEndereco().getCep(), aluno.getEndereco().getNumero()))
                 .withRg(aluno.getRg())
                 .withResponsaveis(new ArrayList<>())
                 .withFaltas(aluno.getFaltas())
@@ -144,9 +126,9 @@ class AlunoServicesTest {
         when(alunoRepositorio.save(aluno)).thenReturn(aluno);
         AlunoDTOResponse result = alunoServices.adicionarAluno(alunoDtoRequest);
         assertEquals(aluno.getNome(), result.nome());
-        assertEquals(aluno.isBolsaFamilia(), result.bolsaFamilia());
-        assertEquals(aluno.getImovel(), result.imovel());
-        assertEquals(aluno.getRendaFamiliarEmSalariosMinimos(), result.rendaFamiliarEmSalariosMinimos());
+        assertEquals(aluno.getDadosSociais().isBolsaFamilia(), result.dadosSociais().bolsaFamilia());
+        assertEquals(aluno.getDadosSociais().getImovel(), result.dadosSociais().imovel());
+        assertEquals(aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos(), result.dadosSociais().rendaFamiliarEmSalariosMinimos());
         assertEquals(aluno.getDataPreenchimento(), result.dataPreenchimento());
         assertEquals(aluno.isActive(), result.status());
         assertEquals(aluno.getFaltas(), result.faltas());
@@ -279,6 +261,7 @@ class AlunoServicesTest {
         Optional<Responsavel> result = alunoServices.encontrarResponsavelPorCpf(aluno, "123456789");
         assertFalse(result.isPresent());
     }
+
     @Test
     void deveRemoverUmResponsavel() {
         // Arrange

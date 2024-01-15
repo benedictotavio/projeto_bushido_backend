@@ -15,6 +15,7 @@ import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.mappers.DadosSociaisMapper;
 import br.org.institutobushido.mappers.EnderecoMapper;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
@@ -31,20 +32,12 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Override
     public AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest) {
-        
+
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByRg(alunoDTORequest.rg());
 
         if (!alunoEncontrado.isPresent()) {
             Aluno aluno = new Aluno();
             aluno.setNome(alunoDTORequest.nome());
-            aluno.setBolsaFamilia(alunoDTORequest.bolsaFamilia());
-            aluno.setImovel(alunoDTORequest.imovel());
-            aluno.setAuxilioBrasil(alunoDTORequest.auxilioBrasil());
-            aluno.setNumerosDePessoasNaCasa(alunoDTORequest.numerosDePessoasNaCasa());
-            aluno.setDataPreenchimento(alunoDTORequest.dataPreenchimento());
-            aluno.setContribuintesDaRendaFamiliar(alunoDTORequest.contribuintesDaRendaFamiliar());
-            aluno.setAlunoContribuiParaRenda(alunoDTORequest.alunoContribuiParaRenda());
-            aluno.setRendaFamiliarEmSalariosMinimos(alunoDTORequest.rendaFamiliarEmSalariosMinimos());
             aluno.setTransporte(alunoDTORequest.transporte());
             aluno.setVemAcompanhado(alunoDTORequest.vemAcompanhado());
             aluno.setTurno(alunoDTORequest.turno());
@@ -53,18 +46,12 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setActive(alunoDTORequest.status());
             aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
             aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
+            aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
 
             Aluno novoAluno = alunoRepositorio.save(aluno);
 
             return AlunoDTOResponse.builder()
                     .withNome(novoAluno.getNome())
-                    .withBolsaFamilia(novoAluno.isBolsaFamilia())
-                    .withAuxilioBrasil(novoAluno.isAuxilioBrasil())
-                    .withImovel(novoAluno.getImovel())
-                    .withNumerosDePessoasNaCasa(novoAluno.getNumerosDePessoasNaCasa())
-                    .withContribuintesDaRendaFamiliar(novoAluno.getContribuintesDaRendaFamiliar())
-                    .withAlunoContribuiParaRenda(novoAluno.isAlunoContribuiParaRenda())
-                    .withRendaFamiliarEmSalariosMinimos(novoAluno.getRendaFamiliarEmSalariosMinimos())
                     .withTransporte(novoAluno.getTransporte())
                     .withVemAcompanhado(novoAluno.isVemAcompanhado())
                     .withTurno(novoAluno.getTurno())
@@ -72,6 +59,7 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withRg(novoAluno.getRg())
                     .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
                     .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(novoAluno.getEndereco()))
+                    .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(novoAluno.getDadosSociais()))
                     .withFaltas(novoAluno.getFaltas())
                     .withStatus(novoAluno.isActive())
                     .build();
@@ -86,13 +74,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
         return AlunoDTOResponse.builder()
                 .withNome(alunoEncontrado.getNome())
-                .withBolsaFamilia(alunoEncontrado.isBolsaFamilia())
-                .withAuxilioBrasil(alunoEncontrado.isAuxilioBrasil())
-                .withImovel(alunoEncontrado.getImovel())
-                .withNumerosDePessoasNaCasa(alunoEncontrado.getNumerosDePessoasNaCasa())
-                .withContribuintesDaRendaFamiliar(alunoEncontrado.getContribuintesDaRendaFamiliar())
-                .withAlunoContribuiParaRenda(alunoEncontrado.isAlunoContribuiParaRenda())
-                .withRendaFamiliarEmSalariosMinimos(alunoEncontrado.getRendaFamiliarEmSalariosMinimos())
+                .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(alunoEncontrado.getDadosSociais()))
                 .withTransporte(alunoEncontrado.getTransporte())
                 .withVemAcompanhado(alunoEncontrado.isVemAcompanhado())
                 .withTurno(alunoEncontrado.getTurno())

@@ -8,9 +8,9 @@ import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
+import br.org.institutobushido.model.aluno.object.DadosSociais;
 
 @SpringBootTest
 class AlunoTest {
@@ -20,13 +20,7 @@ class AlunoTest {
     void setUp() {
         aluno = new Aluno();
         aluno.setNome("João Lucas");
-        aluno.setBolsaFamilia(true);
-        aluno.setAuxilioBrasil(false);
-        aluno.setImovel(Imovel.CEDIDO);
-        aluno.setNumerosDePessoasNaCasa(4);
-        aluno.setContribuintesDaRendaFamiliar(2);
-        aluno.setAlunoContribuiParaRenda(true);
-        aluno.setRendaFamiliarEmSalariosMinimos(2);
+        aluno.setDadosSociais(new DadosSociais());
         aluno.setTransporte(TipoDeTransporte.MOTO);
         aluno.setVemAcompanhado(false);
         aluno.setTurno(Turno.TARDE);

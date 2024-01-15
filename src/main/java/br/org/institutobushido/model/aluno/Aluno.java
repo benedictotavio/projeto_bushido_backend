@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import br.org.institutobushido.enums.Imovel;
 import br.org.institutobushido.enums.TipoDeTransporte;
 import br.org.institutobushido.enums.Turno;
+import br.org.institutobushido.model.aluno.object.DadosSociais;
 import br.org.institutobushido.model.aluno.object.Endereco;
 import br.org.institutobushido.model.aluno.object.Responsavel;
 import lombok.AllArgsConstructor;
@@ -22,13 +23,7 @@ import lombok.NoArgsConstructor;
 @Document(collection = "alunos")
 public class Aluno implements AlunoInterface {
     private String nome;
-    private boolean bolsaFamilia = false;
-    private boolean auxilioBrasil = false;
-    private Imovel imovel;
-    private int numerosDePessoasNaCasa;
-    private int contribuintesDaRendaFamiliar;
-    private boolean alunoContribuiParaRenda = false;
-    private int rendaFamiliarEmSalariosMinimos;
+    private DadosSociais dadosSociais;
     private TipoDeTransporte transporte;
     private boolean vemAcompanhado = true;
     private Turno turno;
