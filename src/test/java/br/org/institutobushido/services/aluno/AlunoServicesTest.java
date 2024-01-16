@@ -27,6 +27,8 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
@@ -36,6 +38,7 @@ import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResp
 import br.org.institutobushido.enums.FiliacaoResposavel;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.model.aluno.object.DadosEscolares;
 import br.org.institutobushido.model.aluno.object.DadosSociais;
 import br.org.institutobushido.model.aluno.object.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
@@ -57,7 +60,7 @@ class AlunoServicesTest {
         alunoDtoRequest = AlunoDTORequest.builder()
                 .withNome("João Algo")
                 .withDadosSociais(new DadosSociaisDTORequest(false, false, null, 0, 0, false, 0))
-                .withTurno(Turno.NOITE)
+                .withDadosEscolares(new DadosEscolaresDTORequest(Turno.NOITE, "Test", "Test"))
                 .withDataPreenchimento(new Date())
                 .withEndereco(enderecoDTORequest)
                 .withRg("123456789")
@@ -68,7 +71,7 @@ class AlunoServicesTest {
 
         aluno.setNome(alunoDtoRequest.nome());
         aluno.setDadosSociais(new DadosSociais());
-        aluno.setTurno(alunoDtoRequest.turno());
+        aluno.setDadosEscolares(new DadosEscolares());
         aluno.setRg(alunoDtoRequest.rg());
         aluno.setFaltas(alunoDtoRequest.faltas());
         aluno.setActive(alunoDtoRequest.status());
@@ -97,8 +100,14 @@ class AlunoServicesTest {
         alunoDtoResponse = AlunoDTOResponse.builder()
                 .withNome(aluno.getNome())
                 .withDadosSociais(
-                        new DadosSociaisDTOResponse(aluno.getDadosSociais().isBolsaFamilia(),aluno.getDadosSociais().isAuxilioBrasil(),aluno.getDadosSociais().getImovel(),aluno.getDadosSociais().getNumerosDePessoasNaCasa(),aluno.getDadosSociais().getContribuintesDaRendaFamiliar(),aluno.getDadosSociais().isAlunoContribuiParaRenda(),aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos()))
-                .withTurno(aluno.getTurno())
+                        new DadosSociaisDTOResponse(aluno.getDadosSociais().isBolsaFamilia(),
+                                aluno.getDadosSociais().isAuxilioBrasil(), aluno.getDadosSociais().getImovel(),
+                                aluno.getDadosSociais().getNumerosDePessoasNaCasa(),
+                                aluno.getDadosSociais().getContribuintesDaRendaFamiliar(),
+                                aluno.getDadosSociais().isAlunoContribuiParaRenda(),
+                                aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos()))
+                .withDadosEscolares(new DadosEscolaresDTOResponse(aluno.getDadosEscolares().getTurno(),
+                        aluno.getDadosEscolares().getEscola(), aluno.getDadosEscolares().getSerie()))
                 .withDataPreenchimento(aluno.getDataPreenchimento())
                 .withEndereco(new EnderecoDTOResponse(aluno.getEndereco().getCidade(), aluno.getEndereco().getEstado(),
                         aluno.getEndereco().getCep(), aluno.getEndereco().getNumero()))
@@ -121,7 +130,8 @@ class AlunoServicesTest {
         assertEquals(aluno.getNome(), result.nome());
         assertEquals(aluno.getDadosSociais().isBolsaFamilia(), result.dadosSociais().bolsaFamilia());
         assertEquals(aluno.getDadosSociais().getImovel(), result.dadosSociais().imovel());
-        assertEquals(aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos(), result.dadosSociais().rendaFamiliarEmSalariosMinimos());
+        assertEquals(aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos(),
+                result.dadosSociais().rendaFamiliarEmSalariosMinimos());
         assertEquals(aluno.getDataPreenchimento(), result.dataPreenchimento());
         assertEquals(aluno.isActive(), result.status());
         assertEquals(aluno.getFaltas(), result.faltas());

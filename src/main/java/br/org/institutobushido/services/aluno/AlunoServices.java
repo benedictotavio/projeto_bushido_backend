@@ -15,6 +15,7 @@ import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.mappers.DadosEscolaresMapper;
 import br.org.institutobushido.mappers.DadosSociaisMapper;
 import br.org.institutobushido.mappers.EnderecoMapper;
 import br.org.institutobushido.mappers.ResponsavelMapper;
@@ -38,24 +39,25 @@ public class AlunoServices implements AlunoServicesInterface {
         if (!alunoEncontrado.isPresent()) {
             Aluno aluno = new Aluno();
             aluno.setNome(alunoDTORequest.nome());
-            aluno.setTurno(alunoDTORequest.turno());
             aluno.setRg(alunoDTORequest.rg());
             aluno.setFaltas(alunoDTORequest.faltas());
             aluno.setActive(alunoDTORequest.status());
             aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
             aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
             aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
+            aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
 
             Aluno novoAluno = alunoRepositorio.save(aluno);
 
             return AlunoDTOResponse.builder()
                     .withNome(novoAluno.getNome())
-                    .withTurno(novoAluno.getTurno())
                     .withDataPreenchimento(novoAluno.getDataPreenchimento())
                     .withRg(novoAluno.getRg())
                     .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
                     .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(novoAluno.getEndereco()))
                     .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(novoAluno.getDadosSociais()))
+                    .withDadosEscolares(
+                            DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(novoAluno.getDadosEscolares()))
                     .withFaltas(novoAluno.getFaltas())
                     .withStatus(novoAluno.isActive())
                     .build();
@@ -71,11 +73,12 @@ public class AlunoServices implements AlunoServicesInterface {
         return AlunoDTOResponse.builder()
                 .withNome(alunoEncontrado.getNome())
                 .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(alunoEncontrado.getDadosSociais()))
-                .withTurno(alunoEncontrado.getTurno())
                 .withDataPreenchimento(alunoEncontrado.getDataPreenchimento())
                 .withRg(alunoEncontrado.getRg())
                 .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(alunoEncontrado.getResponsaveis()))
                 .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(alunoEncontrado.getEndereco()))
+                .withDadosEscolares(
+                        DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(alunoEncontrado.getDadosEscolares()))
                 .withFaltas(alunoEncontrado.getFaltas())
                 .withStatus(alunoEncontrado.isStatus())
                 .build();

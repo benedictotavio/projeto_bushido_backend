@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import br.org.institutobushido.enums.Turno;
+import br.org.institutobushido.model.aluno.object.DadosEscolares;
 import br.org.institutobushido.model.aluno.object.DadosSociais;
 import br.org.institutobushido.model.aluno.object.Endereco;
 import br.org.institutobushido.model.aluno.object.Responsavel;
@@ -20,11 +20,10 @@ import lombok.NoArgsConstructor;
 @Document(collection = "alunos")
 public class Aluno implements AlunoInterface {
     private String nome;
-    private DadosSociais dadosSociais;
-    private Turno turno;
+    private DadosEscolares dadosEscolares;
     private Date dataPreenchimento;
     private Endereco endereco;
-    
+    private DadosSociais dadosSociais;
     @Indexed(unique = true, background = true)
     private String rg;
 

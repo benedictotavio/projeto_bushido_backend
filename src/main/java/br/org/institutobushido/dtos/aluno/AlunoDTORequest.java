@@ -3,10 +3,10 @@ package br.org.institutobushido.dtos.aluno;
 import java.util.Date;
 import java.util.List;
 
+import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
-import br.org.institutobushido.enums.Turno;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -18,7 +18,7 @@ public record AlunoDTORequest(
 
         DadosSociaisDTORequest dadosSociais,
 
-        Turno turno,
+        DadosEscolaresDTORequest dadosEscolares,
 
         Date dataPreenchimento,
 

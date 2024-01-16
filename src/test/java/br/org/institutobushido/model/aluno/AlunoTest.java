@@ -8,7 +8,7 @@ import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import br.org.institutobushido.enums.Turno;
+import br.org.institutobushido.model.aluno.object.DadosEscolares;
 import br.org.institutobushido.model.aluno.object.DadosSociais;
 
 @SpringBootTest
@@ -20,7 +20,7 @@ class AlunoTest {
         aluno = new Aluno();
         aluno.setNome("João Lucas");
         aluno.setDadosSociais(new DadosSociais());
-        aluno.setTurno(Turno.TARDE);
+        aluno.setDadosEscolares(new DadosEscolares());
         aluno.setDataPreenchimento(new Date());
         aluno.setRg("123456789");
         aluno.setFaltas(2);
