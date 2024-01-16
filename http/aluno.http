@@ -19,8 +19,11 @@ Content-Type: application/json
     "alunoContribuiParaRenda": true,
     "rendaFamiliarEmSalariosMinimos": 3
   },
-  "transporte": "PEDESTRE",
-  "turno": "MANHA",
+   "dadosEscolares": {
+    "turno": "MANHA",
+    "escola": "E.M.E.F Marechal Rondon",
+    "serie": 6
+  },
   "dataPreenchimento": "2023-01-01T12:00:00",
   "endereco":{
     "cidade": "City",

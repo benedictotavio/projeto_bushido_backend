@@ -61,7 +61,6 @@ class AlunoServicesTest {
                 .withNome("João Algo")
                 .withDadosSociais(new DadosSociaisDTORequest(false, false, null, 0, 0, false, 0))
                 .withDadosEscolares(new DadosEscolaresDTORequest(Turno.NOITE, "Test", "Test"))
-                .withDataPreenchimento(new Date())
                 .withEndereco(enderecoDTORequest)
                 .withRg("123456789")
                 .withResponsaveis(responsaveisDTORequest)

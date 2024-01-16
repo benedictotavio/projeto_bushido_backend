@@ -46,7 +46,6 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
             aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
             aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
-
             Aluno novoAluno = alunoRepositorio.save(aluno);
 
             return AlunoDTOResponse.builder()

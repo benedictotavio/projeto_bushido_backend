@@ -20,8 +20,6 @@ public record AlunoDTORequest(
 
         DadosEscolaresDTORequest dadosEscolares,
 
-        Date dataPreenchimento,
-
         @NotNull(message = "Endereço é obrigatório!") EnderecoDTORequest endereco,
 
         @NotEmpty @Pattern(regexp = "^\\d{9}$", message = "Formato de rg inválido!") String rg,

@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Aluno implements AlunoInterface {
     private String nome;
     private DadosEscolares dadosEscolares;
-    private Date dataPreenchimento;
+    private Date dataPreenchimento = new Date();
     private Endereco endereco;
     private DadosSociais dadosSociais;
     @Indexed(unique = true, background = true)
