@@ -10,6 +10,8 @@ Content-Type: application/json
 
 {
   "nome": "Luiz",
+  "genero": "M",
+  "dataNascimento": "2023-01-01",
   "dadosSociais":{
     "bolsaFamilia": true,
     "auxilioBrasil": false,

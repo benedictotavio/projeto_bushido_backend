@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import br.org.institutobushido.enums.Genero;
 import br.org.institutobushido.model.aluno.object.DadosEscolares;
 import br.org.institutobushido.model.aluno.object.DadosSociais;
 import br.org.institutobushido.model.aluno.object.Graduacao;
@@ -15,6 +17,8 @@ class AlunoTest {
     @BeforeEach
     void setUp() {
         aluno = new Aluno();
+        aluno.setGenero(Genero.M);
+        aluno.setDataNascimento(new Date());
         aluno.setNome("João Lucas");
         aluno.setDadosSociais(new DadosSociais());
         aluno.setDadosEscolares(new DadosEscolares());
