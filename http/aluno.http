@@ -41,8 +41,10 @@ Content-Type: application/json
       "filiacao":"PAI"
       }
     ],
-  "faltas": 2,
-  "status": true
+   "graduacao": {
+        "kyu": 7,
+        "frequencia": 75
+    }
 }
 
 ###

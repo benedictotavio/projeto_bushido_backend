@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import br.org.institutobushido.model.aluno.object.DadosEscolares;
 import br.org.institutobushido.model.aluno.object.DadosSociais;
 import br.org.institutobushido.model.aluno.object.Endereco;
+import br.org.institutobushido.model.aluno.object.Graduacao;
 import br.org.institutobushido.model.aluno.object.Responsavel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,26 +29,6 @@ public class Aluno implements AlunoInterface {
     private String rg;
 
     private List<Responsavel> responsaveis = new ArrayList<>();
-    private int faltas = 0;
-    private boolean active = true;
 
-    @Override
-    public void adicionarFalta() {
-        this.faltas = (getFaltas() + 1);
-    }
-
-    @Override
-    public void retiraFalta() {
-        if (this.faltas > 0) {
-            this.faltas = getFaltas() - 1;
-        }
-    }
-
-    public boolean isStatus() {
-        if (getFaltas() >= 5) {
-            this.setActive(false);
-            return false;
-        }
-        return true;
-    }
+    private Graduacao graduacao;
 }

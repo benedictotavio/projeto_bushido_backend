@@ -11,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +32,8 @@ import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTOR
 import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.enums.FiliacaoResposavel;
@@ -40,6 +41,7 @@ import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.object.DadosEscolares;
 import br.org.institutobushido.model.aluno.object.DadosSociais;
+import br.org.institutobushido.model.aluno.object.Graduacao;
 import br.org.institutobushido.model.aluno.object.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
@@ -64,16 +66,14 @@ class AlunoServicesTest {
                 .withEndereco(enderecoDTORequest)
                 .withRg("123456789")
                 .withResponsaveis(responsaveisDTORequest)
-                .withFaltas(2)
-                .withStatus(false)
+                .withGraduacao(new GraduacaoDTORequest(0, 0))
                 .build();
 
         aluno.setNome(alunoDtoRequest.nome());
         aluno.setDadosSociais(new DadosSociais());
         aluno.setDadosEscolares(new DadosEscolares());
         aluno.setRg(alunoDtoRequest.rg());
-        aluno.setFaltas(alunoDtoRequest.faltas());
-        aluno.setActive(alunoDtoRequest.status());
+        aluno.setGraduacao(new Graduacao());
         aluno.setResponsaveis(responsaveis);
 
         Mockito.reset(alunoRepositorio);
@@ -112,8 +112,7 @@ class AlunoServicesTest {
                         aluno.getEndereco().getCep(), aluno.getEndereco().getNumero()))
                 .withRg(aluno.getRg())
                 .withResponsaveis(new ArrayList<>())
-                .withFaltas(aluno.getFaltas())
-                .withStatus(aluno.isActive())
+                .withGraduacao(new GraduacaoDTOResponse(aluno.getGraduacao().getKyu(), aluno.getGraduacao().getFaltas(), aluno.getGraduacao().isStatus(),aluno.getGraduacao().getFrequencia()))
                 .build();
 
         // Assert
@@ -132,8 +131,7 @@ class AlunoServicesTest {
         assertEquals(aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos(),
                 result.dadosSociais().rendaFamiliarEmSalariosMinimos());
         assertEquals(aluno.getDataPreenchimento(), result.dataPreenchimento());
-        assertEquals(aluno.isActive(), result.status());
-        assertEquals(aluno.getFaltas(), result.faltas());
+        assertEquals(aluno.getGraduacao().getFaltas(), result.graduacao().faltas());
     }
 
     @Test
@@ -181,44 +179,6 @@ class AlunoServicesTest {
 
         assertThrows(NullPointerException.class, () -> {
             alunoServices.encontrarAlunoPorRg(null);
-        });
-    }
-
-    @Test
-    void deveAdicionarFalta() {
-        // Arrange
-        Optional<Aluno> alunoTest = Optional.of(aluno);
-        String validRg = "123456789";
-        when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
-
-        // Act
-        int initialAbsences = alunoServices.adicionarFaltaDoAluno(validRg);
-        int updatedAbsences = alunoServices.adicionarFaltaDoAluno(validRg);
-
-        // Assert
-        assertEquals(initialAbsences + 1, updatedAbsences);
-    }
-
-    @Test
-    void deveRetirarFalta() {
-        // Arrange
-        Optional<Aluno> alunoTest = Optional.of(aluno);
-        String validRg = "123456789";
-        when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
-        // Act
-        int result = alunoServices.retirarFaltaDoAluno(validRg);
-
-        // Assert
-        assertEquals(aluno.getFaltas(), result);
-    }
-
-    @Test
-    void deveRetornarUmaExceçãoCaseEmailForVazio() {
-        String emptyRg = "";
-
-        // Act & Assert
-        assertThrows(MongoException.class, () -> {
-            alunoServices.adicionarFaltaDoAluno(emptyRg);
         });
     }
 

@@ -1,11 +1,11 @@
 package br.org.institutobushido.dtos.aluno;
 
-import java.util.Date;
 import java.util.List;
 
 import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -26,8 +26,8 @@ public record AlunoDTORequest(
 
         @NotEmpty @NotNull(message = "Insira pelo menos um Responsavel!")
         List<ResponsavelDTORequest> responsaveis,
+        
+        @NotNull(message = "Graduacao é obrigatório!") GraduacaoDTORequest graduacao
 
-        int faltas,
-
-        boolean status) {
+        ) {
 }

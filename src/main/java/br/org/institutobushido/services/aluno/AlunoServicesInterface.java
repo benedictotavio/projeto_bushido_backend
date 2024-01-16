@@ -10,9 +10,9 @@ public interface AlunoServicesInterface {
 
     AlunoDTOResponse buscarAlunoPorRg(String rg);
 
-    public int adicionarFaltaDoAluno(String rg);
+    // public int adicionarFaltaDoAluno(String rg);
 
-    public int retirarFaltaDoAluno(String rg);
+    // public int retirarFaltaDoAluno(String rg);
 
     public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest);
 

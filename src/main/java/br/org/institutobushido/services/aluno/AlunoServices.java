@@ -18,6 +18,7 @@ import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResp
 import br.org.institutobushido.mappers.DadosEscolaresMapper;
 import br.org.institutobushido.mappers.DadosSociaisMapper;
 import br.org.institutobushido.mappers.EnderecoMapper;
+import br.org.institutobushido.mappers.GraduacaoMapper;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.object.Responsavel;
@@ -40,8 +41,7 @@ public class AlunoServices implements AlunoServicesInterface {
             Aluno aluno = new Aluno();
             aluno.setNome(alunoDTORequest.nome());
             aluno.setRg(alunoDTORequest.rg());
-            aluno.setFaltas(alunoDTORequest.faltas());
-            aluno.setActive(alunoDTORequest.status());
+            aluno.setGraduacao(GraduacaoMapper.mapToGraduacao(alunoDTORequest.graduacao()));
             aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
             aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
             aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
@@ -57,8 +57,7 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(novoAluno.getDadosSociais()))
                     .withDadosEscolares(
                             DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(novoAluno.getDadosEscolares()))
-                    .withFaltas(novoAluno.getFaltas())
-                    .withStatus(novoAluno.isActive())
+                    .withGraduacao(GraduacaoMapper.mapToGraduacaoDTOResponse(novoAluno.getGraduacao()))
                     .build();
         }
 
@@ -78,36 +77,8 @@ public class AlunoServices implements AlunoServicesInterface {
                 .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(alunoEncontrado.getEndereco()))
                 .withDadosEscolares(
                         DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(alunoEncontrado.getDadosEscolares()))
-                .withFaltas(alunoEncontrado.getFaltas())
-                .withStatus(alunoEncontrado.isStatus())
+                .withGraduacao(GraduacaoMapper.mapToGraduacaoDTOResponse(alunoEncontrado.getGraduacao()))
                 .build();
-    }
-
-    @Override
-    public int adicionarFaltaDoAluno(String rg) {
-        Query query = new Query();
-        Aluno aluno = encontrarAlunoPorRg(rg);
-        aluno.adicionarFalta();
-        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update();
-        update.set("faltas", aluno.getFaltas());
-        mongoTemplate.findAndModify(query, update, Aluno.class);
-        return aluno.getFaltas();
-    }
-
-    @Override
-    public int retirarFaltaDoAluno(String rg) {
-        Query query = new Query();
-        Aluno aluno = encontrarAlunoPorRg(rg);
-        if (aluno.getFaltas() > 0) {
-            aluno.retiraFalta();
-            query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-            Update update = new Update();
-            update.set("faltas", aluno.getFaltas());
-            mongoTemplate.findAndModify(query, update, Aluno.class);
-            return aluno.getFaltas();
-        }
-        throw new MongoException("O aluno já não possui nenhuma falta.");
     }
 
     @Override
