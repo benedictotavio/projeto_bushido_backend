@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Graduacao {
 
-    
-
     public Graduacao(int kyu, int frequencia) {
         this.kyu = kyu;
         this.frequencia = frequencia;
