@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.org.institutobushido.model.aluno.objects.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import br.org.institutobushido.enums.Genero;
-import br.org.institutobushido.model.aluno.object.DadosEscolares;
-import br.org.institutobushido.model.aluno.object.DadosSociais;
-import br.org.institutobushido.model.aluno.object.Endereco;
-import br.org.institutobushido.model.aluno.object.Graduacao;
-import br.org.institutobushido.model.aluno.object.Responsavel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +30,6 @@ public class Aluno implements AlunoInterface {
     private Endereco endereco;
     private DadosSociais dadosSociais;
     private List<Responsavel> responsaveis = new ArrayList<>();
-
     private Graduacao graduacao;
+    private HistoricoSaude historicoSaude;
 }

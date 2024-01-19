@@ -1,4 +1,4 @@
-package br.org.institutobushido.model.aluno.object;
+package br.org.institutobushido.model.aluno.objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

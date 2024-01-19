@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,17 +34,30 @@ import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.alergia.AlergiaDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.cirurgia.CirurgiaDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.doenca_cronica.DoencaCronicaDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.enums.FatorRH;
 import br.org.institutobushido.enums.FiliacaoResposavel;
+import br.org.institutobushido.enums.TipoSanguineo;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.object.DadosEscolares;
-import br.org.institutobushido.model.aluno.object.DadosSociais;
-import br.org.institutobushido.model.aluno.object.Endereco;
-import br.org.institutobushido.model.aluno.object.Faltas;
-import br.org.institutobushido.model.aluno.object.Graduacao;
-import br.org.institutobushido.model.aluno.object.Responsavel;
+import br.org.institutobushido.model.aluno.historico_de_saude.Alergias;
+import br.org.institutobushido.model.aluno.historico_de_saude.Cirurgia;
+import br.org.institutobushido.model.aluno.historico_de_saude.DoencaCronica;
+import br.org.institutobushido.model.aluno.historico_de_saude.UsoMedicamentoContinuo;
+import br.org.institutobushido.model.aluno.objects.DadosEscolares;
+import br.org.institutobushido.model.aluno.objects.DadosSociais;
+import br.org.institutobushido.model.aluno.objects.Endereco;
+import br.org.institutobushido.model.aluno.objects.Faltas;
+import br.org.institutobushido.model.aluno.objects.Graduacao;
+import br.org.institutobushido.model.aluno.objects.HistoricoSaude;
+import br.org.institutobushido.model.aluno.objects.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
 @SpringBootTest
@@ -68,15 +82,25 @@ class AlunoServicesTest {
                 .withRg("123456789")
                 .withResponsaveis(responsaveisDTORequest)
                 .withGraduacao(new GraduacaoDTORequest(0, 0))
+                .withDataNascimento(new Date(192912881000L))
+                .withHistoricoSaude(
+                        new HistoricoSaudeDTORequest(new UsoMedicamentoContinuoDTORequest(false, "tipo", "medicamento"),
+                                new AlergiaDTORequest(false, "alergia"), new CirurgiaDTORequest(false, "cirurgia"),
+                                new DoencaCronicaDTORequest(false, "doenca"),new ArrayList<String>(), new ArrayList<String>()))
                 .build();
 
         aluno.setNome(alunoDtoRequest.nome());
         aluno.setDadosSociais(new DadosSociais());
         aluno.setDadosEscolares(new DadosEscolares());
         aluno.setRg(alunoDtoRequest.rg());
-        aluno.setGraduacao(new Graduacao(5,new ArrayList<Faltas>(),false,75));
+        aluno.setGraduacao(new Graduacao(5, new ArrayList<Faltas>(), false, 75));
         aluno.setResponsaveis(responsaveis);
         aluno.setEndereco(new Endereco());
+        aluno.setDataNascimento(alunoDtoRequest.dataNascimento());
+        aluno.setHistoricoSaude(new HistoricoSaude(TipoSanguineo.A_NEGATIVO, FatorRH.POSITIVO,
+                new UsoMedicamentoContinuo(false, "medicamento", "medicamento"), new DoencaCronica(false, "doenca"),
+                new Alergias(false, "alergia"), new Cirurgia(false, "cirurgia"), List.of("deficiencia"),
+                List.of("acompanhamentoSaude")));
 
         reset(alunoRepositorio);
     }
@@ -91,7 +115,8 @@ class AlunoServicesTest {
     private AlunoServices alunoServices;
 
     @Test
-    void deveRetornarTrueParaMetodoSaveForChamado() {;
+    void deveRetornarTrueParaMetodoSaveForChamado() {
+        ;
         // Arrange
         when(alunoRepositorio.save(Mockito.any(Aluno.class))).thenReturn(aluno);
 
@@ -116,6 +141,9 @@ class AlunoServicesTest {
                 .withResponsaveis(new ArrayList<>())
                 .withGraduacao(new GraduacaoDTOResponse(aluno.getGraduacao().getKyu(), aluno.getGraduacao().getFaltas(),
                         aluno.getGraduacao().isStatus(), aluno.getGraduacao().getFrequencia()))
+                .withHistoricoSaude(
+                        new HistoricoSaudeDTOResponse(null, null, null, null, List.of("deficiencia"),
+                                List.of("acompanhamentoSaude")))
                 .build();
 
         // Assert

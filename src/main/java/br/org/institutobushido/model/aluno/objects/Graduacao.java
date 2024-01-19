@@ -1,4 +1,4 @@
-package br.org.institutobushido.model.aluno.object;
+package br.org.institutobushido.model.aluno.objects;
 
 import java.util.ArrayList;
 import java.util.List;

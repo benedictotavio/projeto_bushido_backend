@@ -2,7 +2,7 @@ package br.org.institutobushido.dtos.aluno.objects.graduacao;
 
 import java.util.List;
 
-import br.org.institutobushido.model.aluno.object.Faltas;
+import br.org.institutobushido.model.aluno.objects.Faltas;
 import lombok.Builder;
 
 @Builder(setterPrefix = "with")

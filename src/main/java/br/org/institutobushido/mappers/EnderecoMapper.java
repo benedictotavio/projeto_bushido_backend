@@ -2,7 +2,7 @@ package br.org.institutobushido.mappers;
 
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
-import br.org.institutobushido.model.aluno.object.Endereco;
+import br.org.institutobushido.model.aluno.objects.Endereco;
 
 public class EnderecoMapper {
 

@@ -2,7 +2,7 @@ package br.org.institutobushido.mappers;
 
 import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTOResponse;
-import br.org.institutobushido.model.aluno.object.DadosSociais;
+import br.org.institutobushido.model.aluno.objects.DadosSociais;
 
 public class DadosSociaisMapper {
     private DadosSociaisMapper() {

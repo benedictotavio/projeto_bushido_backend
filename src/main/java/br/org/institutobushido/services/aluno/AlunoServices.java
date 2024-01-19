@@ -19,9 +19,10 @@ import br.org.institutobushido.mappers.DadosEscolaresMapper;
 import br.org.institutobushido.mappers.DadosSociaisMapper;
 import br.org.institutobushido.mappers.EnderecoMapper;
 import br.org.institutobushido.mappers.GraduacaoMapper;
+import br.org.institutobushido.mappers.HistoricoSaudeMapper;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.object.Responsavel;
+import br.org.institutobushido.model.aluno.objects.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
 @Service
@@ -48,6 +49,7 @@ public class AlunoServices implements AlunoServicesInterface {
             aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
             aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
             aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
+            aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));
             Aluno novoAluno = alunoRepositorio.save(aluno);
 
             return AlunoDTOResponse.builder()
@@ -62,6 +64,7 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withDadosEscolares(
                             DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(novoAluno.getDadosEscolares()))
                     .withGraduacao(GraduacaoMapper.mapToGraduacaoDTOResponse(novoAluno.getGraduacao()))
+                    .withHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(novoAluno.getHistoricoSaude()))
                     .build();
         }
 
@@ -84,6 +87,7 @@ public class AlunoServices implements AlunoServicesInterface {
                 .withDadosEscolares(
                         DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(alunoEncontrado.getDadosEscolares()))
                 .withGraduacao(GraduacaoMapper.mapToGraduacaoDTOResponse(alunoEncontrado.getGraduacao()))
+                .withHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(alunoEncontrado.getHistoricoSaude()))
                 .build();
     }
 

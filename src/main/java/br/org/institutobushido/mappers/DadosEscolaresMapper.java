@@ -2,7 +2,7 @@ package br.org.institutobushido.mappers;
 
 import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTOResponse;
-import br.org.institutobushido.model.aluno.object.DadosEscolares;
+import br.org.institutobushido.model.aluno.objects.DadosEscolares;
 
 public class DadosEscolaresMapper {
     private DadosEscolaresMapper() {
