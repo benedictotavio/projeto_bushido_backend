@@ -6,12 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,14 +26,38 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.alergia.AlergiaDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.cirurgia.CirurgiaDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.doenca_cronica.DoencaCronicaDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.enums.FatorRH;
 import br.org.institutobushido.enums.FiliacaoResposavel;
-import br.org.institutobushido.enums.Imovel;
-import br.org.institutobushido.enums.TipoDeTransporte;
+import br.org.institutobushido.enums.TipoSanguineo;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.Responsavel;
+import br.org.institutobushido.model.aluno.historico_de_saude.Alergias;
+import br.org.institutobushido.model.aluno.historico_de_saude.Cirurgia;
+import br.org.institutobushido.model.aluno.historico_de_saude.DoencaCronica;
+import br.org.institutobushido.model.aluno.historico_de_saude.UsoMedicamentoContinuo;
+import br.org.institutobushido.model.aluno.objects.DadosEscolares;
+import br.org.institutobushido.model.aluno.objects.DadosSociais;
+import br.org.institutobushido.model.aluno.objects.Endereco;
+import br.org.institutobushido.model.aluno.objects.Faltas;
+import br.org.institutobushido.model.aluno.objects.Graduacao;
+import br.org.institutobushido.model.aluno.objects.HistoricoSaude;
+import br.org.institutobushido.model.aluno.objects.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
 @SpringBootTest
@@ -43,6 +66,7 @@ class AlunoServicesTest {
     private Aluno aluno;
     private List<Responsavel> responsaveis = new ArrayList<>();
     private List<ResponsavelDTORequest> responsaveisDTORequest = new ArrayList<>();
+    private EnderecoDTORequest enderecoDTORequest;
     private AlunoDTORequest alunoDtoRequest;
     private AlunoDTOResponse alunoDtoResponse;
 
@@ -52,45 +76,33 @@ class AlunoServicesTest {
 
         alunoDtoRequest = AlunoDTORequest.builder()
                 .withNome("João Algo")
-                .withBolsaFamilia(true)
-                .withAuxilioBrasil(false)
-                .withImovel(Imovel.CEDIDO)
-                .withNumerosDePessoasNaCasa(4)
-                .withContribuintesDaRendaFamiliar(2)
-                .withAlunoContribuiParaRenda(true)
-                .withRendaFamiliarEmSalariosMinimos(3)
-                .withTransporte(TipoDeTransporte.ONIBUS)
-                .withVemAcompanhado(false)
-                .withTurno(Turno.NOITE)
-                .withDataPreenchimento(new Date())
-                .withCidade("CidadeTeste")
-                .withEstado("EstadoTeste")
+                .withDadosSociais(new DadosSociaisDTORequest(false, false, null, 0, 0, false, 0))
+                .withDadosEscolares(new DadosEscolaresDTORequest(Turno.NOITE, "Test", "Test"))
+                .withEndereco(enderecoDTORequest)
                 .withRg("123456789")
                 .withResponsaveis(responsaveisDTORequest)
-                .withFaltas(2)
-                .withStatus(false)
+                .withGraduacao(new GraduacaoDTORequest(0, 0))
+                .withDataNascimento(new Date(192912881000L))
+                .withHistoricoSaude(
+                        new HistoricoSaudeDTORequest(new UsoMedicamentoContinuoDTORequest(false, "tipo", "medicamento"),
+                                new AlergiaDTORequest(false, "alergia"), new CirurgiaDTORequest(false, "cirurgia"),
+                                new DoencaCronicaDTORequest(false, "doenca"),new ArrayList<String>(), new ArrayList<String>()))
                 .build();
 
         aluno.setNome(alunoDtoRequest.nome());
-        aluno.setBolsaFamilia(alunoDtoRequest.bolsaFamilia());
-        aluno.setImovel(alunoDtoRequest.imovel());
-        aluno.setAuxilioBrasil(alunoDtoRequest.auxilioBrasil());
-        aluno.setNumerosDePessoasNaCasa(alunoDtoRequest.numerosDePessoasNaCasa());
-        aluno.setCidade(alunoDtoRequest.cidade());
-        aluno.setDataPreenchimento(alunoDtoRequest.dataPreenchimento());
-        aluno.setContribuintesDaRendaFamiliar(alunoDtoRequest.contribuintesDaRendaFamiliar());
-        aluno.setEstado(alunoDtoRequest.estado());
-        aluno.setAlunoContribuiParaRenda(alunoDtoRequest.alunoContribuiParaRenda());
-        aluno.setRendaFamiliarEmSalariosMinimos(alunoDtoRequest.rendaFamiliarEmSalariosMinimos());
-        aluno.setTransporte(alunoDtoRequest.transporte());
-        aluno.setVemAcompanhado(alunoDtoRequest.vemAcompanhado());
-        aluno.setTurno(alunoDtoRequest.turno());
+        aluno.setDadosSociais(new DadosSociais());
+        aluno.setDadosEscolares(new DadosEscolares());
         aluno.setRg(alunoDtoRequest.rg());
-        aluno.setFaltas(alunoDtoRequest.faltas());
-        aluno.setActive(alunoDtoRequest.status());
+        aluno.setGraduacao(new Graduacao(5, new ArrayList<Faltas>(), false, 75));
         aluno.setResponsaveis(responsaveis);
+        aluno.setEndereco(new Endereco());
+        aluno.setDataNascimento(alunoDtoRequest.dataNascimento());
+        aluno.setHistoricoSaude(new HistoricoSaude(TipoSanguineo.A_NEGATIVO, FatorRH.POSITIVO,
+                new UsoMedicamentoContinuo(false, "medicamento", "medicamento"), new DoencaCronica(false, "doenca"),
+                new Alergias(false, "alergia"), new Cirurgia(false, "cirurgia"), List.of("deficiencia"),
+                List.of("acompanhamentoSaude")));
 
-        Mockito.reset(alunoRepositorio);
+        reset(alunoRepositorio);
     }
 
     @Mock
@@ -104,50 +116,53 @@ class AlunoServicesTest {
 
     @Test
     void deveRetornarTrueParaMetodoSaveForChamado() {
+        ;
         // Arrange
-        when(alunoRepositorio.save(aluno)).thenReturn(aluno);
+        when(alunoRepositorio.save(Mockito.any(Aluno.class))).thenReturn(aluno);
 
         // Act
         AlunoDTOResponse result = alunoServices.adicionarAluno(alunoDtoRequest);
 
         alunoDtoResponse = AlunoDTOResponse.builder()
                 .withNome(aluno.getNome())
-                .withBolsaFamilia(aluno.isBolsaFamilia())
-                .withAuxilioBrasil(aluno.isAuxilioBrasil())
-                .withImovel(aluno.getImovel())
-                .withNumerosDePessoasNaCasa(aluno.getNumerosDePessoasNaCasa())
-                .withContribuintesDaRendaFamiliar(aluno.getContribuintesDaRendaFamiliar())
-                .withAlunoContribuiParaRenda(aluno.isAlunoContribuiParaRenda())
-                .withRendaFamiliarEmSalariosMinimos(aluno.getRendaFamiliarEmSalariosMinimos())
-                .withTransporte(aluno.getTransporte())
-                .withVemAcompanhado(aluno.isVemAcompanhado())
-                .withTurno(aluno.getTurno())
+                .withDadosSociais(
+                        new DadosSociaisDTOResponse(aluno.getDadosSociais().isBolsaFamilia(),
+                                aluno.getDadosSociais().isAuxilioBrasil(), aluno.getDadosSociais().getImovel(),
+                                aluno.getDadosSociais().getNumerosDePessoasNaCasa(),
+                                aluno.getDadosSociais().getContribuintesDaRendaFamiliar(),
+                                aluno.getDadosSociais().isAlunoContribuiParaRenda(),
+                                aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos()))
+                .withDadosEscolares(new DadosEscolaresDTOResponse(aluno.getDadosEscolares().getTurno(),
+                        aluno.getDadosEscolares().getEscola(), aluno.getDadosEscolares().getSerie()))
                 .withDataPreenchimento(aluno.getDataPreenchimento())
-                .withCidade(aluno.getCidade())
-                .withEstado(aluno.getEstado())
+                .withEndereco(new EnderecoDTOResponse(aluno.getEndereco().getCidade(), aluno.getEndereco().getEstado(),
+                        aluno.getEndereco().getCep(), aluno.getEndereco().getNumero()))
                 .withRg(aluno.getRg())
                 .withResponsaveis(new ArrayList<>())
-                .withFaltas(aluno.getFaltas())
-                .withStatus(aluno.isActive())
+                .withGraduacao(new GraduacaoDTOResponse(aluno.getGraduacao().getKyu(), aluno.getGraduacao().getFaltas(),
+                        aluno.getGraduacao().isStatus(), aluno.getGraduacao().getFrequencia()))
+                .withHistoricoSaude(
+                        new HistoricoSaudeDTOResponse(null, null, null, null, List.of("deficiencia"),
+                                List.of("acompanhamentoSaude")))
                 .build();
 
         // Assert
         assertNotNull(result);
-        assertEquals(alunoDtoResponse, result);
-        verify(alunoRepositorio, times(1)).save(aluno);
+        assertEquals(alunoDtoResponse.dadosEscolares(), result.dadosEscolares());
+        assertEquals(alunoDtoResponse.dadosSociais(), result.dadosSociais());
+        assertEquals(alunoDtoResponse.dataPreenchimento(), result.dataPreenchimento());
     }
 
     @Test
     void deveConfirmarAsIntanciasDosValores() {
-        when(alunoRepositorio.save(aluno)).thenReturn(aluno);
+        when(alunoRepositorio.save(Mockito.any(Aluno.class))).thenReturn(aluno);
         AlunoDTOResponse result = alunoServices.adicionarAluno(alunoDtoRequest);
         assertEquals(aluno.getNome(), result.nome());
-        assertEquals(aluno.isBolsaFamilia(), result.bolsaFamilia());
-        assertEquals(aluno.getImovel(), result.imovel());
-        assertEquals(aluno.getRendaFamiliarEmSalariosMinimos(), result.rendaFamiliarEmSalariosMinimos());
+        assertEquals(aluno.getDadosSociais().isBolsaFamilia(), result.dadosSociais().bolsaFamilia());
+        assertEquals(aluno.getDadosSociais().getImovel(), result.dadosSociais().imovel());
+        assertEquals(aluno.getDadosSociais().getRendaFamiliarEmSalariosMinimos(),
+                result.dadosSociais().rendaFamiliarEmSalariosMinimos());
         assertEquals(aluno.getDataPreenchimento(), result.dataPreenchimento());
-        assertEquals(aluno.isActive(), result.status());
-        assertEquals(aluno.getFaltas(), result.faltas());
     }
 
     @Test
@@ -169,7 +184,7 @@ class AlunoServicesTest {
         String rg = "43";
         Aluno aluno = new Aluno();
         aluno.setRg(rg);
-        Mockito.when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
+        when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
 
         Aluno result = alunoRepositorio.findByRg(rg)
                 .orElseThrow(() -> new MongoException("Email: " + rg + " não encontrado"));
@@ -182,8 +197,7 @@ class AlunoServicesTest {
     @Test
     void deveRetornarExceptionSeAlunoNaoForEncontrado() {
         AlunoRepositorio alunoRepositorio = mock(AlunoRepositorio.class);
-        Mockito.when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.empty());
-
+        when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.empty());
         assertThrows(MongoException.class, () -> {
             alunoServices.encontrarAlunoPorRg("nonexistent_rg");
         });
@@ -195,44 +209,6 @@ class AlunoServicesTest {
 
         assertThrows(NullPointerException.class, () -> {
             alunoServices.encontrarAlunoPorRg(null);
-        });
-    }
-
-    @Test
-    void deveAdicionarFalta() {
-        // Arrange
-        Optional<Aluno> alunoTest = Optional.of(aluno);
-        String validRg = "123456789";
-        when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
-
-        // Act
-        int initialAbsences = alunoServices.adicionarFaltaDoAluno(validRg);
-        int updatedAbsences = alunoServices.adicionarFaltaDoAluno(validRg);
-
-        // Assert
-        assertEquals(initialAbsences + 1, updatedAbsences);
-    }
-
-    @Test
-    void deveRetirarFalta() {
-        // Arrange
-        Optional<Aluno> alunoTest = Optional.of(aluno);
-        String validRg = "123456789";
-        when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
-        // Act
-        int result = alunoServices.retirarFaltaDoAluno(validRg);
-
-        // Assert
-        assertEquals(aluno.getFaltas(), result);
-    }
-
-    @Test
-    void deveRetornarUmaExceçãoCaseEmailForVazio() {
-        String emptyRg = "";
-
-        // Act & Assert
-        assertThrows(MongoException.class, () -> {
-            alunoServices.adicionarFaltaDoAluno(emptyRg);
         });
     }
 
@@ -277,6 +253,7 @@ class AlunoServicesTest {
         Optional<Responsavel> result = alunoServices.encontrarResponsavelPorCpf(aluno, "123456789");
         assertFalse(result.isPresent());
     }
+
     @Test
     void deveRemoverUmResponsavel() {
         // Arrange

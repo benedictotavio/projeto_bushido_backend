@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.org.institutobushido.model.aluno.objects.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import br.org.institutobushido.enums.Imovel;
-import br.org.institutobushido.enums.TipoDeTransporte;
-import br.org.institutobushido.enums.Turno;
+import br.org.institutobushido.enums.Genero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,44 +19,17 @@ import lombok.NoArgsConstructor;
 @Document(collection = "alunos")
 public class Aluno implements AlunoInterface {
     private String nome;
-    private boolean bolsaFamilia = false;
-    private boolean auxilioBrasil = false;
-    private Imovel imovel;
-    private int numerosDePessoasNaCasa;
-    private int contribuintesDaRendaFamiliar;
-    private boolean alunoContribuiParaRenda = false;
-    private int rendaFamiliarEmSalariosMinimos;
-    private TipoDeTransporte transporte;
-    private boolean vemAcompanhado = true;
-    private Turno turno;
-    private Date dataPreenchimento;
-    private String cidade;
-    private String estado;
+    private Date dataNascimento;
+    private Genero genero;
 
     @Indexed(unique = true, background = true)
     private String rg;
 
+    private DadosEscolares dadosEscolares;
+    private Date dataPreenchimento = new Date();
+    private Endereco endereco;
+    private DadosSociais dadosSociais;
     private List<Responsavel> responsaveis = new ArrayList<>();
-    private int faltas = 0;
-    private boolean active = true;
-
-    @Override
-    public void adicionarFalta() {
-        this.faltas = (getFaltas() + 1);
-    }
-
-    @Override
-    public void retiraFalta() {
-        if (this.faltas > 0) {
-            this.faltas = getFaltas() - 1;
-        }
-    }
-
-    public boolean isStatus() {
-        if (getFaltas() >= 5) {
-            this.setActive(false);
-            return false;
-        }
-        return true;
-    }
+    private Graduacao graduacao;
+    private HistoricoSaude historicoSaude;
 }

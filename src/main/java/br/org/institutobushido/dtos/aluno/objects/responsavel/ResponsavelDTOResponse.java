@@ -1,4 +1,4 @@
-package br.org.institutobushido.dtos.aluno;
+package br.org.institutobushido.dtos.aluno.objects.responsavel;
 
 import lombok.Builder;
 

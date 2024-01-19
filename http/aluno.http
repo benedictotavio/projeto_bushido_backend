@@ -10,19 +10,29 @@ Content-Type: application/json
 
 {
   "nome": "Luiz",
-  "bolsaFamilia": true,
-  "auxilioBrasil": false,
-  "imovel": "CEDIDO",
-  "numerosDePessoasNaCasa": 4,
-  "contribuintesDaRendaFamiliar": 2,
-  "alunoContribuiParaRenda": true,
-  "rendaFamiliarEmSalariosMinimos": 3,
-  "transporte": "PEDESTRE",
-  "vemAcompanhado": false,
-  "turno": "MANHA",
+  "genero": "M",
+  "dataNascimento": "2023-01-01",
+  "dadosSociais":{
+    "bolsaFamilia": true,
+    "auxilioBrasil": false,
+    "imovel": "CEDIDO",
+    "numerosDePessoasNaCasa": 4,
+    "contribuintesDaRendaFamiliar": 2,
+    "alunoContribuiParaRenda": true,
+    "rendaFamiliarEmSalariosMinimos": 3
+  },
+   "dadosEscolares": {
+    "turno": "MANHA",
+    "escola": "E.M.E.F Marechal Rondon",
+    "serie": 6
+  },
   "dataPreenchimento": "2023-01-01T12:00:00",
-  "cidade": "City",
-  "estado": "State",
+  "endereco":{
+    "cidade": "City",
+    "estado": "State",
+    "cep":"06000142",
+    "numero":"100"
+  },
   "rg": "123456789",
   "responsaveis": [
       {
@@ -33,8 +43,32 @@ Content-Type: application/json
       "filiacao":"PAI"
       }
     ],
-  "faltas": 2,
-  "status": true
+   "graduacao": {
+        "kyu": 7,
+        "frequencia": 75
+    },
+    "historicoSaude": {
+    "tipoSanguineo": "A_POSITIVO",
+    "fatorRh": "POSITIVO",
+    "usoMedicamentoContinuo": {
+      "resposta": "",
+      "qualMedicamento": ""
+    },
+    "cirurgia": {
+      "resposta": "",
+      "tipo": ""
+    },
+    "alergia": {
+      "resposta": "",
+      "tipo": ""
+    },
+    "doencaCronica": {
+      "resposta": "",
+      "tipo": ""
+    },
+    "deficiencia":["Nenhuma"],
+    "acompanhamentoSaude":["Nenhum"]
+  }
 }
 
 ###

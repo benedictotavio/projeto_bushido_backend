@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +18,8 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.ResponsavelDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.services.aluno.AlunoServices;
 import jakarta.validation.Valid;
 
@@ -43,30 +42,10 @@ public class AlunoControllers {
     }
 
     @PostMapping()
-    ResponseEntity<String> adicionarAluno(@Valid @RequestBody AlunoDTORequest alunoDTORequest) {
+    ResponseEntity<String> adicionarAluno(@Valid() @RequestBody AlunoDTORequest alunoDTORequest) {
         try {
             AlunoDTOResponse novoAluno = alunoServices.adicionarAluno(alunoDTORequest);
             return ResponseEntity.created(URI.create("localhost")).body(novoAluno.rg());
-        } catch (MongoException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PatchMapping("adicionarFalta/{rg}")
-    ResponseEntity<String> adicionarFalta(@PathVariable String rg) {
-        try {
-            int faltas = alunoServices.adicionarFaltaDoAluno(rg);
-            return ResponseEntity.ok().body(String.valueOf(faltas));
-        } catch (MongoException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PatchMapping("retirarFalta/{rg}")
-    ResponseEntity<String> retirarFalta(@PathVariable String rg) {
-        try {
-            int faltas = alunoServices.retirarFaltaDoAluno(rg);
-            return ResponseEntity.ok().body(String.valueOf(faltas));
         } catch (MongoException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
