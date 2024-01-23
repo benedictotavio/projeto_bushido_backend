@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.graduacao.faltas.FaltasDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.services.aluno.AlunoServices;
@@ -73,4 +75,22 @@ public class AlunoControllers {
         }
     }
 
+    @PatchMapping("adicionarFalta/{rg}")
+    public ResponseEntity<String> adicionarFaltaAoAluno(@Valid @RequestBody FaltasDTORequest faltas,
+            @PathVariable String rg) {
+        try {
+            String res = alunoServices.adicionarFaltaDoAluno(rg, faltas);
+            return ResponseEntity.ok().body(res);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("retirarFalta/{rg}")
+    public ResponseEntity<String> retirarFaltaAoAluno(@RequestParam(name = "id") int faltasId,
+            @PathVariable String rg) {
+
+        String res = alunoServices.retirarFaltaDoAluno(rg, faltasId);
+        return ResponseEntity.ok().body(res);
+    }
 }
