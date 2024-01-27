@@ -81,7 +81,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{url}}/retirarFalta/123456789?data=26-01-2024 HTTP/1.1
+PATCH {{url}}/retirarFalta/123456789?data=27-01-2024 HTTP/1.1
 
 ###
 POST {{url}}/adicionarResponsavel/123456789 HTTP/1.1

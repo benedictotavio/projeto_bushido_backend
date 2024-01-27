@@ -1,7 +1,5 @@
 package br.org.institutobushido.services.aluno;
 
-import java.util.Date;
-
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
@@ -12,8 +10,6 @@ public interface AlunoServicesInterface {
     AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest);
 
     AlunoDTOResponse buscarAlunoPorRg(String rg);
-
-    public String adicionarFaltaDoAluno(String rg, Faltas faltas, Date novaFalta);
 
     public String adicionarFaltaDoAluno(String rg, Faltas faltas);
 

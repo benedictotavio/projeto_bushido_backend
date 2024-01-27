@@ -1,8 +1,7 @@
 package br.org.institutobushido.services.aluno;
 
-import java.util.Date;
-import java.util.Optional;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -124,29 +123,6 @@ public class AlunoServices implements AlunoServicesInterface {
             return true;
         }
         throw new MongoException("O aluno deve ter pelo menos 1 responsavel!");
-    }
-
-    @Override
-    public String adicionarFaltaDoAluno(String rg, Faltas falta, Date novaFalta) {
-        Aluno aluno = encontrarAlunoPorRg(rg);
-
-        if (!aluno.getGraduacao().isStatus()) {
-            throw new MongoException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
-        }
-
-        boolean faltasDoAluno = checarSeFaltaEstaRegistrada(aluno, falta.getData());
-
-        if (faltasDoAluno) {
-            throw new MongoException("Ja existe um registro de falta nessa data");
-        }
-
-        Faltas novaFaltaAdicionada = new Faltas(falta.getMotivo(), falta.getObservacao());
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().addToSet("graduacao.faltas", novaFaltaAdicionada);
-        mongoTemplate.updateFirst(query, update, Aluno.class);
-        return String.valueOf(aluno.getGraduacao().getFaltas().size() + 1);
     }
 
     @Override
