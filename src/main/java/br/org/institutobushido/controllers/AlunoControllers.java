@@ -19,9 +19,9 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.objects.graduacao.faltas.FaltasDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.model.aluno.objects.Faltas;
 import br.org.institutobushido.services.aluno.AlunoServices;
 import jakarta.validation.Valid;
 
@@ -76,7 +76,7 @@ public class AlunoControllers {
     }
 
     @PatchMapping("adicionarFalta/{rg}")
-    public ResponseEntity<String> adicionarFaltaAoAluno(@Valid @RequestBody FaltasDTORequest faltas,
+    public ResponseEntity<String> adicionarFaltaAoAluno(@Valid @RequestBody Faltas faltas,
             @PathVariable String rg) {
         try {
             String res = alunoServices.adicionarFaltaDoAluno(rg, faltas);
@@ -90,7 +90,11 @@ public class AlunoControllers {
     public ResponseEntity<String> retirarFaltaAoAluno(@RequestParam(name = "id") int faltasId,
             @PathVariable String rg) {
 
-        String res = alunoServices.retirarFaltaDoAluno(rg, faltasId);
-        return ResponseEntity.ok().body(res);
+        try {
+            String res = alunoServices.retirarFaltaDoAluno(rg, faltasId);
+            return ResponseEntity.ok().body(res);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

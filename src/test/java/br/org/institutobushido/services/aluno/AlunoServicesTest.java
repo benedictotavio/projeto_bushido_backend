@@ -34,7 +34,6 @@ import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTOResponse;
-import br.org.institutobushido.dtos.aluno.objects.graduacao.faltas.FaltasDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.alergia.AlergiaDTORequest;
@@ -289,8 +288,7 @@ class AlunoServicesTest {
         when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
 
         // Act
-        FaltasDTORequest falta1 = FaltasDTORequest.builder().withData(new Date(73827893L)).withMotivo("Dor de barriga")
-                .withObservacao("Aluno possui atestado").build();
+        Faltas falta1 = new Faltas("motivo", "observação");
 
         String result = alunoServices.adicionarFaltaDoAluno(validRg, falta1);
 
@@ -301,8 +299,7 @@ class AlunoServicesTest {
     @Test
     void deveRemoverFaltasSeAlunoExistir() {
         // Arrange
-        Date dataRemovida = new Date(3627836873l);
-        Faltas faltaRemovida = new Faltas("motivo", dataRemovida, "observação");
+        Faltas faltaRemovida = new Faltas("motivo", "observação");
 
         aluno.setGraduacao(new Graduacao(1, List.of(faltaRemovida), true, 50));
         Optional<Aluno> alunoTest = Optional.of(aluno);
@@ -325,13 +322,13 @@ class AlunoServicesTest {
 
         // Assert
         assertThrows(MongoException.class,
-                () -> alunoServices.retirarFaltaDoAluno(invalidRg, aluno.getGraduacao().getFaltas().get(0).getFaltasId()));
+                () -> alunoServices.retirarFaltaDoAluno(invalidRg,
+                        aluno.getGraduacao().getFaltas().get(0).getFaltasId()));
     }
 
     @Test
     void deveRetornarUmaFaltaSeExistir() {
-        Date falta = new Date(0300330444l);
-        Faltas falta1 = new Faltas("motivo", falta, "observacao");
+        Faltas falta1 = new Faltas("motivo", "observacao");
         aluno.setGraduacao(new Graduacao(1, List.of(falta1), true, 50));
         Faltas result = alunoServices.encontrarFaltasDoAluno(aluno, falta1.getFaltasId());
         assertNotNull(result);

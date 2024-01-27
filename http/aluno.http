@@ -77,12 +77,11 @@ Content-Type: application/json
 
 {
   "motivo":"Aluno se encontra doente",
-  "data":"2023-01-01",
   "observacao":"luis trouxe atestado"
 }
 
 ###
-PATCH {{url}}/retirarFalta/123456789?id=1235555272 HTTP/1.1
+PATCH {{url}}/retirarFalta/123456789?id=1213840946 HTTP/1.1
 
 ###
 POST {{url}}/adicionarResponsavel/123456789 HTTP/1.1

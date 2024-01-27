@@ -1,20 +1,15 @@
 package br.org.institutobushido.services.aluno;
 
-import java.util.Date;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import com.mongodb.MongoException;
-
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.objects.graduacao.faltas.FaltasDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.mappers.DadosEscolaresMapper;
@@ -128,22 +123,24 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public String adicionarFaltaDoAluno(String rg, FaltasDTORequest faltasDTORequest) {
+    public String adicionarFaltaDoAluno(String rg, Faltas falta) {
         Aluno aluno = encontrarAlunoPorRg(rg);
 
         if (!aluno.getGraduacao().isStatus()) {
             throw new MongoException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
         }
 
-        Optional<Faltas> faltasDoAluno = encontrarFaltasDoAlunoPelaData(aluno, faltasDTORequest.data());
+        boolean faltasDoAluno = checarSeFaltaEstaRegistrada(aluno, falta.getData());
 
-        if (faltasDoAluno.isEmpty()) {
+        if (faltasDoAluno) {
             throw new MongoException("Ja existe um registro de falta nessa data");
         }
 
+        Faltas novaFalta = new Faltas(falta.getMotivo(), falta.getObservacao());
+
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().addToSet("graduacao.faltas", faltasDTORequest);
+        Update update = new Update().addToSet("graduacao.faltas", novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return String.valueOf(aluno.getGraduacao().getFaltas().size() + 1);
     }
@@ -153,10 +150,6 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
 
         Faltas faltasDoAluno = encontrarFaltasDoAluno(aluno, faltasId);
-
-        if (aluno.getGraduacao().getFaltas().isEmpty()) {
-            throw new MongoException("Falta não encontrada!");
-        }
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
@@ -184,9 +177,22 @@ public class AlunoServices implements AlunoServicesInterface {
                 .orElseThrow(() -> new MongoException("Falta com id " + faltasId + " não foi encontrada."));
     }
 
-    protected Optional<Faltas> encontrarFaltasDoAlunoPelaData(Aluno aluno, Date data) {
-        return aluno.getGraduacao().getFaltas().stream()
-                .filter(falta -> falta.getData() == data).findFirst();
+    protected Optional<Faltas> encontrarFaltasDoAlunoPelaData(Aluno aluno, String data) {
+
+        if (!checarSeFaltaEstaRegistrada(aluno, data)) {
+            throw new MongoException("Falta" + data + "não encontrada!");
+        }
+
+        return aluno.getGraduacao().getFaltas().stream().filter(falta -> falta.getData().equals(data)).findFirst();
+    }
+
+    protected boolean checarSeFaltaEstaRegistrada(Aluno aluno, String data) {
+
+        if (aluno.getGraduacao().getFaltas().isEmpty()) {
+            return false;
+        }
+
+        return aluno.getGraduacao().getFaltas().stream().anyMatch(falta -> falta.getData().equals(data));
     }
 
 }
