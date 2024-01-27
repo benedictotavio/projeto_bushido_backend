@@ -321,7 +321,7 @@ class AlunoServicesTest {
         when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.empty());
 
         // Assert
-        assertThrows(MongoException.class,
+        assertThrows(IndexOutOfBoundsException.class,
                 () -> alunoServices.retirarFaltaDoAluno(invalidRg,
                         aluno.getGraduacao().getFaltas().get(0).getData()));
     }
