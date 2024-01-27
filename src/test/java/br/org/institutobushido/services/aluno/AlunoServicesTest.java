@@ -307,7 +307,7 @@ class AlunoServicesTest {
         when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
 
         // Act
-        String result = alunoServices.retirarFaltaDoAluno(validRg, faltaRemovida.getFaltasId());
+        String result = alunoServices.retirarFaltaDoAluno(validRg, faltaRemovida.getData());
 
         // Arrange
         assertNotNull(result);
@@ -323,14 +323,14 @@ class AlunoServicesTest {
         // Assert
         assertThrows(MongoException.class,
                 () -> alunoServices.retirarFaltaDoAluno(invalidRg,
-                        aluno.getGraduacao().getFaltas().get(0).getFaltasId()));
+                        aluno.getGraduacao().getFaltas().get(0).getData()));
     }
 
     @Test
     void deveRetornarUmaFaltaSeExistir() {
         Faltas falta1 = new Faltas("motivo", "observacao");
         aluno.setGraduacao(new Graduacao(1, List.of(falta1), true, 50));
-        Faltas result = alunoServices.encontrarFaltasDoAluno(aluno, falta1.getFaltasId());
+        Faltas result = alunoServices.encontrarFaltasDoAluno(aluno, falta1.getData());
         assertNotNull(result);
         assertEquals(result, falta1);
     }

@@ -87,11 +87,10 @@ public class AlunoControllers {
     }
 
     @PatchMapping("retirarFalta/{rg}")
-    public ResponseEntity<String> retirarFaltaAoAluno(@RequestParam(name = "id") int faltasId,
+    public ResponseEntity<String> retirarFaltaAoAluno(@RequestParam(name = "data") String data,
             @PathVariable String rg) {
-
         try {
-            String res = alunoServices.retirarFaltaDoAluno(rg, faltasId);
+            String res = alunoServices.retirarFaltaDoAluno(rg, data);
             return ResponseEntity.ok().body(res);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

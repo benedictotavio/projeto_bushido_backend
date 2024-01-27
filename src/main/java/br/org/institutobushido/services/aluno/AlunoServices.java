@@ -1,13 +1,17 @@
 package br.org.institutobushido.services.aluno;
 
+import java.util.Date;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
 import com.mongodb.MongoException;
+
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
@@ -123,6 +127,29 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
+    public String adicionarFaltaDoAluno(String rg, Faltas falta, Date novaFalta) {
+        Aluno aluno = encontrarAlunoPorRg(rg);
+
+        if (!aluno.getGraduacao().isStatus()) {
+            throw new MongoException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
+        }
+
+        boolean faltasDoAluno = checarSeFaltaEstaRegistrada(aluno, falta.getData());
+
+        if (faltasDoAluno) {
+            throw new MongoException("Ja existe um registro de falta nessa data");
+        }
+
+        Faltas novaFaltaAdicionada = new Faltas(falta.getMotivo(), falta.getObservacao());
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update().addToSet("graduacao.faltas", novaFaltaAdicionada);
+        mongoTemplate.updateFirst(query, update, Aluno.class);
+        return String.valueOf(aluno.getGraduacao().getFaltas().size() + 1);
+    }
+
+    @Override
     public String adicionarFaltaDoAluno(String rg, Faltas falta) {
         Aluno aluno = encontrarAlunoPorRg(rg);
 
@@ -146,7 +173,7 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public String retirarFaltaDoAluno(String rg, int faltasId) {
+    public String retirarFaltaDoAluno(String rg, String faltasId) {
         Aluno aluno = encontrarAlunoPorRg(rg);
 
         Faltas faltasDoAluno = encontrarFaltasDoAluno(aluno, faltasId);
@@ -169,9 +196,9 @@ public class AlunoServices implements AlunoServicesInterface {
                 .findFirst();
     }
 
-    protected Faltas encontrarFaltasDoAluno(Aluno aluno, int faltasId) {
+    protected Faltas encontrarFaltasDoAluno(Aluno aluno, String faltasId) {
         Optional<Faltas> faltaEncontrada = aluno.getGraduacao().getFaltas().stream()
-                .filter(falta -> falta.getFaltasId() == faltasId).findFirst();
+                .filter(falta -> falta.getData().equals(faltasId)).findFirst();
 
         return faltaEncontrada
                 .orElseThrow(() -> new MongoException("Falta com id " + faltasId + " não foi encontrada."));
