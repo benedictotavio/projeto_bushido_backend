@@ -28,4 +28,6 @@ public interface AlunoServicesInterface {
     public String adicionarAcompanhamentoSaude(String rg, String acompanhamentoSaude);
 
     public String removerAcompanhamentoSaude(String rg, String acompanhamentoSaude);
+
+    public Object editarHistoricoDeSaude(String rg, String campo, String historicoDeSaude, boolean resposta);
 }

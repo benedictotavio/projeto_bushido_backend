@@ -7,7 +7,7 @@ import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.doenca_cronica.DoencaCronicaDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTOResponse;
 import br.org.institutobushido.model.aluno.historico_de_saude.Alergias;
-import br.org.institutobushido.model.aluno.historico_de_saude.Cirurgia;
+import br.org.institutobushido.model.aluno.historico_de_saude.Cirurgias;
 import br.org.institutobushido.model.aluno.historico_de_saude.DoencaCronica;
 import br.org.institutobushido.model.aluno.historico_de_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.model.aluno.objects.HistoricoSaude;
@@ -27,7 +27,7 @@ public class HistoricoSaudeMapper {
                 historicoSaude.setAlergias(
                                 new Alergias(historicoSaudeDTORequest.alergia().resposta(),
                                                 historicoSaudeDTORequest.alergia().tipo()));
-                historicoSaude.setCirurgia(new Cirurgia(historicoSaudeDTORequest.cirurgia().resposta(),
+                historicoSaude.setCirurgia(new Cirurgias(historicoSaudeDTORequest.cirurgia().resposta(),
                                 historicoSaudeDTORequest.cirurgia().tipo()));
                 historicoSaude.setDoencaCronica(new DoencaCronica(historicoSaudeDTORequest.doencaCronica().resposta(),
                                 historicoSaudeDTORequest.doencaCronica().tipo()));

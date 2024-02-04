@@ -49,7 +49,7 @@ import br.org.institutobushido.enums.TipoSanguineo;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.historico_de_saude.Alergias;
-import br.org.institutobushido.model.aluno.historico_de_saude.Cirurgia;
+import br.org.institutobushido.model.aluno.historico_de_saude.Cirurgias;
 import br.org.institutobushido.model.aluno.historico_de_saude.DoencaCronica;
 import br.org.institutobushido.model.aluno.historico_de_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.model.aluno.objects.DadosEscolares;
@@ -101,7 +101,7 @@ class AlunoServicesTest {
         aluno.setDataNascimento(alunoDtoRequest.dataNascimento());
         aluno.setHistoricoSaude(new HistoricoSaude(TipoSanguineo.A_NEGATIVO, FatorRH.POSITIVO,
                 new UsoMedicamentoContinuo(false, "medicamento", "medicamento"), new DoencaCronica(false, "doenca"),
-                new Alergias(false, "alergia"), new Cirurgia(false, "cirurgia"), List.of("deficiencia"),
+                new Alergias(false, "alergia"), new Cirurgias(false, "cirurgia"), List.of("deficiencia"),
                 List.of("acompanhamentoSaude")));
 
         reset(alunoRepositorio);
@@ -370,5 +370,23 @@ class AlunoServicesTest {
         assertThrows(MongoException.class, () -> {
             alunoServices.adicionarDeficiencia("123456212", deficiencia);
         });
+    }
+
+    @Test
+    void deveAdicionarUmAcompanhamentoNoHistoricoDeSaude() {
+        HistoricoSaude hs = new HistoricoSaude(TipoSanguineo.AB_POSITIVO, FatorRH.POSITIVO,
+                new UsoMedicamentoContinuo(false, "tipo", "atendimento"), null, null, null, List.of("mancamento"),
+                List.of("atendimento"));
+
+        aluno.setHistoricoSaude(hs);
+
+        String rg = "123456789";
+        String acompanhamentoSaude = "Acompanhamento 1";
+
+        when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
+
+        String result = alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamentoSaude);
+
+        assertEquals(acompanhamentoSaude, result);
     }
 }
