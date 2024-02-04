@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -77,7 +76,7 @@ public class AlunoControllers {
         }
     }
 
-    @PatchMapping("adicionarFalta/{rg}")
+    @PostMapping("adicionarFalta/{rg}")
     public ResponseEntity<String> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
             @PathVariable String rg) {
         try {
@@ -88,7 +87,7 @@ public class AlunoControllers {
         }
     }
 
-    @PatchMapping("adicionarFalta/{rg}/{data}")
+    @PostMapping("adicionarFalta/{rg}/{data}")
     public ResponseEntity<String> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
             @PathVariable String rg, @PathVariable long data) {
         try {
@@ -99,7 +98,7 @@ public class AlunoControllers {
         }
     }
 
-    @PatchMapping("retirarFalta/{rg}")
+    @PostMapping("retirarFalta/{rg}")
     public ResponseEntity<String> retirarFaltaAoAluno(@RequestParam(name = "data") String data,
             @PathVariable String rg) {
         try {
@@ -109,4 +108,49 @@ public class AlunoControllers {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("deficiencia/{rg}")
+    public ResponseEntity<String> adicionarDeficiencia(@PathVariable String rg,
+            @RequestParam(name = "deficiencia") String deficiencia) {
+        try {
+            String res = alunoServices.adicionarDeficiencia(rg, deficiencia);
+            return ResponseEntity.ok().body(res);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("deficiencia/{rg}")
+    public ResponseEntity<String> removerDeficiencia(@PathVariable String rg,
+            @RequestParam(name = "deficiencia") String deficiencia) {
+        try {
+            String res = alunoServices.removerDeficiencia(rg, deficiencia);
+            return ResponseEntity.ok().body(res);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("acompanhamentoSaude/{rg}")
+    public ResponseEntity<String> adicionarAcompanhamentoSaude(@PathVariable String rg,
+            @RequestParam(name = "acompanhamento") String acompanhamento) {
+        try {
+            String res = alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamento);
+            return ResponseEntity.ok().body(res);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("acompanhamentoSaude/{rg}")
+    public ResponseEntity<String> removerAcompanhamentoSaude(@PathVariable String rg,
+            @RequestParam(name = "acompanhamento") String acompanhamento) {
+        try {
+            String res = alunoServices.removerAcompanhamentoSaude(rg, acompanhamento);
+            return ResponseEntity.ok().body(res);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
