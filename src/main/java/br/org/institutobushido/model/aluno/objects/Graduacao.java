@@ -18,7 +18,7 @@ public class Graduacao {
     }
 
     private int kyu;
-    private List<Faltas> faltas = new ArrayList<>();
+    private List<Falta> faltas = new ArrayList<>();
     private boolean status = true;
     private int frequencia;
 }

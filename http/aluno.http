@@ -73,9 +73,25 @@ Content-Type: application/json
 
 ###
 PATCH {{url}}/adicionarFalta/123456789 HTTP/1.1
+Content-Type: application/json
+
+{
+  "motivo":"Aluno se encontra doente",
+  "observacao":"luis trouxe atestado"
+}
 
 ###
-PATCH {{url}}/retirarFalta/123456789 HTTP/1.1
+PATCH {{url}}/adicionarFalta/123456789/1506992087893 HTTP/1.1
+Content-Type: application/json
+
+{
+  "motivo":"Aluno se encontra doente",
+  "observacao":"luis trouxe atestado"
+}
+
+
+###
+PATCH {{url}}/retirarFalta/123456789?data=27-01-2024 HTTP/1.1
 
 ###
 POST {{url}}/adicionarResponsavel/123456789 HTTP/1.1
@@ -90,4 +106,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{url}}/removerResponsavel/123456789?cpf=020202020200 HTTP/1.1
+DELETE {{url}}/removerResponsavel/123456789?cpf=020202020201 HTTP/1.1

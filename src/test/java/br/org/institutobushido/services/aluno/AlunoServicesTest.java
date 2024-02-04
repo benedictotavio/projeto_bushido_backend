@@ -34,6 +34,7 @@ import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.alergia.AlergiaDTORequest;
@@ -54,7 +55,7 @@ import br.org.institutobushido.model.aluno.historico_de_saude.UsoMedicamentoCont
 import br.org.institutobushido.model.aluno.objects.DadosEscolares;
 import br.org.institutobushido.model.aluno.objects.DadosSociais;
 import br.org.institutobushido.model.aluno.objects.Endereco;
-import br.org.institutobushido.model.aluno.objects.Faltas;
+import br.org.institutobushido.model.aluno.objects.Falta;
 import br.org.institutobushido.model.aluno.objects.Graduacao;
 import br.org.institutobushido.model.aluno.objects.HistoricoSaude;
 import br.org.institutobushido.model.aluno.objects.Responsavel;
@@ -86,14 +87,15 @@ class AlunoServicesTest {
                 .withHistoricoSaude(
                         new HistoricoSaudeDTORequest(new UsoMedicamentoContinuoDTORequest(false, "tipo", "medicamento"),
                                 new AlergiaDTORequest(false, "alergia"), new CirurgiaDTORequest(false, "cirurgia"),
-                                new DoencaCronicaDTORequest(false, "doenca"),new ArrayList<String>(), new ArrayList<String>()))
+                                new DoencaCronicaDTORequest(false, "doenca"), new ArrayList<String>(),
+                                new ArrayList<String>()))
                 .build();
 
         aluno.setNome(alunoDtoRequest.nome());
         aluno.setDadosSociais(new DadosSociais());
         aluno.setDadosEscolares(new DadosEscolares());
         aluno.setRg(alunoDtoRequest.rg());
-        aluno.setGraduacao(new Graduacao(5, new ArrayList<Faltas>(), false, 75));
+        aluno.setGraduacao(new Graduacao(5, new ArrayList<Falta>(), false, 75));
         aluno.setResponsaveis(responsaveis);
         aluno.setEndereco(new Endereco());
         aluno.setDataNascimento(alunoDtoRequest.dataNascimento());
@@ -116,7 +118,6 @@ class AlunoServicesTest {
 
     @Test
     void deveRetornarTrueParaMetodoSaveForChamado() {
-        ;
         // Arrange
         when(alunoRepositorio.save(Mockito.any(Aluno.class))).thenReturn(aluno);
 
@@ -205,9 +206,7 @@ class AlunoServicesTest {
 
     @Test
     void deveRetornarExceptionSeRgDoAlunoForPassadoComoNull() {
-        AlunoServices alunoServices = new AlunoServices();
-
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(MongoException.class, () -> {
             alunoServices.encontrarAlunoPorRg(null);
         });
     }
@@ -281,4 +280,59 @@ class AlunoServicesTest {
         assertTrue(result);
     }
 
+    @Test
+    void deveAdicionarFaltasSeAlunoExistir() {
+        // Arrange
+        aluno.setGraduacao(new Graduacao(1, new ArrayList<Falta>(), true, 50));
+        Optional<Aluno> alunoTest = Optional.of(aluno);
+        String validRg = "123456789";
+        when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
+
+        // Act
+        FaltaDTORequest falta1 = new FaltaDTORequest("motivo", "observação");
+
+        String result = alunoServices.adicionarFaltaDoAluno(validRg, falta1);
+
+        // Arrange
+        assertNotNull(result);
+    }
+
+    @Test
+    void deveRemoverFaltasSeAlunoExistir() {
+        // Arrange
+        Falta faltaRemovida = new Falta("motivo", "observação");
+
+        aluno.setGraduacao(new Graduacao(1, List.of(faltaRemovida), true, 50));
+        Optional<Aluno> alunoTest = Optional.of(aluno);
+        String validRg = "123456789";
+        when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
+
+        // Act
+        String result = alunoServices.retirarFaltaDoAluno(validRg, faltaRemovida.getData());
+
+        // Arrange
+        assertNotNull(result);
+        assertEquals(0, Integer.parseInt(result));
+    }
+
+    @Test
+    void deveRetornarUmaExceçãoSeRgForInvalido() {
+        String invalidRg = "00000000";
+        AlunoRepositorio alunoRepositorio = mock(AlunoRepositorio.class);
+        when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.empty());
+
+        // Assert
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> alunoServices.retirarFaltaDoAluno(invalidRg,
+                        aluno.getGraduacao().getFaltas().get(0).getData()));
+    }
+
+    @Test
+    void deveRetornarUmaFaltaSeExistir() {
+        Falta falta1 = new Falta("motivo", "observacao");
+        aluno.setGraduacao(new Graduacao(1, List.of(falta1), true, 50));
+        Falta result = alunoServices.encontrarFaltasDoAluno(aluno, falta1.getData());
+        assertNotNull(result);
+        assertEquals(result, falta1);
+    }
 }

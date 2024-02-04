@@ -24,6 +24,6 @@ public class GraduacaoMapper {
             return null;
         }
         return GraduacaoDTOResponse.builder().withFrequencia(graduacao.getFrequencia())
-                .withKyu(graduacao.getKyu()).build();
+                .withKyu(graduacao.getKyu()).withFaltas(graduacao.getFaltas()).build();
     }
 }
