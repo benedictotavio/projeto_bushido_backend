@@ -20,4 +20,12 @@ public interface AlunoServicesInterface {
     public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest);
 
     public boolean removerResponsavel(String rg, String cpf);
+
+    public String adicionarDeficiencia(String rg, String deficiencia);
+
+    public String removerDeficiencia(String rg, String deficiencia);
+
+    public String adicionarAcompanhamentoSaude(String rg, String acompanhamentoSaude);
+
+    public String removerAcompanhamentoSaude(String rg, String acompanhamentoSaude);
 }

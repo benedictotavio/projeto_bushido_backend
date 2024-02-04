@@ -194,6 +194,56 @@ public class AlunoServices implements AlunoServicesInterface {
         return String.valueOf(aluno.getGraduacao().getFaltas().size() - 1);
     }
 
+    @Override
+    public String adicionarDeficiencia(String rg, String deficiencia) {
+        Aluno aluno = encontrarAlunoPorRg(rg);
+
+        if (aluno.getHistoricoSaude().getDeficiencias().contains(deficiencia)) {
+            throw new MongoException(deficiencia + " ja existe no historico de saude");
+        }
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update().push("historicoSaude.deficiencias", deficiencia);
+        mongoTemplate.updateFirst(query, update, Aluno.class);
+        return deficiencia;
+    }
+
+    @Override
+    public String removerDeficiencia(String rg, String deficiencia) {
+        Aluno aluno = encontrarAlunoPorRg(rg);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update().pull("historicoSaude.deficiencias", deficiencia);
+        mongoTemplate.updateFirst(query, update, Aluno.class);
+        return deficiencia;
+    }
+
+    @Override
+    public String adicionarAcompanhamentoSaude(String rg, String acompanhamentoSaude) {
+        Aluno aluno = encontrarAlunoPorRg(rg);
+
+        if (aluno.getHistoricoSaude().getAcompanhamentoSaude().contains(acompanhamentoSaude)) {
+            throw new MongoException(acompanhamentoSaude + " ja existe no historico de saude");
+        }
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update().push("historicoSaude.acompanhamentoSaude", acompanhamentoSaude);
+        mongoTemplate.updateFirst(query, update, Aluno.class);
+        return acompanhamentoSaude;
+    }
+
+    @Override
+    public String removerAcompanhamentoSaude(String rg, String acompanhamentoSaude) {
+        Aluno aluno = encontrarAlunoPorRg(rg);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update().pull("historicoSaude.acompanhamentoSaude", acompanhamentoSaude);
+        mongoTemplate.updateFirst(query, update, Aluno.class);
+        return acompanhamentoSaude;
+    }
+
     protected Aluno encontrarAlunoPorRg(String rgAluno) {
         return alunoRepositorio.findByRg(rgAluno)
                 .orElseThrow(() -> new MongoException("Rg: " + rgAluno + " não encontrado"));
@@ -244,5 +294,4 @@ public class AlunoServices implements AlunoServicesInterface {
 
         return aluno.getGraduacao().getFaltas().stream().anyMatch(falta -> falta.getData().equals(dataFormatada));
     }
-
 }

@@ -8,12 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
-
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,9 +19,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-
 import com.mongodb.MongoException;
-
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTORequest;
@@ -334,5 +330,10 @@ class AlunoServicesTest {
         Falta result = alunoServices.encontrarFaltasDoAluno(aluno, falta1.getData());
         assertNotNull(result);
         assertEquals(result, falta1);
+    }
+
+    @Test
+    void deveAdicionarUmaInfromaçãoNoHistoricoDeSaude(){
+        
     }
 }
