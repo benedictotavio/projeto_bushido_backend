@@ -8,10 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +21,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+
 import com.mongodb.MongoException;
+
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTORequest;
@@ -333,7 +337,38 @@ class AlunoServicesTest {
     }
 
     @Test
-    void deveAdicionarUmaInfromaçãoNoHistoricoDeSaude(){
-        
+    void deveAdicionarUmaDeficienciaNoHistoricoDeSaude() {
+        HistoricoSaude hs = new HistoricoSaude(TipoSanguineo.AB_POSITIVO, FatorRH.POSITIVO,
+                new UsoMedicamentoContinuo(false, "tipo", "atendimento"), null, null, null, null, null);
+
+        hs.setDeficiencias(List.of("mancamento"));
+        hs.setAcompanhamentoSaude(List.of("atendimento"));
+        aluno.setHistoricoSaude(hs);
+
+        when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.of(aluno));
+
+        String deficiencia = "Visual impairment";
+
+        String result = alunoServices.adicionarDeficiencia("1234561111", deficiencia);
+
+        assertEquals(deficiencia, result);
+    }
+
+    @Test
+    void deveRetornarUmaExcessaoSeDeficienciaJaExistir() {
+
+        HistoricoSaude hs = new HistoricoSaude(TipoSanguineo.AB_POSITIVO, FatorRH.POSITIVO,
+                new UsoMedicamentoContinuo(false, "tipo", "atendimento"), null, null, null, null, null);
+
+        hs.setDeficiencias(List.of("Physical disability"));
+        hs.setAcompanhamentoSaude(List.of("atendimento"));
+        aluno.setHistoricoSaude(hs);
+        Mockito.when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.of(aluno));
+
+        String deficiencia = "Physical disability";
+
+        assertThrows(MongoException.class, () -> {
+            alunoServices.adicionarDeficiencia("123456212", deficiencia);
+        });
     }
 }
