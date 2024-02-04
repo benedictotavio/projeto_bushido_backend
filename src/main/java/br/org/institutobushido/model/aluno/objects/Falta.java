@@ -5,13 +5,15 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class Faltas {
+public class Falta {
 
-    public Faltas(String motivo, String observacao) {
+    public Falta(String motivo, String observacao) {
         this.data = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         this.motivo = motivo;
         this.observacao = observacao;
     }
+
+    public Falta(){}
 
     private String data;
     private String motivo;

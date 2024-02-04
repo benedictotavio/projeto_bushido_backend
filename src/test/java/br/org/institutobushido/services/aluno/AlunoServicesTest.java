@@ -34,6 +34,7 @@ import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTOResponse;
+import br.org.institutobushido.dtos.aluno.objects.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTORequest;
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.informacoes_de_saude.alergia.AlergiaDTORequest;
@@ -54,7 +55,7 @@ import br.org.institutobushido.model.aluno.historico_de_saude.UsoMedicamentoCont
 import br.org.institutobushido.model.aluno.objects.DadosEscolares;
 import br.org.institutobushido.model.aluno.objects.DadosSociais;
 import br.org.institutobushido.model.aluno.objects.Endereco;
-import br.org.institutobushido.model.aluno.objects.Faltas;
+import br.org.institutobushido.model.aluno.objects.Falta;
 import br.org.institutobushido.model.aluno.objects.Graduacao;
 import br.org.institutobushido.model.aluno.objects.HistoricoSaude;
 import br.org.institutobushido.model.aluno.objects.Responsavel;
@@ -94,7 +95,7 @@ class AlunoServicesTest {
         aluno.setDadosSociais(new DadosSociais());
         aluno.setDadosEscolares(new DadosEscolares());
         aluno.setRg(alunoDtoRequest.rg());
-        aluno.setGraduacao(new Graduacao(5, new ArrayList<Faltas>(), false, 75));
+        aluno.setGraduacao(new Graduacao(5, new ArrayList<Falta>(), false, 75));
         aluno.setResponsaveis(responsaveis);
         aluno.setEndereco(new Endereco());
         aluno.setDataNascimento(alunoDtoRequest.dataNascimento());
@@ -282,13 +283,13 @@ class AlunoServicesTest {
     @Test
     void deveAdicionarFaltasSeAlunoExistir() {
         // Arrange
-        aluno.setGraduacao(new Graduacao(1, new ArrayList<Faltas>(), true, 50));
+        aluno.setGraduacao(new Graduacao(1, new ArrayList<Falta>(), true, 50));
         Optional<Aluno> alunoTest = Optional.of(aluno);
         String validRg = "123456789";
         when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
 
         // Act
-        Faltas falta1 = new Faltas("motivo", "observação");
+        FaltaDTORequest falta1 = new FaltaDTORequest("motivo", "observação");
 
         String result = alunoServices.adicionarFaltaDoAluno(validRg, falta1);
 
@@ -299,7 +300,7 @@ class AlunoServicesTest {
     @Test
     void deveRemoverFaltasSeAlunoExistir() {
         // Arrange
-        Faltas faltaRemovida = new Faltas("motivo", "observação");
+        Falta faltaRemovida = new Falta("motivo", "observação");
 
         aluno.setGraduacao(new Graduacao(1, List.of(faltaRemovida), true, 50));
         Optional<Aluno> alunoTest = Optional.of(aluno);
@@ -328,9 +329,9 @@ class AlunoServicesTest {
 
     @Test
     void deveRetornarUmaFaltaSeExistir() {
-        Faltas falta1 = new Faltas("motivo", "observacao");
+        Falta falta1 = new Falta("motivo", "observacao");
         aluno.setGraduacao(new Graduacao(1, List.of(falta1), true, 50));
-        Faltas result = alunoServices.encontrarFaltasDoAluno(aluno, falta1.getData());
+        Falta result = alunoServices.encontrarFaltasDoAluno(aluno, falta1.getData());
         assertNotNull(result);
         assertEquals(result, falta1);
     }
