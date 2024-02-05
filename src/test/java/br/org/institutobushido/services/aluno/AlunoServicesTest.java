@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
@@ -318,14 +318,16 @@ class AlunoServicesTest {
 
     @Test
     void deveRetornarUmaExceçãoSeRgForInvalido() {
+        aluno.getGraduacao().setFaltas(List.of(new Falta("motivo", "observação")));
         String invalidRg = "00000000";
+        String faltasId = aluno.getGraduacao().getFaltas().get(0).getData();
         AlunoRepositorio alunoRepositorio = mock(AlunoRepositorio.class);
-        when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.empty());
+        when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.of(aluno));
 
         // Assert
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> alunoServices.retirarFaltaDoAluno(invalidRg,
-                        aluno.getGraduacao().getFaltas().get(0).getData()));
+        assertThrows(MongoException.class, () -> {
+            alunoServices.retirarFaltaDoAluno(invalidRg, faltasId);
+        });
     }
 
     @Test
