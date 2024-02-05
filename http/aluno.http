@@ -119,7 +119,7 @@ Content-Type: application/json
 
 {
   "cirurgias": {
-      "tipo": "desvio de cepto",
+      "tipo": "endometriose",
       "resposta": true
     }
 }

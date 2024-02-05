@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
@@ -119,7 +120,7 @@ class AlunoServicesTest {
     @Test
     void deveRetornarTrueParaMetodoSaveForChamado() {
         // Arrange
-        when(alunoRepositorio.save(Mockito.any(Aluno.class))).thenReturn(aluno);
+        when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
 
         // Act
         AlunoDTOResponse result = alunoServices.adicionarAluno(alunoDtoRequest);
@@ -156,7 +157,7 @@ class AlunoServicesTest {
 
     @Test
     void deveConfirmarAsIntanciasDosValores() {
-        when(alunoRepositorio.save(Mockito.any(Aluno.class))).thenReturn(aluno);
+        when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
         AlunoDTOResponse result = alunoServices.adicionarAluno(alunoDtoRequest);
         assertEquals(aluno.getNome(), result.nome());
         assertEquals(aluno.getDadosSociais().isBolsaFamilia(), result.dadosSociais().bolsaFamilia());
@@ -388,5 +389,29 @@ class AlunoServicesTest {
         String result = alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamentoSaude);
 
         assertEquals(acompanhamentoSaude, result);
+    }
+
+    @Test
+    void adicionarNovoValorNoHistoricoDeSaudeDeficiencia() {
+        String rg = "123456789";
+        String deficiencia = "Deficiencia1";
+        when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
+        String result = alunoServices.adicionarDeficiencia(rg, deficiencia);
+        assertEquals(result, deficiencia);
+    }
+
+    @Test
+    void deveRemoverADeficienciaDoObjetoHistoricoDeSaude() {
+        // Arrange
+        aluno.setRg("123456789");
+        aluno.setHistoricoSaude(new HistoricoSaude());
+        aluno.getHistoricoSaude().setDeficiencias(List.of("Deficiencia1", "Deficiencia2", "Deficiencia3"));
+        when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.of(aluno));
+
+        // Act
+        String removedDeficiencia = alunoServices.removerDeficiencia("123456789", "Deficiencia2");
+
+        // Assert
+        assertEquals("Deficiencia2", removedDeficiencia);
     }
 }
