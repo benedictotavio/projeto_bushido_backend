@@ -21,7 +21,7 @@ public class HistoricoSaude {
     private UsoMedicamentoContinuo usoMedicamentoContinuo;
     private DoencaCronica doencaCronica;
     private Alergias alergias;
-    private Cirurgias cirurgia;
+    private Cirurgias cirurgias;
     private List<String> deficiencias;
     private List<String> acompanhamentoSaude;
 }

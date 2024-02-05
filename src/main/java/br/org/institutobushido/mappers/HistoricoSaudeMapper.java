@@ -27,7 +27,7 @@ public class HistoricoSaudeMapper {
                 historicoSaude.setAlergias(
                                 new Alergias(historicoSaudeDTORequest.alergia().resposta(),
                                                 historicoSaudeDTORequest.alergia().tipo()));
-                historicoSaude.setCirurgia(new Cirurgias(historicoSaudeDTORequest.cirurgia().resposta(),
+                historicoSaude.setCirurgias(new Cirurgias(historicoSaudeDTORequest.cirurgia().resposta(),
                                 historicoSaudeDTORequest.cirurgia().tipo()));
                 historicoSaude.setDoencaCronica(new DoencaCronica(historicoSaudeDTORequest.doencaCronica().resposta(),
                                 historicoSaudeDTORequest.doencaCronica().tipo()));
@@ -45,12 +45,12 @@ public class HistoricoSaudeMapper {
                         return null;
                 }
                 return HistoricoSaudeDTOResponse.builder()
-                                .withAlergia(AlergiaDTOResponse.builder()
+                                .withAlergias(AlergiaDTOResponse.builder()
                                                 .withResposta(historicoSaude.getAlergias().getResposta())
                                                 .withTipo(historicoSaude.getAlergias().getTipo()).build())
-                                .withCirurgia(CirurgiaDTOResponse.builder()
-                                                .withResposta(historicoSaude.getCirurgia().getResposta())
-                                                .withTipo(historicoSaude.getCirurgia().getTipo()).build())
+                                .withCirurgias(CirurgiaDTOResponse.builder()
+                                                .withResposta(historicoSaude.getCirurgias().getResposta())
+                                                .withTipo(historicoSaude.getCirurgias().getTipo()).build())
                                 .withDoencaCronica(
                                                 DoencaCronicaDTOResponse.builder()
                                                                 .withResposta(historicoSaude.getDoencaCronica()
@@ -62,7 +62,7 @@ public class HistoricoSaudeMapper {
                                                                 .getQualMedicamento())
                                                 .withResposta(historicoSaude.getUsoMedicamentoContinuo().getResposta())
                                                 .withTipo(historicoSaude.getUsoMedicamentoContinuo().getTipo()).build())
-                                .withDeficiencia(historicoSaude.getDeficiencias())
+                                .withDeficiencias(historicoSaude.getDeficiencias())
                                 .withAcompanhamentoSaude(historicoSaude.getAcompanhamentoSaude())
                                 .build();
         }

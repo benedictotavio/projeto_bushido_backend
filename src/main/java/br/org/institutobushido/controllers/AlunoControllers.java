@@ -169,6 +169,17 @@ public class AlunoControllers {
             }
         }
 
+        if (object.getValue().getTipo().equals("")) {
+            try {
+                Object res = alunoServices.editarHistoricoDeSaude(rg, object.getKey(), "",
+                        false);
+                return ResponseEntity.ok().body(res);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+
+        }
+
         try {
             Object res = alunoServices.editarHistoricoDeSaude(rg, object.getKey(), object.getValue().getTipo(),
                     true);
