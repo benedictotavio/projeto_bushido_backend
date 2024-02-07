@@ -14,15 +14,15 @@ import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public record AlunoDTOResponse(
-        String nome,
-        Date dataNascimento,
-        Genero genero,
-        DadosSociaisDTOResponse dadosSociais,
-        DadosEscolaresDTOResponse dadosEscolares,
-        Date dataPreenchimento,
-        EnderecoDTOResponse endereco,
-        String rg,
-        List<ResponsavelDTOResponse> responsaveis,
-        GraduacaoDTOResponse graduacao,
-        HistoricoSaudeDTOResponse historicoSaude) {
+                String nome,
+                Date dataNascimento,
+                Genero genero,
+                DadosSociaisDTOResponse dadosSociais,
+                DadosEscolaresDTOResponse dadosEscolares,
+                Date dataPreenchimento,
+                EnderecoDTOResponse endereco,
+                String rg,
+                List<ResponsavelDTOResponse> responsaveis,
+                GraduacaoDTOResponse graduacao,
+                HistoricoSaudeDTOResponse historicoSaude) {
 }

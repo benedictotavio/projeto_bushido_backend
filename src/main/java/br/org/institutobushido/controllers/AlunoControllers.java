@@ -1,6 +1,7 @@
 package br.org.institutobushido.controllers;
 
 import java.net.URI;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mongodb.MongoException;
 
+import br.org.institutobushido.abstracts.InformacoesSaudeImpl;
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.objects.graduacao.faltas.FaltaDTORequest;
@@ -143,14 +146,45 @@ public class AlunoControllers {
     }
 
     @DeleteMapping("acompanhamentoSaude/{rg}")
-    public ResponseEntity<String> removerAcompanhamentoSaude(@PathVariable String rg,
+    public ResponseEntity<Object> removerAcompanhamentoSaude(@PathVariable String rg,
             @RequestParam(name = "acompanhamento") String acompanhamento) {
         try {
-            String res = alunoServices.removerAcompanhamentoSaude(rg, acompanhamento);
+            Object res = alunoServices.removerAcompanhamentoSaude(rg, acompanhamento);
             return ResponseEntity.ok().body(res);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    @PutMapping("historicoSaude/{rg}")
+    public ResponseEntity<Object> adicionarHistoricoDeSaude(@PathVariable String rg,
+            @RequestBody Map.Entry<String, InformacoesSaudeImpl> object) {
+
+        if (!object.getValue().getResposta()) {
+            try {
+                Object res = alunoServices.editarHistoricoDeSaude(rg, object.getKey(), "", false);
+                return ResponseEntity.ok().body(res);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+        }
+
+        if (object.getValue().getTipo().equals("")) {
+            try {
+                Object res = alunoServices.editarHistoricoDeSaude(rg, object.getKey(), "",
+                        false);
+                return ResponseEntity.ok().body(res);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+        }
+
+        try {
+            Object res = alunoServices.editarHistoricoDeSaude(rg, object.getKey(), object.getValue().getTipo(),
+                    true);
+            return ResponseEntity.ok().body(res);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

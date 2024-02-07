@@ -30,5 +30,7 @@ public abstract class InformacaoSaude {
         return "Resposta: " + resposta + ", Tipo: " + tipo;
     }
 
-    // Adicione outros métodos ou funcionalidades conforme necessário
+    public void setStatus() {
+        this.resposta = !this.resposta;
+    }
 }

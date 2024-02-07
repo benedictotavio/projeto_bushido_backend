@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -49,7 +50,7 @@ import br.org.institutobushido.enums.TipoSanguineo;
 import br.org.institutobushido.enums.Turno;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.historico_de_saude.Alergias;
-import br.org.institutobushido.model.aluno.historico_de_saude.Cirurgia;
+import br.org.institutobushido.model.aluno.historico_de_saude.Cirurgias;
 import br.org.institutobushido.model.aluno.historico_de_saude.DoencaCronica;
 import br.org.institutobushido.model.aluno.historico_de_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.model.aluno.objects.DadosEscolares;
@@ -101,7 +102,7 @@ class AlunoServicesTest {
         aluno.setDataNascimento(alunoDtoRequest.dataNascimento());
         aluno.setHistoricoSaude(new HistoricoSaude(TipoSanguineo.A_NEGATIVO, FatorRH.POSITIVO,
                 new UsoMedicamentoContinuo(false, "medicamento", "medicamento"), new DoencaCronica(false, "doenca"),
-                new Alergias(false, "alergia"), new Cirurgia(false, "cirurgia"), List.of("deficiencia"),
+                new Alergias(false, "alergia"), new Cirurgias(false, "cirurgia"), List.of("deficiencia"),
                 List.of("acompanhamentoSaude")));
 
         reset(alunoRepositorio);
@@ -119,7 +120,7 @@ class AlunoServicesTest {
     @Test
     void deveRetornarTrueParaMetodoSaveForChamado() {
         // Arrange
-        when(alunoRepositorio.save(Mockito.any(Aluno.class))).thenReturn(aluno);
+        when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
 
         // Act
         AlunoDTOResponse result = alunoServices.adicionarAluno(alunoDtoRequest);
@@ -156,7 +157,7 @@ class AlunoServicesTest {
 
     @Test
     void deveConfirmarAsIntanciasDosValores() {
-        when(alunoRepositorio.save(Mockito.any(Aluno.class))).thenReturn(aluno);
+        when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
         AlunoDTOResponse result = alunoServices.adicionarAluno(alunoDtoRequest);
         assertEquals(aluno.getNome(), result.nome());
         assertEquals(aluno.getDadosSociais().isBolsaFamilia(), result.dadosSociais().bolsaFamilia());
@@ -317,14 +318,16 @@ class AlunoServicesTest {
 
     @Test
     void deveRetornarUmaExceçãoSeRgForInvalido() {
+        aluno.getGraduacao().setFaltas(List.of(new Falta("motivo", "observação")));
         String invalidRg = "00000000";
+        String faltasId = aluno.getGraduacao().getFaltas().get(0).getData();
         AlunoRepositorio alunoRepositorio = mock(AlunoRepositorio.class);
-        when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.empty());
+        when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.of(aluno));
 
         // Assert
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> alunoServices.retirarFaltaDoAluno(invalidRg,
-                        aluno.getGraduacao().getFaltas().get(0).getData()));
+        assertThrows(MongoException.class, () -> {
+            alunoServices.retirarFaltaDoAluno(invalidRg, faltasId);
+        });
     }
 
     @Test
@@ -370,5 +373,47 @@ class AlunoServicesTest {
         assertThrows(MongoException.class, () -> {
             alunoServices.adicionarDeficiencia("123456212", deficiencia);
         });
+    }
+
+    @Test
+    void deveAdicionarUmAcompanhamentoNoHistoricoDeSaude() {
+        HistoricoSaude hs = new HistoricoSaude(TipoSanguineo.AB_POSITIVO, FatorRH.POSITIVO,
+                new UsoMedicamentoContinuo(false, "tipo", "atendimento"), null, null, null, List.of("mancamento"),
+                List.of("atendimento"));
+
+        aluno.setHistoricoSaude(hs);
+
+        String rg = "123456789";
+        String acompanhamentoSaude = "Acompanhamento 1";
+
+        when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
+
+        String result = alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamentoSaude);
+
+        assertEquals(acompanhamentoSaude, result);
+    }
+
+    @Test
+    void adicionarNovoValorNoHistoricoDeSaudeDeficiencia() {
+        String rg = "123456789";
+        String deficiencia = "Deficiencia1";
+        when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
+        String result = alunoServices.adicionarDeficiencia(rg, deficiencia);
+        assertEquals(result, deficiencia);
+    }
+
+    @Test
+    void deveRemoverADeficienciaDoObjetoHistoricoDeSaude() {
+        // Arrange
+        aluno.setRg("123456789");
+        aluno.setHistoricoSaude(new HistoricoSaude());
+        aluno.getHistoricoSaude().setDeficiencias(List.of("Deficiencia1", "Deficiencia2", "Deficiencia3"));
+        when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.of(aluno));
+
+        // Act
+        String removedDeficiencia = alunoServices.removerDeficiencia("123456789", "Deficiencia2");
+
+        // Assert
+        assertEquals("Deficiencia2", removedDeficiencia);
     }
 }
