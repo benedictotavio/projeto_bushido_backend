@@ -101,7 +101,7 @@ public class AlunoControllers {
         }
     }
 
-    @PostMapping("retirarFalta/{rg}")
+    @DeleteMapping("retirarFalta/{rg}")
     public ResponseEntity<String> retirarFaltaAoAluno(@RequestParam(name = "data") String data,
             @PathVariable String rg) {
         try {
