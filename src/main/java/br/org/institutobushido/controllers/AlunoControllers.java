@@ -22,9 +22,9 @@ import com.mongodb.MongoException;
 import br.org.institutobushido.abstracts.InformacoesSaudeImpl;
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.objects.graduacao.faltas.FaltaDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.dtos.aluno.graduacao.faltas.FaltaDTORequest;
+import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.services.aluno.AlunoServices;
 import jakarta.validation.Valid;
 

@@ -3,12 +3,12 @@ package br.org.institutobushido.dtos.aluno;
 import java.sql.Date;
 import java.util.List;
 
-import br.org.institutobushido.dtos.aluno.objects.dados_escolares.DadosEscolaresDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.dados_sociais.DadosSociaisDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.endereco.EnderecoDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.graduacao.GraduacaoDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.historico_de_saude.HistoricoSaudeDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.dados_escolares.DadosEscolaresDTORequest;
+import br.org.institutobushido.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
+import br.org.institutobushido.dtos.aluno.endereco.EnderecoDTORequest;
+import br.org.institutobushido.dtos.aluno.graduacao.GraduacaoDTORequest;
+import br.org.institutobushido.dtos.aluno.historico_de_saude.HistoricoSaudeDTORequest;
+import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.enums.Genero;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

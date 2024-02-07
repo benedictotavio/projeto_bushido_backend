@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.model.aluno.objects.Responsavel;
+import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 
 @Component
 public class ResponsavelMapper {
