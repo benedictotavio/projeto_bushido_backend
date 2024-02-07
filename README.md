@@ -7,13 +7,13 @@ Esta é a documentação da API Aluno, que permite realizar operações relacion
 ### Buscar aluno por RG
 
 ```http
-GET http://localhost:8080/api/V1/aluno?rg={rg} HTTP/1.1
+GET http://localhost:8080/api/V1/aluno?rg={rg}
 ```
 
 ### Adicionar aluno
 
 ``` http
-POST http://localhost:8080/api/V1/aluno HTTP/1.1
+POST http://localhost:8080/api/V1/aluno
 ```
 
 ```body
@@ -80,10 +80,10 @@ POST http://localhost:8080/api/V1/aluno HTTP/1.1
   }
 }
 ```
-## Adicionar falta ao aluno
+## Adicionar falta ao aluno no dia atual
 
 ```http
-POST http://localhost:8080/api/V1/aluno/adicionarFalta/{rg} HTTP/1.1
+POST http://localhost:8080/api/V1/aluno/adicionarFalta/{rg}
 ```
 ```body
 {
@@ -91,45 +91,57 @@ POST http://localhost:8080/api/V1/aluno/adicionarFalta/{rg} HTTP/1.1
   "observacao":"Luis trouxe atestado"
 }
 ```
-### Retirar falta do aluno
+## Adicionar falta ao aluno no dia atual
+
 ```http
-DELETE http://localhost:8080/api/V1/aluno/retirarFalta/{rg}?data=dd-MM-yyyy HTTP/1.1
-```
-### Adicionar responsável ao aluno
-```http
-POST http://localhost:8080/api/V1/aluno/adicionarResponsavel/{rg} HTTP/1.1
+POST http://localhost:8080/api/V1/aluno/adicionarFalta/{rg}/00000000000
 ```
 ```body
 {
-  "nome": "Teste",
-  "cpf": "020202020201",
-  "telefone": "{rg}",
-  "email": "email@email.com.br",
-  "filiacao": "MAE"
+  "motivo":"Aluno se encontra doente",
+  "observacao":"Luis trouxe atestado"
+}
+```
+
+### Retirar falta do aluno
+```http
+DELETE http://localhost:8080/api/V1/aluno/retirarFalta/{rg}?data=dd-MM-yyyy
+```
+### Adicionar responsável ao aluno
+```http
+POST http://localhost:8080/api/V1/aluno/adicionarResponsavel/{rg}
+```
+```body
+{
+  "nome": "string",
+  "cpf": "cpf",
+  "telefone": "string",
+  "email": "string",
+  "filiacao": "MAE" -> enum
 }
 ```
 
 ### Remover responsável do aluno
 
 ```http
-DELETE http://localhost:8080/api/V1/aluno/removerResponsavel/{rg}?cpf=string HTTP/1.1
+DELETE http://localhost:8080/api/V1/aluno/removerResponsavel/{rg}?cpf=string
 ```
 ### Adicionar deficiência ao aluno
 
 ```http
-POST http://localhost:8080/api/V1/aluno/deficiencia/{rg}?deficiencia=string HTTP/1.1
+POST http://localhost:8080/api/V1/aluno/deficiencia/{rg}?deficiencia=string
 ```
 
 ### Remover deficiência do aluno
 
 ```http
-DELETE http://localhost:8080/api/V1/aluno/deficiencia/{rg}?deficiencia=string HTTP/1.1
+DELETE http://localhost:8080/api/V1/aluno/deficiencia/{rg}?deficiencia=string
 ```
 
 ### Adicionar acompanhamento de saúde ao aluno
 
 ```http
-POST http://localhost:8080/api/V1/aluno/acompanhamentoSaude/{rg}?acompanhamento=string HTTP/1.1
+POST http://localhost:8080/api/V1/aluno/acompanhamentoSaude/{rg}?acompanhamento=string
 ```
 
 ### Remover acompanhamento de saúde do aluno
