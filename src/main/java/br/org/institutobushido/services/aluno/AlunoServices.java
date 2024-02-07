@@ -206,7 +206,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().push("historicoSaude.deficiencias", deficiencia);
+        Update update = new Update().push(HISTORICO_SAUDE + "deficiencias", deficiencia);
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return deficiencia;
     }
@@ -216,7 +216,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull("historicoSaude.deficiencias", deficiencia);
+        Update update = new Update().pull(HISTORICO_SAUDE + "deficiencias", deficiencia);
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return deficiencia;
     }
@@ -231,7 +231,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().push("historicoSaude.acompanhamentoSaude", acompanhamentoSaude);
+        Update update = new Update().push(HISTORICO_SAUDE + "acompanhamentoSaude", acompanhamentoSaude);
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return acompanhamentoSaude;
     }
@@ -241,7 +241,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull("historicoSaude.acompanhamentoSaude", acompanhamentoSaude);
+        Update update = new Update().pull(HISTORICO_SAUDE + "acompanhamentoSaude", acompanhamentoSaude);
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return acompanhamentoSaude;
     }
