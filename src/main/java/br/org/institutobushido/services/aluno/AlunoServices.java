@@ -16,9 +16,9 @@ import com.mongodb.MongoException;
 
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.objects.graduacao.faltas.FaltaDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.dtos.aluno.graduacao.faltas.FaltaDTORequest;
+import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.mappers.DadosEscolaresMapper;
 import br.org.institutobushido.mappers.DadosSociaisMapper;
 import br.org.institutobushido.mappers.EnderecoMapper;
@@ -26,8 +26,8 @@ import br.org.institutobushido.mappers.GraduacaoMapper;
 import br.org.institutobushido.mappers.HistoricoSaudeMapper;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.objects.Falta;
-import br.org.institutobushido.model.aluno.objects.Responsavel;
+import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
+import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 
 @Service

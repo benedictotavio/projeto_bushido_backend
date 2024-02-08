@@ -6,9 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import br.org.institutobushido.enums.Genero;
-import br.org.institutobushido.model.aluno.objects.DadosEscolares;
-import br.org.institutobushido.model.aluno.objects.DadosSociais;
-import br.org.institutobushido.model.aluno.objects.Graduacao;
+import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
+import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
+import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 
 @SpringBootTest
 class AlunoTest {

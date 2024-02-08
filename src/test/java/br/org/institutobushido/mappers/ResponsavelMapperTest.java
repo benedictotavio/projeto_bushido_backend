@@ -1,9 +1,9 @@
 package br.org.institutobushido.mappers;
 
-import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.objects.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.enums.FiliacaoResposavel;
-import br.org.institutobushido.model.aluno.objects.Responsavel;
+import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
