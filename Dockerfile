@@ -1,11 +1,9 @@
-FROM ubuntu:latest AS build
+FROM ubuntu:22.04 AS build
 
-RUN apt-get update
-RUN apt-get install -y openjdk-17-jdk
-
+RUN apt-get update && apt-get install -y openjdk-17-jdk && apt-get clean
 COPY . .
 
-RUN apt-get install -y maven
+RUN apt-get install -y maven && apt-get clean
 RUN mvn clean install
 
 FROM openjdk:17-jdk-slim
