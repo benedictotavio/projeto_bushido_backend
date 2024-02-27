@@ -1,8 +1,7 @@
 package br.org.institutobushido.services.admin;
-
-import br.org.institutobushido.dtos.admin.AdminDTORequest;
-import br.org.institutobushido.dtos.admin.AdminDTOResponse;
+import br.org.institutobushido.dtos.admin.signup.SignUpDTORequest;
+import br.org.institutobushido.dtos.admin.signup.SignUpDTOResponse;
 
 public interface AdminServiceInterface {
-    AdminDTOResponse signup(AdminDTORequest adminDTORequest);
+    SignUpDTOResponse signup(SignUpDTORequest adminDTORequest);
 }

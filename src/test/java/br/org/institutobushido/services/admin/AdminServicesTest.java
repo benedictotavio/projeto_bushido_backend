@@ -14,23 +14,25 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import br.org.institutobushido.dtos.admin.AdminDTORequest;
-import br.org.institutobushido.dtos.admin.AdminDTOResponse;
+import br.org.institutobushido.dtos.admin.signup.SignUpDTORequest;
+import br.org.institutobushido.dtos.admin.signup.SignUpDTOResponse;
+import br.org.institutobushido.enums.admin.UserRole;
 import br.org.institutobushido.model.admin.Admin;
 import br.org.institutobushido.repositories.AdminRepositorio;
 
 @SpringBootTest
-public class AdminServicesTest {
+class AdminServicesTest {
     private Admin admin;
-    private AdminDTORequest adminDTORequest;
-    private AdminDTOResponse adminDTOResponse;
+    private SignUpDTORequest adminDTORequest;
+    private SignUpDTOResponse adminDTOResponse;
 
     @BeforeEach
     void setUp() {
         admin = new Admin();
 
-        adminDTORequest = AdminDTORequest.builder().withCargo("Chefe").withEmail("johndoe@example.com")
-                .withNome("John Doe").build();
+        adminDTORequest = SignUpDTORequest.builder().withSenha("123").withCargo("Chefe")
+                .withEmail("johndoe@example.com")
+                .withNome("John Doe").withRole(UserRole.ADMIN).build();
 
         admin.setEmail(adminDTORequest.email());
         admin.setCargo(adminDTORequest.cargo());
@@ -49,14 +51,14 @@ public class AdminServicesTest {
     private AdminServices adminServices;
 
     @Test
-    void test_create_admin_with_valid_input() {
+    void criarAdminComDadosValidos() {
         // Arrange
         when(adminRepositorio.save(any(Admin.class))).thenReturn(admin);
 
         // Act
-        AdminDTOResponse result = adminServices.signup(adminDTORequest);
+        SignUpDTOResponse result = adminServices.signup(adminDTORequest);
 
-        adminDTOResponse = AdminDTOResponse.builder().withEmail(admin.getEmail())
+        adminDTOResponse = SignUpDTOResponse.builder().withEmail(admin.getEmail())
                 .withNome(admin.getNome()).build();
 
         // Assert
@@ -66,10 +68,10 @@ public class AdminServicesTest {
     }
 
     @Test
-    void test_throw_exception_when_creating_admin_with_empty_name() {
+    void deveLancarUmaExcecaoQuandoEmailForNulo() {
 
         // Act
-        adminDTORequest = AdminDTORequest.builder().withSenha("00000").withNome("test o2").withEmail(null).build();
+        adminDTORequest = SignUpDTORequest.builder().withSenha("00000").withNome("test o2").withEmail(null).build();
 
         // Assert
         assertThrows(NullPointerException.class, () -> adminServices.signup(null));

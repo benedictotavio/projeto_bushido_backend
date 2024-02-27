@@ -1,4 +1,4 @@
-package br.org.institutobushido.enums;
+package br.org.institutobushido.enums.aluno;
 
     public enum TipoSanguineo {
         A_POSITIVO("A+"),

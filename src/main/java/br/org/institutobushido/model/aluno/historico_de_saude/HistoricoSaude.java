@@ -2,8 +2,8 @@ package br.org.institutobushido.model.aluno.historico_de_saude;
 
 import java.util.List;
 
-import br.org.institutobushido.enums.FatorRH;
-import br.org.institutobushido.enums.TipoSanguineo;
+import br.org.institutobushido.enums.aluno.FatorRH;
+import br.org.institutobushido.enums.aluno.TipoSanguineo;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergias;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgias;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.DoencaCronica;

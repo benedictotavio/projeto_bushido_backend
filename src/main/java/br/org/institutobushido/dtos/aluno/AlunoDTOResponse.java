@@ -9,7 +9,7 @@ import br.org.institutobushido.dtos.aluno.endereco.EnderecoDTOResponse;
 import br.org.institutobushido.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import br.org.institutobushido.dtos.aluno.historico_de_saude.HistoricoSaudeDTOResponse;
 import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.enums.Genero;
+import br.org.institutobushido.enums.aluno.Genero;
 import lombok.Builder;
 
 @Builder(setterPrefix = "with")

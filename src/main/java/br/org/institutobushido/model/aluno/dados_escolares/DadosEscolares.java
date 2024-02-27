@@ -1,6 +1,6 @@
 package br.org.institutobushido.model.aluno.dados_escolares;
 
-import br.org.institutobushido.enums.Turno;
+import br.org.institutobushido.enums.aluno.Turno;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

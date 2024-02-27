@@ -4,6 +4,9 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,9 +16,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mongodb.MongoException;
 
-import br.org.institutobushido.dtos.admin.AdminDTORequest;
-import br.org.institutobushido.dtos.admin.AdminDTOResponse;
+import br.org.institutobushido.dtos.admin.login.LoginDTORequest;
+import br.org.institutobushido.dtos.admin.login.LoginDTOResponse;
+import br.org.institutobushido.dtos.admin.signup.SignUpDTORequest;
+import br.org.institutobushido.dtos.admin.signup.SignUpDTOResponse;
+import br.org.institutobushido.model.admin.Admin;
 import br.org.institutobushido.services.admin.AdminServices;
+import br.org.institutobushido.services.admin.infra.TokenServices;
 import jakarta.validation.Valid;
 
 @RestController(value = "admin")
@@ -25,11 +32,17 @@ public class AdminControllers {
     @Autowired
     private AdminServices adminServices;
 
-    @PostMapping()
-    public ResponseEntity<String> signup(@Valid @RequestBody AdminDTORequest adminDTORequest) {
+    @Autowired
+    private TokenServices tokenService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @PostMapping("signup")
+    public ResponseEntity<String> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest) {
 
         try {
-            AdminDTOResponse admin = adminServices.signup(adminDTORequest);
+            SignUpDTOResponse admin = adminServices.signup(signUpDTORequest);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
             return ResponseEntity.created(location).body(admin.email());
         } catch (MongoException e) {
@@ -37,4 +50,11 @@ public class AdminControllers {
         }
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginDTOResponse> login(@RequestBody @Valid LoginDTORequest loginDTORequest) {
+        var login = new UsernamePasswordAuthenticationToken(loginDTORequest.email(), loginDTORequest.senha());
+        Authentication auth = this.authenticationManager.authenticate(login);
+        var token = tokenService.generateToken((Admin) auth.getPrincipal());
+        return ResponseEntity.ok().body(new LoginDTOResponse(token));
+    }
 }
