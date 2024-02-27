@@ -26,6 +26,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private AdminRepositorio adminRepositorio;
 
     @Override
+    @SuppressWarnings("null")
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         var token = this.recoverToken(request);
