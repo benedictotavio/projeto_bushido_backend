@@ -191,8 +191,6 @@ class AlunoServicesTest {
         Aluno result = alunoRepositorio.findByRg(rg)
                 .orElseThrow(() -> new MongoException("Email: " + rg + " não encontrado"));
 
-        System.out.println(result);
-
         assertEquals(aluno, result);
     }
 

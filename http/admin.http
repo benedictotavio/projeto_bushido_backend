@@ -5,5 +5,7 @@ Content-Type: application/json
 
 {
     "nome": "Teste 01",
-    "email": "email@email.com.br"
+    "email":"test",
+    "cargo":"Diretor",
+    "senha": "123456"
 }
