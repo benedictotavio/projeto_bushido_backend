@@ -1,0 +1,23 @@
+@url = http://localhost:8080/api/V1/admin
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJteS1zZWNyZXQta2V5IiwiZW1haWwiOiJ0ZXN0QGVtYWlsLmNvbS5iciIsInN1YiI6InRlc3RAZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5MDY1NzM0fQ.TI4iDwTT7XWW9zrrVWc1pEG5b7l_JgfcXwYDO9bmw3k
+
+POST {{url}}/signup HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nome": "Super Admin",
+    "email":"super_admin@email.com.br",
+    "cargo":"Administrador",
+    "senha": "123456",
+    "role": "ADMIN"
+}
+
+###
+POST {{url}}/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "super_admin@email.com.br",
+    "senha": "123456"
+}

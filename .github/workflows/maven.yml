@@ -11,6 +11,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      MONGO_URI: ${{ vars.MONGO_URI }}
+      MONGO_DB: ${{ vars.MONGO_DB }}  
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -19,5 +24,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - name: Set enviroment variables
+      run: echo "MONGO_URI=${{ vars.MONGO_URI }}" >> $GITHUB_ENV
     - name: Build with Maven
       run: mvn package

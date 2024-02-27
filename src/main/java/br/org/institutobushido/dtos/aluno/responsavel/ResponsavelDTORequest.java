@@ -2,7 +2,7 @@ package br.org.institutobushido.dtos.aluno.responsavel;
 
 import com.mongodb.lang.NonNull;
 
-import br.org.institutobushido.enums.FiliacaoResposavel;
+import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;

@@ -9,7 +9,7 @@ import br.org.institutobushido.dtos.aluno.endereco.EnderecoDTORequest;
 import br.org.institutobushido.dtos.aluno.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.dtos.aluno.historico_de_saude.HistoricoSaudeDTORequest;
 import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
-import br.org.institutobushido.enums.Genero;
+import br.org.institutobushido.enums.aluno.Genero;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

@@ -1,6 +1,6 @@
 package br.org.institutobushido.model.aluno.dados_sociais;
 
-import br.org.institutobushido.enums.Imovel;
+import br.org.institutobushido.enums.aluno.Imovel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

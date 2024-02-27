@@ -1,6 +1,6 @@
 package br.org.institutobushido.dtos.aluno.dados_sociais;
 
-import br.org.institutobushido.enums.Imovel;
+import br.org.institutobushido.enums.aluno.Imovel;
 import lombok.Builder;
 
 @Builder(setterPrefix = "with")

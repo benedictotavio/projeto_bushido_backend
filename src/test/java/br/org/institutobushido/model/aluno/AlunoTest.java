@@ -5,7 +5,7 @@ import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import br.org.institutobushido.enums.Genero;
+import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
 import br.org.institutobushido.model.aluno.graduacao.Graduacao;

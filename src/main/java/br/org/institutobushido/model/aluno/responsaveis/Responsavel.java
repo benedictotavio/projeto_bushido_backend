@@ -1,6 +1,6 @@
 package br.org.institutobushido.model.aluno.responsaveis;
 
-import br.org.institutobushido.enums.FiliacaoResposavel;
+import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
