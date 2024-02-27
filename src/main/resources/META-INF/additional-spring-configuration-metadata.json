@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "The jwt.secret is a key component in the JWT (JSON Web Tokens) authorization process. It is a secret string used to sign and verify the tokens. This secret ensures the integrity of the message and prevents the tokens from being tampered with."
+    }
+  ]
+}
