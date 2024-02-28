@@ -10,8 +10,10 @@ FROM openjdk:17-jdk-slim
 
 EXPOSE 8080
 
-ENV MONGO_USERNAME=benedictotavio
-ENV MONGO_PASSWORD=123
+ENV MONGO_USERNAME=${MONGO_USERNAME}
+ENV MONGO_PASSWORD=${MONGO_PASSWORD}
+ENV JWT_SECRET=${JWT_SECRET:-secret}
+ENV MONGO_DB=${MONGO_DB:-bushido}
 
 COPY --from=build /target/institutobushido-0.0.1-SNAPSHOT.jar app.jar
 
