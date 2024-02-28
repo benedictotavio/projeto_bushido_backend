@@ -1,0 +1,23 @@
+@url = https://projeto-bushido-backend.onrender.com/api/V1/admin
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJteS1zZWNyZXQta2V5IiwiZW1haWwiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJzdWIiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJleHAiOjE3MDkxMTc4MTR9.Uoni11sl74J3ojBnHI8mdVugN7MOK5wTE4PfTsd58O4
+
+POST {{url}}/signup HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nome": "Super Admin",
+    "email":"super_admin1@email.com.br",
+    "cargo":"Administrador",
+    "senha": "123456",
+    "role": "ADMIN"
+}
+
+###
+POST {{url}}/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "super_admin@email.com.br",
+    "senha": "123456"
+}

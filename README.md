@@ -1,19 +1,21 @@
-# Documentação da API Aluno
+# Documentação da API Bushido
 
 Esta é a documentação da API Aluno, que permite realizar operações relacionadas aos alunos.
 
-## Endpoints
+`https://projeto-bushido-backend.onrender.com`
+
+# Aluno
 
 ### Buscar aluno por RG
 
 ```http
-GET http://localhost:8080/api/V1/aluno?rg={rg}
+GET /api/V1/aluno?rg={rg}
 ```
 
 ### Adicionar aluno
 
-``` http
-POST http://localhost:8080/api/V1/aluno
+```http
+POST /api/V1/aluno
 ```
 
 ```body
@@ -80,22 +82,26 @@ POST http://localhost:8080/api/V1/aluno
   }
 }
 ```
+
 ## Adicionar falta ao aluno no dia atual
 
 ```http
-POST http://localhost:8080/api/V1/aluno/adicionarFalta/{rg}
+POST /api/V1/aluno/adicionarFalta/{rg}
 ```
+
 ```body
 {
   "motivo":"Aluno se encontra doente",
   "observacao":"Luis trouxe atestado"
 }
 ```
+
 ## Adicionar falta ao aluno no dia atual
 
 ```http
-POST http://localhost:8080/api/V1/aluno/adicionarFalta/{rg}/00000000000
+POST /api/V1/aluno/adicionarFalta/{rg}/00000000000
 ```
+
 ```body
 {
   "motivo":"Aluno se encontra doente",
@@ -104,13 +110,17 @@ POST http://localhost:8080/api/V1/aluno/adicionarFalta/{rg}/00000000000
 ```
 
 ### Retirar falta do aluno
+
 ```http
-DELETE http://localhost:8080/api/V1/aluno/retirarFalta/{rg}?data=dd-MM-yyyy
+DELETE /api/V1/aluno/retirarFalta/{rg}?data=dd-MM-yyyy
 ```
+
 ### Adicionar responsável ao aluno
+
 ```http
-POST http://localhost:8080/api/V1/aluno/adicionarResponsavel/{rg}
+POST /api/V1/aluno/adicionarResponsavel/{rg}
 ```
+
 ```body
 {
   "nome": "string",
@@ -124,28 +134,60 @@ POST http://localhost:8080/api/V1/aluno/adicionarResponsavel/{rg}
 ### Remover responsável do aluno
 
 ```http
-DELETE http://localhost:8080/api/V1/aluno/removerResponsavel/{rg}?cpf=string
+DELETE /api/V1/aluno/removerResponsavel/{rg}?cpf=string
 ```
+
 ### Adicionar deficiência ao aluno
 
 ```http
-POST http://localhost:8080/api/V1/aluno/deficiencia/{rg}?deficiencia=string
+POST /api/V1/aluno/deficiencia/{rg}?deficiencia=string
 ```
 
 ### Remover deficiência do aluno
 
 ```http
-DELETE http://localhost:8080/api/V1/aluno/deficiencia/{rg}?deficiencia=string
+DELETE /api/V1/aluno/deficiencia/{rg}?deficiencia=string
 ```
 
 ### Adicionar acompanhamento de saúde ao aluno
 
 ```http
-POST http://localhost:8080/api/V1/aluno/acompanhamentoSaude/{rg}?acompanhamento=string
+POST /api/V1/aluno/acompanhamentoSaude/{rg}?acompanhamento=string
 ```
 
 ### Remover acompanhamento de saúde do aluno
 
 ```http
-DELETE http://localhost:8080/api/V1/aluno/acompanhamentoSaude/{rg}
+DELETE /api/V1/aluno/acompanhamentoSaude/{rg}
+```
+
+# Admin
+
+### Login
+
+```http
+POST /api/V1/admin/login
+```
+
+```body
+{
+  email: string
+  password: string
+}
+```
+
+### Sign up
+
+```http
+POST /api/V1/admin/signup
+```
+
+```body
+{
+  "nome": string,
+  "email": string,
+  "cargo": string,
+  "senha": string,
+  "role": string
+}
 ```

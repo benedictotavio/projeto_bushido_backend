@@ -1,0 +1,134 @@
+@url = https://projeto-bushido-backend.onrender.com/api/V1/aluno
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxZTJhNDNiMDYwOTBkZjMzYjUyMjg3ZDAzN2NjNjM2ZSIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5MTM5MTc3fQ.gd0V-Fyq6dPf__Y8txL90I-MnMn0ttQpV-ulPtQ-ZG4
+
+# Buscar aluno por e-mail
+GET {{url}}?rg=123456789 HTTP/1.1
+Authorization: Bearer {{token}}
+###
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nome": "Luiz",
+  "genero": "M",
+  "dataNascimento": "2023-01-01",
+  "dadosSociais":{
+    "bolsaFamilia": true,
+    "auxilioBrasil": false,
+    "imovel": "CEDIDO",
+    "numerosDePessoasNaCasa": 4,
+    "contribuintesDaRendaFamiliar": 2,
+    "alunoContribuiParaRenda": true,
+    "rendaFamiliarEmSalariosMinimos": 3
+  },
+   "dadosEscolares": {
+    "turno": "MANHA",
+    "escola": "E.M.E.F Marechal Rondon",
+    "serie": 6
+  },
+  "dataPreenchimento": "2023-01-01T12:00:00",
+  "endereco":{
+    "cidade": "City",
+    "estado": "State",
+    "cep":"06000142",
+    "numero":"100"
+  },
+  "rg": "123456789",
+  "responsaveis": [
+      {
+      "nome":"Teste 00",
+      "cpf": "123.456.789-01",
+      "telefone":"0000-0000",
+      "email":"email@email.com",
+      "filiacao":"PAI"
+      }
+    ],
+   "graduacao": {
+        "kyu": 7,
+        "frequencia": 75
+    },
+    "historicoSaude": {
+    "tipoSanguineo": "A_POSITIVO",
+    "fatorRh": "POSITIVO",
+    "usoMedicamentoContinuo": {
+      "resposta": "",
+      "qualMedicamento": ""
+    },
+    "cirurgia": {
+      "resposta": "",
+      "tipo": ""
+    },
+    "alergia": {
+      "resposta": "",
+      "tipo": ""
+    },
+    "doencaCronica": {
+      "resposta": "",
+      "tipo": ""
+    },
+    "deficiencia":["Nenhuma"],
+    "acompanhamentoSaude":["Nenhum"]
+  }
+}
+
+###
+POST {{url}}/adicionarFalta/123456789 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "motivo":"Aluno se encontra doente",
+  "observacao":"luis trouxe atestado"
+}
+
+###
+POST {{url}}/adicionarFalta/123456789/1506992087893 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "motivo":"Aluno se encontra doente",
+  "observacao":"luis trouxe atestado"
+}
+
+###
+DELETE {{url}}/retirarFalta/123456789?data=27-02-2024 HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+POST {{url}}/adicionarResponsavel/123456789 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nome": "Teste",
+  "cpf": "020202020201",
+  "telefone": "123456789",
+  "email": "email@email.com.br",
+  "filiacao": "MAE"
+}
+
+###
+DELETE {{url}}/removerResponsavel/123456789?cpf=020202020201 HTTP/1.1
+Authorization: Bearer {{token}}
+###
+POST {{url}}/deficiencia/123456789?deficiencia=amidalite HTTP/1.1
+###
+DELETE {{url}}/deficiencia/123456789?deficiencia=aaa HTTP/1.1
+###
+POST {{url}}/acompanhamentoSaude/123456789?acompanhamento=aaa HTTP/1.1
+###
+DELETE {{url}}/acompanhamentoSaude/123456789?acompanhamento=aaa HTTP/1.1
+
+###
+PUT {{url}}/historicoSaude/123456789 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "alergias": {
+      "tipo": "p",
+      "resposta": true
+    }
+}
