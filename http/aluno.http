@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJteS1zZWNyZXQta2V5IiwiZW1haWwiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJzdWIiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJleHAiOjE3MDkwODEyNzJ9.4ekNpDKflTZ8PrYaa2xnfnrBLhnI3RTYGgf-n3KE8nw
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJteS1zZWNyZXQta2V5IiwiZW1haWwiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJzdWIiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJleHAiOjE3MDkxMTc4MTR9.Uoni11sl74J3ojBnHI8mdVugN7MOK5wTE4PfTsd58O4
 
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1

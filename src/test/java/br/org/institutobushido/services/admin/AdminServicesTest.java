@@ -12,10 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.data.mongodb.core.MongoTemplate;
-
-import br.org.institutobushido.InstitutobushidoApplication;
 import br.org.institutobushido.dtos.admin.signup.SignUpDTORequest;
 import br.org.institutobushido.dtos.admin.signup.SignUpDTOResponse;
 import br.org.institutobushido.enums.admin.UserRole;
