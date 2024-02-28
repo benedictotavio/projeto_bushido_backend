@@ -23,8 +23,8 @@ jobs:
           java-version: "17"
           distribution: "temurin"
           cache: maven
-      - name: Set enviroment variables
-        run: export MONGO_URI=${{ vars.MONGO_URI }}
+      - name: Read enviroment variables
+        run: echo $MONGO_URI
       - name: Run tests
         run: mvn test
       - name: Build with Maven
