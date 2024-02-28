@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJteS1zZWNyZXQta2V5IiwiZW1haWwiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJzdWIiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJleHAiOjE3MDkxMTc4MTR9.Uoni11sl74J3ojBnHI8mdVugN7MOK5wTE4PfTsd58O4
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI5MGR1cTg5dWpxcWR1ZGpkamRxdWpkcTg3MzJqOGplZDhkaiIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5MTQxMDg1fQ.9KJbJLrS3pMeKACkDK7rsJ8N5TUQDgBLt6cp54YNUBo
 
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1
@@ -93,7 +93,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-DELETE {{url}}/retirarFalta/123456789?data=27-02-2024 HTTP/1.1
+DELETE {{url}}/retirarFalta/123456789?data=28-02-2024 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###

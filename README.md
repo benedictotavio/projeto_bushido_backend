@@ -1,8 +1,53 @@
 # Documentação da API Bushido
 
-Esta é a documentação da API Aluno, que permite realizar operações relacionadas aos alunos.
+Esta é a documentação da API Aluno, que permite realizar operações relacionadas ao cadastramento de alunos.
 
-`https://projeto-bushido-backend.onrender.com`
+```http 
+https://projeto-bushido-backend.onrender.com
+```
+
+## Descrição
+
+O desenvolvimento de uma API RESTful para cadastro de alunos em um projeto social de aulas de caratê demanda a utilização de tecnologias como Java, Spring Boot, Docker e MongoDB. Java oferece robustez e flexibilidade no desenvolvimento, enquanto Spring Boot simplifica a criação de aplicativos web. O Docker facilita a implantação e gerenciamento de contêineres, garantindo portabilidade e escalabilidade. MongoDB é ideal para armazenar dados flexíveis e não estruturados, com alta performance em consultas. Essas tecnologias combinadas garantem uma solução eficiente, escalável e altamente performática para o projeto.
+
+# Autorização
+
+Antes de tudo o usuario deve possuir um cadastro de admnistrador, o cadastro devera ser feito por outro administrador com acesso ilimitados. Apos efetuar o cadastro, o usuário devera relizar um _[login](#login)_ para receber o token de autorização para cada requisição.
+
+## Sign up
+
+#### Cadastro para novos admintradores que serão responsaveis por realizar o cadastro dos alunos.
+
+```http
+POST /api/V1/admin/signup
+```
+
+```body
+{
+  "nome": string,
+  "email": string,
+  "cargo": string,
+  "senha": string,
+  "role": string
+}
+```
+
+## Login
+
+#### Retorna um token que sera utilizado nas demais requisições
+
+
+```http
+POST /api/V1/admin/login
+```
+
+```body
+{
+  email: string
+  password: string
+}
+```
+
 
 # Aluno
 
@@ -159,35 +204,4 @@ POST /api/V1/aluno/acompanhamentoSaude/{rg}?acompanhamento=string
 
 ```http
 DELETE /api/V1/aluno/acompanhamentoSaude/{rg}
-```
-
-# Admin
-
-### Login
-
-```http
-POST /api/V1/admin/login
-```
-
-```body
-{
-  email: string
-  password: string
-}
-```
-
-### Sign up
-
-```http
-POST /api/V1/admin/signup
-```
-
-```body
-{
-  "nome": string,
-  "email": string,
-  "cargo": string,
-  "senha": string,
-  "role": string
-}
 ```
