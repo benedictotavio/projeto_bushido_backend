@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJteS1zZWNyZXQta2V5IiwiZW1haWwiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJzdWIiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJleHAiOjE3MDkwNjcwODV9.w9iT__g69NjT0NHRI4J9hqfHqEQLEUecBaPeJ6hXAHg
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJteS1zZWNyZXQta2V5IiwiZW1haWwiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJzdWIiOiJzdXBlcl9hZG1pbkBlbWFpbC5jb20uYnIiLCJleHAiOjE3MDkwODEyNzJ9.4ekNpDKflTZ8PrYaa2xnfnrBLhnI3RTYGgf-n3KE8nw
 
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1
@@ -92,9 +92,9 @@ Authorization: Bearer {{token}}
   "observacao":"luis trouxe atestado"
 }
 
-
 ###
-DELETE {{url}}/retirarFalta/123456789?data=22-02-2024 HTTP/1.1
+DELETE {{url}}/retirarFalta/123456789?data=27-02-2024 HTTP/1.1
+Authorization: Bearer {{token}}
 
 ###
 POST {{url}}/adicionarResponsavel/123456789 HTTP/1.1
@@ -111,6 +111,7 @@ Authorization: Bearer {{token}}
 
 ###
 DELETE {{url}}/removerResponsavel/123456789?cpf=020202020201 HTTP/1.1
+Authorization: Bearer {{token}}
 ###
 POST {{url}}/deficiencia/123456789?deficiencia=amidalite HTTP/1.1
 ###

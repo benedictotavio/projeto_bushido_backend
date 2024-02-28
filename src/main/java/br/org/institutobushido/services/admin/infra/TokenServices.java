@@ -32,7 +32,7 @@ public class TokenServices {
         }
     }
 
-    public String validateToken(String token){
+    public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
             return JWT.require(algorithm).withIssuer(secret).build().verify(token).getSubject();

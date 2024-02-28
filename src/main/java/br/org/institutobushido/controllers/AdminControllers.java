@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +26,6 @@ import jakarta.validation.Valid;
 
 @RestController(value = "admin")
 @RequestMapping("api/V1/admin")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminControllers {
     @Autowired
     private AdminServices adminServices;
@@ -40,9 +38,8 @@ public class AdminControllers {
 
     @PostMapping("signup")
     public ResponseEntity<String> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest) {
-
         try {
-            SignUpDTOResponse admin = adminServices.signup(signUpDTORequest);
+            SignUpDTOResponse admin = this.adminServices.signup(signUpDTORequest);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
             return ResponseEntity.created(location).body(admin.email());
         } catch (MongoException e) {
@@ -54,7 +51,7 @@ public class AdminControllers {
     public ResponseEntity<LoginDTOResponse> login(@RequestBody @Valid LoginDTORequest loginDTORequest) {
         var login = new UsernamePasswordAuthenticationToken(loginDTORequest.email(), loginDTORequest.senha());
         Authentication auth = this.authenticationManager.authenticate(login);
-        var token = tokenService.generateToken((Admin) auth.getPrincipal());
+        var token = this.tokenService.generateToken((Admin) auth.getPrincipal());
         return ResponseEntity.ok().body(new LoginDTOResponse(token));
     }
 }
