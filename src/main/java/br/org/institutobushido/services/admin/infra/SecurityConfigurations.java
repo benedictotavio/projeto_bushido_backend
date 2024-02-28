@@ -27,7 +27,7 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "api/V1/admin/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/V1/admin/signup").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "api/V1/admin/signup").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/V1/aluno").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

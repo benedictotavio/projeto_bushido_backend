@@ -25,7 +25,7 @@ jobs:
           cache: maven
       - name: Set enviroment variables
         run: export MONGO_URI=${{ vars.MONGO_URI }}
-      - name: Build with Maven
-        run: mvn package
       - name: Run tests
         run: mvn test
+      - name: Build with Maven
+        run: mvn clean install
