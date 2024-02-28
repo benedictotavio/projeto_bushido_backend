@@ -24,7 +24,7 @@ jobs:
           distribution: "temurin"
           cache: maven
       - name: Set enviroment variables
-        run: echo "MONGO_URI=${{ vars.MONGO_URI }}" >> $GITHUB_ENV
+        run: export MONGO_URI=${{ vars.MONGO_URI }}
       - name: Build with Maven
         run: mvn package
       - name: Run tests
