@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MONGO_URI: ${{ vars.MONGO_URI }}
+      MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
+      MONGO_PASSWORD: ${{ vars.MONGO_PASSWORD }}
       MONGO_DB: ${{ vars.MONGO_DB }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
