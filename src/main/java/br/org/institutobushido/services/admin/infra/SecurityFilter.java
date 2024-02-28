@@ -20,20 +20,19 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    private TokenServices tokenService;
+    private TokenServices tokenServices;
 
     @Autowired
     private AdminRepositorio adminRepositorio;
 
     @Override
-    @SuppressWarnings("null")
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         var token = this.recoverToken(request);
 
         if (token != null) {
-            var login = tokenService.validateToken(token);
-            UserDetails userDetails = adminRepositorio.findByEmail(login);
+            var login = this.tokenServices.validateToken(token);
+            UserDetails userDetails = this.adminRepositorio.findByEmail(login);
             var authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                     userDetails.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
