@@ -10,11 +10,11 @@ https://projeto-bushido-backend.onrender.com/api/V1
 
 O desenvolvimento de uma API RESTful para cadastro de alunos em um projeto social de aulas de caratê demanda a utilização de tecnologias como Java, Spring Boot, Docker e MongoDB. Java oferece robustez e flexibilidade no desenvolvimento, enquanto Spring Boot simplifica a criação de aplicativos web. O Docker facilita a implantação e gerenciamento de contêineres, garantindo portabilidade e escalabilidade. MongoDB é ideal para armazenar dados flexíveis e não estruturados, com alta performance em consultas. Essas tecnologias combinadas garantem uma solução eficiente, escalável e altamente performática para o projeto.
 
-# Autorização
+## Autorização
 
 Antes de tudo o usuario deve possuir um cadastro de admnistrador, o cadastro devera ser feito por outro administrador com acesso ilimitados. Apos efetuar o cadastro, o usuário devera relizar um _[login](#login)_ para receber o token de autorização para cada requisição.
 
-## Sign up
+### Sign up
 
 #### Cadastro para novos admintradores que serão responsaveis por realizar o cadastro dos alunos.
 
@@ -32,11 +32,11 @@ POST /admin/signup
 }
 ```
 
-## Login
+### Login
 
 Retorna um token que sera utilizado nas demais requisições
 
-## Request
+### Request
 ```http
 POST /admin/login
 ```
@@ -48,7 +48,7 @@ POST /admin/login
 }
 ```
 
-## Response
+### Response
 
 <p>
 <details>
@@ -92,7 +92,7 @@ Retorna um objeto de uma aluno com base no rg passado uma Query String como par�
 GET /aluno?rg={rg}
 ```
 
-### Response
+#### Response
 
 <p>
 <details>
@@ -307,7 +307,7 @@ POST /aluno
 }
 ```
 
-### Response
+#### Response
 
 <p>
 <details>
@@ -356,7 +356,7 @@ POST /aluno/adicionarFalta/{rg}
   "observacao":"Luis trouxe atestado"
 }
 ```
-### Response
+#### Response
 
 <p>
 <details>
@@ -401,7 +401,7 @@ POST /aluno/adicionarFalta/{rg}/00000000000
 }
 ```
 
-### Response
+#### Response
 
 <p>
 <details>
