@@ -1,4 +1,4 @@
-package br.org.institutobushido.controllers;
+package br.org.institutobushido.controllers.aluno;
 
 import java.net.URI;
 import java.util.Map;
@@ -27,7 +27,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/V1/aluno")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "https://institutobushido.netlify.app", allowedHeaders = { "Authorization", "Content-Type" })
 public class AlunoControllers {
 
     @Autowired
@@ -77,36 +77,36 @@ public class AlunoControllers {
     @DeleteMapping("retirarFalta/{rg}")
     public ResponseEntity<String> retirarFaltaAoAluno(@RequestParam(name = "data") String data,
             @PathVariable String rg) {
-            String res = alunoServices.retirarFaltaDoAluno(rg, data);
-            return ResponseEntity.ok().body(res);
+        String res = alunoServices.retirarFaltaDoAluno(rg, data);
+        return ResponseEntity.ok().body(res);
     }
 
     @PostMapping("deficiencia/{rg}")
     public ResponseEntity<String> adicionarDeficiencia(@PathVariable String rg,
             @RequestParam(name = "deficiencia") String deficiencia) {
-            String res = alunoServices.adicionarDeficiencia(rg, deficiencia);
-            return ResponseEntity.ok().body(res);
+        String res = alunoServices.adicionarDeficiencia(rg, deficiencia);
+        return ResponseEntity.ok().body(res);
     }
 
     @DeleteMapping("deficiencia/{rg}")
     public ResponseEntity<String> removerDeficiencia(@PathVariable String rg,
             @RequestParam(name = "deficiencia") String deficiencia) {
-            String res = alunoServices.removerDeficiencia(rg, deficiencia);
-            return ResponseEntity.ok().body(res);
+        String res = alunoServices.removerDeficiencia(rg, deficiencia);
+        return ResponseEntity.ok().body(res);
     }
 
     @PostMapping("acompanhamentoSaude/{rg}")
     public ResponseEntity<String> adicionarAcompanhamentoSaude(@PathVariable String rg,
             @RequestParam(name = "acompanhamento") String acompanhamento) {
-            String res = alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamento);
-            return ResponseEntity.ok().body(res);
+        String res = alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamento);
+        return ResponseEntity.ok().body(res);
     }
 
     @DeleteMapping("acompanhamentoSaude/{rg}")
     public ResponseEntity<Object> removerAcompanhamentoSaude(@PathVariable String rg,
             @RequestParam(name = "acompanhamento") String acompanhamento) {
-            Object res = alunoServices.removerAcompanhamentoSaude(rg, acompanhamento);
-            return ResponseEntity.ok().body(res);
+        Object res = alunoServices.removerAcompanhamentoSaude(rg, acompanhamento);
+        return ResponseEntity.ok().body(res);
     }
 
     @PutMapping("historicoSaude/{rg}")

@@ -61,6 +61,8 @@ import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
+import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 
 @SpringBootTest
 class AlunoServicesTest {
@@ -198,14 +200,14 @@ class AlunoServicesTest {
     void deveRetornarExceptionSeAlunoNaoForEncontrado() {
         AlunoRepositorio alunoRepositorio = mock(AlunoRepositorio.class);
         when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.empty());
-        assertThrows(MongoException.class, () -> {
+        assertThrows(EntityNotFoundException.class, () -> {
             alunoServices.encontrarAlunoPorRg("nonexistent_rg");
         });
     }
 
     @Test
     void deveRetornarExceptionSeRgDoAlunoForPassadoComoNull() {
-        assertThrows(MongoException.class, () -> {
+        assertThrows(EntityNotFoundException.class, () -> {
             alunoServices.encontrarAlunoPorRg(null);
         });
     }
@@ -323,7 +325,7 @@ class AlunoServicesTest {
         when(alunoRepositorio.findByRg(Mockito.anyString())).thenReturn(Optional.of(aluno));
 
         // Assert
-        assertThrows(MongoException.class, () -> {
+        assertThrows(EntityNotFoundException.class, () -> {
             alunoServices.retirarFaltaDoAluno(invalidRg, faltasId);
         });
     }
@@ -368,7 +370,7 @@ class AlunoServicesTest {
 
         String deficiencia = "Physical disability";
 
-        assertThrows(MongoException.class, () -> {
+        assertThrows(AlreadyRegisteredException.class, () -> {
             alunoServices.adicionarDeficiencia("123456212", deficiencia);
         });
     }
