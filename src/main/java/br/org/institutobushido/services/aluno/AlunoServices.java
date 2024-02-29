@@ -11,9 +11,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
-import com.mongodb.MongoException;
-
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.graduacao.faltas.FaltaDTORequest;
@@ -29,6 +26,10 @@ import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
+import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.resources.exceptions.InactiveUserException;
+import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 
 @Service
 public class AlunoServices implements AlunoServicesInterface {
@@ -78,7 +79,7 @@ public class AlunoServices implements AlunoServicesInterface {
                     .build();
         }
 
-        throw new MongoException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
+        throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
     }
 
     @Override
@@ -116,7 +117,7 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withNome(responsavelDTORequest.nome())
                     .withTelefone(responsavelDTORequest.telefone()).build();
         }
-        throw new MongoException("Não foi possivel adicionar esse responsavel");
+        throw new LimitQuantityException("Não foi possivel adicionar esse responsavel");
     }
 
     @Override
@@ -130,7 +131,7 @@ public class AlunoServices implements AlunoServicesInterface {
             mongoTemplate.updateFirst(query, update, Aluno.class);
             return true;
         }
-        throw new MongoException("O aluno deve ter pelo menos 1 responsavel!");
+        throw new LimitQuantityException("O aluno deve ter pelo menos 1 responsavel!");
     }
 
     @Override
@@ -138,13 +139,13 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
 
         if (!aluno.getGraduacao().isStatus()) {
-            throw new MongoException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
+            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
         }
 
         boolean faltasDoAluno = checarSeFaltaEstaRegistrada(aluno, new Date());
 
         if (faltasDoAluno) {
-            throw new MongoException("Ja existe um registro de falta nessa data");
+            throw new AlreadyRegisteredException("Ja existe um registro de falta nessa data");
         }
 
         Falta novaFalta = new Falta(falta.motivo(), falta.observacao());
@@ -161,13 +162,13 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
 
         if (!aluno.getGraduacao().isStatus()) {
-            throw new MongoException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
+            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
         }
 
         boolean faltasDoAluno = checarSeFaltaEstaRegistrada(aluno, new Date(dataFalta));
 
         if (faltasDoAluno) {
-            throw new MongoException("Ja existe um registro de falta nessa data");
+            throw new AlreadyRegisteredException("Ja existe um registro de falta nessa data");
         }
 
         Falta novaFalta = new Falta();
@@ -186,9 +187,7 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String retirarFaltaDoAluno(String rg, String faltasId) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-
         Falta faltasDoAluno = encontrarFaltasDoAluno(aluno, faltasId);
-
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
         Update update = new Update().pull(GRADUACAO_FALTA, faltasDoAluno);
@@ -201,7 +200,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
 
         if (aluno.getHistoricoSaude().getDeficiencias().contains(deficiencia)) {
-            throw new MongoException(deficiencia + " ja existe no historico de saude");
+            throw new AlreadyRegisteredException(deficiencia + " ja existe no historico de saude");
         }
 
         Query query = new Query();
@@ -226,7 +225,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
 
         if (aluno.getHistoricoSaude().getAcompanhamentoSaude().contains(acompanhamentoSaude)) {
-            throw new MongoException(acompanhamentoSaude + " ja existe no historico de saude");
+            throw new AlreadyRegisteredException(acompanhamentoSaude + " ja existe no historico de saude");
         }
 
         Query query = new Query();
@@ -259,7 +258,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
     protected Aluno encontrarAlunoPorRg(String rgAluno) {
         return alunoRepositorio.findByRg(rgAluno)
-                .orElseThrow(() -> new MongoException("Rg: " + rgAluno + " não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Rg: " + rgAluno + " não encontrado"));
     }
 
     protected Optional<Responsavel> encontrarResponsavelPorCpf(Aluno aluno, String cpf) {
@@ -273,7 +272,7 @@ public class AlunoServices implements AlunoServicesInterface {
                 .filter(falta -> falta.getData().equals(faltasId)).findFirst();
 
         return faltaEncontrada
-                .orElseThrow(() -> new MongoException("Falta com id " + faltasId + " não foi encontrada."));
+                .orElseThrow(() -> new EntityNotFoundException("Falta com id " + faltasId + " não foi encontrada."));
     }
 
     protected Optional<Falta> encontrarFaltasDoAlunoPelaData(Aluno aluno, Date data) {
@@ -281,7 +280,7 @@ public class AlunoServices implements AlunoServicesInterface {
         String dataFormatada = new SimpleDateFormat(DATA_FORMATO).format(data);
 
         if (!checarSeFaltaEstaRegistrada(aluno, dataFormatada)) {
-            throw new MongoException("Falta" + data + "não encontrada!");
+            throw new EntityNotFoundException("Falta" + data + "não encontrada!");
         }
 
         return aluno.getGraduacao().getFaltas().stream().filter(falta -> falta.getData().equals(dataFormatada))

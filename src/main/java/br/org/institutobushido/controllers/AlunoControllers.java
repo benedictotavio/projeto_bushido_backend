@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.mongodb.MongoException;
-
 import br.org.institutobushido.abstracts.InformacoesSaudeImpl;
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
@@ -37,123 +34,79 @@ public class AlunoControllers {
     private AlunoServices alunoServices;
 
     @GetMapping()
-    ResponseEntity<Object> buscarAlunoPorEmail(@RequestParam(name = "rg") String rg) {
-        try {
-            AlunoDTOResponse alunoEncontrado = alunoServices.buscarAlunoPorRg(rg);
-            return ResponseEntity.ok().body(alunoEncontrado);
-        } catch (MongoException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    ResponseEntity<Object> buscarAlunoPorRg(@RequestParam(name = "rg") String rg) {
+        AlunoDTOResponse alunoEncontrado = alunoServices.buscarAlunoPorRg(rg);
+        return ResponseEntity.ok().body(alunoEncontrado);
     }
 
     @PostMapping()
     ResponseEntity<String> adicionarAluno(@Valid() @RequestBody AlunoDTORequest alunoDTORequest) {
-        try {
-            AlunoDTOResponse novoAluno = alunoServices.adicionarAluno(alunoDTORequest);
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-            return ResponseEntity.created(location).body(novoAluno.rg());
-        } catch (MongoException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        AlunoDTOResponse novoAluno = alunoServices.adicionarAluno(alunoDTORequest);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+        return ResponseEntity.created(location).body(novoAluno.rg());
     }
 
     @PostMapping("adicionarResponsavel/{rg}")
     public ResponseEntity<Object> adicionarResponsavel(@PathVariable String rg,
             @RequestBody ResponsavelDTORequest responsavelDTORequest) {
-        try {
-            ResponsavelDTOResponse res = alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
-            return ResponseEntity.ok().body(res);
-        } catch (MongoException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        ResponsavelDTOResponse res = alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
+        return ResponseEntity.ok().body(res);
     }
 
     @DeleteMapping("removerResponsavel/{rg}")
     public ResponseEntity<Object> removerResponsavel(@PathVariable String rg,
             @RequestParam(name = "cpf") String cpf) {
-        try {
-            boolean res = alunoServices.removerResponsavel(rg, cpf);
-            return ResponseEntity.ok().body(res);
-        } catch (MongoException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        boolean res = alunoServices.removerResponsavel(rg, cpf);
+        return ResponseEntity.ok().body(res);
     }
 
     @PostMapping("adicionarFalta/{rg}")
     public ResponseEntity<String> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
             @PathVariable String rg) {
-        try {
-            String res = alunoServices.adicionarFaltaDoAluno(rg, faltas);
-            return ResponseEntity.ok().body(res);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        String res = alunoServices.adicionarFaltaDoAluno(rg, faltas);
+        return ResponseEntity.ok().body(res);
     }
 
     @PostMapping("adicionarFalta/{rg}/{data}")
     public ResponseEntity<String> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
             @PathVariable String rg, @PathVariable long data) {
-        try {
-            String res = alunoServices.adicionarFaltaDoAluno(rg, faltas, data);
-            return ResponseEntity.ok().body(res);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        String res = alunoServices.adicionarFaltaDoAluno(rg, faltas, data);
+        return ResponseEntity.ok().body(res);
     }
 
     @DeleteMapping("retirarFalta/{rg}")
     public ResponseEntity<String> retirarFaltaAoAluno(@RequestParam(name = "data") String data,
             @PathVariable String rg) {
-        try {
             String res = alunoServices.retirarFaltaDoAluno(rg, data);
             return ResponseEntity.ok().body(res);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping("deficiencia/{rg}")
     public ResponseEntity<String> adicionarDeficiencia(@PathVariable String rg,
             @RequestParam(name = "deficiencia") String deficiencia) {
-        try {
             String res = alunoServices.adicionarDeficiencia(rg, deficiencia);
             return ResponseEntity.ok().body(res);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @DeleteMapping("deficiencia/{rg}")
     public ResponseEntity<String> removerDeficiencia(@PathVariable String rg,
             @RequestParam(name = "deficiencia") String deficiencia) {
-        try {
             String res = alunoServices.removerDeficiencia(rg, deficiencia);
             return ResponseEntity.ok().body(res);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping("acompanhamentoSaude/{rg}")
     public ResponseEntity<String> adicionarAcompanhamentoSaude(@PathVariable String rg,
             @RequestParam(name = "acompanhamento") String acompanhamento) {
-        try {
             String res = alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamento);
             return ResponseEntity.ok().body(res);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @DeleteMapping("acompanhamentoSaude/{rg}")
     public ResponseEntity<Object> removerAcompanhamentoSaude(@PathVariable String rg,
             @RequestParam(name = "acompanhamento") String acompanhamento) {
-        try {
             Object res = alunoServices.removerAcompanhamentoSaude(rg, acompanhamento);
             return ResponseEntity.ok().body(res);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PutMapping("historicoSaude/{rg}")
