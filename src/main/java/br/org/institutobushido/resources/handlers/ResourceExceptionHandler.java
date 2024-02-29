@@ -1,12 +1,10 @@
 package br.org.institutobushido.resources.handlers;
 
 import java.time.Instant;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import br.org.institutobushido.resources.errors.StandardError;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
@@ -14,7 +12,7 @@ import br.org.institutobushido.resources.exceptions.InactiveUserException;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 import jakarta.servlet.http.HttpServletRequest;
 
-@ControllerAdvice
+@ControllerAdvice(basePackages = "br.org.institutobushido.controllers.aluno")
 public class ResourceExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<StandardError> objectNotFound(EntityNotFoundException e, HttpServletRequest request) {
@@ -60,5 +58,4 @@ public class ResourceExceptionHandler {
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(err.getStatus()).body(err);
     }
-
 }
