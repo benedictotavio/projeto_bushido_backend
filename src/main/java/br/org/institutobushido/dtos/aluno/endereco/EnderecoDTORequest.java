@@ -1,17 +1,13 @@
 package br.org.institutobushido.dtos.aluno.endereco;
 
-import com.mongodb.lang.NonNull;
-
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public record EnderecoDTORequest(
-    @NonNull()
-    String cidade,
-    @NonNull()
-    String estado,
-    @NonNull()
-    String cep,
-    @NonNull()
-    String numero) {
+        String cidade,
+        String estado,
+        @NotNull(message = "Cep é obrigatório") @Pattern(regexp = "^\\d{8}$", message = "Cep inválido") String cep,
+        @NotNull(message = "Numero é obrigatório") String numero) {
 }

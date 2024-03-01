@@ -8,7 +8,9 @@ import br.org.institutobushido.dtos.aluno.historico_de_saude.informacoes_de_saud
 import br.org.institutobushido.dtos.aluno.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTORequest;
 
 public record HistoricoSaudeDTORequest(UsoMedicamentoContinuoDTORequest usoMedicamentoContinuo,
-                AlergiaDTORequest alergia,
-                CirurgiaDTORequest cirurgia, DoencaCronicaDTORequest doencaCronica, List<String> deficiencia,
-                List<String> acompanhamentoSaude) {
+        AlergiaDTORequest alergia,
+        CirurgiaDTORequest cirurgia, 
+        DoencaCronicaDTORequest doencaCronica, 
+        List<String> deficiencia,
+        List<String> acompanhamentoSaude) {
 }

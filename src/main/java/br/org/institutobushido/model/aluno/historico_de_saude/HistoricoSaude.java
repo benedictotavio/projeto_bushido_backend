@@ -1,5 +1,6 @@
 package br.org.institutobushido.model.aluno.historico_de_saude;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.org.institutobushido.enums.aluno.FatorRH;
@@ -22,6 +23,6 @@ public class HistoricoSaude {
     private DoencaCronica doencaCronica;
     private Alergias alergias;
     private Cirurgias cirurgias;
-    private List<String> deficiencias;
-    private List<String> acompanhamentoSaude;
+    private List<String> deficiencias = new ArrayList<>();
+    private List<String> acompanhamentoSaude = new ArrayList<>();
 }
