@@ -37,6 +37,7 @@ POST /admin/signup
 Retorna um token que sera utilizado nas demais requisições
 
 ### Request
+
 ```http
 POST /admin/login
 ```
@@ -55,9 +56,9 @@ POST /admin/login
 <summary><i>200</i></summary>
 
 ```json
-    {
-      "token":"string"
-    }
+{
+  "token": "string"
+}
 ```
 
 </details>
@@ -185,37 +186,37 @@ GET /aluno?rg={rg}
 
 Adiciona um aluno baseado nos dados cadastrais abaixo.
 
-```*``` Campos Obrigatórios
+`*` Campos Obrigatórios
 
 | Campo                                                 | Tipo             | Descrição                                         |
 | ----------------------------------------------------- | ---------------- | :------------------------------------------------ |
-| nome```*```                                           | string           | Nome completo do aluno                            |
-| genero```*```                                         | string           | Gênero do aluno (M ou F)                          |
-| dataNascimento```*```                                 | Date             | Data de nascimento do aluno (ISO String)          |
+| nome`*`                                               | string           | Nome completo do aluno                            |
+| genero`*`                                             | string           | Gênero do aluno (M ou F)                          |
+| dataNascimento`*`                                     | Date             | Data de nascimento do aluno (ISO String)          |
 | dadosSociais                                          | objeto           | Dados sociais do aluno                            |
 | dadosSociais.bolsaFamilia                             | boolean          | Indica se o aluno recebe Bolsa Família            |
 | dadosSociais.auxilioBrasil                            | boolean          | Indica se o aluno recebe Auxílio Brasil           |
-| dadosSociais.imovel```*```                            | string (enum)    | </br>CEDIDO</br>ALUGADO</br>PROPRIO</li></ul>     |
+| dadosSociais.imovel`*`                                | string (enum)    | </br>CEDIDO</br>ALUGADO</br>PROPRIO</li></ul>     |
 | dadosSociais.numerosDePessoasNaCasa                   | integer          | Número de pessoas na casa do aluno                |
 | dadosSociais.contribuintesDaRendaFamiliar             | integer          | Número de contribuintes da renda familiar         |
 | dadosSociais.alunoContribuiParaRenda                  | boolean          | Indica se o aluno contribui para a renda familiar |
-| dadosSociais.rendaFamiliarEmSalariosMinimos```*```    | integer          | Renda familiar em salários mínimos                |
+| dadosSociais.rendaFamiliarEmSalariosMinimos`*`        | integer          | Renda familiar em salários mínimos                |
 | dadosEscolares                                        | objeto           | Dados escolares do aluno                          |
-| dadosEscolares.turno```*```                           | string (enum)    | Turno escolar do aluno (MANHA ou outro)           |
-| dadosEscolares.escola```*```                          | string           | Nome da escola do aluno                           |
-| dadosEscolares.serie```*```                           | integer          | Série em que o aluno está matriculado             |
+| dadosEscolares.turno`*`                               | string (enum)    | Turno escolar do aluno (MANHA ou outro)           |
+| dadosEscolares.escola`*`                              | string           | Nome da escola do aluno                           |
+| dadosEscolares.serie`*`                               | integer          | Série em que o aluno está matriculado             |
 | endereco                                              | objeto           | Endereço do aluno                                 |
 | endereco.cidade                                       | string           | Cidade do aluno                                   |
 | endereco.estado                                       | string           | Estado do aluno                                   |
-| endereco.cep```*```                                   | string           | CEP do aluno                                      |
-| endereco.numero```*```                                | string           | Número do endereço do aluno                       |
-| rg```*```                                             | string           | Número do RG do aluno                             |
+| endereco.cep`*`                                       | string           | CEP do aluno                                      |
+| endereco.numero`*`                                    | string           | Número do endereço do aluno                       |
+| rg`*`                                                 | string           | Número do RG do aluno                             |
 | responsaveis                                          | array de objetos | Responsáveis legais do aluno                      |
 | responsaveis.nome                                     | string           | Nome do responsável legal                         |
 | responsaveis.cpf                                      | string           | CPF do responsável legal                          |
-| responsaveis.telefone```*```                          | string           | Telefone do responsável legal                     |
+| responsaveis.telefone`*`                              | string           | Telefone do responsável legal                     |
 | responsaveis.email                                    | string           | Email do responsável legal                        |
-| responsaveis.filiacao```*```                          | string (enum)    | Filiação do responsável legal (PAI ou outro)      |
+| responsaveis.filiacao`*`                              | string (enum)    | Filiação do responsável legal (PAI ou outro)      |
 | graduacao                                             | objeto           | Informações sobre a graduação do aluno            |
 | graduacao.kyu                                         | integer          | Nível de graduação (Kyu) do aluno                 |
 | graduacao.frequencia                                  | integer          | Frequência nas aulas de caratê                    |
@@ -316,8 +317,10 @@ POST /aluno
 
 ```json
 {
-  "rg_aluno": "string",
-  "code": 200
+  "id": "string",
+  "status": 200,
+  "message": "string",
+  "entity": "string"
 }
 ```
 
@@ -328,8 +331,11 @@ POST /aluno
 
 ```json
 {
+  "timestamp": 0,
+  "status": 400,
+  "error": "string",
   "message": "string",
-  "code": 400
+  "path": "string"
 }
 ```
 
@@ -353,10 +359,11 @@ POST /aluno/adicionarFalta/{rg}
 
 ```body
 {
-  "motivo":"Aluno se encontra doente",
-  "observacao":"Luis trouxe atestado"
+  "motivo":"string",
+  "observacao":"string"
 }
 ```
+
 #### Response
 
 <p>
@@ -364,10 +371,12 @@ POST /aluno/adicionarFalta/{rg}
 <summary><i>200</i></summary>
 
 ```json
-    {
-      "qtd_faltas":0,
-      "code":200
-    }
+{
+  "id": "string",
+  "status": 200,
+  "message": "string",
+  "entity": "string"
+}
 ```
 
 </details>
@@ -377,8 +386,11 @@ POST /aluno/adicionarFalta/{rg}
 
 ```json
 {
-  "message": "Data inválida",
-  "code": 400
+  "timestamp": 0,
+  "status": 400,
+  "error": "string",
+  "message": "string",
+  "path": "string"
 }
 ```
 
@@ -390,14 +402,15 @@ POST /aluno/adicionarFalta/{rg}
 
 ## Adicionar falta ao aluno na data especifica
 
-### Request
+#### Request
+
 ```http
 POST /aluno/adicionarFalta/{rg}/00000000000
 ```
 
 ```body
 {
-  "motivo":"Aluno se encontra doente",
+  "motivo":"Aluno se encontra doente","Aluno se encontra doente"
   "observacao":"Luis trouxe atestado"
 }
 ```
@@ -409,10 +422,12 @@ POST /aluno/adicionarFalta/{rg}/00000000000
 <summary><i>200</i></summary>
 
 ```json
-    {
-      "qtd_faltas":0,
-      "code":200
-    }
+{
+  "id": "string",
+  "status": 200,
+  "message": "string",
+  "entity": "string"
+}
 ```
 
 </details>
@@ -422,8 +437,11 @@ POST /aluno/adicionarFalta/{rg}/00000000000
 
 ```json
 {
-  "message": "Data inválida",
-  "code": 400
+  "timestamp": 0,
+  "status": 400,
+  "error": "string",
+  "message": "string",
+  "path": "string"
 }
 ```
 
@@ -445,6 +463,8 @@ DELETE /aluno/retirarFalta/{rg}?data=dd-MM-yyyy
 POST /aluno/adicionarResponsavel/{rg}
 ```
 
+#### Request
+
 ```body
 {
   "nome": "string",
@@ -455,17 +475,89 @@ POST /aluno/adicionarResponsavel/{rg}
 }
 ```
 
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "id": "string",
+  "status": 200,
+  "message": "string",
+  "entity": "string"
+}
+```
+
+</details>
+
+<details>
+<summary><i>400</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 400,
+  "error": "string",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+</details>
+</p>
+
 ## Remover responsável do aluno
 
 ```http
 DELETE /aluno/removerResponsavel/{rg}?cpf=string
 ```
 
+
 ## Adicionar deficiência ao aluno
 
+- **rg:** string
+- **deficiencia:** string
 ```http
 POST /aluno/deficiencia/{rg}?deficiencia=string
 ```
+
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "id": "string",
+  "status": 200,
+  "message": "string",
+  "entity": "string"
+}
+```
+
+</details>
+
+<details>
+<summary><i>400</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 400,
+  "error": "string",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+</details>
+</p>
+
 
 ## Remover deficiência do aluno
 
@@ -475,9 +567,47 @@ DELETE /aluno/deficiencia/{rg}?deficiencia=string
 
 ## Adicionar acompanhamento de saúde ao aluno
 
+- **rg:** string
+- **acompanhamento:** string
+
 ```http
 POST /aluno/acompanhamentoSaude/{rg}?acompanhamento=string
 ```
+
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "id": "string",
+  "status": 200,
+  "message": "string",
+  "entity": "string"
+}
+```
+
+</details>
+
+<details>
+<summary><i>400</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 400,
+  "error": "string",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+</details>
+</p>
+
 
 ## Remover acompanhamento de saúde do aluno
 
