@@ -74,7 +74,8 @@ public class ResourceExceptionHandler {
 
     // -> Pattern Validations
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<StandardError> invalidProperty(MethodArgumentNotValidException e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> invalidProperty(MethodArgumentNotValidException e,
+            HttpServletRequest request) {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
         err.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -110,8 +111,6 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleSecurityException(Exception e) {
 
-        System.out.println(e.toString());
-
         if (e instanceof BadCredentialsException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), e.getMessage());
             problem.setTitle("Erro de Autenticação");
@@ -122,19 +121,19 @@ public class ResourceExceptionHandler {
         if (e instanceof AccessDeniedException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), e.getMessage());
             problem.setTitle("Access Denied Error");
-            problem.setProperty("access_denied", "Not authorized to access this resource");
+            problem.setProperty("access_denied", "Voce não esta autorizado a acessar essa sessão.");
         }
 
         if (e instanceof TokenExpiredException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), e.getMessage());
             problem.setTitle("JWT Expired");
-            problem.setProperty("jwt_error", "JWT Signature is invalid");
+            problem.setProperty("jwt_error", "JWT Token esta expirado");
         }
 
         if (e instanceof SignatureVerificationException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), e.getMessage());
             problem.setTitle("JWT Signature error");
-            problem.setProperty("jwt_error", "JWT Token is expired");
+            problem.setProperty("jwt_error", "JWT Token não está no formato correto");
         }
         return problem;
     }

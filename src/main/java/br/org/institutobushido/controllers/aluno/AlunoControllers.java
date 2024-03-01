@@ -2,8 +2,8 @@ package br.org.institutobushido.controllers.aluno;
 
 import java.net.URI;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +21,10 @@ import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
+import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
+import br.org.institutobushido.resources.response.SuccessPostResponse;
 import br.org.institutobushido.services.aluno.AlunoServices;
 import jakarta.validation.Valid;
 
@@ -32,23 +36,25 @@ public class AlunoControllers {
     private AlunoServices alunoServices;
 
     @GetMapping()
-    ResponseEntity<Object> buscarAlunoPorRg(@RequestParam(name = "rg") String rg) {
+    ResponseEntity<AlunoDTOResponse> buscarAlunoPorRg(@RequestParam(name = "rg") String rg) {
         AlunoDTOResponse alunoEncontrado = alunoServices.buscarAlunoPorRg(rg);
         return ResponseEntity.ok().body(alunoEncontrado);
     }
 
     @PostMapping()
-    ResponseEntity<String> adicionarAluno(@Valid() @RequestBody AlunoDTORequest alunoDTORequest) {
+    ResponseEntity<SuccessPostResponse> adicionarAluno(@Valid() @RequestBody AlunoDTORequest alunoDTORequest) {
         AlunoDTOResponse novoAluno = alunoServices.adicionarAluno(alunoDTORequest);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(location).body(novoAluno.rg());
+        return ResponseEntity.created(location).body(new SuccessPostResponse(novoAluno.rg(),
+                HttpStatus.OK.value(), "Aluno adicionado com sucesso", Aluno.class.getName()));
     }
 
     @PostMapping("adicionarResponsavel/{rg}")
-    public ResponseEntity<Object> adicionarResponsavel(@PathVariable String rg,
+    public ResponseEntity<SuccessPostResponse> adicionarResponsavel(@PathVariable String rg,
             @RequestBody ResponsavelDTORequest responsavelDTORequest) {
-        ResponsavelDTOResponse res = alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
-        return ResponseEntity.ok().body(res);
+        ResponsavelDTOResponse responsavel = alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
+        return ResponseEntity.ok().body(new SuccessPostResponse(responsavel.cpf(), HttpStatus.OK.value(),
+                "Responsável adicionado com sucesso", Responsavel.class.getName()));
     }
 
     @DeleteMapping("removerResponsavel/{rg}")
@@ -59,17 +65,17 @@ public class AlunoControllers {
     }
 
     @PostMapping("adicionarFalta/{rg}")
-    public ResponseEntity<String> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
+    public ResponseEntity<SuccessPostResponse> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
             @PathVariable String rg) {
         String res = alunoServices.adicionarFaltaDoAluno(rg, faltas);
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(new SuccessPostResponse(res, HttpStatus.OK.value(), "Falta adicionada",Falta.class.getName()));
     }
 
     @PostMapping("adicionarFalta/{rg}/{data}")
-    public ResponseEntity<String> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
+    public ResponseEntity<SuccessPostResponse> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
             @PathVariable String rg, @PathVariable long data) {
         String res = alunoServices.adicionarFaltaDoAluno(rg, faltas, data);
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(new SuccessPostResponse(res, HttpStatus.OK.value(), "Falta adicionada", Falta.class.getName()));
     }
 
     @DeleteMapping("retirarFalta/{rg}")
@@ -80,10 +86,10 @@ public class AlunoControllers {
     }
 
     @PostMapping("deficiencia/{rg}")
-    public ResponseEntity<String> adicionarDeficiencia(@PathVariable String rg,
+    public ResponseEntity<SuccessPostResponse> adicionarDeficiencia(@PathVariable String rg,
             @RequestParam(name = "deficiencia") String deficiencia) {
         String res = alunoServices.adicionarDeficiencia(rg, deficiencia);
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(new SuccessPostResponse(res, HttpStatus.OK.value(), "Deficiência adicionada"));
     }
 
     @DeleteMapping("deficiencia/{rg}")
@@ -94,10 +100,10 @@ public class AlunoControllers {
     }
 
     @PostMapping("acompanhamentoSaude/{rg}")
-    public ResponseEntity<String> adicionarAcompanhamentoSaude(@PathVariable String rg,
+    public ResponseEntity<SuccessPostResponse> adicionarAcompanhamentoSaude(@PathVariable String rg,
             @RequestParam(name = "acompanhamento") String acompanhamento) {
         String res = alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamento);
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(new SuccessPostResponse(res, HttpStatus.OK.value(), "Acompanhamento de saude adicionado"));
     }
 
     @DeleteMapping("acompanhamentoSaude/{rg}")
