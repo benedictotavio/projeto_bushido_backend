@@ -1,4 +1,4 @@
-package br.org.institutobushido.resources.configs;
+package br.org.institutobushido.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("https://institutobushido.netlify.app")
+        registry.addMapping("/api/V1/**").allowedOrigins("https://institutobushido.netlify.app")
                 .allowedHeaders("Authorization", "Content-Type");
     }
 }

@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DadosSociais {
-    private boolean bolsaFamilia;
-    private boolean auxilioBrasil;
+    private boolean bolsaFamilia = false;
+    private boolean auxilioBrasil = false;
     private Imovel imovel;
-    private int numerosDePessoasNaCasa;
-    private int contribuintesDaRendaFamiliar;
-    private boolean alunoContribuiParaRenda;
+    private int numerosDePessoasNaCasa = 1;
+    private int contribuintesDaRendaFamiliar = 1;
+    private boolean alunoContribuiParaRenda = false;
     private int rendaFamiliarEmSalariosMinimos;
 }

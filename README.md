@@ -102,7 +102,7 @@ GET /aluno?rg={rg}
     {
       "nome": "string",
       "genero": "M" | "F",
-      "dataNascimento": "dd-MM-yyy",
+      "dataNascimento": "YYYY-MM-DD. YYYY-MM-DDThh:mm:ss",
       "dadosSociais":{
         "bolsaFamilia": true,
         "auxilioBrasil": false,
@@ -185,36 +185,37 @@ GET /aluno?rg={rg}
 
 Adiciona um aluno baseado nos dados cadastrais abaixo.
 
+```*``` Campos Obrigatórios
+
 | Campo                                                 | Tipo             | Descrição                                         |
 | ----------------------------------------------------- | ---------------- | :------------------------------------------------ |
-| nome                                                  | string           | Nome completo do aluno                            |
-| genero                                                | string           | Gênero do aluno (M ou F)                          |
-| dataNascimento                                        | string           | Data de nascimento do aluno (dd-MM-yyyy)          |
+| nome```*```                                           | string           | Nome completo do aluno                            |
+| genero```*```                                         | string           | Gênero do aluno (M ou F)                          |
+| dataNascimento```*```                                 | Date             | Data de nascimento do aluno (ISO String)          |
 | dadosSociais                                          | objeto           | Dados sociais do aluno                            |
 | dadosSociais.bolsaFamilia                             | boolean          | Indica se o aluno recebe Bolsa Família            |
 | dadosSociais.auxilioBrasil                            | boolean          | Indica se o aluno recebe Auxílio Brasil           |
-| dadosSociais.imovel                                   | string (enum)    | </br>CEDIDO</br>ALUGADO</br>PROPRIO</li></ul>     |
+| dadosSociais.imovel```*```                            | string (enum)    | </br>CEDIDO</br>ALUGADO</br>PROPRIO</li></ul>     |
 | dadosSociais.numerosDePessoasNaCasa                   | integer          | Número de pessoas na casa do aluno                |
 | dadosSociais.contribuintesDaRendaFamiliar             | integer          | Número de contribuintes da renda familiar         |
 | dadosSociais.alunoContribuiParaRenda                  | boolean          | Indica se o aluno contribui para a renda familiar |
-| dadosSociais.rendaFamiliarEmSalariosMinimos           | integer          | Renda familiar em salários mínimos                |
+| dadosSociais.rendaFamiliarEmSalariosMinimos```*```    | integer          | Renda familiar em salários mínimos                |
 | dadosEscolares                                        | objeto           | Dados escolares do aluno                          |
-| dadosEscolares.turno                                  | string (enum)    | Turno escolar do aluno (MANHA ou outro)           |
-| dadosEscolares.escola                                 | string           | Nome da escola do aluno                           |
-| dadosEscolares.serie                                  | integer          | Série em que o aluno está matriculado             |
-| dataPreenchimento                                     | string           | Data e hora do preenchimento do formulário        |
+| dadosEscolares.turno```*```                           | string (enum)    | Turno escolar do aluno (MANHA ou outro)           |
+| dadosEscolares.escola```*```                          | string           | Nome da escola do aluno                           |
+| dadosEscolares.serie```*```                           | integer          | Série em que o aluno está matriculado             |
 | endereco                                              | objeto           | Endereço do aluno                                 |
 | endereco.cidade                                       | string           | Cidade do aluno                                   |
 | endereco.estado                                       | string           | Estado do aluno                                   |
-| endereco.cep                                          | string           | CEP do aluno                                      |
-| endereco.numero                                       | string           | Número do endereço do aluno                       |
-| rg                                                    | string           | Número do RG do aluno                             |
+| endereco.cep```*```                                   | string           | CEP do aluno                                      |
+| endereco.numero```*```                                | string           | Número do endereço do aluno                       |
+| rg```*```                                             | string           | Número do RG do aluno                             |
 | responsaveis                                          | array de objetos | Responsáveis legais do aluno                      |
 | responsaveis.nome                                     | string           | Nome do responsável legal                         |
 | responsaveis.cpf                                      | string           | CPF do responsável legal                          |
-| responsaveis.telefone                                 | string           | Telefone do responsável legal                     |
+| responsaveis.telefone```*```                          | string           | Telefone do responsável legal                     |
 | responsaveis.email                                    | string           | Email do responsável legal                        |
-| responsaveis.filiacao                                 | string (enum)    | Filiação do responsável legal (PAI ou outro)      |
+| responsaveis.filiacao```*```                          | string (enum)    | Filiação do responsável legal (PAI ou outro)      |
 | graduacao                                             | objeto           | Informações sobre a graduação do aluno            |
 | graduacao.kyu                                         | integer          | Nível de graduação (Kyu) do aluno                 |
 | graduacao.frequencia                                  | integer          | Frequência nas aulas de caratê                    |

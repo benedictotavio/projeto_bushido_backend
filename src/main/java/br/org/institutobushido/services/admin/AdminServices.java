@@ -78,7 +78,7 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
                     .withIssuer(secret)
                     .withClaim("email", admin.getEmail())
                     .withSubject(admin.getEmail())
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 100 * 60 * 1000))
                     .sign(algorithm);
         } catch (JWTCreationException e) {
             throw new JWTCreationException("Error ao gerar token", e);
