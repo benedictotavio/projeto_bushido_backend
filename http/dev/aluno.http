@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmZTIzcmYyMzlVSjd0amg3ODZmN0c3VDZGNTZHRlI3R0Y1Nkc2Zmc2N2Y2Zzd5Z3ZGUjVERjdndDY3OGpva2kwOThVNzg5SiIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5MzMxODEwfQ.FSO_MsNP-m7aFgLkTEcNRYXqfBHWFUrPBBvQYgn7754
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcwOTMzNDU4NX0.TjUCp7_DCk5O2H5IW17BwGKPSLPeLO46HVujgrIdnzs
 
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1
@@ -71,7 +71,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-POST {{url}}/adicionarFalta/123456789/1506992087893 HTTP/1.1
+POST {{url}}/adicionarFalta/123456789/1206992087893 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

@@ -1,3 +1,9 @@
 package br.org.institutobushido.dtos.aluno.graduacao.faltas;
 
-public record FaltaDTORequest(String motivo, String observacao) {}
+import jakarta.validation.constraints.NotNull;
+
+public record FaltaDTORequest(
+    @NotNull(message = "Motivo é obrigatório")
+    String motivo, 
+    String observacao) {
+}
