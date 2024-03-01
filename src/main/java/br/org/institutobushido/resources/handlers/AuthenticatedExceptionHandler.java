@@ -25,19 +25,19 @@ public class AuthenticatedExceptionHandler {
         if (e instanceof AccessDeniedException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), e.getMessage());
             problem.setTitle("Access Denied Error");
-            problem.setProperty("access_denied", "Not authorized to access this resource");
+            problem.setProperty("access_denied", "Not authorized to access this resource.");
         }
 
         if (e instanceof TokenExpiredException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), e.getMessage());
             problem.setTitle("JWT Expired");
-            problem.setProperty("jwt_error", "JWT Signature is invalid");
+            problem.setProperty("jwt_error", "JWT Token is expired.");
         }
 
         if (e instanceof SignatureVerificationException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), e.getMessage());
             problem.setTitle("JWT Signature error");
-            problem.setProperty("jwt_error", "JWT Token is expired");
+            problem.setProperty("jwt_error", "JWT Signature is invalid.");
         }
         return problem;
     }
