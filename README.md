@@ -102,7 +102,7 @@ GET /aluno?rg={rg}
     {
       "nome": "string",
       "genero": "M" | "F",
-      "dataNascimento": "dd-MM-yyy",
+      "dataNascimento": "YYYY-MM-DD. YYYY-MM-DDThh:mm:ss",
       "dadosSociais":{
         "bolsaFamilia": true,
         "auxilioBrasil": false,
@@ -189,7 +189,7 @@ Adiciona um aluno baseado nos dados cadastrais abaixo.
 | ----------------------------------------------------- | ---------------- | :------------------------------------------------ |
 | nome                                                  | string           | Nome completo do aluno                            |
 | genero                                                | string           | Gênero do aluno (M ou F)                          |
-| dataNascimento                                        | string           | Data de nascimento do aluno (dd-MM-yyyy)          |
+| dataNascimento                                        | Date             | Data de nascimento do aluno (ISO String)          |
 | dadosSociais                                          | objeto           | Dados sociais do aluno                            |
 | dadosSociais.bolsaFamilia                             | boolean          | Indica se o aluno recebe Bolsa Família            |
 | dadosSociais.auxilioBrasil                            | boolean          | Indica se o aluno recebe Auxílio Brasil           |
@@ -202,7 +202,6 @@ Adiciona um aluno baseado nos dados cadastrais abaixo.
 | dadosEscolares.turno                                  | string (enum)    | Turno escolar do aluno (MANHA ou outro)           |
 | dadosEscolares.escola                                 | string           | Nome da escola do aluno                           |
 | dadosEscolares.serie                                  | integer          | Série em que o aluno está matriculado             |
-| dataPreenchimento                                     | string           | Data e hora do preenchimento do formulário        |
 | endereco                                              | objeto           | Endereço do aluno                                 |
 | endereco.cidade                                       | string           | Cidade do aluno                                   |
 | endereco.estado                                       | string           | Estado do aluno                                   |

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
 import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.dtos.aluno.graduacao.faltas.FaltaDTORequest;
@@ -48,38 +49,37 @@ public class AlunoServices implements AlunoServicesInterface {
 
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByRg(alunoDTORequest.rg());
 
-        if (!alunoEncontrado.isPresent()) {
-            Aluno aluno = new Aluno();
-            aluno.setGenero(alunoDTORequest.genero());
-            aluno.setDataNascimento(alunoDTORequest.dataNascimento());
-            aluno.setNome(alunoDTORequest.nome());
-            aluno.setRg(alunoDTORequest.rg());
-            aluno.setGraduacao(GraduacaoMapper.mapToGraduacao(alunoDTORequest.graduacao()));
-            aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
-            aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
-            aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
-            aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
-            aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));
-            Aluno novoAluno = alunoRepositorio.save(aluno);
-
-            return AlunoDTOResponse.builder()
-                    .withNome(novoAluno.getNome())
-                    .withGenero(novoAluno.getGenero())
-                    .withDataNascimento(novoAluno.getDataNascimento())
-                    .withDataPreenchimento(novoAluno.getDataPreenchimento())
-                    .withRg(novoAluno.getRg())
-                    .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
-                    .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(novoAluno.getEndereco()))
-                    .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(novoAluno.getDadosSociais()))
-                    .withDadosEscolares(
-                            DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(novoAluno.getDadosEscolares()))
-                    .withGraduacao(GraduacaoMapper.mapToGraduacaoDTOResponse(novoAluno.getGraduacao()))
-                    .withHistoricoSaude(
-                            HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(novoAluno.getHistoricoSaude()))
-                    .build();
+        if (alunoEncontrado.isPresent()) {
+            throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
         }
+        Aluno aluno = new Aluno();
+        aluno.setGenero(alunoDTORequest.genero());
+        aluno.setDataNascimento(alunoDTORequest.dataNascimento());
+        aluno.setNome(alunoDTORequest.nome());
+        aluno.setRg(alunoDTORequest.rg());
+        aluno.setGraduacao(GraduacaoMapper.mapToGraduacao(alunoDTORequest.graduacao()));
+        aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
+        aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
+        aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
+        aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
+        aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));
+        Aluno novoAluno = alunoRepositorio.save(aluno);
 
-        throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
+        return AlunoDTOResponse.builder()
+                .withNome(novoAluno.getNome())
+                .withGenero(novoAluno.getGenero())
+                .withDataNascimento(novoAluno.getDataNascimento())
+                .withDataPreenchimento(novoAluno.getDataPreenchimento())
+                .withRg(novoAluno.getRg())
+                .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
+                .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(novoAluno.getEndereco()))
+                .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(novoAluno.getDadosSociais()))
+                .withDadosEscolares(
+                        DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(novoAluno.getDadosEscolares()))
+                .withGraduacao(GraduacaoMapper.mapToGraduacaoDTOResponse(novoAluno.getGraduacao()))
+                .withHistoricoSaude(
+                        HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(novoAluno.getHistoricoSaude()))
+                .build();
     }
 
     @Override
