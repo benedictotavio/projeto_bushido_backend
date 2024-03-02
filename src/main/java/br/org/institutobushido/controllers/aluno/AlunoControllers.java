@@ -3,7 +3,6 @@ package br.org.institutobushido.controllers.aluno;
 import java.net.URI;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +46,8 @@ public class AlunoControllers {
         AlunoDTOResponse novoAluno = alunoServices.adicionarAluno(alunoDTORequest);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(location)
-                .body(new SuccessPostResponse(novoAluno.rg(), "Aluno adicionado com sucesso", Aluno.class.getName()));
+                .body(new SuccessPostResponse(novoAluno.rg(), "Aluno adicionado com sucesso",
+                        Aluno.class.getSimpleName()));
     }
 
     @PostMapping("adicionarResponsavel/{rg}")
@@ -55,7 +55,7 @@ public class AlunoControllers {
             @RequestBody ResponsavelDTORequest responsavelDTORequest) {
         ResponsavelDTOResponse responsavel = alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
         return ResponseEntity.ok().body(new SuccessPostResponse(responsavel.cpf(),
-                "Responsável adicionado com sucesso", Responsavel.class.getName()));
+                "Responsável adicionado com sucesso", Responsavel.class.getSimpleName()));
     }
 
     @DeleteMapping("removerResponsavel/{rg}")
@@ -71,7 +71,7 @@ public class AlunoControllers {
             @PathVariable String rg) {
         String res = alunoServices.adicionarFaltaDoAluno(rg, faltas);
         return ResponseEntity.ok()
-                .body(new SuccessPostResponse(res, "Falta adicionada", Falta.class.getName()));
+                .body(new SuccessPostResponse(res, "Falta adicionada", Falta.class.getSimpleName()));
     }
 
     @PostMapping("adicionarFalta/{rg}/{data}")
@@ -79,7 +79,7 @@ public class AlunoControllers {
             @PathVariable String rg, @PathVariable long data) {
         String res = alunoServices.adicionarFaltaDoAluno(rg, faltas, data);
         return ResponseEntity.ok()
-                .body(new SuccessPostResponse(res, "Falta adicionada", Falta.class.getName()));
+                .body(new SuccessPostResponse(res, "Falta adicionada", Falta.class.getSimpleName()));
     }
 
     @DeleteMapping("retirarFalta/{rg}")
@@ -110,7 +110,8 @@ public class AlunoControllers {
             @RequestParam(name = "acompanhamento") String acompanhamento) {
         String res = alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamento);
         return ResponseEntity.ok()
-                .body(new SuccessPostResponse(res, "Acompanhamento adicionado"));
+                .body(new SuccessPostResponse(res,
+                        "Acompanhamento " + acompanhamento + " foi adicionado com sucesso."));
     }
 
     @DeleteMapping("acompanhamentoSaude/{rg}")

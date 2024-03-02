@@ -79,7 +79,7 @@ public class ResourceExceptionHandler {
             HttpServletRequest request) {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
-        err.setStatus(HttpStatus.BAD_GATEWAY.value());
+        err.setStatus(HttpStatus.BAD_REQUEST.value());
         err.setError("Metodo inválido");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());

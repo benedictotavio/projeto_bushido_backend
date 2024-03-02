@@ -64,12 +64,17 @@ POST /admin/login
 </details>
 
 <details>
-<summary><i>403</i></summary>
+<summary><i>401</i></summary>
 
 ```json
 {
-  "message": "Senha ou e-mail inválido",
-  "code": 403
+  "type": "string",
+  "title": "Erro de Autenticação",
+  "status": 401,
+  "detail": "string",
+  "instance": "/api/V1/admin/login",
+  "message:": "string",
+  "error:": "Credenciais Inválidas"
 }
 ```
 
@@ -167,12 +172,15 @@ GET /aluno?rg={rg}
 </details>
 
 <details>
-<summary><i>400</i></summary>
+<summary><i>404</i></summary>
 
 ```json
 {
-  "message": "Rg não foi encontrado.",
-  "code": 400
+  "timestamp": 0,
+  "status": 404,
+  "error": "Object Not Found",
+  "message": "string",
+  "path": "string"
 }
 ```
 
@@ -313,12 +321,12 @@ POST /aluno
 
 <p>
 <details>
-<summary><i>200</i></summary>
+<summary><i>201</i></summary>
 
 ```json
 {
   "id": "string",
-  "status": 200,
+  "status": 201,
   "message": "string",
   "entity": "string"
 }
@@ -333,12 +341,41 @@ POST /aluno
 {
   "timestamp": 0,
   "status": 400,
-  "error": "string",
+  "error": "Metodo inválido",
   "message": "string",
-  "path": "string"
+  "path": "/api/V1/aluno"
 }
 ```
 
+</details>
+
+<details>
+<summary><i>403</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 403,
+  "error": "Propriedade Invalida",
+  "message": "string",
+  "path": "/api/V1/aluno"
+}
+```
+
+</details>
+
+<details>
+<summary><i>409</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 409,
+  "error": "Object is already Registered",
+  "message": "string",
+  "path": "/api/V1/aluno/adicionarFalta/123456789"
+}
+```
 </details>
 
 </details>
@@ -382,22 +419,34 @@ POST /aluno/adicionarFalta/{rg}
 </details>
 
 <details>
-<summary><i>400</i></summary>
+<summary><i>404</i></summary>
 
 ```json
 {
   "timestamp": 0,
-  "status": 400,
-  "error": "string",
+  "status": 404,
+  "error": "Object Not Found",
   "message": "string",
-  "path": "string"
+  "path": "/api/V1/aluno/adicionarFalta/1e23456789"
 }
 ```
 
 </details>
 
-</details>
+<details>
+<summary><i>409</i></summary>
 
+```json
+{
+  "timestamp": 0,
+  "status": 409,
+  "error": "Object is already Registered",
+  "message": "string",
+  "path": "/api/V1/aluno/adicionarFalta/123456789"
+}
+```
+</details>
+</details>
 </p>
 
 ## Adicionar falta ao aluno na data especifica
@@ -614,3 +663,36 @@ POST /aluno/acompanhamentoSaude/{rg}?acompanhamento=string
 ```http
 DELETE /aluno/acompanhamentoSaude/{rg}
 ```
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "id": "string",
+  "status": 200,
+  "message": "string",
+  "entity": "string"
+}
+```
+
+</details>
+
+<details>
+<summary><i>400</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 400,
+  "error": "string",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+</details>
+</p>
