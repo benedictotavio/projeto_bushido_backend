@@ -3,7 +3,6 @@ package br.org.institutobushido.model.aluno;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
@@ -11,10 +10,8 @@ import br.org.institutobushido.model.aluno.endereco.Endereco;
 import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 import br.org.institutobushido.model.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
-
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

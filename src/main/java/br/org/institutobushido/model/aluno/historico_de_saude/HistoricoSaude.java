@@ -5,8 +5,8 @@ import java.util.List;
 
 import br.org.institutobushido.enums.aluno.FatorRH;
 import br.org.institutobushido.enums.aluno.TipoSanguineo;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergias;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgias;
+import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergia;
+import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgia;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import lombok.AllArgsConstructor;
@@ -21,8 +21,8 @@ public class HistoricoSaude {
     private FatorRH fatorRh;
     private UsoMedicamentoContinuo usoMedicamentoContinuo;
     private DoencaCronica doencaCronica;
-    private Alergias alergias;
-    private Cirurgias cirurgias;
+    private Alergia alergia;
+    private Cirurgia cirurgia;
     private List<String> deficiencias = new ArrayList<>();
     private List<String> acompanhamentoSaude = new ArrayList<>();
 }

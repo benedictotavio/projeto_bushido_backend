@@ -1,8 +1,8 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkZGRkZCIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5MzY2NzE0fQ.StPo0MCwVfDEdLTZ4rnaY_nXKrMbIaR8XQe6Zy66SLM
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkZGRkZCIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5NDAxNDY5fQ.FsiH_sSUetz0UFabbjXxmaypcSNQ1n5-CxyfVI1V8UU
 
 # Buscar aluno por e-mail
-GET {{url}}?rg=123e456789 HTTP/1.1
+GET {{url}}?rg=123456789 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}} HTTP/1.1
@@ -35,28 +35,12 @@ Authorization: Bearer {{token}}
       }
     ],
    "graduacao": {
-        "kyu": 7,
-        "frequencia": 75
+      "kyu": 7,
+      "frequencia": 75
     },
     "historicoSaude": {
-    "tipoSanguineo": "A_POSITIVO",
-    "fatorRh": "POSITIVO",
-    "usoMedicamentoContinuo": {
-      "resposta": "",
-      "qualMedicamento": ""
-    },
-    "cirurgia": {
-      "resposta": "",
-      "tipo": ""
-    },
-    "alergia": {
-      "resposta": "",
-      "tipo": ""
-    },
-    "doencaCronica": {
-      "resposta": "",
-      "tipo": ""
-    }
+      "tipoSanguineo": "A_POSITIVO",
+      "fatorRh": "POSITIVO"
   }
 }
 
@@ -118,8 +102,8 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "alergias": {
-      "tipo": "p",
+  "cirurgia": {
+      "tipo": "bariatrica",
       "resposta": true
     }
 }

@@ -7,8 +7,8 @@ import br.org.institutobushido.dtos.aluno.historico_de_saude.informacoes_de_saud
 import br.org.institutobushido.dtos.aluno.historico_de_saude.informacoes_de_saude.doenca_cronica.DoencaCronicaDTOResponse;
 import br.org.institutobushido.dtos.aluno.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTOResponse;
 import br.org.institutobushido.model.aluno.historico_de_saude.HistoricoSaude;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergias;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgias;
+import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergia;
+import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgia;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 
@@ -24,10 +24,10 @@ public class HistoricoSaudeMapper {
 
                 HistoricoSaude historicoSaude = new HistoricoSaude();
 
-                historicoSaude.setAlergias(
-                                new Alergias(historicoSaudeDTORequest.alergia().resposta(),
+                historicoSaude.setAlergia(
+                                new Alergia(historicoSaudeDTORequest.alergia().resposta(),
                                                 historicoSaudeDTORequest.alergia().tipo()));
-                historicoSaude.setCirurgias(new Cirurgias(historicoSaudeDTORequest.cirurgia().resposta(),
+                historicoSaude.setCirurgia(new Cirurgia(historicoSaudeDTORequest.cirurgia().resposta(),
                                 historicoSaudeDTORequest.cirurgia().tipo()));
                 historicoSaude.setDoencaCronica(new DoencaCronica(historicoSaudeDTORequest.doencaCronica().resposta(),
                                 historicoSaudeDTORequest.doencaCronica().tipo()));
@@ -45,12 +45,12 @@ public class HistoricoSaudeMapper {
                         return null;
                 }
                 return HistoricoSaudeDTOResponse.builder()
-                                .withAlergias(AlergiaDTOResponse.builder()
-                                                .withResposta(historicoSaude.getAlergias().getResposta())
-                                                .withTipo(historicoSaude.getAlergias().getTipo()).build())
-                                .withCirurgias(CirurgiaDTOResponse.builder()
-                                                .withResposta(historicoSaude.getCirurgias().getResposta())
-                                                .withTipo(historicoSaude.getCirurgias().getTipo()).build())
+                                .withAlergia(AlergiaDTOResponse.builder()
+                                                .withResposta(historicoSaude.getAlergia().getResposta())
+                                                .withTipo(historicoSaude.getAlergia().getTipo()).build())
+                                .withCirurgia(CirurgiaDTOResponse.builder()
+                                                .withResposta(historicoSaude.getCirurgia().getResposta())
+                                                .withTipo(historicoSaude.getCirurgia().getTipo()).build())
                                 .withDoencaCronica(
                                                 DoencaCronicaDTOResponse.builder()
                                                                 .withResposta(historicoSaude.getDoencaCronica()

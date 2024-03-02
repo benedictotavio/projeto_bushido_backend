@@ -3,13 +3,13 @@ package br.org.institutobushido.resources.response.error;
 import java.io.Serializable;
 import java.time.Instant;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
+@Data
 public class StandardError implements Serializable {
     private Instant timestamp;
     private Integer status;
