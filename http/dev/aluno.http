@@ -1,6 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkZGRkZCIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5NDAxNDY5fQ.FsiH_sSUetz0UFabbjXxmaypcSNQ1n5-CxyfVI1V8UU
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcwOTQxMzU0M30.ii9s1Ym9MbyEUWqdWK3XE0sv-1znaeh9duftQhL-SSc
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1
 Authorization: Bearer {{token}}
@@ -45,7 +44,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-POST {{url}}/adicionarFalta/1e23456789 HTTP/1.1
+POST {{url}}/adicionarFalta/123456789 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -75,13 +74,13 @@ Authorization: Bearer {{token}}
 
 {
   "nome": "Teste",
-  "cpf": "020202020202",
-  "telefone": "123456789",
-  "filiacao": "MAE"
+  "cpf": "00045678901",
+  "telefone": "11999999999",
+  "filiacao": "PAI"
 }
 
 ###
-DELETE {{url}}/removerResponsavel/123456789?cpf=020202020202 HTTP/1.1
+DELETE {{url}}/removerResponsavel/123456789?cpf=12345678901 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}}/deficiencia/123456789?deficiencia=amidalite HTTP/1.1
@@ -102,7 +101,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "cirurgia": {
+  "cirurgggia": {
       "tipo": "bariatrica",
       "resposta": true
     }

@@ -71,15 +71,15 @@ public class ResourceExceptionHandler {
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(err.getStatus()).body(err);
     }
-
     // -> Pattern Validations
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<StandardError> invalidProperty(MethodArgumentNotValidException e,
             HttpServletRequest request) {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
-        err.setStatus(HttpStatus.BAD_REQUEST.value());
-        err.setError("Metodo inválido");
+        err.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        err.setError("Invalid Property");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(err.getStatus()).body(err);
@@ -90,7 +90,7 @@ public class ResourceExceptionHandler {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
         err.setStatus(HttpStatus.FORBIDDEN.value());
-        err.setError("Argumento Inválido");
+        err.setError("Invalid Attribute");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(err.getStatus()).body(err);
@@ -101,7 +101,7 @@ public class ResourceExceptionHandler {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
         err.setStatus(HttpStatus.FORBIDDEN.value());
-        err.setError("Propriedade Invalida");
+        err.setError("Object not support");
         err.setMessage(e.getLocalizedMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(err.getStatus()).body(err);
@@ -110,8 +110,6 @@ public class ResourceExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleSecurityException(Exception e) {
-
-        System.out.println(e.getMessage());
 
         if (e instanceof BadCredentialsException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), e.getMessage());

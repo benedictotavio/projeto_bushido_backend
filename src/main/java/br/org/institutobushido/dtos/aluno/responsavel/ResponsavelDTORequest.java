@@ -13,11 +13,11 @@ import lombok.Builder;
 public record ResponsavelDTORequest(
         @NotNull(message = "Nome do responsavel é obrigatório") String nome,
 
-        @NotNull(message = "Cpf do responsavel é obrigatório") @Pattern(regexp = "\\^d{11}$", message = "Cpf inválido!") String cpf,
+        @NotNull(message = "Cpf do responsavel é obrigatório") @Pattern(regexp = "^\\d{11}$", message = "Cpf inválido!") String cpf,
 
-        @NonNull() @Pattern(regexp = "^\\(?[1-9]{2}\\)? ?(\\d{4,5})\\-?\\d{4}", message = "Formato de telefone inválido!") String telefone,
+        @NonNull() @Pattern(regexp = "^\\(?(\\d{2})\\)?[-\\s]?(\\d{4,5})[-\\s]?(\\d{4})$", message = "Formato de telefone inválido!") String telefone,
 
         String email,
 
-        @NotNull(message = "Filiacao é obrigatório") @Pattern(regexp = "^(PAI|MAE|OUTRO)$", message = "Filiacao inválida!") FiliacaoResposavel filiacao) {
+        @NotNull(message = "Filiacao é obrigatório") FiliacaoResposavel filiacao) {
 }
