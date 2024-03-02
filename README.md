@@ -385,7 +385,7 @@ POST /aluno
 
 ## Adicionar falta ao aluno no dia atual
 
-Adciona uma falta ao aluno na data no momento exato em que a requisição foi feita.
+Adiciona uma falta ao aluno na data no momento exato em que a requisição foi feita.
 
 ### Request
 
@@ -453,10 +453,17 @@ POST /aluno/adicionarFalta/{rg}
 
 ## Adicionar falta ao aluno na data especifica
 
+Adiciona uma falta ao aluno na data especificada no parâmetro data.
+
 #### Request
 
+- **rg:** string
+- **data:** inteiro 
+  - formato: **UTC** datetime in milliseconds
+    - exemplo: **1609459200000**
+
 ```http
-POST /aluno/adicionarFalta/{rg}/00000000000
+POST /aluno/adicionarFalta/{rg}/{data}
 ```
 
 ```body
@@ -497,7 +504,7 @@ POST /aluno/adicionarFalta/{rg}/00000000000
 ```
 
 </details>
-
+<details>
 <summary><i>422</i></summary>
 
 ```json
@@ -517,7 +524,12 @@ POST /aluno/adicionarFalta/{rg}/00000000000
 
 ## Retirar falta do aluno
 
+Retira a falta do aluno na data especificada no parâmetro data.
+
 #### Request
+
+- **rg:** string
+- **data:** dd-MM-yyyy
 
 ```http
 DELETE /aluno/retirarFalta/{rg}?data=dd-MM-yyyy
@@ -560,11 +572,16 @@ DELETE /aluno/retirarFalta/{rg}?data=dd-MM-yyyy
 
 ## Adicionar responsável ao aluno
 
+Adiciona um responsável ao aluno com base nos dados abaixo.
+
+#### Request
+
+- **rg:** string
+
 ```http
 POST /aluno/adicionarResponsavel/{rg}
 ```
 
-#### Request
 
 ```body
 {
@@ -626,7 +643,12 @@ POST /aluno/adicionarResponsavel/{rg}
 
 ## Remover responsável do aluno
 
+Remover responsável do aluno com base no cpf informado.
+
 #### Request
+
+- **rg:** string
+- **deficiencia:** string
 
 ```http
 DELETE /aluno/removerResponsavel/{rg}?cpf=string
@@ -667,6 +689,8 @@ DELETE /aluno/removerResponsavel/{rg}?cpf=string
 </p>
 
 ## Adicionar deficiência ao aluno
+
+Adiciona uma string no campo deficiência ao aluno com base no parâmetro deficiência.
 
 - **rg:** string
 - **deficiencia:** string
@@ -711,8 +735,12 @@ POST /aluno/deficiencia/{rg}?deficiencia=string
 
 ## Remover deficiência do aluno
 
+Remove uma string no campo deficiência do aluno com base no parâmetro deficiência.
+
 #### Request
 
+- **rg:** string
+- **deficiencia:** string
 ```http
 DELETE /aluno/deficiencia/{rg}?deficiencia=string
 ```
@@ -752,6 +780,8 @@ DELETE /aluno/deficiencia/{rg}?deficiencia=string
 </p>
 
 ## Adicionar acompanhamento de saúde ao aluno
+
+Adiciona uma string no campo acompanhamento de alunos ao aluno com base no parâmetro acompanhamento.
 
 #### Request
 
@@ -797,6 +827,12 @@ POST /aluno/acompanhamentoSaude/{rg}?acompanhamento=string
 
 ## Remover acompanhamento de saúde do aluno
 
+Remove uma string no campo acompanhamento de alunos do aluno com base no parâmetro acompanhamento.
+
+#### Request
+
+- **rg:** string
+
 ```http
 DELETE /aluno/acompanhamentoSaude/{rg}
 ```
@@ -826,6 +862,66 @@ DELETE /aluno/acompanhamentoSaude/{rg}
   "timestamp": 0,
   "status": 404,
   "error": "Object Not Found",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+</details>
+</p>
+
+
+## Editar historico de saude ao aluno
+
+Edita uma valor no historico de saude baseado no sis
+
+#### Request
+
+- **rg:** string
+
+```http
+PUT /aluno/historicoSaude/{rg}
+```
+
+- **historico de saude:**
+  - alergia
+  - cirurgia
+  - doencaCronica
+  - deficiencia
+
+```body
+"{{historico de saude}}": {
+      "tipo": "p",
+      "resposta": true
+ }
+```
+
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "id": "string",
+  "status": 200,
+  "message": "string",
+  "entity": "string"
+}
+```
+
+</details>
+
+<details>
+<summary><i>400</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 400,
+  "error": "Bad Request",
   "message": "string",
   "path": "string"
 }

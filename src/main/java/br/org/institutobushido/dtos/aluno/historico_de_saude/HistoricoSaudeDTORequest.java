@@ -16,7 +16,7 @@ public record HistoricoSaudeDTORequest(
 
     public HistoricoSaudeDTORequest {
         if (usoMedicamentoContinuo == null) {
-            usoMedicamentoContinuo = new UsoMedicamentoContinuoDTORequest(false, "", "");
+            usoMedicamentoContinuo = new UsoMedicamentoContinuoDTORequest(false, "");
         }
         if (alergia == null) {
             alergia = new AlergiaDTORequest(false, "");

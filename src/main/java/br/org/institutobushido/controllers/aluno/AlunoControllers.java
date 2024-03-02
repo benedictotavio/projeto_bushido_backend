@@ -142,7 +142,7 @@ public class AlunoControllers {
                 if (!listaHistoricoSaude.contains(object.getKey())) {
                         return ResponseEntity.badRequest().body(new StandardError(Instant.now(), 400, "Bad Request",
                                         "Propriedade " + object.getKey()
-                                                        + " inexistente. Siga aspropriedades permitidas: "
+                                                        + " inexistente. Siga as propriedades permitidas: "
                                                         + listaHistoricoSaude.toString(),
                                         location.getPath()));
                 }
@@ -158,13 +158,9 @@ public class AlunoControllers {
                         return ResponseEntity.ok().body(res);
                 }
 
-                try {
-                        Object res = alunoServices.editarHistoricoDeSaude(rg, object.getKey(),
-                                        object.getValue().getTipo(),
-                                        true);
-                        return ResponseEntity.ok().body(res);
-                } catch (Exception e) {
-                        return ResponseEntity.badRequest().body(e.getMessage());
-                }
+                Object res = alunoServices.editarHistoricoDeSaude(rg, object.getKey(),
+                                object.getValue().getTipo(),
+                                true);
+                return ResponseEntity.ok().body(res);
         }
 }

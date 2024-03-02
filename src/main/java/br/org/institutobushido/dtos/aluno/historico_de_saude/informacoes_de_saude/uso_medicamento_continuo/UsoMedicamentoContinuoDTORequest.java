@@ -2,6 +2,5 @@ package br.org.institutobushido.dtos.aluno.historico_de_saude.informacoes_de_sau
 
 public record UsoMedicamentoContinuoDTORequest(
         boolean resposta,
-        String tipo,
-        String qualMedicamento) {
+        String tipo) {
 }
