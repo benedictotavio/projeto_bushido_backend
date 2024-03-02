@@ -4,9 +4,9 @@ import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public record ResponsavelDTOResponse(
-        String nome,
-        String cpf,
-        String telefone,
-        String email,
-        String filiacao
-){}
+                String nome,
+                String cpf,
+                String telefone,
+                String email,
+                String filiacao) {
+}

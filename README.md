@@ -335,21 +335,6 @@ POST /aluno
 </details>
 
 <details>
-<summary><i>400</i></summary>
-
-```json
-{
-  "timestamp": 0,
-  "status": 400,
-  "error": "Metodo inválido",
-  "message": "string",
-  "path": "/api/V1/aluno"
-}
-```
-
-</details>
-
-<details>
 <summary><i>403</i></summary>
 
 ```json
@@ -376,6 +361,22 @@ POST /aluno
   "path": "/api/V1/aluno/adicionarFalta/123456789"
 }
 ```
+
+</details>
+
+<details>
+<summary><i>422</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 422,
+  "error": "Metodo inválido",
+  "message": "string",
+  "path": "/api/V1/aluno"
+}
+```
+
 </details>
 
 </details>
@@ -445,6 +446,7 @@ POST /aluno/adicionarFalta/{rg}
   "path": "/api/V1/aluno/adicionarFalta/123456789"
 }
 ```
+
 </details>
 </details>
 </p>
@@ -482,13 +484,13 @@ POST /aluno/adicionarFalta/{rg}/00000000000
 </details>
 
 <details>
-<summary><i>400</i></summary>
+<summary><i>409</i></summary>
 
 ```json
 {
   "timestamp": 0,
-  "status": 400,
-  "error": "string",
+  "status": 409,
+  "error": "Object is already Registered",
   "message": "string",
   "path": "string"
 }
@@ -496,15 +498,65 @@ POST /aluno/adicionarFalta/{rg}/00000000000
 
 </details>
 
+<summary><i>422</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 422,
+  "error": "Invalid Property",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
 </details>
 
 </p>
 
 ## Retirar falta do aluno
 
+#### Request
+
 ```http
 DELETE /aluno/retirarFalta/{rg}?data=dd-MM-yyyy
 ```
+
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "id": "string",
+  "status": 200,
+  "success": true,
+  "message": "string",
+  "entity": "string"
+}
+```
+
+</details>
+
+<details>
+<summary><i>404</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 404,
+  "error": "Object Not Found",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+</details>
+</p>
 
 ## Adicionar responsável ao aluno
 
@@ -555,20 +607,70 @@ POST /aluno/adicionarResponsavel/{rg}
 ```
 
 </details>
+<details>
+<summary><i>422</i></summary>
+
+```json
+{
+  "timestamp": 1709406663.54420566,
+  "status": 422,
+  "error": "Invalid Property",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
 </details>
 </p>
 
 ## Remover responsável do aluno
 
+#### Request
+
 ```http
 DELETE /aluno/removerResponsavel/{rg}?cpf=string
 ```
 
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "id": "string",
+  "status": 200,
+  "message": "string",
+  "entity": "string"
+}
+```
+
+</details>
+
+<details>
+<summary><i>411</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 411,
+  "error": "Object has no quantity limit",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+</details>
+</p>
 
 ## Adicionar deficiência ao aluno
 
 - **rg:** string
 - **deficiencia:** string
+
 ```http
 POST /aluno/deficiencia/{rg}?deficiencia=string
 ```
@@ -591,13 +693,13 @@ POST /aluno/deficiencia/{rg}?deficiencia=string
 </details>
 
 <details>
-<summary><i>400</i></summary>
+<summary><i>404</i></summary>
 
 ```json
 {
   "timestamp": 0,
-  "status": 400,
-  "error": "string",
+  "status": 404,
+  "error": "Object Not Found",
   "message": "string",
   "path": "string"
 }
@@ -607,14 +709,51 @@ POST /aluno/deficiencia/{rg}?deficiencia=string
 </details>
 </p>
 
-
 ## Remover deficiência do aluno
+
+#### Request
 
 ```http
 DELETE /aluno/deficiencia/{rg}?deficiencia=string
 ```
 
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "id": "amidalite",
+  "status": 200,
+  "success": true,
+  "message": "Deficiência amidalite foi removida com sucesso.",
+  "entity": null
+}
+```
+
+</details>
+
+<details>
+<summary><i>404</i></summary>
+
+```json
+{
+  "timestamp": 1709410251.949585896,
+  "status": 404,
+  "error": "Object Not Found",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+</p>
+
 ## Adicionar acompanhamento de saúde ao aluno
+
+#### Request
 
 - **rg:** string
 - **acompanhamento:** string
@@ -639,15 +778,14 @@ POST /aluno/acompanhamentoSaude/{rg}?acompanhamento=string
 ```
 
 </details>
-
 <details>
-<summary><i>400</i></summary>
+<summary><i>409</i></summary>
 
 ```json
 {
   "timestamp": 0,
-  "status": 400,
-  "error": "string",
+  "status": 409,
+  "error": "Object is already Registered",
   "message": "string",
   "path": "string"
 }
@@ -657,12 +795,12 @@ POST /aluno/acompanhamentoSaude/{rg}?acompanhamento=string
 </details>
 </p>
 
-
 ## Remover acompanhamento de saúde do aluno
 
 ```http
 DELETE /aluno/acompanhamentoSaude/{rg}
 ```
+
 #### Response
 
 <p>
@@ -681,13 +819,13 @@ DELETE /aluno/acompanhamentoSaude/{rg}
 </details>
 
 <details>
-<summary><i>400</i></summary>
+<summary><i>404</i></summary>
 
 ```json
 {
   "timestamp": 0,
-  "status": 400,
-  "error": "string",
+  "status": 404,
+  "error": "Object Not Found",
   "message": "string",
   "path": "string"
 }

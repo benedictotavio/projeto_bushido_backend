@@ -9,7 +9,7 @@ import br.org.institutobushido.dtos.aluno.historico_de_saude.informacoes_de_saud
 import lombok.Builder;
 
 @Builder(setterPrefix = "with")
-public record HistoricoSaudeDTOResponse(UsoMedicamentoContinuoDTOResponse usoMedicamento, AlergiaDTOResponse alergias,
-                CirurgiaDTOResponse cirurgias, DoencaCronicaDTOResponse doencaCronica, List<String> deficiencias,
-                List<String> acompanhamentoSaude) {
+public record HistoricoSaudeDTOResponse(UsoMedicamentoContinuoDTOResponse usoMedicamento, AlergiaDTOResponse alergia,
+        CirurgiaDTOResponse cirurgia, DoencaCronicaDTOResponse doencaCronica, List<String> deficiencias,
+        List<String> acompanhamentoSaude) {
 }

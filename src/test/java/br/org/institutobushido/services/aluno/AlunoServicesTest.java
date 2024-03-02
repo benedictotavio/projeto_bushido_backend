@@ -55,8 +55,8 @@ import br.org.institutobushido.model.aluno.endereco.Endereco;
 import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.model.aluno.historico_de_saude.HistoricoSaude;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergias;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgias;
+import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergia;
+import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgia;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
@@ -104,7 +104,7 @@ class AlunoServicesTest {
         aluno.setDataNascimento(alunoDtoRequest.dataNascimento());
         aluno.setHistoricoSaude(new HistoricoSaude(TipoSanguineo.A_NEGATIVO, FatorRH.POSITIVO,
                 new UsoMedicamentoContinuo(false, "medicamento", "medicamento"), new DoencaCronica(false, "doenca"),
-                new Alergias(false, "alergia"), new Cirurgias(false, "cirurgia"), List.of("deficiencia"),
+                new Alergia(false, "alergia"), new Cirurgia(false, "cirurgia"), List.of("deficiencia"),
                 List.of("acompanhamentoSaude")));
 
         reset(alunoRepositorio);
