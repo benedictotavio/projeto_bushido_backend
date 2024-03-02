@@ -1,5 +1,5 @@
 @url = https://projeto-bushido-backend.onrender.com/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxZTJhNDNiMDYwOTBkZjMzYjUyMjg3ZDAzN2NjNjM2ZSIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5MTM5MTc3fQ.gd0V-Fyq6dPf__Y8txL90I-MnMn0ttQpV-ulPtQ-ZG4
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxZTJhNDNiMDYwOTBkZjMzYjUyMjg3ZDAzN2NjNjM2ZSIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5MzM4OTI2fQ.ckjgD1RYJMmvWUWOp1SO5HNqnJY7bYBItlrg3wEsp8E
 
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1

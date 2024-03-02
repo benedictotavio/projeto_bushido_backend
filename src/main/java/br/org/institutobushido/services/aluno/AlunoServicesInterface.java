@@ -19,7 +19,7 @@ public interface AlunoServicesInterface {
 
     public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest);
 
-    public boolean removerResponsavel(String rg, String cpf);
+    public String removerResponsavel(String rg, String cpf);
 
     public String adicionarDeficiencia(String rg, String deficiencia);
 

@@ -275,10 +275,10 @@ class AlunoServicesTest {
         when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
 
         // Act
-        boolean result = alunoServices.removerResponsavel(rg, cpf);
+        String result = alunoServices.removerResponsavel(rg, cpf);
 
         // Assert
-        assertTrue(result);
+        assertEquals("1", result);
     }
 
     @Test

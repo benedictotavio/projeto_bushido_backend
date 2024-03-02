@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcwOTMzNDU4NX0.TjUCp7_DCk5O2H5IW17BwGKPSLPeLO46HVujgrIdnzs
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmZTIzcmYyMzlVSjd0amg3ODZmN0c3VDZGNTZHRlI3R0Y1Nkc2Zmc2N2Y2Zzd5Z3ZGUjVERjdndDY3OGpva2kwOThVNzg5SiIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5MzQ2NDc3fQ.reacAL6ugGB4T22kCklPDalkSZkxmj1jCa73Zp28onE
 
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1
@@ -12,7 +12,7 @@ Authorization: Bearer {{token}}
 {
   "nome": "Luiz",
   "genero": "M",
-  "dataNascimento": "2023-15-01",
+  "dataNascimento": "2022-15-01",
   "dadosSociais":{
     "imovel": "CEDIDO",
     "rendaFamiliarEmSalariosMinimos": 3
@@ -71,7 +71,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-POST {{url}}/adicionarFalta/123456789/1206992087893 HTTP/1.1
+POST {{url}}/adicionarFalta/123456789/1506992087893 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -81,7 +81,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-DELETE {{url}}/retirarFalta/123456789?data=28-02-2024 HTTP/1.1
+DELETE {{url}}/retirarFalta/123456789?data=02-08-2014 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
@@ -91,13 +91,13 @@ Authorization: Bearer {{token}}
 
 {
   "nome": "Teste",
-  "cpf": "020202020201",
+  "cpf": "020202020202",
   "telefone": "123456789",
   "filiacao": "MAE"
 }
 
 ###
-DELETE {{url}}/removerResponsavel/123456789?cpf=020202020201 HTTP/1.1
+DELETE {{url}}/removerResponsavel/123456789?cpf=020202020202 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}}/deficiencia/123456789?deficiencia=amidalite HTTP/1.1
