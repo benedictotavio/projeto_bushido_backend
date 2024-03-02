@@ -229,8 +229,8 @@ Adiciona um aluno baseado nos dados cadastrais abaixo.
 | graduacao.kyu                                         | integer          | Nível de graduação (Kyu) do aluno                 |
 | graduacao.frequencia                                  | integer          | Frequência nas aulas de caratê                    |
 | historicoSaude                                        | objeto           | Histórico de saúde do aluno                       |
-| historicoSaude.tipoSanguineo                          | string (enum)    | Tipo sanguíneo do aluno                           |
-| historicoSaude.fatorRh                                | string (enum)    | Fator Rh do aluno                                 |
+| historicoSaude.tipoSanguineo`*`                       | string (enum)    | Tipo sanguíneo do aluno                           |
+| historicoSaude.fatorRh`*`                             | string (enum)    | Fator Rh do aluno                                 |
 | historicoSaude.usoMedicamentoContinuo                 | objeto           | Uso de medicamento contínuo pelo aluno            |
 | historicoSaude.usoMedicamentoContinuo.resposta        | string           | Resposta sobre uso de medicamento contínuo        |
 | historicoSaude.usoMedicamentoContinuo.qualMedicamento | string           | Nome do medicamento contínuo                      |
