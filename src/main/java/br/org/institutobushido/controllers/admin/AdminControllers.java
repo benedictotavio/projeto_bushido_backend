@@ -17,6 +17,7 @@ import br.org.institutobushido.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.dtos.admin.signup.SignUpDTORequest;
 import br.org.institutobushido.dtos.admin.signup.SignUpDTOResponse;
 import br.org.institutobushido.model.admin.Admin;
+import br.org.institutobushido.resources.response.success.SuccessPostResponse;
 import br.org.institutobushido.services.admin.AdminServices;
 import jakarta.validation.Valid;
 
@@ -31,10 +32,11 @@ public class AdminControllers {
 
     @PostMapping("signup")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<String> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest) {
+    public ResponseEntity<SuccessPostResponse> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest) {
         SignUpDTOResponse admin = this.adminServices.signup(signUpDTORequest);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(location).body(admin.email());
+        return ResponseEntity.created(location)
+                .body(new SuccessPostResponse(admin.email(), "Admin criado com sucesso", Admin.class.getSimpleName()));
     }
 
     @PostMapping("/login")

@@ -1,5 +1,5 @@
 @url = https://projeto-bushido-backend.onrender.com/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxZTJhNDNiMDYwOTBkZjMzYjUyMjg3ZDAzN2NjNjM2ZSIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5NDE4ODg2fQ.DL7YdjGjJw9E9l2HCPW8fbQn_B28DdrT3zkeauPmlwY
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxZTJhNDNiMDYwOTBkZjMzYjUyMjg3ZDAzN2NjNjM2ZSIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5NDI1NTUwfQ.GupIkPkI1TtRtr7jgS5HndRMDsSZ33L-YLOTipTWUeM
 
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1
@@ -75,7 +75,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-DELETE {{url}}/retirarFalta/123456789?data=27-02-2024 HTTP/1.1
+DELETE {{url}}/retirarFalta/123456789?data=02-03-2024 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
