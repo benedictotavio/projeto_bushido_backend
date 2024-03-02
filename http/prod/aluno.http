@@ -1,5 +1,5 @@
 @url = https://projeto-bushido-backend.onrender.com/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxZTJhNDNiMDYwOTBkZjMzYjUyMjg3ZDAzN2NjNjM2ZSIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5MzM4OTI2fQ.ckjgD1RYJMmvWUWOp1SO5HNqnJY7bYBItlrg3wEsp8E
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxZTJhNDNiMDYwOTBkZjMzYjUyMjg3ZDAzN2NjNjM2ZSIsImVtYWlsIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwic3ViIjoic3VwZXJfYWRtaW5AZW1haWwuY29tLmJyIiwiZXhwIjoxNzA5NDE4ODg2fQ.DL7YdjGjJw9E9l2HCPW8fbQn_B28DdrT3zkeauPmlwY
 
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1
@@ -50,25 +50,7 @@ Authorization: Bearer {{token}}
     },
     "historicoSaude": {
     "tipoSanguineo": "A_POSITIVO",
-    "fatorRh": "POSITIVO",
-    "usoMedicamentoContinuo": {
-      "resposta": "",
-      "qualMedicamento": ""
-    },
-    "cirurgia": {
-      "resposta": "",
-      "tipo": ""
-    },
-    "alergia": {
-      "resposta": "",
-      "tipo": ""
-    },
-    "doencaCronica": {
-      "resposta": "",
-      "tipo": ""
-    },
-    "deficiencia":["Nenhuma"],
-    "acompanhamentoSaude":["Nenhum"]
+    "fatorRh": "POSITIVO"
   }
 }
 
@@ -127,8 +109,9 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "alergias": {
-      "tipo": "p",
-      "resposta": true
+  "usoMedicamentoContinuo": {
+      "qualMedicamento": "",
+      "resposta": false,
+      "tipo": ""
     }
 }

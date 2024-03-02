@@ -88,7 +88,7 @@ class AlunoServicesTest {
                 .withGraduacao(new GraduacaoDTORequest(0, 0))
                 .withDataNascimento(new Date(192912881000L))
                 .withHistoricoSaude(
-                        new HistoricoSaudeDTORequest(new UsoMedicamentoContinuoDTORequest(false, "tipo", "medicamento"),
+                        new HistoricoSaudeDTORequest(new UsoMedicamentoContinuoDTORequest(false, "tipo"),
                                 new AlergiaDTORequest(false, "alergia"), new CirurgiaDTORequest(false, "cirurgia"),
                                 new DoencaCronicaDTORequest(false, "doenca"), new ArrayList<String>(),
                                 new ArrayList<String>()))
@@ -103,7 +103,7 @@ class AlunoServicesTest {
         aluno.setEndereco(new Endereco());
         aluno.setDataNascimento(alunoDtoRequest.dataNascimento());
         aluno.setHistoricoSaude(new HistoricoSaude(TipoSanguineo.A_NEGATIVO, FatorRH.POSITIVO,
-                new UsoMedicamentoContinuo(false, "medicamento", "medicamento"), new DoencaCronica(false, "doenca"),
+                new UsoMedicamentoContinuo(false, "medicamento"), new DoencaCronica(false, "doenca"),
                 new Alergia(false, "alergia"), new Cirurgia(false, "cirurgia"), List.of("deficiencia"),
                 List.of("acompanhamentoSaude")));
 
@@ -342,7 +342,7 @@ class AlunoServicesTest {
     @Test
     void deveAdicionarUmaDeficienciaNoHistoricoDeSaude() {
         HistoricoSaude hs = new HistoricoSaude(TipoSanguineo.AB_POSITIVO, FatorRH.POSITIVO,
-                new UsoMedicamentoContinuo(false, "tipo", "atendimento"), null, null, null, null, null);
+                new UsoMedicamentoContinuo(false, "tipo"), null, null, null, null, null);
 
         hs.setDeficiencias(List.of("mancamento"));
         hs.setAcompanhamentoSaude(List.of("atendimento"));
@@ -361,7 +361,7 @@ class AlunoServicesTest {
     void deveRetornarUmaExcessaoSeDeficienciaJaExistir() {
 
         HistoricoSaude hs = new HistoricoSaude(TipoSanguineo.AB_POSITIVO, FatorRH.POSITIVO,
-                new UsoMedicamentoContinuo(false, "tipo", "atendimento"), null, null, null, null, null);
+                new UsoMedicamentoContinuo(false, "tipo"), null, null, null, null, null);
 
         hs.setDeficiencias(List.of("Physical disability"));
         hs.setAcompanhamentoSaude(List.of("atendimento"));
@@ -378,11 +378,10 @@ class AlunoServicesTest {
     @Test
     void deveAdicionarUmAcompanhamentoNoHistoricoDeSaude() {
         HistoricoSaude hs = new HistoricoSaude(TipoSanguineo.AB_POSITIVO, FatorRH.POSITIVO,
-                new UsoMedicamentoContinuo(false, "tipo", "atendimento"), null, null, null, List.of("mancamento"),
+                new UsoMedicamentoContinuo(false, "tipo"), null, null, null, List.of("mancamento"),
                 List.of("atendimento"));
 
         aluno.setHistoricoSaude(hs);
-
         String rg = "123456789";
         String acompanhamentoSaude = "Acompanhamento 1";
 

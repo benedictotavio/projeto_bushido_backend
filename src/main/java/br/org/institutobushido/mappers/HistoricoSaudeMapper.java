@@ -33,8 +33,7 @@ public class HistoricoSaudeMapper {
                                 historicoSaudeDTORequest.doencaCronica().tipo()));
                 historicoSaude.setUsoMedicamentoContinuo(new UsoMedicamentoContinuo(
                                 historicoSaudeDTORequest.usoMedicamentoContinuo().resposta(),
-                                historicoSaudeDTORequest.usoMedicamentoContinuo().tipo(),
-                                historicoSaudeDTORequest.usoMedicamentoContinuo().qualMedicamento()));
+                                historicoSaudeDTORequest.usoMedicamentoContinuo().tipo()));
                 historicoSaude.setDeficiencias(historicoSaudeDTORequest.deficiencia());
                 historicoSaude.setAcompanhamentoSaude(historicoSaudeDTORequest.acompanhamentoSaude());
                 return historicoSaude;
@@ -58,8 +57,6 @@ public class HistoricoSaudeMapper {
                                                                 .withTipo(historicoSaude.getDoencaCronica().getTipo())
                                                                 .build())
                                 .withUsoMedicamento(UsoMedicamentoContinuoDTOResponse.builder()
-                                                .withQualMedicamento(historicoSaude.getUsoMedicamentoContinuo()
-                                                                .getQualMedicamento())
                                                 .withResposta(historicoSaude.getUsoMedicamentoContinuo().getResposta())
                                                 .withTipo(historicoSaude.getUsoMedicamentoContinuo().getTipo()).build())
                                 .withDeficiencias(historicoSaude.getDeficiencias())
