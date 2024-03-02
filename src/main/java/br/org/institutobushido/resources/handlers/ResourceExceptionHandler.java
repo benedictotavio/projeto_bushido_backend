@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import br.org.institutobushido.resources.errors.StandardError;
+
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.resources.exceptions.InactiveUserException;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.resources.response.error.StandardError;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
 
@@ -43,7 +44,7 @@ public class ResourceExceptionHandler {
             HttpServletRequest request) {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
-        err.setStatus(HttpStatus.NOT_FOUND.value());
+        err.setStatus(HttpStatus.CONFLICT.value());
         err.setError("Object is already Registered");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
@@ -54,7 +55,7 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardError> objectHasNoQuantity(LimitQuantityException e, HttpServletRequest request) {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
-        err.setStatus(HttpStatus.BAD_REQUEST.value());
+        err.setStatus(HttpStatus.LENGTH_REQUIRED.value());
         err.setError("Object has no quantity limit");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
@@ -65,7 +66,7 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardError> inactiveUser(InactiveUserException e, HttpServletRequest request) {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
-        err.setStatus(HttpStatus.BAD_REQUEST.value());
+        err.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
         err.setError("Object is inactive");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
@@ -78,8 +79,8 @@ public class ResourceExceptionHandler {
             HttpServletRequest request) {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
-        err.setStatus(HttpStatus.BAD_REQUEST.value());
-        err.setError("Object argument is invalid");
+        err.setStatus(HttpStatus.BAD_GATEWAY.value());
+        err.setError("Metodo inválido");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(err.getStatus()).body(err);

@@ -121,7 +121,7 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public boolean removerResponsavel(String rg, String cpf) {
+    public String removerResponsavel(String rg, String cpf) {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Optional<Responsavel> responsavel = encontrarResponsavelPorCpf(aluno, cpf);
         if (responsavel.isPresent() && aluno.getResponsaveis().size() > 1) {
@@ -129,7 +129,7 @@ public class AlunoServices implements AlunoServicesInterface {
             query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
             Update update = new Update().pull("responsaveis", Query.query(Criteria.where("cpf").is(cpf)));
             mongoTemplate.updateFirst(query, update, Aluno.class);
-            return true;
+            return String.valueOf(aluno.getResponsaveis().size() - 1);
         }
         throw new LimitQuantityException("O aluno deve ter pelo menos 1 responsavel!");
     }

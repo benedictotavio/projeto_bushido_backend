@@ -1,4 +1,4 @@
-package br.org.institutobushido.resources.errors;
+package br.org.institutobushido.resources.response.error;
 
 import java.io.Serializable;
 import java.time.Instant;
