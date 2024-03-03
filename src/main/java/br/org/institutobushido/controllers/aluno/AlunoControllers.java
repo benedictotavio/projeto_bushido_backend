@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +32,9 @@ import br.org.institutobushido.resources.response.success.SuccessPostResponse;
 import br.org.institutobushido.services.aluno.AlunoServices;
 import jakarta.validation.Valid;
 
-@RestController
+@RestController(value = "aluno")
 @RequestMapping("api/V1/aluno")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AlunoControllers {
 
         @Autowired
