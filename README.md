@@ -16,7 +16,9 @@ Antes de tudo o usuario deve possuir um cadastro de admnistrador, o cadastro dev
 
 ### Sign up
 
-#### Cadastro para novos admintradores que serão responsaveis por realizar o cadastro dos alunos.
+Cadastro para novos admnistradores que serão responsaveis por realizar o cadastro dos alunos.
+
+#### Request
 
 ```http
 POST /admin/signup
@@ -31,6 +33,37 @@ POST /admin/signup
   "role": string
 }
 ```
+
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "token": "string"
+}
+```
+
+</details>
+
+<details>
+<summary><i>422</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 422,
+  "error": "Invalid Property",
+  "message": "string",
+  "path": "string"
+}
+```
+</details>
+</p>
+
+
 
 ### Login
 
@@ -90,7 +123,7 @@ POST /admin/login
 
 Retorna um objeto de uma aluno com base no rg passado uma Query String como parâmetro.
 
-### Request
+#### Request
 
 - **rg:** string
 
@@ -246,7 +279,7 @@ Adiciona um aluno baseado nos dados cadastrais abaixo.
 | historicoSaude.deficiencia                            | array de strings | Deficiências do aluno                             |
 | historicoSaude.acompanhamentoSaude                    | array de strings | Acompanhamento médico do aluno                    |
 
-### Request
+#### Request
 
 ```http
 POST /aluno
@@ -387,7 +420,7 @@ POST /aluno
 
 Adiciona uma falta ao aluno na data no momento exato em que a requisição foi feita.
 
-### Request
+#### Request
 
 - **rg:** string
 
@@ -459,7 +492,7 @@ Adiciona uma falta ao aluno na data especificada no parâmetro data.
 
 - **rg:** string
 - **data:** inteiro 
-  - formato: **UTC** datetime in milliseconds
+  - formato: _UTC datetime in milliseconds_
     - exemplo: **1609459200000**
 
 ```http
@@ -468,7 +501,7 @@ POST /aluno/adicionarFalta/{rg}/{data}
 
 ```body
 {
-  "motivo":"Aluno se encontra doente","Aluno se encontra doente"
+  "motivo":"Aluno se encontra doente",
   "observacao":"Luis trouxe atestado"
 }
 ```

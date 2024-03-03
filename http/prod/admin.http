@@ -10,7 +10,7 @@ Authorization: Bearer {{token}}
     "email":"super_admin1@email.com.br",
     "cargo":"Administrador",
     "senha": "123456",
-    "role": "ADMIN"
+
 }
 
 ###

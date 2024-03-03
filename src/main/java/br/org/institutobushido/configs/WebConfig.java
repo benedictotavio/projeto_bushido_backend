@@ -10,7 +10,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/V1/**").allowedOrigins("https://institutobushido.netlify.app")
-                .allowedHeaders("Authorization", "Content-Type");
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }

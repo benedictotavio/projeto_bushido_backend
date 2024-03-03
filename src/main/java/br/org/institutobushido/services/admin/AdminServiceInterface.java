@@ -7,6 +7,5 @@ import br.org.institutobushido.model.admin.Admin;
 
 public interface AdminServiceInterface {
     SignUpDTOResponse signup(SignUpDTORequest adminDTORequest);
-
     LoginDTOResponse login(Admin admin);
 }
