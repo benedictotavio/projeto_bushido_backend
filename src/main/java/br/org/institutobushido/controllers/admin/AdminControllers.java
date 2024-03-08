@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import br.org.institutobushido.dtos.admin.login.LoginDTORequest;
-import br.org.institutobushido.dtos.admin.login.LoginDTOResponse;
-import br.org.institutobushido.dtos.admin.signup.SignUpDTORequest;
-import br.org.institutobushido.dtos.admin.signup.SignUpDTOResponse;
+import br.org.institutobushido.controllers.dtos.admin.login.LoginDTORequest;
+import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
+import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
+import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTOResponse;
 import br.org.institutobushido.model.admin.Admin;
-import br.org.institutobushido.resources.response.success.SuccessPostResponse;
+import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.services.admin.AdminServices;
 import jakarta.validation.Valid;
 

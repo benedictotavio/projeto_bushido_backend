@@ -1,10 +1,10 @@
 package br.org.institutobushido.services.aluno;
 
-import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
-import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.graduacao.faltas.FaltaDTORequest;
-import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 
 public interface AlunoServicesInterface {
     AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest);

@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 
 @Component

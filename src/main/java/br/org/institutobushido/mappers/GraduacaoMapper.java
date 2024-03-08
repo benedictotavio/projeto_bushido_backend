@@ -1,7 +1,7 @@
 package br.org.institutobushido.mappers;
 
-import br.org.institutobushido.dtos.aluno.graduacao.GraduacaoDTORequest;
-import br.org.institutobushido.dtos.aluno.graduacao.GraduacaoDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 
 public class GraduacaoMapper {
