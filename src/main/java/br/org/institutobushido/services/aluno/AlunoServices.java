@@ -12,11 +12,11 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import br.org.institutobushido.dtos.aluno.AlunoDTORequest;
-import br.org.institutobushido.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.dtos.aluno.graduacao.faltas.FaltaDTORequest;
-import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.mappers.DadosEscolaresMapper;
 import br.org.institutobushido.mappers.DadosSociaisMapper;
 import br.org.institutobushido.mappers.EnderecoMapper;
@@ -109,7 +109,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Optional<Responsavel> responsavel = encontrarResponsavelPorCpf(aluno, responsavelDTORequest.cpf());
 
         if (responsavel.isPresent()) {
-            throw new AlreadyRegisteredException("Esse responsável ja existe");
+            throw new AlreadyRegisteredException("Esse responsável já existe");
         }
 
         if (aluno.getResponsaveis().size() < 5) {
@@ -125,7 +125,7 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withNome(responsavelDTORequest.nome())
                     .withTelefone(responsavelDTORequest.telefone()).build();
         }
-        throw new LimitQuantityException("Não foi possivel adicionar esse responsavel");
+        throw new LimitQuantityException("Não foi possivel adicionar esse responsável");
     }
 
     @Override

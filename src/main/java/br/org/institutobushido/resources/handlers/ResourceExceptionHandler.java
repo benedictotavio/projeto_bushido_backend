@@ -19,7 +19,7 @@ import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.resources.exceptions.InactiveUserException;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
-import br.org.institutobushido.resources.response.error.StandardError;
+import br.org.institutobushido.controllers.response.error.StandardError;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
 

@@ -1,7 +1,7 @@
 package br.org.institutobushido.mappers;
 
-import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTORequest;
-import br.org.institutobushido.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 

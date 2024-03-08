@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "alunos")
-public class Aluno implements AlunoInterface {
+public class Aluno {
     private String nome;
     private Date dataNascimento;
     private Genero genero;
@@ -35,12 +35,4 @@ public class Aluno implements AlunoInterface {
     private List<Responsavel> responsaveis = new ArrayList<>();
     private Graduacao graduacao;
     private HistoricoSaude historicoSaude;
-
-    @Override
-    public String toString() {
-        return "Aluno [nome=" + nome + ", dataNascimento=" + dataNascimento + ", genero=" + genero + ", rg=" + rg
-                + ", dadosEscolares=" + dadosEscolares + ", dataPreenchimento=" + dataPreenchimento + ", endereco="
-                + endereco + ", dadosSociais=" + dadosSociais + ", responsaveis=" + responsaveis + ", graduacao="
-                + graduacao + ", historicoSaude=" + historicoSaude + "]";
-    }
 }

@@ -1,7 +1,7 @@
 package br.org.institutobushido.mappers;
 
-import br.org.institutobushido.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
-import br.org.institutobushido.dtos.aluno.dados_sociais.DadosSociaisDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTOResponse;
 import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
 
 public class DadosSociaisMapper {
