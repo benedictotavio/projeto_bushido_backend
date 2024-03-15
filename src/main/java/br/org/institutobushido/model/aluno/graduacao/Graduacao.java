@@ -16,10 +16,12 @@ public class Graduacao {
     public Graduacao(int kyu, int frequencia) {
         this.kyu = kyu;
         this.frequencia = frequencia;
+        this.faltas = new ArrayList<>();
+        this.status = true;
     }
 
     private int kyu;
-    private List<Falta> faltas = new ArrayList<>();
-    private boolean status = true;
+    private List<Falta> faltas;
+    private boolean status;
     private int frequencia;
 }
