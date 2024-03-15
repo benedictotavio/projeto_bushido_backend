@@ -63,6 +63,7 @@ public class AlunoServices implements AlunoServicesInterface {
         aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
         aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
         aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));
+        
         Aluno novoAluno = alunoRepositorio.save(aluno);
 
         return AlunoDTOResponse.builder()
@@ -112,11 +113,9 @@ public class AlunoServices implements AlunoServicesInterface {
             throw new AlreadyRegisteredException("Esse responsável já existe");
         }
 
-        if (aluno.getResponsaveis().size() < 5) {
+    
             Query query = new Query();
-            if (aluno.getResponsaveis().size() == 4) {
-                mudarStatusGraduacaoAluno(aluno, false);
-            }
+            
             query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
             Update update = new Update().push("responsaveis", responsavelDTORequest);
             mongoTemplate.updateFirst(query, update, Aluno.class);
@@ -124,8 +123,7 @@ public class AlunoServices implements AlunoServicesInterface {
                     .withEmail(responsavelDTORequest.email()).withFiliacao(responsavelDTORequest.filiacao().toString())
                     .withNome(responsavelDTORequest.nome())
                     .withTelefone(responsavelDTORequest.telefone()).build();
-        }
-        throw new LimitQuantityException("Não foi possivel adicionar esse responsável");
+        
     }
 
     @Override
@@ -139,10 +137,6 @@ public class AlunoServices implements AlunoServicesInterface {
 
         if (!responsavel.isPresent()) {
             throw new EntityNotFoundException("Responsavel com o CPF: " + cpf + " nao foi encontrado.");
-        }
-
-        if (aluno.getResponsaveis().size() == 5) {
-            mudarStatusGraduacaoAluno(aluno, true);
         }
 
         Query query = new Query();
@@ -166,12 +160,19 @@ public class AlunoServices implements AlunoServicesInterface {
             throw new AlreadyRegisteredException("Ja existe um registro de falta nessa data");
         }
 
+        
+
         Falta novaFalta = new Falta(falta.motivo(), falta.observacao());
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
         Update update = new Update().addToSet(GRADUACAO_FALTA, novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
+
+        if (aluno.getGraduacao().getFaltas().size() == 4) {
+            mudarStatusGraduacaoAluno(aluno, false);
+        }
+
         return String.valueOf(aluno.getGraduacao().getFaltas().size() + 1);
     }
 
@@ -195,14 +196,20 @@ public class AlunoServices implements AlunoServicesInterface {
 
         Falta novaFalta = new Falta();
 
+        
+
         novaFalta.setData(new SimpleDateFormat(DATA_FORMATO).format(new Date(dataFalta)));
         novaFalta.setMotivo(falta.motivo());
         novaFalta.setObservacao(falta.observacao());
-
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
         Update update = new Update().addToSet(GRADUACAO_FALTA, novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
+
+        if (aluno.getGraduacao().getFaltas().size() == 4) {
+            mudarStatusGraduacaoAluno(aluno, false);
+        }
+
         return String.valueOf(aluno.getGraduacao().getFaltas().size() + 1);
     }
 
@@ -210,6 +217,9 @@ public class AlunoServices implements AlunoServicesInterface {
     public String retirarFaltaDoAluno(String rg, String faltasId) {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Falta faltasDoAluno = encontrarFaltasDoAluno(aluno, faltasId);
+        if (aluno.getGraduacao().getFaltas().size() == 5) {
+            mudarStatusGraduacaoAluno(aluno, true);
+        }
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
         Update update = new Update().pull(GRADUACAO_FALTA, faltasDoAluno);

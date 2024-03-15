@@ -13,9 +13,7 @@ public class GraduacaoMapper {
         if (graduacaoDTORequest == null) {
             return null;
         }
-        Graduacao graduacao = new Graduacao();
-        graduacao.setKyu(graduacaoDTORequest.kyu());
-        graduacao.setFrequencia(graduacaoDTORequest.frequencia());
+        Graduacao graduacao = new Graduacao(graduacaoDTORequest.kyu(),graduacaoDTORequest.frequencia());
         return graduacao;
     }
 
@@ -24,6 +22,6 @@ public class GraduacaoMapper {
             return null;
         }
         return GraduacaoDTOResponse.builder().withFrequencia(graduacao.getFrequencia())
-                .withKyu(graduacao.getKyu()).withFaltas(graduacao.getFaltas()).build();
+                .withKyu(graduacao.getKyu()).withFaltas(graduacao.getFaltas()).withStatus(graduacao.isStatus()).build();
     }
 }
