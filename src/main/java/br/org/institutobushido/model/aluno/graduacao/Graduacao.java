@@ -31,5 +31,14 @@ public class Graduacao {
     public void setFrequencia(int frequencia) {
         this.frequencia = frequencia;
     }
+
+    public void setFaltas(List<Falta> faltas) {
+        this.faltas = faltas;
+    }
+
+    public Falta adicionarFaltas(Falta falta) {
+        this.faltas.add(falta);
+        return falta;
+    }
     
 }

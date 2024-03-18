@@ -2,6 +2,7 @@ package br.org.institutobushido.mappers;
 
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.DadosEscolaresDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.DadosEscolaresDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.UpdateDadosEscolaresDTORequest;
 import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
 
 public class DadosEscolaresMapper {
@@ -18,6 +19,20 @@ public class DadosEscolaresMapper {
        dadosEscolares.setEscola(dadosEscolaresDTORequest.escola());
        dadosEscolares.setSerie(dadosEscolaresDTORequest.serie());
        dadosEscolares.setTurno(dadosEscolaresDTORequest.turno());
+
+       return dadosEscolares;
+    }
+
+    public static DadosEscolares mapToDadosEscolares(UpdateDadosEscolaresDTORequest dadosEditadosEscolaresDTORequest) {
+
+        if (dadosEditadosEscolaresDTORequest == null) {
+            return null;
+        }
+
+       DadosEscolares dadosEscolares = new DadosEscolares();
+       dadosEscolares.setEscola(dadosEditadosEscolaresDTORequest.escola());
+       dadosEscolares.setSerie(dadosEditadosEscolaresDTORequest.serie());
+       dadosEscolares.setTurno(dadosEditadosEscolaresDTORequest.turno());
 
        return dadosEscolares;
     }

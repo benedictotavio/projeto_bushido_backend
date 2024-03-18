@@ -70,22 +70,37 @@ public class Aluno {
     }
 
     public void setDadosEscolares(DadosEscolares dadosEscolares) {
+        if (dadosEscolares == null) {
+            dadosEscolares = this.dadosEscolares;
+        }
         this.dadosEscolares = dadosEscolares;
     }
 
     public void setEndereco(Endereco endereco) {
+        if (endereco == null) {
+            endereco = this.endereco;
+        }
         this.endereco = endereco;
     }
 
     public void setDadosSociais(DadosSociais dadosSociais) {
+        if (dadosSociais == null) {
+            dadosSociais = this.dadosSociais;
+        }
         this.dadosSociais = dadosSociais;
     }
 
     public void setGraduacao(Graduacao graduacao) {
+        if (graduacao == null) {
+            graduacao = this.graduacao;
+        }
         this.graduacao = graduacao;
     }
 
     public void setHistoricoSaude(HistoricoSaude historicoSaude) {
+        if (historicoSaude == null) {
+            return;
+        }
         this.historicoSaude = historicoSaude;
     }
 

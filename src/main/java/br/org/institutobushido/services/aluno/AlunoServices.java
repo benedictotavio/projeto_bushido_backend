@@ -25,10 +25,6 @@ import br.org.institutobushido.mappers.GraduacaoMapper;
 import br.org.institutobushido.mappers.HistoricoSaudeMapper;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
-import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
-import br.org.institutobushido.model.aluno.endereco.Endereco;
-import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
@@ -360,37 +356,18 @@ public class AlunoServices implements AlunoServicesInterface {
     public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
 
-        alunoEncontrado.setDadosSociais(
-                new DadosSociais(
-                        updateAlunoDTORequest.dadosSociais().bolsaFamilia(),
-                        updateAlunoDTORequest.dadosSociais().auxilioBrasil(),
-                        updateAlunoDTORequest.dadosSociais().imovel(),
-                        updateAlunoDTORequest.dadosSociais().numerosDePessoasNaCasa(),
-                        updateAlunoDTORequest.dadosSociais().contribuintesDaRendaFamiliar(),
-                        updateAlunoDTORequest.dadosSociais().alunoContribuiParaRenda(),
-                        updateAlunoDTORequest.dadosSociais().rendaFamiliarEmSalariosMinimos()));
-        alunoEncontrado.setEndereco(
-                new Endereco(
-                        updateAlunoDTORequest.endereco().cidade(),
-                        updateAlunoDTORequest.endereco().estado(),
-                        updateAlunoDTORequest.endereco().cep(),
-                        updateAlunoDTORequest.endereco().numero()));
-        alunoEncontrado.setGraduacao(new Graduacao(
-                updateAlunoDTORequest.graduacao().kyu(),
-                updateAlunoDTORequest.graduacao().frequencia()));
-        alunoEncontrado.setDadosEscolares(
-                new DadosEscolares(
-                        updateAlunoDTORequest.dadosEscolares().turno(),
-                        updateAlunoDTORequest.dadosEscolares().escola(),
-                        updateAlunoDTORequest.dadosEscolares().serie()));
         alunoEncontrado.setNome(updateAlunoDTORequest.nome());
         alunoEncontrado.setDataNascimento(updateAlunoDTORequest.dataNascimento());
         alunoEncontrado.setGenero(updateAlunoDTORequest.genero());
+        alunoEncontrado.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(updateAlunoDTORequest.dadosSociais()));
+        alunoEncontrado.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(updateAlunoDTORequest.dadosEscolares()));
+        alunoEncontrado.setEndereco(EnderecoMapper.mapToEndereco(updateAlunoDTORequest.endereco()));
+        alunoEncontrado.setGraduacao(GraduacaoMapper.mapToGraduacao(updateAlunoDTORequest.graduacao()));
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
         Update update = new Update();
-
+        
         update.set("dadosSociais", alunoEncontrado.getDadosSociais());
         update.set("endereco", alunoEncontrado.getEndereco());
         update.set("graduacao", alunoEncontrado.getGraduacao());
@@ -398,6 +375,7 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set("nome", alunoEncontrado.getNome());
         update.set("dataNascimento", alunoEncontrado.getDataNascimento());
         update.set("genero", alunoEncontrado.getGenero());
+
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
 
         return "Aluno editado com sucesso!";

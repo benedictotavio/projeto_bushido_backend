@@ -2,6 +2,7 @@ package br.org.institutobushido.mappers;
 
 import br.org.institutobushido.controllers.dtos.aluno.endereco.EnderecoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.endereco.EnderecoDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.endereco.UpdateEnderecoDTORequest;
 import br.org.institutobushido.model.aluno.endereco.Endereco;
 
 public class EnderecoMapper {
@@ -17,6 +18,18 @@ public class EnderecoMapper {
         endereco.setCidade(enderecoDTORequest.cidade());
         endereco.setEstado(enderecoDTORequest.estado());
         endereco.setNumero(enderecoDTORequest.numero());
+        return endereco;
+    }
+
+    public static Endereco mapToEndereco(UpdateEnderecoDTORequest enderecoEditadoDTORequest) {
+        if (enderecoEditadoDTORequest == null) {
+            return null;
+        }
+        Endereco endereco = new Endereco();
+        endereco.setCep(enderecoEditadoDTORequest.cep());
+        endereco.setCidade(enderecoEditadoDTORequest.cidade());
+        endereco.setEstado(enderecoEditadoDTORequest.estado());
+        endereco.setNumero(enderecoEditadoDTORequest.numero());
         return endereco;
     }
 
