@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import br.org.institutobushido.abstracts.InformacoesSaudeImpl;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
@@ -29,6 +28,7 @@ import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTO
 import br.org.institutobushido.controllers.response.error.StandardError;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
+import br.org.institutobushido.controllers.response.success.SuccessPutResponse;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
@@ -59,9 +59,11 @@ public class AlunoControllers {
         }
 
         @PutMapping("{id}")
-        public ResponseEntity<String> editarAluno(@PathVariable String id, @RequestBody UpdateAlunoDTORequest aluno) {
+        public ResponseEntity<SuccessPutResponse> editarAluno(@PathVariable String id,
+                        @RequestBody UpdateAlunoDTORequest aluno) {
                 String alunoEditado = this.alunoServices.editarAlunoPorRg(id, aluno);
-                return ResponseEntity.ok().body(alunoEditado);
+                return ResponseEntity.ok().body(
+                                new SuccessPutResponse(id, alunoEditado, Aluno.class.getSimpleName()));
         }
 
         @PostMapping("adicionarResponsavel/{rg}")

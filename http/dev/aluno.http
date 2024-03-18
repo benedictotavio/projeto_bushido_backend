@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcwOTQyMzI4MX0.bCL5yTT_6xfDsQY3bR8tVzkF2SPFe9AKLsR0k8MbQDc
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMDgwMTU4OX0.J0tudEOeGpezd1_KeB-tLqAAiNzqic6xjP1Fr8J2JBk
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1
 Authorization: Bearer {{token}}
@@ -51,6 +51,15 @@ Authorization: Bearer {{token}}
 {
   "motivo":"Aluno se encontra doente",
   "observacao":"luis trouxe atestado"
+}
+
+###
+PUT {{url}}/123456789 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nome":"Updated User II"
 }
 
 ###
