@@ -5,10 +5,10 @@ import java.util.List;
 
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Graduacao {
@@ -24,4 +24,12 @@ public class Graduacao {
     private List<Falta> faltas;
     private boolean status;
     private int frequencia;
+
+    public void setKyu(int kyu) {
+        this.kyu = kyu;
+    }
+    public void setFrequencia(int frequencia) {
+        this.frequencia = frequencia;
+    }
+    
 }

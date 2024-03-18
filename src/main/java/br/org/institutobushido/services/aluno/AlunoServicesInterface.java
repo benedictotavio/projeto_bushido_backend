@@ -2,6 +2,7 @@ package br.org.institutobushido.services.aluno;
 
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
@@ -10,6 +11,8 @@ public interface AlunoServicesInterface {
     AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest);
 
     AlunoDTOResponse buscarAlunoPorRg(String rg);
+
+    public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest);
 
     public String adicionarFaltaDoAluno(String rg, FaltaDTORequest faltas);
 

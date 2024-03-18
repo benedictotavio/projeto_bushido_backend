@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
@@ -24,6 +25,10 @@ import br.org.institutobushido.mappers.GraduacaoMapper;
 import br.org.institutobushido.mappers.HistoricoSaudeMapper;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
+import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
+import br.org.institutobushido.model.aluno.endereco.Endereco;
+import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
@@ -52,6 +57,7 @@ public class AlunoServices implements AlunoServicesInterface {
         if (alunoEncontrado.isPresent()) {
             throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
         }
+
         Aluno aluno = new Aluno();
         aluno.setGenero(alunoDTORequest.genero());
         aluno.setDataNascimento(alunoDTORequest.dataNascimento());
@@ -63,7 +69,7 @@ public class AlunoServices implements AlunoServicesInterface {
         aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
         aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
         aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));
-        
+
         Aluno novoAluno = alunoRepositorio.save(aluno);
 
         return AlunoDTOResponse.builder()
@@ -113,17 +119,16 @@ public class AlunoServices implements AlunoServicesInterface {
             throw new AlreadyRegisteredException("Esse responsável já existe");
         }
 
-    
-            Query query = new Query();
-            
-            query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-            Update update = new Update().push("responsaveis", responsavelDTORequest);
-            mongoTemplate.updateFirst(query, update, Aluno.class);
-            return ResponsavelDTOResponse.builder().withCpf(responsavelDTORequest.cpf())
-                    .withEmail(responsavelDTORequest.email()).withFiliacao(responsavelDTORequest.filiacao().toString())
-                    .withNome(responsavelDTORequest.nome())
-                    .withTelefone(responsavelDTORequest.telefone()).build();
-        
+        Query query = new Query();
+
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update().push("responsaveis", responsavelDTORequest);
+        mongoTemplate.updateFirst(query, update, Aluno.class);
+        return ResponsavelDTOResponse.builder().withCpf(responsavelDTORequest.cpf())
+                .withEmail(responsavelDTORequest.email()).withFiliacao(responsavelDTORequest.filiacao().toString())
+                .withNome(responsavelDTORequest.nome())
+                .withTelefone(responsavelDTORequest.telefone()).build();
+
     }
 
     @Override
@@ -160,8 +165,6 @@ public class AlunoServices implements AlunoServicesInterface {
             throw new AlreadyRegisteredException("Ja existe um registro de falta nessa data");
         }
 
-        
-
         Falta novaFalta = new Falta(falta.motivo(), falta.observacao());
 
         Query query = new Query();
@@ -195,8 +198,6 @@ public class AlunoServices implements AlunoServicesInterface {
         }
 
         Falta novaFalta = new Falta();
-
-        
 
         novaFalta.setData(new SimpleDateFormat(DATA_FORMATO).format(new Date(dataFalta)));
         novaFalta.setMotivo(falta.motivo());
@@ -353,5 +354,52 @@ public class AlunoServices implements AlunoServicesInterface {
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
         Update update = new Update().set("graduacao.status", status);
         mongoTemplate.updateFirst(query, update, Aluno.class);
+    }
+
+    @Override
+    public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest) {
+        Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
+
+        alunoEncontrado.setDadosSociais(
+                new DadosSociais(
+                        updateAlunoDTORequest.dadosSociais().bolsaFamilia(),
+                        updateAlunoDTORequest.dadosSociais().auxilioBrasil(),
+                        updateAlunoDTORequest.dadosSociais().imovel(),
+                        updateAlunoDTORequest.dadosSociais().numerosDePessoasNaCasa(),
+                        updateAlunoDTORequest.dadosSociais().contribuintesDaRendaFamiliar(),
+                        updateAlunoDTORequest.dadosSociais().alunoContribuiParaRenda(),
+                        updateAlunoDTORequest.dadosSociais().rendaFamiliarEmSalariosMinimos()));
+        alunoEncontrado.setEndereco(
+                new Endereco(
+                        updateAlunoDTORequest.endereco().cidade(),
+                        updateAlunoDTORequest.endereco().estado(),
+                        updateAlunoDTORequest.endereco().cep(),
+                        updateAlunoDTORequest.endereco().numero()));
+        alunoEncontrado.setGraduacao(new Graduacao(
+                updateAlunoDTORequest.graduacao().kyu(),
+                updateAlunoDTORequest.graduacao().frequencia()));
+        alunoEncontrado.setDadosEscolares(
+                new DadosEscolares(
+                        updateAlunoDTORequest.dadosEscolares().turno(),
+                        updateAlunoDTORequest.dadosEscolares().escola(),
+                        updateAlunoDTORequest.dadosEscolares().serie()));
+        alunoEncontrado.setNome(updateAlunoDTORequest.nome());
+        alunoEncontrado.setDataNascimento(updateAlunoDTORequest.dataNascimento());
+        alunoEncontrado.setGenero(updateAlunoDTORequest.genero());
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
+        Update update = new Update();
+
+        update.set("dadosSociais", alunoEncontrado.getDadosSociais());
+        update.set("endereco", alunoEncontrado.getEndereco());
+        update.set("graduacao", alunoEncontrado.getGraduacao());
+        update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
+        update.set("nome", alunoEncontrado.getNome());
+        update.set("dataNascimento", alunoEncontrado.getDataNascimento());
+        update.set("genero", alunoEncontrado.getGenero());
+        this.mongoTemplate.updateFirst(query, update, Aluno.class);
+
+        return "Aluno editado com sucesso!";
     }
 }

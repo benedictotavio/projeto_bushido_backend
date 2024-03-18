@@ -4,6 +4,7 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,18 +18,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import br.org.institutobushido.abstracts.InformacoesSaudeImpl;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
-import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.controllers.response.error.StandardError;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
+import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
+import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.services.aluno.AlunoServices;
 import jakarta.validation.Valid;
 
@@ -53,6 +56,12 @@ public class AlunoControllers {
                 return ResponseEntity.created(location)
                                 .body(new SuccessPostResponse(novoAluno.rg(), "Aluno adicionado com sucesso",
                                                 Aluno.class.getSimpleName()));
+        }
+
+        @PutMapping("{id}")
+        public ResponseEntity<String> editarAluno(@PathVariable String id, @RequestBody UpdateAlunoDTORequest aluno) {
+                String alunoEditado = this.alunoServices.editarAlunoPorRg(id, aluno);
+                return ResponseEntity.ok().body(alunoEditado);
         }
 
         @PostMapping("adicionarResponsavel/{rg}")
