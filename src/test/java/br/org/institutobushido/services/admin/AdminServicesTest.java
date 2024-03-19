@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
-import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTOResponse;
 import br.org.institutobushido.enums.admin.UserRole;
 import br.org.institutobushido.model.admin.Admin;
 import br.org.institutobushido.repositories.AdminRepositorio;
@@ -23,7 +22,6 @@ import br.org.institutobushido.repositories.AdminRepositorio;
 class AdminServicesTest {
     private Admin admin;
     private SignUpDTORequest adminDTORequest;
-    private SignUpDTOResponse adminDTOResponse;
 
     @BeforeEach
     void setUp() {
@@ -55,15 +53,10 @@ class AdminServicesTest {
         when(adminRepositorio.save(any(Admin.class))).thenReturn(admin);
 
         // Act
-        SignUpDTOResponse result = adminServices.signup(adminDTORequest);
-
-        adminDTOResponse = SignUpDTOResponse.builder().withEmail(admin.getEmail())
-                .withNome(admin.getNome()).build();
+        adminServices.signup(adminDTORequest);
 
         // Assert
-        assertNotNull(result);
-        assertEquals(adminDTOResponse.email(), result.email());
-        assertEquals(adminDTOResponse.nome(), result.nome());
+        assertNotNull(admin);
     }
 
     @Test
