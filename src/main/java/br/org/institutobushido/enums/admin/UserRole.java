@@ -2,7 +2,7 @@ package br.org.institutobushido.enums.admin;
 
 public enum UserRole {
     ADMIN("admin"),
-    ALUNO("aluno");
+    USER("user");
 
     private String role;
 

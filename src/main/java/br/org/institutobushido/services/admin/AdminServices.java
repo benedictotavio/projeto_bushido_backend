@@ -15,7 +15,6 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
-import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTOResponse;
 import br.org.institutobushido.model.admin.Admin;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
@@ -30,7 +29,7 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
     private AdminRepositorio adminRepositorio;
 
     @Override
-    public SignUpDTOResponse signup(SignUpDTORequest adminDTORequest) {
+    public void signup(SignUpDTORequest adminDTORequest) {
 
         UserDetails adminEncontrado = adminRepositorio.findByEmail(adminDTORequest.email());
 
@@ -46,12 +45,7 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
         admin.setCargo(adminDTORequest.cargo());
         admin.setRole(adminDTORequest.role());
 
-        Admin novoAdmin = adminRepositorio.save(admin);
-
-        return SignUpDTOResponse.builder()
-                .withEmail(novoAdmin.getEmail())
-                .withNome(novoAdmin.getNome())
-                .build();
+        adminRepositorio.save(admin);
     }
 
     @Override
