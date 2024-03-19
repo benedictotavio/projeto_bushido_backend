@@ -3,6 +3,10 @@ package br.org.institutobushido.model.aluno;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
@@ -10,8 +14,6 @@ import br.org.institutobushido.model.aluno.endereco.Endereco;
 import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 import br.org.institutobushido.model.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -70,29 +72,31 @@ public class Aluno {
     }
 
     public void setDadosEscolares(DadosEscolares dadosEscolares) {
+
         if (dadosEscolares == null) {
-            dadosEscolares = this.dadosEscolares;
+            return;
         }
+
         this.dadosEscolares = dadosEscolares;
     }
 
     public void setEndereco(Endereco endereco) {
         if (endereco == null) {
-            endereco = this.endereco;
+            return;
         }
         this.endereco = endereco;
     }
 
     public void setDadosSociais(DadosSociais dadosSociais) {
         if (dadosSociais == null) {
-            dadosSociais = this.dadosSociais;
+            return;
         }
         this.dadosSociais = dadosSociais;
     }
 
     public void setGraduacao(Graduacao graduacao) {
         if (graduacao == null) {
-            graduacao = this.graduacao;
+            return;
         }
         this.graduacao = graduacao;
     }

@@ -16,7 +16,6 @@ public class GraduacaoMapper {
             return null;
         }
         
-        aluno.getGraduacao().setFrequencia(graduacaoDTORequest.frequencia());
         aluno.getGraduacao().setKyu(graduacaoDTORequest.kyu());
 
         return aluno.getGraduacao();

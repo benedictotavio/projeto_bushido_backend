@@ -360,9 +360,6 @@ public class AlunoServices implements AlunoServicesInterface {
     public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
 
-        // Dados Sociais
-        DadosSociais dadosSociais = DadosSociaisMapper.setDadosSociais(updateAlunoDTORequest.dadosSociais(),
-                alunoEncontrado);
         // Dados Escolares
         DadosEscolares dadosEscolares = DadosEscolaresMapper.setDadosEscolares(updateAlunoDTORequest.dadosEscolares(),
                 alunoEncontrado);
@@ -370,23 +367,26 @@ public class AlunoServices implements AlunoServicesInterface {
         Endereco endereco = EnderecoMapper.setEndereco(updateAlunoDTORequest.endereco(), alunoEncontrado);
         // Graduacao
         Graduacao graduacao = GraduacaoMapper.setGraduacao(updateAlunoDTORequest.graduacao(), alunoEncontrado);
+        // Dados Sociais
+        DadosSociais dadosSociais = DadosSociaisMapper.setDadosSociais(updateAlunoDTORequest.dadosSociais(),
+                alunoEncontrado);
 
         alunoEncontrado.setNome(updateAlunoDTORequest.nome());
         alunoEncontrado.setDataNascimento(updateAlunoDTORequest.dataNascimento());
         alunoEncontrado.setGenero(updateAlunoDTORequest.genero());
         alunoEncontrado.setDadosSociais(dadosSociais);
-        alunoEncontrado.setDadosEscolares(dadosEscolares);
         alunoEncontrado.setEndereco(endereco);
         alunoEncontrado.setGraduacao(graduacao);
+        alunoEncontrado.setDadosEscolares(dadosEscolares);
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
         Update update = new Update();
 
         update.set("dadosSociais", alunoEncontrado.getDadosSociais());
-        update.set("endereco", endereco);
-        update.set("graduacao", graduacao);
-        update.set("dadosEscolares", dadosEscolares);
+        update.set("endereco", alunoEncontrado.getEndereco());
+        update.set("graduacao", alunoEncontrado.getGraduacao());
+        update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
         update.set("nome", alunoEncontrado.getNome());
         update.set("dataNascimento", alunoEncontrado.getDataNascimento());
         update.set("genero", alunoEncontrado.getGenero());

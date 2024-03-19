@@ -15,21 +15,21 @@ public class DadosEscolares {
 
     public void setTurno(Turno turno) {
         if (turno == null) {
-            turno = this.turno;
+            return;
         }
         this.turno = turno;
     }
 
     public void setEscola(String escola) {
         if (escola == null) {
-            escola = this.escola;
+            return;
         }
         this.escola = escola;
     }
 
     public void setSerie(String serie) {
         if (serie == null) {
-            serie = this.serie;
+            return;
         }
         this.serie = serie;
     }
