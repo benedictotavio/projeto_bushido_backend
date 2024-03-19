@@ -12,11 +12,8 @@ public class DadosSociaisMapper {
 
     public static DadosSociais setDadosSociais(UpdateDadosSociaisDTORequest dadosSociaisDTORequest, Aluno aluno) {
         if (dadosSociaisDTORequest == null) {
-            System.out.println("dadosSociaisDTORequest == null");
             return null;
         }
-
-        System.out.println(dadosSociaisDTORequest.imovel());
 
         aluno.getDadosSociais().setImovel(dadosSociaisDTORequest.imovel());
         aluno.getDadosSociais().setBolsaFamilia(dadosSociaisDTORequest.bolsaFamilia());

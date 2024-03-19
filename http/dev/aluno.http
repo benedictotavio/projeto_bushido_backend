@@ -57,6 +57,16 @@ Authorization: Bearer {{token}}
 }
 
 ###
+POST {{url}}/adicionarFalta/123456789/1406992087893 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "motivo":"Aluno se encontra doente",
+  "observacao":"luis trouxe atestado"
+}
+
+###
 PUT {{url}}/123456789 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -70,15 +80,6 @@ Authorization: Bearer {{token}}
   }
 }
 
-###
-POST {{url}}/adicionarFalta/123456789/1906992087893 HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{
-  "motivo":"Aluno se encontra doente",
-  "observacao":"luis trouxe atestado"
-}
 
 ###
 DELETE {{url}}/retirarFalta/123456789?data=02-10-2017 HTTP/1.1
@@ -118,7 +119,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "ss": {
+  "alergia": {
       "resposta": true,
       "tipo": "dij9-qwdjqh"
     }
