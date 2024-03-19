@@ -416,6 +416,115 @@ POST /aluno
 
 </p>
 
+## Editar aluno por rg
+
+#### Request
+
+- *rg*: string
+
+```http
+PUT /aluno/{rg}
+```
+
+```body
+{
+  "nome": "string",
+  "genero": "M" ou "F",
+  "dataNascimento": "dd-MM-yyyy",
+  "dadosSociais":{
+    "bolsaFamilia": true,
+    "auxilioBrasil": false,
+    "imovel": "CEDIDO", -> enum
+    "numerosDePessoasNaCasa": 0,
+    "contribuintesDaRendaFamiliar": 0,
+    "alunoContribuiParaRenda": true,
+    "rendaFamiliarEmSalariosMinimos": 0
+  },
+   "dadosEscolares": {
+    "turno": "MANHA", -> enum
+    "escola": "string",
+    "serie": 0
+  },
+  "dataPreenchimento": "2023-01-01T12:00:00",
+  "endereco":{
+    "cidade": "string",
+    "estado": "string",
+    "cep":"string",
+    "numero":"string"
+  },
+   "graduacao": {
+        "kyu": 0,
+        "frequencia": 0
+    }
+}
+```
+
+#### Response
+
+<p>
+<details>
+<summary><i>201</i></summary>
+
+```json
+{
+  "id": "string",
+  "status": 201,
+  "message": "string",
+  "entity": "string"
+}
+```
+
+</details>
+
+<details>
+<summary><i>403</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 403,
+  "error": "Propriedade Invalida",
+  "message": "string",
+  "path": "/api/V1/aluno"
+}
+```
+
+</details>
+
+<details>
+<summary><i>409</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 409,
+  "error": "Object is already Registered",
+  "message": "string",
+  "path": "/api/V1/aluno/adicionarFalta/123456789"
+}
+```
+
+</details>
+
+<details>
+<summary><i>422</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 422,
+  "error": "Metodo inválido",
+  "message": "string",
+  "path": "/api/V1/aluno"
+}
+```
+
+</details>
+
+</details>
+
+</p>
+
 ## Adicionar falta ao aluno no dia atual
 
 Adiciona uma falta ao aluno na data no momento exato em que a requisição foi feita.

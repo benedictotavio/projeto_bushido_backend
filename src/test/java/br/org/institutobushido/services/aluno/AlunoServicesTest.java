@@ -177,7 +177,7 @@ class AlunoServicesTest {
         when(alunoRepositorio.findByRg(validRg)).thenReturn(alunoTest);
 
         // Act
-        AlunoDTOResponse response = alunoServices.buscarAlunoPorRg(validRg);
+        AlunoDTOResponse response = alunoServices.buscarAluno(validRg);
 
         // Assert
         assertNotNull(response);

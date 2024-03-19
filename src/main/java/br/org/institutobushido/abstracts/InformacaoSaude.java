@@ -29,8 +29,4 @@ public abstract class InformacaoSaude {
     public String toString() {
         return "Resposta: " + resposta + ", Tipo: " + tipo;
     }
-
-    public void setStatus() {
-        this.resposta = !this.resposta;
-    }
 }

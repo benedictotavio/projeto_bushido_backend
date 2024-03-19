@@ -1,7 +1,10 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcwOTQyMzI4MX0.bCL5yTT_6xfDsQY3bR8tVzkF2SPFe9AKLsR0k8MbQDc
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMDg2Mjc5NX0.6D8yi4Gsvs7pYuTt2SVF4kCmJosTqDNwU_XRz49B5t0
+
+@rg=012345678
+
 # Buscar aluno por e-mail
-GET {{url}}?rg=123456789 HTTP/1.1
+GET {{url}}?rg={{rg}} HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}} HTTP/1.1
@@ -11,10 +14,13 @@ Authorization: Bearer {{token}}
 {
   "nome": "Luiz",
   "genero": "M",
-  "dataNascimento": "2023-12-01",
+  "dataNascimento": "2010-10-05",
   "dadosSociais":{
     "imovel": "CEDIDO",
-    "rendaFamiliarEmSalariosMinimos": 3
+    "rendaFamiliarEmSalariosMinimos": 3,
+    "bolsaFamilia":true,
+    "auxilioBrasil":true,
+    "numerosDePessoasNaCasa":4
   },
   "dadosEscolares": {
     "turno": "MANHA"
@@ -24,7 +30,7 @@ Authorization: Bearer {{token}}
     "cep":"06000142",
     "numero":"100"
   },
-  "rg": "123456789",
+  "rg": "012345678",
   "responsaveis": [
       {
       "nome":"Joaquim",
@@ -44,7 +50,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-POST {{url}}/adicionarFalta/123456789 HTTP/1.1
+POST {{url}}/adicionarFalta/{{rg}} HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -54,7 +60,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-POST {{url}}/adicionarFalta/123456789/1906992087893 HTTP/1.1
+POST {{url}}/adicionarFalta/{{rg}}/1326992087893 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -62,13 +68,27 @@ Authorization: Bearer {{token}}
   "motivo":"Aluno se encontra doente",
   "observacao":"luis trouxe atestado"
 }
-
 ###
-DELETE {{url}}/retirarFalta/123456789?data=02-10-2017 HTTP/1.1
+DELETE {{url}}/retirarFalta/{{rg}}?data=22-07-2021 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
-POST {{url}}/adicionarResponsavel/123456789 HTTP/1.1
+PUT {{url}}/012345678 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nome":"Oliverinha",
+  "genero":"F",
+  "dadosEscolares": {
+    "turno": "TARDE"
+  }
+}
+
+
+###
+###
+POST {{url}}/adicionarResponsavel/{{rg}} HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -80,7 +100,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-DELETE {{url}}/removerResponsavel/123456789?cpf=00045678901 HTTP/1.1
+DELETE {{url}}/removerResponsavel/{{rg}}?cpf=00045678901 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}}/deficiencia/123456789?deficiencia=amidalite HTTP/1.1
@@ -96,12 +116,12 @@ DELETE {{url}}/acompanhamentoSaude/123456789?acompanhamento=aaa HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
-PUT {{url}}/historicoSaude/123456789 HTTP/1.1
+PUT {{url}}/historicoSaude/012345678 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "ss": {
+  "alergia": {
       "resposta": true,
       "tipo": "dij9-qwdjqh"
     }
