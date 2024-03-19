@@ -45,7 +45,7 @@ public class AlunoControllers {
 
         @GetMapping()
         ResponseEntity<AlunoDTOResponse> buscarAlunoPorRg(@RequestParam(name = "rg") String rg) {
-                AlunoDTOResponse alunoEncontrado = alunoServices.buscarAlunoPorRg(rg);
+                AlunoDTOResponse alunoEncontrado = alunoServices.buscarAluno(rg);
                 return ResponseEntity.ok().body(alunoEncontrado);
         }
 

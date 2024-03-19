@@ -10,7 +10,7 @@ import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTO
 public interface AlunoServicesInterface {
     AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest);
 
-    AlunoDTOResponse buscarAlunoPorRg(String rg);
+    AlunoDTOResponse buscarAluno(String rg);
 
     public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest);
 

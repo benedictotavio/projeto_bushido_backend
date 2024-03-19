@@ -1,5 +1,6 @@
 package br.org.institutobushido.model.aluno;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "alunos")
-public class Aluno {
+public class Aluno implements Serializable {
     private String nome;
     private Date dataNascimento;
     private Genero genero;

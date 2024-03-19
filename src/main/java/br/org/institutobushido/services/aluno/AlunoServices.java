@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -90,7 +90,7 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public AlunoDTOResponse buscarAlunoPorRg(String rg) {
+    public AlunoDTOResponse buscarAluno(String rg) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
 
         return AlunoDTOResponse.builder()
@@ -298,6 +298,7 @@ public class AlunoServices implements AlunoServicesInterface {
         return Map.of("resposta", resposta, "tipo", historicoDeSaude);
     }
 
+    @Cacheable(value = "aluno", key = "#rg")
     protected Aluno encontrarAlunoPorRg(String rgAluno) {
         return alunoRepositorio.findByRg(rgAluno)
                 .orElseThrow(() -> new EntityNotFoundException("Rg: " + rgAluno + " não encontrado"));
@@ -315,27 +316,6 @@ public class AlunoServices implements AlunoServicesInterface {
 
         return faltaEncontrada
                 .orElseThrow(() -> new EntityNotFoundException("Falta com id " + faltasId + " não foi encontrada."));
-    }
-
-    protected Optional<Falta> encontrarFaltasDoAlunoPelaData(Aluno aluno, Date data) {
-
-        String dataFormatada = new SimpleDateFormat(DATA_FORMATO).format(data);
-
-        if (!checarSeFaltaEstaRegistrada(aluno, dataFormatada)) {
-            throw new EntityNotFoundException("Falta" + data + "não encontrada!");
-        }
-
-        return aluno.getGraduacao().getFaltas().stream().filter(falta -> falta.getData().equals(dataFormatada))
-                .findFirst();
-    }
-
-    protected boolean checarSeFaltaEstaRegistrada(Aluno aluno, String data) {
-
-        if (aluno.getGraduacao().getFaltas().isEmpty()) {
-            return false;
-        }
-
-        return aluno.getGraduacao().getFaltas().stream().anyMatch(falta -> falta.getData().equals(data));
     }
 
     protected boolean checarSeFaltaEstaRegistrada(Aluno aluno, Date data) {
