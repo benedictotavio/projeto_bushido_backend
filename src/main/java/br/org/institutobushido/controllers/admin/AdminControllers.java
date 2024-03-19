@@ -31,9 +31,9 @@ public class AdminControllers {
 
     @PostMapping("signup")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Void> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest) {
+    public ResponseEntity<String> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest) {
         this.adminServices.signup(signUpDTORequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("Admin criado com sucesso");
     }
 
     @PostMapping("/login")
