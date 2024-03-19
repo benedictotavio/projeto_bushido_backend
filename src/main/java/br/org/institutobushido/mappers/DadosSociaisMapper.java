@@ -3,10 +3,33 @@ package br.org.institutobushido.mappers;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.UpdateDadosSociaisDTORequest;
+import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
 
 public class DadosSociaisMapper {
     private DadosSociaisMapper() {
+    }
+
+    public static DadosSociais setDadosSociais(UpdateDadosSociaisDTORequest dadosSociaisDTORequest, Aluno aluno) {
+        if (dadosSociaisDTORequest == null) {
+            return null;
+        }
+
+        System.out.println(dadosSociaisDTORequest.imovel());
+
+        aluno.getDadosSociais().setImovel(dadosSociaisDTORequest.imovel());
+        aluno.getDadosSociais().setBolsaFamilia(dadosSociaisDTORequest.bolsaFamilia());
+        aluno.getDadosSociais().setAuxilioBrasil(dadosSociaisDTORequest.auxilioBrasil());
+        aluno.getDadosSociais()
+                .setAlunoContribuiParaRenda(dadosSociaisDTORequest.alunoContribuiParaRenda());
+        aluno.getDadosSociais()
+                .setContribuintesDaRendaFamiliar(dadosSociaisDTORequest.contribuintesDaRendaFamiliar());
+        aluno.getDadosSociais()
+                .setNumerosDePessoasNaCasa(dadosSociaisDTORequest.numerosDePessoasNaCasa());
+        aluno.getDadosSociais().setRendaFamiliarEmSalariosMinimos(
+                dadosSociaisDTORequest.rendaFamiliarEmSalariosMinimos());
+
+        return aluno.getDadosSociais();
     }
 
     public static DadosSociais mapToDadosSociais(DadosSociaisDTORequest dadosSociaisDTORequest) {
@@ -62,7 +85,8 @@ public class DadosSociaisMapper {
             return null;
         }
 
-        return UpdateDadosSociaisDTORequest.builder().withAlunoContribuiParaRenda(dadosSociais.isAlunoContribuiParaRenda())
+        return UpdateDadosSociaisDTORequest.builder()
+                .withAlunoContribuiParaRenda(dadosSociais.isAlunoContribuiParaRenda())
                 .withAuxilioBrasil(dadosSociais.isAuxilioBrasil()).withBolsaFamilia(dadosSociais.isBolsaFamilia())
                 .withContribuintesDaRendaFamiliar(dadosSociais.getContribuintesDaRendaFamiliar())
                 .withImovel(dadosSociais.getImovel())

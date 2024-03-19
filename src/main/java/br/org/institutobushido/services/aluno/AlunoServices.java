@@ -25,6 +25,10 @@ import br.org.institutobushido.mappers.GraduacaoMapper;
 import br.org.institutobushido.mappers.HistoricoSaudeMapper;
 import br.org.institutobushido.mappers.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
+import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
+import br.org.institutobushido.model.aluno.endereco.Endereco;
+import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
@@ -356,22 +360,33 @@ public class AlunoServices implements AlunoServicesInterface {
     public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
 
+        // Dados Sociais
+        DadosSociais dadosSociais = DadosSociaisMapper.setDadosSociais(updateAlunoDTORequest.dadosSociais(),
+                alunoEncontrado);
+        // Dados Escolares
+        DadosEscolares dadosEscolares = DadosEscolaresMapper.setDadosEscolares(updateAlunoDTORequest.dadosEscolares(),
+                alunoEncontrado);
+        // Endereco
+        Endereco endereco = EnderecoMapper.setEndereco(updateAlunoDTORequest.endereco(), alunoEncontrado);
+        // Graduacao
+        Graduacao graduacao = GraduacaoMapper.setGraduacao(updateAlunoDTORequest.graduacao(), alunoEncontrado);
+
         alunoEncontrado.setNome(updateAlunoDTORequest.nome());
         alunoEncontrado.setDataNascimento(updateAlunoDTORequest.dataNascimento());
         alunoEncontrado.setGenero(updateAlunoDTORequest.genero());
-        alunoEncontrado.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(updateAlunoDTORequest.dadosSociais()));
-        alunoEncontrado.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(updateAlunoDTORequest.dadosEscolares()));
-        alunoEncontrado.setEndereco(EnderecoMapper.mapToEndereco(updateAlunoDTORequest.endereco()));
-        alunoEncontrado.setGraduacao(GraduacaoMapper.mapToGraduacao(updateAlunoDTORequest.graduacao()));
+        alunoEncontrado.setDadosSociais(dadosSociais);
+        alunoEncontrado.setDadosEscolares(dadosEscolares);
+        alunoEncontrado.setEndereco(endereco);
+        alunoEncontrado.setGraduacao(graduacao);
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
         Update update = new Update();
-        
+
         update.set("dadosSociais", alunoEncontrado.getDadosSociais());
-        update.set("endereco", alunoEncontrado.getEndereco());
-        update.set("graduacao", alunoEncontrado.getGraduacao());
-        update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
+        update.set("endereco", endereco);
+        update.set("graduacao", graduacao);
+        update.set("dadosEscolares", dadosEscolares);
         update.set("nome", alunoEncontrado.getNome());
         update.set("dataNascimento", alunoEncontrado.getDataNascimento());
         update.set("genero", alunoEncontrado.getGenero());

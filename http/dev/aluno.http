@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMDgwMTU4OX0.J0tudEOeGpezd1_KeB-tLqAAiNzqic6xjP1Fr8J2JBk
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMDgwOTYyM30.8pkfTO0z_FUVPQuXl9IhgsvWhv5Ts3bzUnpeWBjEFc4
 # Buscar aluno por e-mail
 GET {{url}}?rg=123456789 HTTP/1.1
 Authorization: Bearer {{token}}
@@ -14,7 +14,10 @@ Authorization: Bearer {{token}}
   "dataNascimento": "2023-12-01",
   "dadosSociais":{
     "imovel": "CEDIDO",
-    "rendaFamiliarEmSalariosMinimos": 3
+    "rendaFamiliarEmSalariosMinimos": 3,
+    "bolsaFamilia":true,
+    "auxilioBrasil":true,
+    "numerosDePessoasNaCasa":4
   },
   "dadosEscolares": {
     "turno": "MANHA"
@@ -59,7 +62,14 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "nome":"Updated User II"
+  "nome":"Teste 200",
+  "dadosSociais":{
+    "imovel": "ALUGADO",
+    "rendaFamiliarEmSalariosMinimos": 3,
+    "bolsaFamilia":true,
+    "auxilioBrasil":true,
+    "numerosDePessoasNaCasa":4
+  }
 }
 
 ###
