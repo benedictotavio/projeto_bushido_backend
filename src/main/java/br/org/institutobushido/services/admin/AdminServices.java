@@ -1,8 +1,6 @@
 package br.org.institutobushido.services.admin;
 
 import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,8 +23,11 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
     @Value("${jwt.secret}")
     private String secret;
 
-    @Autowired
     private AdminRepositorio adminRepositorio;
+
+    public AdminServices(AdminRepositorio adminRepositorio) {
+        this.adminRepositorio = adminRepositorio;
+    }
 
     @Override
     public void signup(SignUpDTORequest adminDTORequest) {

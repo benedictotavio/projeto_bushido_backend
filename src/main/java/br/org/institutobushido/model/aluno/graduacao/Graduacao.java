@@ -1,5 +1,6 @@
 package br.org.institutobushido.model.aluno.graduacao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Graduacao {
+public class Graduacao implements Serializable{
+
+    private static final long serialVersionUID = 2405172041950251807L;
 
     public Graduacao(int kyu, int frequencia) {
         this.kyu = kyu;

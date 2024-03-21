@@ -1,6 +1,5 @@
 package br.org.institutobushido.controllers.admin;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,23 +10,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTORequest;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
 import br.org.institutobushido.model.admin.Admin;
-import br.org.institutobushido.services.admin.AdminServices;
+import br.org.institutobushido.services.admin.AdminServiceInterface;
 import jakarta.validation.Valid;
 
 @RestController(value = "admin")
 @RequestMapping("api/V1/admin")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminControllers {
-    @Autowired
-    private AdminServices adminServices;
 
-    @Autowired
+    private AdminServiceInterface adminServices;
     private AuthenticationManager authenticationManager;
+
+    public AdminControllers(AdminServiceInterface adminServices, AuthenticationManager authenticationManager) {
+        this.adminServices = adminServices;
+        this.authenticationManager = authenticationManager;
+    }
 
     @PostMapping("signup")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

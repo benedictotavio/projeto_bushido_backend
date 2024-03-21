@@ -24,6 +24,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Document(collection = "alunos")
 public class Aluno implements Serializable {
+    private static final long serialVersionUID = 2405172041950251807L;
+
     private String nome;
     private Date dataNascimento;
     private Genero genero;

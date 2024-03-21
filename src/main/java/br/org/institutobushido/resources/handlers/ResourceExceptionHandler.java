@@ -73,7 +73,6 @@ public class ResourceExceptionHandler {
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(err.getStatus()).body(err);
     }
-    // -> Pattern Validations
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<StandardError> invalidProperty(MethodArgumentNotValidException e,
@@ -123,19 +122,19 @@ public class ResourceExceptionHandler {
         }
 
         if (e instanceof AccessDeniedException) {
-            problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), e.getMessage());
+            problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), e.getMessage());
             problem.setTitle("Access Denied Error");
             problem.setProperty("access_denied", "Voce não esta autorizado a acessar essa sessão.");
         }
 
         if (e instanceof TokenExpiredException) {
-            problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), e.getMessage());
+            problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), e.getMessage());
             problem.setTitle("JWT Expired");
             problem.setProperty("jwt_error", "JWT Token esta expirado");
         }
 
         if (e instanceof SignatureVerificationException) {
-            problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), e.getMessage());
+            problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), e.getMessage());
             problem.setTitle("JWT Signature error");
             problem.setProperty("jwt_error", "JWT Token não está no formato correto");
         }
