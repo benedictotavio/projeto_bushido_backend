@@ -4,8 +4,6 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +30,7 @@ import br.org.institutobushido.controllers.response.success.SuccessPutResponse;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
-import br.org.institutobushido.services.aluno.AlunoServices;
+import br.org.institutobushido.services.aluno.AlunoServicesInterface;
 import jakarta.validation.Valid;
 
 @RestController(value = "aluno")
@@ -40,8 +38,11 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AlunoControllers {
 
-        @Autowired
-        private AlunoServices alunoServices;
+        private final AlunoServicesInterface alunoServices;
+
+        public AlunoControllers(AlunoServicesInterface alunoServices) {
+                this.alunoServices = alunoServices;
+        }
 
         @GetMapping()
         ResponseEntity<AlunoDTOResponse> buscarAlunoPorRg(@RequestParam(name = "rg") String rg) {

@@ -1,5 +1,6 @@
 package br.org.institutobushido.model.aluno.historico_de_saude;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HistoricoSaude {
+public class HistoricoSaude implements Serializable {
+
+    private static final long serialVersionUID = 2405172041950251807L;
+
     private TipoSanguineo tipoSanguineo;
     private FatorRH fatorRh;
     private UsoMedicamentoContinuo usoMedicamentoContinuo;

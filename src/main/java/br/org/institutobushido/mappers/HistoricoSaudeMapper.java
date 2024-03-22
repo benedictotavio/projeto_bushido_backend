@@ -24,6 +24,8 @@ public class HistoricoSaudeMapper {
 
                 HistoricoSaude historicoSaude = new HistoricoSaude();
 
+                historicoSaude.setTipoSanguineo(historicoSaudeDTORequest.tipoSanguineo());
+                historicoSaude.setFatorRh(historicoSaudeDTORequest.fatorRh());
                 historicoSaude.setAlergia(
                                 new Alergia(historicoSaudeDTORequest.alergia().resposta(),
                                                 historicoSaudeDTORequest.alergia().tipo()));
@@ -44,6 +46,8 @@ public class HistoricoSaudeMapper {
                         return null;
                 }
                 return HistoricoSaudeDTOResponse.builder()
+                                .withFatorRh(historicoSaude.getFatorRh())
+                                .withTipoSanguineo(historicoSaude.getTipoSanguineo())
                                 .withAlergia(AlergiaDTOResponse.builder()
                                                 .withResposta(historicoSaude.getAlergia().getResposta())
                                                 .withTipo(historicoSaude.getAlergia().getTipo()).build())

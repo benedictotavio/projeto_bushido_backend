@@ -88,7 +88,8 @@ class AlunoServicesTest {
                 .withGraduacao(new GraduacaoDTORequest(0, 0))
                 .withDataNascimento(new Date(192912881000L))
                 .withHistoricoSaude(
-                        new HistoricoSaudeDTORequest(new UsoMedicamentoContinuoDTORequest(false, "tipo"),
+                        new HistoricoSaudeDTORequest(FatorRH.POSITIVO, TipoSanguineo.AB_NEGATIVO,
+                                new UsoMedicamentoContinuoDTORequest(false, "tipo"),
                                 new AlergiaDTORequest(false, "alergia"), new CirurgiaDTORequest(false, "cirurgia"),
                                 new DoencaCronicaDTORequest(false, "doenca"), new ArrayList<String>(),
                                 new ArrayList<String>()))
@@ -146,7 +147,9 @@ class AlunoServicesTest {
                 .withGraduacao(new GraduacaoDTOResponse(aluno.getGraduacao().getKyu(), aluno.getGraduacao().getFaltas(),
                         aluno.getGraduacao().isStatus(), aluno.getGraduacao().getFrequencia()))
                 .withHistoricoSaude(
-                        new HistoricoSaudeDTOResponse(null, null, null, null, List.of("deficiencia"),
+                        new HistoricoSaudeDTOResponse(aluno.getHistoricoSaude().getFatorRh(),
+                                aluno.getHistoricoSaude().getTipoSanguineo(), null, null, null, null,
+                                List.of("deficiencia"),
                                 List.of("acompanhamentoSaude")))
                 .build();
 

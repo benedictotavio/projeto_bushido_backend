@@ -1,5 +1,7 @@
 package br.org.institutobushido.model.aluno.endereco;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Endereco {
+public class Endereco implements Serializable {
+    private static final long serialVersionUID = 2405172041950251807L;
     private String cidade;
     private String estado;
     private String cep;
@@ -19,18 +22,21 @@ public class Endereco {
         }
         this.cidade = cidade;
     }
+
     public void setEstado(String estado) {
         if (estado == null) {
             estado = this.estado;
         }
         this.estado = estado;
     }
+
     public void setCep(String cep) {
         if (cep == null) {
             cep = this.cep;
         }
         this.cep = cep;
     }
+
     public void setNumero(String numero) {
         if (numero == null) {
             numero = this.numero;

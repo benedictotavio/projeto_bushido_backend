@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMDg2Mjc5NX0.6D8yi4Gsvs7pYuTt2SVF4kCmJosTqDNwU_XRz49B5t0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMDk3MDYxOH0.cHU1CJub9iigFARqSvDFQpDqH-SGFJZXFEveHmVjneg
 
 @rg=012345678
 
@@ -12,42 +12,68 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "nome": "Luiz",
+  "nome": "Zé do Pipo",
+  "sobrenome": "a zé do pipo",
   "genero": "M",
-  "dataNascimento": "2010-10-05",
-  "dadosSociais":{
-    "imovel": "CEDIDO",
-    "rendaFamiliarEmSalariosMinimos": 3,
-    "bolsaFamilia":true,
-    "auxilioBrasil":true,
-    "numerosDePessoasNaCasa":4
+  "dataNascimento": "2020-03-20",
+  "dadosSociais": {
+    "bolsaFamilia": true,
+    "auxilioBrasil": true,
+    "imovel": "PRÓPRIO",
+    "numerosDePessoasNaCasa": 12,
+    "contribuintesDaRendaFamiliar": 3,
+    "alunoContribuiParaRenda": true,
+    "rendaFamiliarEmSalariosMinimos": 2000
   },
   "dadosEscolares": {
-    "turno": "MANHA"
+    "turno": "AB_NEGATIVO",
+    "escola": "Emef Luis Ziraldo",
+    "serie": 4
   },
-  "dataPreenchimento": "2023-01-01T12:00:00",
-  "endereco":{
-    "cep":"06000142",
-    "numero":"100"
+  "endereco": {
+    "estado": "São Paulo",
+    "cidade": "Osasco",
+    "cep": "06140140",
+    "numero": 565
   },
-  "rg": "012345678",
+  "rg": "45566456454655",
   "responsaveis": [
-      {
-      "nome":"Joaquim",
-      "cpf":"12345678901",
-      "telefone":"0000-0000",
-      "filiacao":"PAI"
-      }
-    ],
-   "graduacao": {
-      "kyu": 7,
-      "frequencia": 75
+    {
+      "nome": "Otavio Benedicto Domingues",
+      "cpf": "45916466880",
+      "telefone": "11972300768",
+      "email": "otavio.w@outlook.com",
+      "filiacao": "MAE"
+    }
+  ],
+  "graduacao": {
+    "kyu": 0,
+    "frequencia": 0
+  },
+  "historicoSaude": {
+    "tipoSanguineo": "A_POSITIVO",
+    "fatorRh": "POSITIVO",
+    "usoMedicamentoContinuo": {
+      "resposta": "",
+      "tipo": "dd"
     },
-    "historicoSaude": {
-      "tipoSanguineo": "A_POSITIVO",
-      "fatorRh": "POSITIVO"
+    "cirurgia": {
+      "resposta": false,
+      "tipo": ""
+    },
+    "alergia": {
+      "resposta": false,
+      "tipo": "dd"
+    },
+    "doencaCronica": {
+      "resposta": false,
+      "tipo": ""
+    },
+    "deficiencia": [],
+    "acompanhamentoSaude": []
   }
 }
+
 
 ###
 POST {{url}}/adicionarFalta/{{rg}} HTTP/1.1
@@ -85,8 +111,6 @@ Authorization: Bearer {{token}}
   }
 }
 
-
-###
 ###
 POST {{url}}/adicionarResponsavel/{{rg}} HTTP/1.1
 Content-Type: application/json

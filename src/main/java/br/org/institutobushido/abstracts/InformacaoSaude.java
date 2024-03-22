@@ -4,6 +4,8 @@ public abstract class InformacaoSaude {
     private boolean resposta;
     private String tipo;
 
+    protected InformacaoSaude() {}
+
     protected InformacaoSaude(boolean resposta, String tipo) {
         this.resposta = resposta;
         this.tipo = tipo;
