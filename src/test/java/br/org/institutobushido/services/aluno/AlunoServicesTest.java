@@ -10,11 +10,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -295,7 +294,9 @@ class AlunoServicesTest {
         // Act
         FaltaDTORequest falta1 = new FaltaDTORequest("motivo", "observação");
 
-        String result = alunoServices.adicionarFaltaDoAluno(validRg, falta1);
+        Date date = new Date();
+
+        String result = alunoServices.adicionarFaltaDoAluno(validRg, falta1, date.getTime());
 
         // Arrange
         assertNotNull(result);

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -40,10 +39,14 @@ import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 @Service
 public class AlunoServices implements AlunoServicesInterface {
 
-    @Autowired
-    private AlunoRepositorio alunoRepositorio;
-    @Autowired
+    private AlunoRepositorio alunoRepositorio;    
     private MongoTemplate mongoTemplate;
+
+
+    public AlunoServices(AlunoRepositorio alunoRepositorio, MongoTemplate mongoTemplate) {
+        this.alunoRepositorio = alunoRepositorio;
+        this.mongoTemplate = mongoTemplate;
+    }
 
     private static final String GRADUACAO_FALTA = "graduacao.faltas";
     private static final String DATA_FORMATO = "dd-MM-yyyy";
@@ -149,34 +152,6 @@ public class AlunoServices implements AlunoServicesInterface {
         Update update = new Update().pull("responsaveis", Query.query(Criteria.where("cpf").is(cpf)));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return String.valueOf(aluno.getResponsaveis().size() - 1);
-    }
-
-    @Override
-    public String adicionarFaltaDoAluno(String rg, FaltaDTORequest falta) {
-        Aluno aluno = encontrarAlunoPorRg(rg);
-
-        if (!aluno.getGraduacao().isStatus()) {
-            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
-        }
-
-        boolean faltasDoAluno = checarSeFaltaEstaRegistrada(aluno, new Date());
-
-        if (faltasDoAluno) {
-            throw new AlreadyRegisteredException("Ja existe um registro de falta nessa data");
-        }
-
-        Falta novaFalta = new Falta(falta.motivo(), falta.observacao());
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().addToSet(GRADUACAO_FALTA, novaFalta);
-        mongoTemplate.updateFirst(query, update, Aluno.class);
-
-        if (aluno.getGraduacao().getFaltas().size() == 4) {
-            mudarStatusGraduacaoAluno(aluno, false);
-        }
-
-        return String.valueOf(aluno.getGraduacao().getFaltas().size() + 1);
     }
 
     @Override
