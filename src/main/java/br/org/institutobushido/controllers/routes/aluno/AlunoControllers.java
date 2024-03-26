@@ -1,4 +1,4 @@
-package br.org.institutobushido.controllers.aluno;
+package br.org.institutobushido.controllers.routes.aluno;
 
 import java.net.URI;
 import java.time.Instant;

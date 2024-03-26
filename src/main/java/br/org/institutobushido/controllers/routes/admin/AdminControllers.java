@@ -1,4 +1,4 @@
-package br.org.institutobushido.controllers.admin;
+package br.org.institutobushido.controllers.routes.admin;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
