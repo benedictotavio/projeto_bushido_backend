@@ -391,7 +391,7 @@ POST /aluno
   "status": 409,
   "error": "Object is already Registered",
   "message": "string",
-  "path": "/api/V1/aluno/adicionarFalta/123456789"
+  "path": "/api/V1/aluno/falta/123456789"
 }
 ```
 
@@ -500,7 +500,7 @@ PUT /aluno/{rg}
   "status": 409,
   "error": "Object is already Registered",
   "message": "string",
-  "path": "/api/V1/aluno/adicionarFalta/123456789"
+  "path": "/api/V1/aluno/falta/123456789"
 }
 ```
 
@@ -523,74 +523,6 @@ PUT /aluno/{rg}
 
 </details>
 
-</p>
-
-## Adicionar falta ao aluno no dia atual
-
-Adiciona uma falta ao aluno na data no momento exato em que a requisição foi feita.
-
-#### Request
-
-- **rg:** string
-
-```http
-POST /aluno/adicionarFalta/{rg}
-```
-
-```body
-{
-  "motivo":"string",
-  "observacao":"string"
-}
-```
-
-#### Response
-
-<p>
-<details>
-<summary><i>200</i></summary>
-
-```json
-{
-  "id": "string",
-  "status": 200,
-  "message": "string",
-  "entity": "string"
-}
-```
-
-</details>
-
-<details>
-<summary><i>404</i></summary>
-
-```json
-{
-  "timestamp": 0,
-  "status": 404,
-  "error": "Object Not Found",
-  "message": "string",
-  "path": "/api/V1/aluno/adicionarFalta/1e23456789"
-}
-```
-
-</details>
-
-<details>
-<summary><i>409</i></summary>
-
-```json
-{
-  "timestamp": 0,
-  "status": 409,
-  "error": "Object is already Registered",
-  "message": "string",
-  "path": "/api/V1/aluno/adicionarFalta/123456789"
-}
-```
-
-</details>
-</details>
 </p>
 
 ## Adicionar falta ao aluno na data especifica
@@ -674,7 +606,7 @@ Retira a falta do aluno na data especificada no parâmetro data.
 - **data:** dd-MM-yyyy
 
 ```http
-DELETE /aluno/retirarFalta/{rg}?data=dd-MM-yyyy
+DELETE /aluno/falta/{rg}?data=dd-MM-yyyy
 ```
 
 #### Response
@@ -721,7 +653,7 @@ Adiciona um responsável ao aluno com base nos dados abaixo.
 - **rg:** string
 
 ```http
-POST /aluno/adicionarResponsavel/{rg}
+POST /aluno/responsavel/{rg}
 ```
 
 
@@ -793,7 +725,7 @@ Remover responsável do aluno com base no cpf informado.
 - **deficiencia:** string
 
 ```http
-DELETE /aluno/removerResponsavel/{rg}?cpf=string
+DELETE /aluno/responsavel/{rg}?cpf=string
 ```
 
 #### Response

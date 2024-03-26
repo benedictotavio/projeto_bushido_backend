@@ -67,7 +67,7 @@ public class AlunoControllers {
                                 new SuccessPutResponse(id, alunoEditado, Aluno.class.getSimpleName()));
         }
 
-        @PostMapping("adicionarResponsavel/{rg}")
+        @PostMapping("responsavel/{rg}")
         public ResponseEntity<SuccessPostResponse> adicionarResponsavel(@PathVariable String rg,
                         @Valid @RequestBody ResponsavelDTORequest responsavelDTORequest) {
                 ResponsavelDTOResponse responsavel = alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
@@ -75,7 +75,7 @@ public class AlunoControllers {
                                 "Responsável adicionado com sucesso", Responsavel.class.getSimpleName()));
         }
 
-        @DeleteMapping("removerResponsavel/{rg}")
+        @DeleteMapping("responsavel/{rg}")
         public ResponseEntity<SuccessDeleteResponse> removerResponsavel(@PathVariable String rg,
                         @RequestParam(name = "cpf") String cpf) {
                 String res = alunoServices.removerResponsavel(rg, cpf);
@@ -84,15 +84,7 @@ public class AlunoControllers {
                                                 Responsavel.class.getSimpleName()));
         }
 
-        @PostMapping("adicionarFalta/{rg}")
-        public ResponseEntity<SuccessPostResponse> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
-                        @PathVariable String rg) {
-                String res = alunoServices.adicionarFaltaDoAluno(rg, faltas);
-                return ResponseEntity.ok()
-                                .body(new SuccessPostResponse(res, "Falta adicionada", Falta.class.getSimpleName()));
-        }
-
-        @PostMapping("adicionarFalta/{rg}/{data}")
+        @PostMapping("falta/{rg}/{data}")
         public ResponseEntity<SuccessPostResponse> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
                         @PathVariable String rg, @PathVariable long data) {
                 String res = alunoServices.adicionarFaltaDoAluno(rg, faltas, data);
@@ -100,7 +92,7 @@ public class AlunoControllers {
                                 .body(new SuccessPostResponse(res, "Falta adicionada", Falta.class.getSimpleName()));
         }
 
-        @DeleteMapping("retirarFalta/{rg}")
+        @DeleteMapping("falta/{rg}")
         public ResponseEntity<SuccessDeleteResponse> retirarFaltaAoAluno(@RequestParam(name = "data") String data,
                         @PathVariable String rg) {
                 String res = alunoServices.retirarFaltaDoAluno(rg, data);

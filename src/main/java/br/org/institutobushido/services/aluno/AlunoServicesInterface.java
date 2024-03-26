@@ -14,8 +14,6 @@ public interface AlunoServicesInterface {
 
     public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest);
 
-    public String adicionarFaltaDoAluno(String rg, FaltaDTORequest faltas);
-
     public String adicionarFaltaDoAluno(String rg, FaltaDTORequest faltas, long novaFalta);
 
     public String retirarFaltaDoAluno(String rg, String faltasId);

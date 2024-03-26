@@ -1,7 +1,6 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMDk3MDYxOH0.cHU1CJub9iigFARqSvDFQpDqH-SGFJZXFEveHmVjneg
-
-@rg=012345678
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMTQwNTE5Mn0.zDL18jcSpNWS3TToAdP_sdjKwyttZZmMz5cYTPi9qqQ
+@rg=123456789
 
 # Buscar aluno por e-mail
 GET {{url}}?rg={{rg}} HTTP/1.1
@@ -19,14 +18,14 @@ Authorization: Bearer {{token}}
   "dadosSociais": {
     "bolsaFamilia": true,
     "auxilioBrasil": true,
-    "imovel": "PRÓPRIO",
+    "imovel": "PROPRIO",
     "numerosDePessoasNaCasa": 12,
     "contribuintesDaRendaFamiliar": 3,
     "alunoContribuiParaRenda": true,
     "rendaFamiliarEmSalariosMinimos": 2000
   },
   "dadosEscolares": {
-    "turno": "AB_NEGATIVO",
+    "turno": "MANHA",
     "escola": "Emef Luis Ziraldo",
     "serie": 4
   },
@@ -36,7 +35,7 @@ Authorization: Bearer {{token}}
     "cep": "06140140",
     "numero": 565
   },
-  "rg": "45566456454655",
+  "rg": "123456789",
   "responsaveis": [
     {
       "nome": "Otavio Benedicto Domingues",
@@ -76,17 +75,9 @@ Authorization: Bearer {{token}}
 
 
 ###
-POST {{url}}/adicionarFalta/{{rg}} HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{
-  "motivo":"Aluno se encontra doente",
-  "observacao":"luis trouxe atestado"
-}
 
 ###
-POST {{url}}/adicionarFalta/{{rg}}/1326992087893 HTTP/1.1
+POST {{url}}/falta/{{rg}}/1596992087893 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -95,11 +86,11 @@ Authorization: Bearer {{token}}
   "observacao":"luis trouxe atestado"
 }
 ###
-DELETE {{url}}/retirarFalta/{{rg}}?data=22-07-2021 HTTP/1.1
+DELETE {{url}}/falta/{{rg}}?data=22-07-2021 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
-PUT {{url}}/012345678 HTTP/1.1
+PUT {{url}}/123456789 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -112,41 +103,41 @@ Authorization: Bearer {{token}}
 }
 
 ###
-POST {{url}}/adicionarResponsavel/{{rg}} HTTP/1.1
+POST {{url}}/responsavel/{{rg}} HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
   "nome": "Teste",
-  "cpf": "00045678901",
+  "cpf": "45202055636",
   "telefone": "11999999999",
   "filiacao": "PAI"
 }
 
 ###
-DELETE {{url}}/removerResponsavel/{{rg}}?cpf=00045678901 HTTP/1.1
+DELETE {{url}}/responsavel/{{rg}}?cpf=45916466880 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
-POST {{url}}/deficiencia/123456789?deficiencia=amidalite HTTP/1.1
+POST {{url}}/deficiencia/123456789?deficiencia=fff HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 DELETE {{url}}/deficiencia/123456789?deficiencia=amidalite HTTP/1.1
 Authorization: Bearer {{token}}
 ###
-POST {{url}}/acompanhamentoSaude/123456789?acompanhamento=aaa HTTP/1.1
+POST {{url}}/acompanhamentoSaude/123456789?acompanhamento=fffff HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 DELETE {{url}}/acompanhamentoSaude/123456789?acompanhamento=aaa HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
-PUT {{url}}/historicoSaude/012345678 HTTP/1.1
+PUT {{url}}/historicoSaude/123456789 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "alergia": {
+  "doencaCronica": {
       "resposta": true,
-      "tipo": "dij9-qwdjqh"
+      "tipo": "diabete"
     }
 }

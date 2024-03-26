@@ -1,5 +1,5 @@
 @url = https://projeto-bushido-backend.onrender.com/api/V1/admin
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMDg4OTI0N30.VMHiJltCK5Qir8d8fQfojPs7ecdCOVEIRl5p8urERaw
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMTExODUyMH0.ueGedfb38jVkQnwFezE8RPEaLakQ-XHTB5qQlHH9pHU
 
 POST {{url}}/signup HTTP/1.1
 Content-Type: application/json
