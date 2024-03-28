@@ -8,6 +8,6 @@ import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public record GraduacaoDTOResponse(
-        int kyu, List<Falta> faltas, boolean status, LocalDate inicioGraduacao, LocalDate fimGraduacao, int frequencia, boolean aprovado, int cargaHoraria
-) {
+                int kyu, List<Falta> faltas, boolean status, LocalDate inicioGraduacao, LocalDate fimGraduacao,
+                int frequencia, boolean aprovado, int cargaHoraria, int dan) {
 }

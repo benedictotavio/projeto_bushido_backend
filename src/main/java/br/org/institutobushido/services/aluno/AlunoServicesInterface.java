@@ -31,7 +31,9 @@ public interface AlunoServicesInterface {
 
     public String removerAcompanhamentoSaude(String rg, String acompanhamentoSaude);
 
-    public GraduacaoDTOResponse finalizarGraduacao(String rg);
+    public GraduacaoDTOResponse aprovarAluno(String rg);
+
+    public GraduacaoDTOResponse reprovarAluno(String rg);
 
     public Object editarHistoricoDeSaude(String rg, String campo, String historicoDeSaude, boolean resposta);
 }

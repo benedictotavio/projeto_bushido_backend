@@ -27,8 +27,9 @@ public class GraduacaoMapper {
             return null;
         }
         return GraduacaoDTOResponse.builder()
-        .withFrequencia(graduacao.getFrequencia())
+                .withFrequencia(graduacao.getFrequencia())
                 .withKyu(graduacao.getKyu())
+                .withDan(graduacao.getDan())
                 .withFaltas(graduacao.getFaltas())
                 .withStatus(graduacao.isStatus())
                 .withAprovado(graduacao.isAprovado())
