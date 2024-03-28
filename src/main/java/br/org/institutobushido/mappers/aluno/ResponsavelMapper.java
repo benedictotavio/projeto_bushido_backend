@@ -1,4 +1,4 @@
-package br.org.institutobushido.mappers;
+package br.org.institutobushido.mappers.aluno;
 
 import java.util.Collections;
 import java.util.List;

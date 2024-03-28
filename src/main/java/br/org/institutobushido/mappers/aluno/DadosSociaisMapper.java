@@ -1,4 +1,4 @@
-package br.org.institutobushido.mappers;
+package br.org.institutobushido.mappers.aluno;
 
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTOResponse;

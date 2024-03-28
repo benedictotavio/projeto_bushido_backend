@@ -1,0 +1,11 @@
+@url = http://0.0.0.0:8080/api/V1/turma
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMTY3NDEwMn0.wO6jzdl9zUUY5v0Hcwe2RPACJyXU4QYfKBycrS388IQ
+@rg=123456789
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+
+}
