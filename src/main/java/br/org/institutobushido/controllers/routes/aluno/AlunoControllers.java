@@ -4,6 +4,8 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +30,7 @@ import br.org.institutobushido.controllers.response.success.SuccessDeleteRespons
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPutResponse;
 import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.services.aluno.AlunoServicesInterface;
@@ -124,6 +127,14 @@ public class AlunoControllers {
                 return ResponseEntity.ok()
                                 .body(new SuccessPostResponse(res,
                                                 "Acompanhamento " + acompanhamento + " foi adicionado com sucesso."));
+        }
+
+        @PostMapping("graduacao/{rg}/finalizar")
+        public ResponseEntity<SuccessPostResponse> finalizarGraduacao(@PathVariable String rg) {
+                GraduacaoDTOResponse res = alunoServices.finalizarGraduacao(rg);
+                return ResponseEntity.ok()
+                                .body(new SuccessPostResponse(String.valueOf(res.kyu()),
+                                                "Graduação concluída com sucesso.", Graduacao.class.getName()));
         }
 
         @DeleteMapping("acompanhamentoSaude/{rg}")

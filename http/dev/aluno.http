@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMTQxODA5OX0.ezrMOVcoN2Cgnu1raJt0QgBUg1Ua35Z_1VnrXUpLLJg
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMTY0NDI5N30.2-FPrOSUK_j37CO7lTHEnvlScYeR7dn7HRPNugMh2VM
 @rg=123456789
 
 # Buscar aluno por e-mail
@@ -46,8 +46,7 @@ Authorization: Bearer {{token}}
     }
   ],
   "graduacao": {
-    "kyu": 0,
-    "frequencia": 0
+    "kyu": 7
   },
   "historicoSaude": {
     "tipoSanguineo": "A_POSITIVO",
@@ -73,8 +72,6 @@ Authorization: Bearer {{token}}
   }
 }
 
-
-###
 
 ###
 POST {{url}}/falta/{{rg}}/1596992087893 HTTP/1.1
@@ -131,6 +128,10 @@ DELETE {{url}}/acompanhamentoSaude/123456789?acompanhamento=aaa HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
+POST {{url}}/graduacao/{{rg}}/finalizar HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
 PUT {{url}}/historicoSaude/123456789 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}

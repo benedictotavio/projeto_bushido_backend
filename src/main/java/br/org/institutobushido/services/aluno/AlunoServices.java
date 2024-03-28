@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -39,9 +41,8 @@ import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 @Service
 public class AlunoServices implements AlunoServicesInterface {
 
-    private AlunoRepositorio alunoRepositorio;    
+    private AlunoRepositorio alunoRepositorio;
     private MongoTemplate mongoTemplate;
-
 
     public AlunoServices(AlunoRepositorio alunoRepositorio, MongoTemplate mongoTemplate) {
         this.alunoRepositorio = alunoRepositorio;
@@ -61,12 +62,11 @@ public class AlunoServices implements AlunoServicesInterface {
             throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
         }
 
-        Aluno aluno = new Aluno();
+        Aluno aluno = new Aluno(alunoDTORequest.rg());
         aluno.setGenero(alunoDTORequest.genero());
         aluno.setDataNascimento(alunoDTORequest.dataNascimento());
         aluno.setNome(alunoDTORequest.nome());
-        aluno.setRg(alunoDTORequest.rg());
-        aluno.setGraduacao(GraduacaoMapper.mapToGraduacao(alunoDTORequest.graduacao()));
+        aluno.addGraduacao(new Graduacao(alunoDTORequest.graduacao().kyu()));
         aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
         aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
         aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
@@ -86,7 +86,7 @@ public class AlunoServices implements AlunoServicesInterface {
                 .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(novoAluno.getDadosSociais()))
                 .withDadosEscolares(
                         DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(novoAluno.getDadosEscolares()))
-                .withGraduacao(GraduacaoMapper.mapToGraduacaoDTOResponse(novoAluno.getGraduacao()))
+                .withGraduacao(GraduacaoMapper.mapToListGraduacaoDTOResponse(novoAluno.getGraduacao()))
                 .withHistoricoSaude(
                         HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(novoAluno.getHistoricoSaude()))
                 .build();
@@ -107,7 +107,7 @@ public class AlunoServices implements AlunoServicesInterface {
                 .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(alunoEncontrado.getEndereco()))
                 .withDadosEscolares(
                         DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(alunoEncontrado.getDadosEscolares()))
-                .withGraduacao(GraduacaoMapper.mapToGraduacaoDTOResponse(alunoEncontrado.getGraduacao()))
+                .withGraduacao(GraduacaoMapper.mapToListGraduacaoDTOResponse(alunoEncontrado.getGraduacao()))
                 .withHistoricoSaude(
                         HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(alunoEncontrado.getHistoricoSaude()))
                 .build();
@@ -162,7 +162,7 @@ public class AlunoServices implements AlunoServicesInterface {
             throw new LimitQuantityException("A data deve ser menor ou igual a data atual");
         }
 
-        if (!aluno.getGraduacao().isStatus()) {
+        if (!aluno.getGraduacao().get(0).isStatus()) {
             throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
         }
 
@@ -182,25 +182,25 @@ public class AlunoServices implements AlunoServicesInterface {
         Update update = new Update().addToSet(GRADUACAO_FALTA, novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
 
-        if (aluno.getGraduacao().getFaltas().size() == 4) {
+        if (aluno.getGraduacao().get(0).getFaltas().size() == 4) {
             mudarStatusGraduacaoAluno(aluno, false);
         }
 
-        return String.valueOf(aluno.getGraduacao().getFaltas().size() + 1);
+        return String.valueOf(aluno.getGraduacao().get(0).getFaltas().size() + 1);
     }
 
     @Override
     public String retirarFaltaDoAluno(String rg, String faltasId) {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Falta faltasDoAluno = encontrarFaltasDoAluno(aluno, faltasId);
-        if (aluno.getGraduacao().getFaltas().size() == 5) {
+        if (aluno.getGraduacao().get(0).getFaltas().size() == 5) {
             mudarStatusGraduacaoAluno(aluno, true);
         }
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
         Update update = new Update().pull(GRADUACAO_FALTA, faltasDoAluno);
         mongoTemplate.updateFirst(query, update, Aluno.class);
-        return String.valueOf(aluno.getGraduacao().getFaltas().size() - 1);
+        return String.valueOf(aluno.getGraduacao().get(0).getFaltas().size() - 1);
     }
 
     @Override
@@ -273,8 +273,44 @@ public class AlunoServices implements AlunoServicesInterface {
         return Map.of("resposta", resposta, "tipo", historicoDeSaude);
     }
 
+    @Override
+    public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest) {
+        Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
+
+        // Dados Escolares
+        DadosEscolares dadosEscolares = DadosEscolaresMapper.setDadosEscolares(updateAlunoDTORequest.dadosEscolares(),
+                alunoEncontrado);
+        // Endereco
+        Endereco endereco = EnderecoMapper.setEndereco(updateAlunoDTORequest.endereco(), alunoEncontrado);
+        // Dados Sociais
+        DadosSociais dadosSociais = DadosSociaisMapper.setDadosSociais(updateAlunoDTORequest.dadosSociais(),
+                alunoEncontrado);
+
+        alunoEncontrado.setNome(updateAlunoDTORequest.nome());
+        alunoEncontrado.setDataNascimento(updateAlunoDTORequest.dataNascimento());
+        alunoEncontrado.setGenero(updateAlunoDTORequest.genero());
+        alunoEncontrado.setDadosSociais(dadosSociais);
+        alunoEncontrado.setEndereco(endereco);
+        alunoEncontrado.setDadosEscolares(dadosEscolares);
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
+        Update update = new Update();
+
+        update.set("dadosSociais", alunoEncontrado.getDadosSociais());
+        update.set("endereco", alunoEncontrado.getEndereco());
+        update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
+        update.set("nome", alunoEncontrado.getNome());
+        update.set("dataNascimento", alunoEncontrado.getDataNascimento());
+        update.set("genero", alunoEncontrado.getGenero());
+
+        this.mongoTemplate.updateFirst(query, update, Aluno.class);
+
+        return "Aluno editado com sucesso!";
+    }
+
     @Cacheable(value = "aluno", key = "#rg")
-    protected Aluno encontrarAlunoPorRg(String rgAluno) {
+    public Aluno encontrarAlunoPorRg(String rgAluno) {
         return alunoRepositorio.findByRg(rgAluno)
                 .orElseThrow(() -> new EntityNotFoundException("Rg: " + rgAluno + " não encontrado"));
     }
@@ -286,7 +322,7 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     protected Falta encontrarFaltasDoAluno(Aluno aluno, String faltasId) {
-        Optional<Falta> faltaEncontrada = aluno.getGraduacao().getFaltas().stream()
+        Optional<Falta> faltaEncontrada = aluno.getGraduacao().get(0).getFaltas().stream()
                 .filter(falta -> falta.getData().equals(faltasId)).findFirst();
 
         return faltaEncontrada
@@ -297,11 +333,12 @@ public class AlunoServices implements AlunoServicesInterface {
 
         String dataFormatada = new SimpleDateFormat(DATA_FORMATO).format(data);
 
-        if (aluno.getGraduacao().getFaltas().isEmpty()) {
+        if (aluno.getGraduacao().get(0).getFaltas().isEmpty()) {
             return false;
         }
 
-        return aluno.getGraduacao().getFaltas().stream().anyMatch(falta -> falta.getData().equals(dataFormatada));
+        return aluno.getGraduacao().get(0).getFaltas().stream()
+                .anyMatch(falta -> falta.getData().equals(dataFormatada));
     }
 
     protected void mudarStatusGraduacaoAluno(Aluno aluno, boolean status) {
@@ -311,43 +348,58 @@ public class AlunoServices implements AlunoServicesInterface {
         mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
+    protected void mudarCargaHorariaAluno(Aluno aluno) {
+        int cargaHoraria = definirCargaHorariaAluno(aluno.getGraduacao().get(0).getCargaHoraria());
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update().set("graduacao.cargaHoraria", cargaHoraria);
+        mongoTemplate.updateFirst(query, update, Aluno.class);
+    }
+
+    protected void mudarFrequenciaAluno(Aluno aluno) {
+        int frequencia = definirFrequenciaAluno(aluno.getGraduacao().get(0).getFrequencia());
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update().set("graduacao.frequencia", frequencia);
+        mongoTemplate.updateFirst(query, update, Aluno.class);
+    }
+
+    protected int definirCargaHorariaAluno(int cargaHorariaAtual) {
+        return cargaHorariaAtual + 3;
+    }
+
+    protected int definirFrequenciaAluno(int frequenciaAtual) {
+        return frequenciaAtual + 1;
+    }
+
     @Override
-    public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest) {
+    public GraduacaoDTOResponse finalizarGraduacao(String rg) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
-
-        // Dados Escolares
-        DadosEscolares dadosEscolares = DadosEscolaresMapper.setDadosEscolares(updateAlunoDTORequest.dadosEscolares(),
-                alunoEncontrado);
-        // Endereco
-        Endereco endereco = EnderecoMapper.setEndereco(updateAlunoDTORequest.endereco(), alunoEncontrado);
-        // Graduacao
-        Graduacao graduacao = GraduacaoMapper.setGraduacao(updateAlunoDTORequest.graduacao(), alunoEncontrado);
-        // Dados Sociais
-        DadosSociais dadosSociais = DadosSociaisMapper.setDadosSociais(updateAlunoDTORequest.dadosSociais(),
-                alunoEncontrado);
-
-        alunoEncontrado.setNome(updateAlunoDTORequest.nome());
-        alunoEncontrado.setDataNascimento(updateAlunoDTORequest.dataNascimento());
-        alunoEncontrado.setGenero(updateAlunoDTORequest.genero());
-        alunoEncontrado.setDadosSociais(dadosSociais);
-        alunoEncontrado.setEndereco(endereco);
-        alunoEncontrado.setGraduacao(graduacao);
-        alunoEncontrado.setDadosEscolares(dadosEscolares);
-
+        Graduacao graduacaoAtual = alunoEncontrado.getGraduacao().get(alunoEncontrado.getGraduacao().size() - 1);
+        graduacaoAtual.aprovacao();
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
         Update update = new Update();
-
-        update.set("dadosSociais", alunoEncontrado.getDadosSociais());
-        update.set("endereco", alunoEncontrado.getEndereco());
         update.set("graduacao", alunoEncontrado.getGraduacao());
-        update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
-        update.set("nome", alunoEncontrado.getNome());
-        update.set("dataNascimento", alunoEncontrado.getDataNascimento());
-        update.set("genero", alunoEncontrado.getGenero());
-
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
 
-        return "Aluno editado com sucesso!";
+        adicionarNovaGraduacao(alunoEncontrado.getRg(), graduacaoAtual.getKyu() - 1, graduacaoAtual.getDan());
+
+        return GraduacaoMapper.mapToGraduacaoDTOResponse(
+                alunoEncontrado.getGraduacao().get(alunoEncontrado.getGraduacao().size() - 1));
+    }
+
+    public void adicionarNovaGraduacao(String rg, int kyu, int danAtual) {
+        Graduacao novaGraduacao = new Graduacao(kyu);
+
+        if (kyu <= 1) {
+            novaGraduacao.setDan(danAtual + 1);
+        }
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(rg));
+        Update update = new Update();
+        update.addToSet("graduacao", novaGraduacao);
+        this.mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 }
