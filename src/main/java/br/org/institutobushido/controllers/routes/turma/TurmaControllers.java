@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.services.turma.TurmaServiceInterface;
+import jakarta.validation.Valid;
 
 @RestController(value = "turma")
 @RequestMapping("api/V1/turma")
@@ -23,7 +24,7 @@ public class TurmaControllers {
     }
 
     @PostMapping
-    public ResponseEntity<SuccessPostResponse> criarNovaTurma(@RequestBody TurmaDTORequest turmaDTORequest) {
+    public ResponseEntity<SuccessPostResponse> criarNovaTurma(@Valid() @RequestBody TurmaDTORequest turmaDTORequest) {
         this.turmaService.criarNovaTurma(turmaDTORequest);
         return ResponseEntity.ok().body(new SuccessPostResponse("nova turma criada", "Turmas encontradas", "Turma"));
     }

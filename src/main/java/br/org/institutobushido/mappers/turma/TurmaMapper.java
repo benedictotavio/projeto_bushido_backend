@@ -8,8 +8,9 @@ public class TurmaMapper {
         if (turmaDTORequest == null) {
             return null;
         }
-        return new Turma(turmaDTORequest.nome(), turmaDTORequest.tutor(), turmaDTORequest.endereco());
+        return new Turma(turmaDTORequest.endereco(), turmaDTORequest.nome(), turmaDTORequest.tutor());
     }
 
-    private TurmaMapper() {}
+    private TurmaMapper() {
+    }
 }

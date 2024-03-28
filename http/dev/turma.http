@@ -7,5 +7,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-
+    "nome":"Fundão I",
+    "endereco": "Rua Almir Juca",
+    "tutor": "Luiz Roberto"
 }
