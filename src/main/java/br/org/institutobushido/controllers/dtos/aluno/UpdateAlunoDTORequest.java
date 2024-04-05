@@ -9,12 +9,11 @@ import br.org.institutobushido.controllers.dtos.aluno.graduacao.UpdateGraduacaoD
 import br.org.institutobushido.enums.aluno.Genero;
 
 public record UpdateAlunoDTORequest(
-    String nome,
-    Date dataNascimento,
-    Genero genero,
-    UpdateDadosSociaisDTORequest dadosSociais,
-    UpdateDadosEscolaresDTORequest dadosEscolares,
-    UpdateEnderecoDTORequest endereco,
-    UpdateGraduacaoDTORequest graduacao
-) {
+        String nome,
+        Date dataNascimento,
+        Genero genero,
+        UpdateDadosSociaisDTORequest dadosSociais,
+        UpdateDadosEscolaresDTORequest dadosEscolares,
+        UpdateEnderecoDTORequest endereco,
+        UpdateGraduacaoDTORequest graduacao) {
 }

@@ -19,12 +19,11 @@ import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.mappers.aluno.AlunoMapper;
 import br.org.institutobushido.mappers.aluno.DadosEscolaresMapper;
 import br.org.institutobushido.mappers.aluno.DadosSociaisMapper;
 import br.org.institutobushido.mappers.aluno.EnderecoMapper;
 import br.org.institutobushido.mappers.aluno.GraduacaoMapper;
-import br.org.institutobushido.mappers.aluno.HistoricoSaudeMapper;
-import br.org.institutobushido.mappers.aluno.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
@@ -62,55 +61,18 @@ public class AlunoServices implements AlunoServicesInterface {
             throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
         }
 
-        Aluno aluno = new Aluno(alunoDTORequest.rg());
-        aluno.setGenero(alunoDTORequest.genero());
-        aluno.setDataNascimento(alunoDTORequest.dataNascimento());
-        aluno.setNome(alunoDTORequest.nome());
-        aluno.addGraduacao(new Graduacao(alunoDTORequest.graduacao().kyu()));
-        aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
-        aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
-        aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
-        aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
-        aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));
+        Aluno novoAlunoRequest = AlunoMapper.mapToAluno(alunoDTORequest);
 
-        Aluno novoAluno = alunoRepositorio.save(aluno);
+        Aluno novoAluno = alunoRepositorio.save(novoAlunoRequest);
 
-        return AlunoDTOResponse.builder()
-                .withNome(novoAluno.getNome())
-                .withGenero(novoAluno.getGenero())
-                .withDataNascimento(novoAluno.getDataNascimento())
-                .withDataPreenchimento(novoAluno.getDataPreenchimento())
-                .withRg(novoAluno.getRg())
-                .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(novoAluno.getResponsaveis()))
-                .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(novoAluno.getEndereco()))
-                .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(novoAluno.getDadosSociais()))
-                .withDadosEscolares(
-                        DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(novoAluno.getDadosEscolares()))
-                .withGraduacao(GraduacaoMapper.mapToListGraduacaoDTOResponse(novoAluno.getGraduacao()))
-                .withHistoricoSaude(
-                        HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(novoAluno.getHistoricoSaude()))
-                .build();
+        return AlunoMapper.mapToAlunoDTOResponse(novoAluno);
     }
 
     @Override
     public AlunoDTOResponse buscarAluno(String rg) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
 
-        return AlunoDTOResponse.builder()
-                .withNome(alunoEncontrado.getNome())
-                .withGenero(alunoEncontrado.getGenero())
-                .withDataNascimento(alunoEncontrado.getDataNascimento())
-                .withDadosSociais(DadosSociaisMapper.mapToDadosSociaisDTOResponse(alunoEncontrado.getDadosSociais()))
-                .withDataPreenchimento(alunoEncontrado.getDataPreenchimento())
-                .withRg(alunoEncontrado.getRg())
-                .withResponsaveis(ResponsavelMapper.mapToResponsaveisDTOResponse(alunoEncontrado.getResponsaveis()))
-                .withEndereco(EnderecoMapper.mapToEnderecoDTOResponse(alunoEncontrado.getEndereco()))
-                .withDadosEscolares(
-                        DadosEscolaresMapper.mapToDadosEscolaresDTOResponse(alunoEncontrado.getDadosEscolares()))
-                .withGraduacao(GraduacaoMapper.mapToListGraduacaoDTOResponse(alunoEncontrado.getGraduacao()))
-                .withHistoricoSaude(
-                        HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(alunoEncontrado.getHistoricoSaude()))
-                .build();
+        return AlunoMapper.mapToAlunoDTOResponse(alunoEncontrado);
     }
 
     @Override

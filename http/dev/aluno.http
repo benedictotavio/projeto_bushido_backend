@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMTY2MjUzM30.Hje2AR-ZkeJjn_CSOf5rxFn_Aq_yXEUBlnw4rdK-9Ug
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjI5MDg5OH0.TulY9-OSl2ZHmY4HAwEH2pcvNVHH1b3XOhU-FJ7mNg8
 @rg=123456789
 
 GET {{url}}?rg={{rg}} HTTP/1.1
@@ -14,6 +14,7 @@ Authorization: Bearer {{token}}
   "sobrenome": "a zé do pipo",
   "genero": "M",
   "dataNascimento": "2020-03-20",
+  "turma":"Fundao I",
   "dadosSociais": {
     "bolsaFamilia": true,
     "auxilioBrasil": true,

@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/turma
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMTY3NDEwMn0.wO6jzdl9zUUY5v0Hcwe2RPACJyXU4QYfKBycrS388IQ
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjI3NjQ1M30.1s15DkZELB_zwc1tFfksbQ63VvndAVP_gp25Ve68oEo
 @rg=123456789
 
 POST {{url}} HTTP/1.1
@@ -11,3 +11,23 @@ Authorization: Bearer {{token}}
     "endereco": "Rua Almir Juca",
     "tutor": "Luiz Roberto"
 }
+
+###
+DELETE {{url}}/ HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+POST {{url}}/aluno/Fundão I HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nome": "nicolas souza",
+  "genero": "M",
+  "dataNascimento": "2008-05-08",
+  "rg":"165787777"
+}
+
+###
+GET {{url}} HTTP/1.1
+Authorization: Bearer {{token}}
