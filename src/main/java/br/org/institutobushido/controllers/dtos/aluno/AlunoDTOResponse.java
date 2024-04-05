@@ -23,6 +23,6 @@ public record AlunoDTOResponse(
                 EnderecoDTOResponse endereco,
                 String rg,
                 List<ResponsavelDTOResponse> responsaveis,
-                GraduacaoDTOResponse graduacao,
+                List<GraduacaoDTOResponse> graduacao,
                 HistoricoSaudeDTOResponse historicoSaude) {
 }

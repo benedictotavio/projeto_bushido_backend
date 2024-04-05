@@ -3,10 +3,10 @@ package br.org.institutobushido.services.aluno;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.model.aluno.historico_de_saude.HistoricoSaude;
 
 public interface AlunoServicesInterface {
     AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest);
@@ -31,8 +31,9 @@ public interface AlunoServicesInterface {
 
     public String removerAcompanhamentoSaude(String rg, String acompanhamentoSaude);
 
-    public Object editarHistoricoDeSaude(String rg, String campo, String historicoDeSaude, boolean resposta);
+    public GraduacaoDTOResponse aprovarAluno(String rg);
 
-    // TODO: Criar serviço para retornar historico de graduacao em um array
-    // public List<GraduacaoDTOResponse> historicoGraduacaoAluno(String rgAluno);
+    public GraduacaoDTOResponse reprovarAluno(String rg);
+
+    public Object editarHistoricoDeSaude(String rg, String campo, String historicoDeSaude, boolean resposta);
 }

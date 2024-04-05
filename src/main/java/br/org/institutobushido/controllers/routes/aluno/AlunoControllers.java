@@ -4,6 +4,8 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +30,9 @@ import br.org.institutobushido.controllers.response.success.SuccessDeleteRespons
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPutResponse;
 import br.org.institutobushido.model.aluno.Aluno;
+import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
+import br.org.institutobushido.model.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.services.aluno.AlunoServicesInterface;
 import jakarta.validation.Valid;
@@ -105,7 +109,8 @@ public class AlunoControllers {
         public ResponseEntity<SuccessPostResponse> adicionarDeficiencia(@PathVariable String rg,
                         @RequestParam(name = "deficiencia") String deficiencia) {
                 String res = alunoServices.adicionarDeficiencia(rg, deficiencia);
-                return ResponseEntity.ok().body(new SuccessPostResponse(res, "Deficiência adicionada"));
+                return ResponseEntity.ok().body(new SuccessPostResponse(res, "Deficiência adicionada",
+                                HistoricoSaude.class.getSimpleName()));
         }
 
         @DeleteMapping("deficiencia/{rg}")
@@ -114,7 +119,8 @@ public class AlunoControllers {
                 String res = alunoServices.removerDeficiencia(rg, deficiencia);
                 return ResponseEntity.ok()
                                 .body(new SuccessDeleteResponse(res,
-                                                "Deficiência " + deficiencia + " foi removida com sucesso."));
+                                                "Deficiência " + deficiencia + " foi removida com sucesso.",
+                                                HistoricoSaude.class.getSimpleName()));
         }
 
         @PostMapping("acompanhamentoSaude/{rg}")
@@ -123,7 +129,24 @@ public class AlunoControllers {
                 String res = alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamento);
                 return ResponseEntity.ok()
                                 .body(new SuccessPostResponse(res,
-                                                "Acompanhamento " + acompanhamento + " foi adicionado com sucesso."));
+                                                "Acompanhamento " + acompanhamento + " foi adicionado com sucesso.",
+                                                HistoricoSaude.class.getSimpleName()));
+        }
+
+        @PostMapping("graduacao/{rg}/aprovar")
+        public ResponseEntity<SuccessPostResponse> aprovarAluno(@PathVariable String rg) {
+                GraduacaoDTOResponse res = alunoServices.aprovarAluno(rg);
+                return ResponseEntity.ok()
+                                .body(new SuccessPostResponse(String.valueOf(res.kyu()),
+                                                "Graduação concluída com sucesso.", Graduacao.class.getSimpleName()));
+        }
+
+        @PostMapping("graduacao/{rg}/reprovar")
+        public ResponseEntity<SuccessPostResponse> reprovarAluno(@PathVariable String rg) {
+                GraduacaoDTOResponse res = alunoServices.reprovarAluno(rg);
+                return ResponseEntity.ok()
+                                .body(new SuccessPostResponse(String.valueOf(res.kyu()),
+                                                "Graduação concluída com sucesso.", Graduacao.class.getSimpleName()));
         }
 
         @DeleteMapping("acompanhamentoSaude/{rg}")

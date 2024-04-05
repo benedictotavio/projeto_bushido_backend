@@ -15,13 +15,9 @@ import br.org.institutobushido.model.aluno.endereco.Endereco;
 import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 import br.org.institutobushido.model.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Document(collection = "alunos")
 public class Aluno implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
@@ -34,14 +30,24 @@ public class Aluno implements Serializable {
     private String rg;
 
     private DadosEscolares dadosEscolares;
-    private Date dataPreenchimento = new Date();
+    private Date dataPreenchimento;
     private Endereco endereco;
     private DadosSociais dadosSociais;
     private List<Responsavel> responsaveis = new ArrayList<>();
-    private Graduacao graduacao;
+    private List<Graduacao> graduacao;
     private HistoricoSaude historicoSaude;
 
-    public void setRg(String rg) {
+    public Aluno(String rg) {
+        this.graduacao = new ArrayList<>();
+        this.historicoSaude = new HistoricoSaude();
+        this.dadosEscolares = new DadosEscolares();
+        this.dadosSociais = new DadosSociais();
+        this.endereco = new Endereco();
+        this.responsaveis = new ArrayList<>();
+        this.dataPreenchimento = new Date();
+        this.nome = "";
+        this.dataNascimento = new Date();
+        this.genero = Genero.OUTRO;
         this.rg = rg;
     }
 
@@ -97,11 +103,11 @@ public class Aluno implements Serializable {
         this.dadosSociais = dadosSociais;
     }
 
-    public void setGraduacao(Graduacao graduacao) {
+    public void addGraduacao(Graduacao graduacao) {
         if (graduacao == null) {
             return;
         }
-        this.graduacao = graduacao;
+        this.graduacao.add(graduacao);
     }
 
     public void setHistoricoSaude(HistoricoSaude historicoSaude) {

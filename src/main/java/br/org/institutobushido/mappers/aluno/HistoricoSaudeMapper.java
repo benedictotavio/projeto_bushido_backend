@@ -1,4 +1,4 @@
-package br.org.institutobushido.mappers;
+package br.org.institutobushido.mappers.aluno;
 
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.HistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.HistoricoSaudeDTOResponse;

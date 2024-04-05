@@ -111,7 +111,7 @@ public class ResourceExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleSecurityException(Exception e) {
-
+        
         if (e instanceof BadCredentialsException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), e.getMessage());
             problem.setTitle("Erro de Autenticação");
