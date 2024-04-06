@@ -66,6 +66,10 @@ public class Graduacao implements Serializable {
         this.frequencia = frequencia;
     }
 
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     public void setCargaHoraria(int cargaHoraria) {
         if (cargaHoraria < 0) {
             throw new LimitQuantityException("A carga horária deve ser maior que zero");
@@ -92,6 +96,7 @@ public class Graduacao implements Serializable {
 
     public void aprovacao() {
         this.fimGraduacao = LocalDate.now();
+        setStatus(false);
         setAprovado(true);
         setCargaHoraria(definirCargaHoraria());
         setFrequencia(definirFrequencia());
@@ -99,6 +104,7 @@ public class Graduacao implements Serializable {
 
     public void reprovacao() {
         this.fimGraduacao = LocalDate.now();
+        setStatus(false);
         setAprovado(false);
         setCargaHoraria(definirCargaHoraria());
         setFrequencia(definirFrequencia());

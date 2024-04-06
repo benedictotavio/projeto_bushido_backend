@@ -162,12 +162,14 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
         int graduacaoAtual = aluno.getGraduacao().size();
         Falta faltasDoAluno = encontrarFaltasDoAluno(aluno, faltasId);
+
         if (aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).getFaltas().size() == 5) {
             mudarStatusGraduacaoAluno(aluno, true);
         }
+
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(GRADUACAO + (graduacaoAtual - 1) + ".faltas", faltasDoAluno);
+        Update update = new Update().pull(GRADUACAO + "." +(graduacaoAtual - 1) + ".faltas", faltasDoAluno);
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return String.valueOf(aluno.getGraduacao().get(0).getFaltas().size() - 1);
     }
@@ -255,9 +257,6 @@ public class AlunoServices implements AlunoServicesInterface {
         DadosSociais dadosSociais = DadosSociaisMapper.setDadosSociais(updateAlunoDTORequest.dadosSociais(),
                 alunoEncontrado);
 
-        alunoEncontrado.setNome(updateAlunoDTORequest.nome());
-        alunoEncontrado.setDataNascimento(updateAlunoDTORequest.dataNascimento());
-        alunoEncontrado.setGenero(updateAlunoDTORequest.genero());
         alunoEncontrado.setDadosSociais(dadosSociais);
         alunoEncontrado.setEndereco(endereco);
         alunoEncontrado.setDadosEscolares(dadosEscolares);
@@ -269,9 +268,6 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set("dadosSociais", alunoEncontrado.getDadosSociais());
         update.set("endereco", alunoEncontrado.getEndereco());
         update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
-        update.set("nome", alunoEncontrado.getNome());
-        update.set("dataNascimento", alunoEncontrado.getDataNascimento());
-        update.set("genero", alunoEncontrado.getGenero());
 
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
 

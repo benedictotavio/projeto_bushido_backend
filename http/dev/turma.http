@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/turma
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjI3NjQ1M30.1s15DkZELB_zwc1tFfksbQ63VvndAVP_gp25Ve68oEo
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjM2OTM0Nn0.uubMaZqNadXe97TAlYdQAqeriL9L2xyhyWNmhxqNuwg
 @rg=123456789
 
 POST {{url}} HTTP/1.1
@@ -13,7 +13,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-DELETE {{url}}/ HTTP/1.1
+DELETE {{url}}/Fundão I HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
@@ -30,4 +30,8 @@ Authorization: Bearer {{token}}
 
 ###
 GET {{url}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+GET {{url}}/Fundão I HTTP/1.1
 Authorization: Bearer {{token}}
