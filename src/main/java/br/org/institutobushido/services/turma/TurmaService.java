@@ -69,6 +69,11 @@ public class TurmaService implements TurmaServiceInterface {
         return TurmaMapper.mapToListTurmaDTOResponse(turmas);
     }
 
+    @Override
+    public TurmaDTOResponse buscarTurmaPorNome(String nomeTurma) { 
+        return TurmaMapper.mapToTurmaDTOResponse(this.encontrarTurmaPeloNome(nomeTurma));
+    }
+
     private boolean verificaSeTurmaExiste(String nomeTurma) {
         return this.turmaRepositorio.findByNome(nomeTurma).isPresent();
     }

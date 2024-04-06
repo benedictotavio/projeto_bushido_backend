@@ -32,8 +32,7 @@ public class AlunoMapper {
                 aluno.getNome(),
                 aluno.getDataNascimento().toString(),
                 aluno.getGenero(),
-                aluno.getRg(),
-                aluno.getDataPreenchimento().toString());
+                aluno.getRg());
     }
 
     public static AlunoDTORequest mapToAlunoDTORequest(Aluno aluno) {

@@ -1,6 +1,6 @@
 package br.org.institutobushido.model.turma;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import br.org.institutobushido.enums.aluno.Genero;
 import lombok.Getter;
@@ -8,16 +8,14 @@ import lombok.Getter;
 @Getter
 public class Aluno {
     private String nome;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private Genero genero;
     private String rg;
-    private Date dataPreenchimento;
 
-    public Aluno(String rg, String nome, Date dataNascimento, Genero genero) {
+    public Aluno(String rg, String nome, LocalDate dataNascimento, Genero genero) {
         this.rg = rg;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.genero = genero;
-        this.dataPreenchimento = new Date();
     }
 }

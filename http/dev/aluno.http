@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjI5MDg5OH0.TulY9-OSl2ZHmY4HAwEH2pcvNVHH1b3XOhU-FJ7mNg8
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjM2NTU5NX0.lbVtKnFLm4nGu8cgFihrcKqGkBoECYzTHwC6FVFikxY
 @rg=123456789
 
 GET {{url}}?rg={{rg}} HTTP/1.1
@@ -83,7 +83,7 @@ Authorization: Bearer {{token}}
   "observacao":"luis trouxe atestado"
 }
 ###
-DELETE {{url}}/falta/{{rg}}?data=22-07-2021 HTTP/1.1
+DELETE {{url}}/falta/{{rg}}?data=23-03-2024 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
@@ -116,7 +116,7 @@ DELETE {{url}}/responsavel/{{rg}}?cpf=45916466880 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}}/deficiencia/123456789?deficiencia=fff HTTP/1.1
-Authorization: Bearer {{token}}
+Authorization: Bearer {{token}}'aluno'
 ###
 DELETE {{url}}/deficiencia/123456789?deficiencia=amidalite HTTP/1.1
 Authorization: Bearer {{token}}

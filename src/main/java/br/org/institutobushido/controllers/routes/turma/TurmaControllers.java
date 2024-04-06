@@ -59,4 +59,10 @@ public class TurmaControllers {
         return ResponseEntity.ok().body(turmas);
     }
 
+    @GetMapping("{nomeTurma}")
+    public ResponseEntity<TurmaDTOResponse> buscarTurmaPorNome(@PathVariable String nomeTurma) {
+        var turma = this.turmaService.buscarTurmaPorNome(nomeTurma);
+        return ResponseEntity.ok().body(turma);
+    }
+
 }
