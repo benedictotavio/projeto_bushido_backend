@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjUxNTg4NH0.0ofMBukiG90aBavIfPHHtPEvuZvm62yNhOeD9meohnU
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjUyMjg0N30.bSC8sgj6Ntv7XfEIa00SIwtXDjyH17JaMcSEDLNHb4M
 @rg=123456789
 
 GET {{url}}?nome=Zé HTTP/1.1
@@ -110,7 +110,7 @@ Authorization: Bearer {{token}}
   "nome": "Teste",
   "cpf": "45202055636",
   "telefone": "11999999999",
-  "filiacao": "OUTRO"
+  "filiacao": "PAI"
 }
 
 ###

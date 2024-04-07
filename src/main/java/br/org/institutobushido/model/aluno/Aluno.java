@@ -125,13 +125,12 @@ public class Aluno implements Serializable {
                     "O responsavel com o cpf " + novoResponsavel.getCpf() + " ja esta cadastrado!");
         }
 
-        if (novoResponsavel.getFiliacao() == FiliacaoResposavel.PAI
-                || novoResponsavel.getFiliacao() == FiliacaoResposavel.MAE) {
-            for (Responsavel responsavel : this.getResponsaveis()) {
-                if (responsavel.getFiliacao() == FiliacaoResposavel.PAI
-                        || responsavel.getFiliacao() == FiliacaoResposavel.MAE) {
-                    throw new LimitQuantityException("O responsavel deve ter apenas um pai ou uma mae");
-                }
+        if (novoResponsavel.getFiliacao() != FiliacaoResposavel.OUTRO) {
+            boolean responsavelJaCadastrado = this.getResponsaveis().stream().anyMatch(
+                    responsavel -> responsavel.getFiliacao().equals(novoResponsavel.getFiliacao()));
+            if (responsavelJaCadastrado) {
+                throw new LimitQuantityException(
+                        "O Aluno so pode ter um responsavel com a filiacao " + novoResponsavel.getFiliacao());
             }
         }
 
