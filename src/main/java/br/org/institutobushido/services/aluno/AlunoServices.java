@@ -82,7 +82,8 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        Responsavel novoResponsavel = aluno.adicionarResponsavel(ResponsavelMapper.mapToResponsavel(responsavelDTORequest));
+        Responsavel novoResponsavel = aluno
+                .adicionarResponsavel(ResponsavelMapper.mapToResponsavel(responsavelDTORequest));
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
@@ -113,57 +114,37 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String adicionarFaltaDoAluno(String rg, FaltaDTORequest falta, long dataFalta) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        int graduacaoAtual = aluno.getGraduacao().size();
+        int graduacaoAtual = aluno.getGraduacao().size() - 1;
+        Falta novaFalta = aluno.getGraduacao().get(graduacaoAtual).adicionarFalta(falta.motivo(), falta.observacao(),
+                dataFalta);
 
-        if (!aluno.getGraduacao().get(graduacaoAtual - 1).isStatus()) {
-            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
-        }
-
-        if (dataFalta > new Date().getTime()) {
-            throw new LimitQuantityException("A data deve ser menor ou igual a data atual");
-        }
-
-        if (dataFalta < aluno.getGraduacao().get(graduacaoAtual - 1).getInicioGraduacao().atStartOfDay()
-                .toInstant(ZoneOffset.UTC).toEpochMilli()) {
-            throw new LimitQuantityException("A data deve ser maior ou igual a data de inicio da graduacao");
-        }
-
-        boolean faltasDoAluno = checarSeFaltaEstaRegistrada(aluno, new Date(dataFalta));
-
-        if (faltasDoAluno) {
-            throw new AlreadyRegisteredException("Ja existe um registro de falta nessa data");
-        }
-
-        Falta novaFalta = new Falta();
-
-        novaFalta.setData(new SimpleDateFormat(DATA_FORMATO).format(new Date(dataFalta)));
-        novaFalta.setMotivo(falta.motivo());
-        novaFalta.setObservacao(falta.observacao());
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().addToSet(GRADUACAO + "." + (graduacaoAtual - 1) + ".faltas", novaFalta);
+        Update update = new Update().addToSet(GRADUACAO + "." + (graduacaoAtual) + ".faltas", novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
 
         if (aluno.getGraduacao().get(0).getFaltas().size() == 4) {
             mudarStatusGraduacaoAluno(aluno, false);
         }
 
-        return String.valueOf(aluno.getGraduacao().get(graduacaoAtual - 1).getFaltas().size() + 1);
+        return String.valueOf(aluno.getGraduacao().get(graduacaoAtual).getFaltas().size());
     }
 
     @Override
     public String retirarFaltaDoAluno(String rg, String faltasId) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        int graduacaoAtual = aluno.getGraduacao().size();
-        Falta faltasDoAluno = encontrarFaltasDoAluno(aluno, faltasId);
+        int graduacaoAtual = aluno.getGraduacao().size() - 1;
+        Falta faltaDoAluno = aluno.getGraduacao().get(graduacaoAtual).removerFalta(faltasId);
 
-        if (aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).getFaltas().size() == 5) {
+        if (aluno.getGraduacao().get(aluno.getGraduacao().size() -
+                1).getFaltas().size() == 5) {
             mudarStatusGraduacaoAluno(aluno, true);
         }
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(GRADUACAO + "." + (graduacaoAtual - 1) + ".faltas", faltasDoAluno);
+        Update update = new Update().pull(GRADUACAO + "." + (graduacaoAtual) +
+                ".faltas", faltaDoAluno);
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return String.valueOf(aluno.getGraduacao().get(0).getFaltas().size() - 1);
     }
@@ -308,28 +289,6 @@ public class AlunoServices implements AlunoServicesInterface {
                 .orElseThrow(() -> new EntityNotFoundException("Rg: " + rgAluno + " não encontrado"));
     }
 
-    protected Falta encontrarFaltasDoAluno(Aluno aluno, String faltasId) {
-        Optional<Falta> faltaEncontrada = aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).getFaltas().stream()
-                .filter(falta -> falta.getData().equals(faltasId)).findFirst();
-
-        return faltaEncontrada
-                .orElseThrow(() -> new EntityNotFoundException("Falta com id " + faltasId + " não foi encontrada."));
-    }
-
-    protected boolean checarSeFaltaEstaRegistrada(Aluno aluno, Date data) {
-
-        int graduacaoAtual = aluno.getGraduacao().size();
-
-        String dataFormatada = new SimpleDateFormat(DATA_FORMATO).format(data);
-
-        if (aluno.getGraduacao().get(graduacaoAtual - 1).getFaltas().isEmpty()) {
-            return false;
-        }
-
-        return aluno.getGraduacao().get(graduacaoAtual - 1).getFaltas().stream()
-                .anyMatch(falta -> falta.getData().equals(dataFormatada));
-    }
-
     protected void mudarStatusGraduacaoAluno(Aluno aluno, boolean status) {
         int graduacaoAtual = aluno.getGraduacao().size();
         Query query = new Query();
@@ -351,6 +310,7 @@ public class AlunoServices implements AlunoServicesInterface {
         update.addToSet(GRADUACAO, novaGraduacao);
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
     }
+
     private void editarHistoricoDeSaude(UpdateHistoricoSaudeDTORequest updateHistoricoSaudeDTORequest, Aluno aluno) {
 
         aluno.getHistoricoSaude().setFatorRh(
