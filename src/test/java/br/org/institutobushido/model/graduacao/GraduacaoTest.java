@@ -46,13 +46,9 @@ class GraduacaoTest {
     void deveDefinirFrequenciaCom6Faltas() {
         graduacao.setInicioGraduacao(LocalDate.now().minusMonths(2));
         graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime());
-        graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime());
-        graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime());
-        graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime());
-        graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime());
-        graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime());
+        graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime() - 1000 * 60 * 60 * 24 * 4);
         graduacao.aprovacao();
-        assertEquals(75, graduacao.getFrequencia());
+        assertEquals(91, graduacao.getFrequencia());
     }
 
 }
