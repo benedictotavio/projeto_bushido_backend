@@ -6,8 +6,15 @@ public abstract class InformacaoSaude {
 
     protected InformacaoSaude() {}
 
-    protected InformacaoSaude(boolean resposta, String tipo) {
-        this.resposta = resposta;
+    protected InformacaoSaude(String tipo) {
+        
+        if (tipo == null || tipo.isEmpty() || tipo.isBlank()) {
+            this.tipo = "";
+            this.resposta = false;
+            return;
+        }
+
+        this.resposta = true;
         this.tipo = tipo;
     }
 

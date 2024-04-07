@@ -1,10 +1,6 @@
 package br.org.institutobushido.controllers.routes.aluno;
 
 import java.net.URI;
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,14 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import br.org.institutobushido.abstracts.InformacoesSaudeImpl;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.controllers.response.error.StandardError;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPutResponse;
@@ -159,36 +154,9 @@ public class AlunoControllers {
         }
 
         @PutMapping("historicoSaude/{rg}")
-        public ResponseEntity<Object> adicionarHistoricoDeSaude(@PathVariable String rg,
-                        @RequestBody Map.Entry<String, InformacoesSaudeImpl> object) {
-
-                URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-
-                List<String> listaHistoricoSaude = List.of("alergia", "cirurgia", "usoMedicamentoContinuo",
-                                "doencaCronica");
-
-                if (!listaHistoricoSaude.contains(object.getKey())) {
-                        return ResponseEntity.badRequest().body(new StandardError(Instant.now(), 400, "Bad Request",
-                                        "Propriedade " + object.getKey()
-                                                        + " inexistente. Siga as propriedades permitidas: "
-                                                        + listaHistoricoSaude.toString(),
-                                        location.getPath()));
-                }
-
-                if (!object.getValue().getResposta()) {
-                        Object res = alunoServices.editarHistoricoDeSaude(rg, object.getKey(), "", false);
-                        return ResponseEntity.ok().body(res);
-                }
-
-                if (object.getValue().getTipo().equals("")) {
-                        Object res = alunoServices.editarHistoricoDeSaude(rg, object.getKey(), "",
-                                        false);
-                        return ResponseEntity.ok().body(res);
-                }
-
-                Object res = alunoServices.editarHistoricoDeSaude(rg, object.getKey(),
-                                object.getValue().getTipo(),
-                                true);
-                return ResponseEntity.ok().body(res);
+        public ResponseEntity<SuccessPutResponse> editarHistoricoDeSaude(@PathVariable String rg,
+                        @RequestBody UpdateHistoricoSaudeDTORequest object) {
+                String res = alunoServices.editarHistoricoDeSaude(rg, object);
+                return ResponseEntity.ok().body(new SuccessPutResponse(rg, res, HistoricoSaude.class.getSimpleName()));
         }
 }

@@ -13,6 +13,8 @@ public interface TurmaServiceInterface {
 
     void adicionarAlunoATurma(String nomeTurma, AlunoDTORequest aluno);
 
+    void removerAlunoDaTurma(String nomeTurma, String rg);
+
     List<TurmaDTOResponse> listarTurmas();
 
     TurmaDTOResponse buscarTurmaPorNome(String nomeTurma);

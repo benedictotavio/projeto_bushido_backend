@@ -8,7 +8,7 @@ public class UsoMedicamentoContinuo extends InformacaoSaude implements Serializa
 
     private static final long serialVersionUID = 2405172041950251807L;
 
-    public UsoMedicamentoContinuo(boolean resposta, String tipo) {
-        super(resposta, tipo);
+    public UsoMedicamentoContinuo(String tipo) {
+        super(tipo);
     }
 }

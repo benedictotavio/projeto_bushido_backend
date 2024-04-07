@@ -22,23 +22,19 @@ public class HistoricoSaudeMapper {
                         return null;
                 }
 
-                HistoricoSaude historicoSaude = new HistoricoSaude();
-
-                historicoSaude.setTipoSanguineo(historicoSaudeDTORequest.tipoSanguineo());
-                historicoSaude.setFatorRh(historicoSaudeDTORequest.fatorRh());
-                historicoSaude.setAlergia(
-                                new Alergia(historicoSaudeDTORequest.alergia().resposta(),
-                                                historicoSaudeDTORequest.alergia().tipo()));
-                historicoSaude.setCirurgia(new Cirurgia(historicoSaudeDTORequest.cirurgia().resposta(),
-                                historicoSaudeDTORequest.cirurgia().tipo()));
-                historicoSaude.setDoencaCronica(new DoencaCronica(historicoSaudeDTORequest.doencaCronica().resposta(),
-                                historicoSaudeDTORequest.doencaCronica().tipo()));
-                historicoSaude.setUsoMedicamentoContinuo(new UsoMedicamentoContinuo(
-                                historicoSaudeDTORequest.usoMedicamentoContinuo().resposta(),
-                                historicoSaudeDTORequest.usoMedicamentoContinuo().tipo()));
-                historicoSaude.setDeficiencias(historicoSaudeDTORequest.deficiencia());
-                historicoSaude.setAcompanhamentoSaude(historicoSaudeDTORequest.acompanhamentoSaude());
-                return historicoSaude;
+                return new HistoricoSaude(
+                                historicoSaudeDTORequest.tipoSanguineo(),
+                                historicoSaudeDTORequest.fatorRh(),
+                                new UsoMedicamentoContinuo(
+                                                historicoSaudeDTORequest.usoMedicamentoContinuo().tipo()),
+                                new DoencaCronica(
+                                                historicoSaudeDTORequest.doencaCronica().tipo()),
+                                new Alergia(
+                                                historicoSaudeDTORequest.alergia().tipo()),
+                                new Cirurgia(
+                                                historicoSaudeDTORequest.cirurgia().tipo()),
+                                historicoSaudeDTORequest.deficiencia(),
+                                historicoSaudeDTORequest.acompanhamentoSaude());
         }
 
         public static HistoricoSaudeDTOResponse mapToHistoricoSaudeDTOResponse(HistoricoSaude historicoSaude) {

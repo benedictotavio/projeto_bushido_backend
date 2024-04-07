@@ -45,12 +45,19 @@ public class TurmaControllers {
                 .body(new SuccessDeleteResponse(nomeTurma, "Turma removida com sucesso", Turma.class.getSimpleName()));
     }
 
-    @PostMapping("/aluno/{nomeTurma}")
+    @PostMapping("{nomeTurma}/aluno")
     public ResponseEntity<SuccessPostResponse> adicionarAluno(@PathVariable String nomeTurma,
             @Valid @RequestBody AlunoDTORequest aluno) {
         this.turmaService.adicionarAlunoATurma(nomeTurma, aluno);
         return ResponseEntity.ok()
                 .body(new SuccessPostResponse(aluno.rg(), "Aluno adicionado com sucesso", Turma.class.getSimpleName()));
+    }
+
+    @DeleteMapping("{nomeTurma}/aluno/{rg}")
+    public ResponseEntity<SuccessDeleteResponse> deletarAluno(@PathVariable String nomeTurma, @PathVariable String rg) {
+        this.turmaService.removerAlunoDaTurma(nomeTurma, rg);
+        return ResponseEntity.ok()
+                .body(new SuccessDeleteResponse(rg, "Aluno removido com sucesso", Turma.class.getSimpleName()));
     }
 
     @GetMapping
@@ -64,5 +71,4 @@ public class TurmaControllers {
         var turma = this.turmaService.buscarTurmaPorNome(nomeTurma);
         return ResponseEntity.ok().body(turma);
     }
-
 }
