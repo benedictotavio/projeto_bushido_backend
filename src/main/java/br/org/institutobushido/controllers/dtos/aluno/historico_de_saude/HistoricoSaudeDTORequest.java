@@ -6,12 +6,10 @@ import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informa
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.cirurgia.CirurgiaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.doenca_cronica.DoencaCronicaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTORequest;
-import br.org.institutobushido.enums.aluno.FatorRH;
 import br.org.institutobushido.enums.aluno.TipoSanguineo;
 import jakarta.validation.constraints.NotNull;
 
 public record HistoricoSaudeDTORequest(
-        @NotNull(message = "Fator Rh é obrigatório") FatorRH fatorRh,
         @NotNull(message = "Tipo Sanguineo é obrigatório") TipoSanguineo tipoSanguineo,
         UsoMedicamentoContinuoDTORequest usoMedicamentoContinuo,
         AlergiaDTORequest alergia,
