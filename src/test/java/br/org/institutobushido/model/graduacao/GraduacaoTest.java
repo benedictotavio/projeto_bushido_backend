@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import br.org.institutobushido.model.aluno.graduacao.Graduacao;
-import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
 
 @SpringBootTest
 class GraduacaoTest {
@@ -31,7 +30,7 @@ class GraduacaoTest {
     @Test
     void deveDefinirCargaHorariaComDuasFaltas() {
         graduacao.setInicioGraduacao(LocalDate.now().minusMonths(5));
-        graduacao.adicionarFaltas(new Falta("Doente", "Tem atestado", new Date()));
+        graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime());
         graduacao.aprovacao();
         assertEquals(62, graduacao.getCargaHoraria());
     }
@@ -46,14 +45,10 @@ class GraduacaoTest {
     @Test
     void deveDefinirFrequenciaCom6Faltas() {
         graduacao.setInicioGraduacao(LocalDate.now().minusMonths(2));
-        graduacao.adicionarFaltas(new Falta("Doente", "Tem atestado", new Date()));
-        graduacao.adicionarFaltas(new Falta("Doente", "Tem atestado", new Date()));
-        graduacao.adicionarFaltas(new Falta("Doente", "Tem atestado", new Date()));
-        graduacao.adicionarFaltas(new Falta("Doente", "Tem atestado", new Date()));
-        graduacao.adicionarFaltas(new Falta("Doente", "Tem atestado", new Date()));
-        graduacao.adicionarFaltas(new Falta("Doente", "Tem atestado", new Date()));
+        graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime());
+        graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime() - 1000 * 60 * 60 * 24 * 4);
         graduacao.aprovacao();
-        assertEquals(75, graduacao.getFrequencia());
+        assertEquals(91, graduacao.getFrequencia());
     }
 
 }

@@ -107,12 +107,9 @@ public class ResourceExceptionHandler {
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(err.getStatus()).body(err);
     }
-    // ------------- //
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleSecurityException(Exception e) {
-
-        System.out.println(e.getMessage());
 
         if (e instanceof BadCredentialsException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), e.getMessage());

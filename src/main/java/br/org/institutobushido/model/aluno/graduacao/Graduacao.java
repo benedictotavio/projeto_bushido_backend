@@ -2,10 +2,15 @@ package br.org.institutobushido.model.aluno.graduacao;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
+import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.resources.exceptions.InactiveUserException;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -85,8 +90,35 @@ public class Graduacao implements Serializable {
         this.inicioGraduacao = inicioGraduacao;
     }
 
-    public Falta adicionarFaltas(Falta falta) {
-        this.faltas.add(falta);
+    public Falta adicionarFalta(String motivo, String observacao, long data) {
+
+        if (!this.status) {
+            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
+        }
+
+        if (data < this.getInicioGraduacao().atStartOfDay()
+                .toInstant(ZoneOffset.UTC).toEpochMilli()) {
+            throw new LimitQuantityException("A data deve ser maior ou igual a data de inicio da graduacao");
+        }
+
+        Falta novaFalta = new Falta(motivo, observacao, new Date(data));
+
+        boolean faltaEstaRegistrada = this.getFaltas().stream()
+                .anyMatch(falta -> falta.getData().equals(novaFalta.getData()));
+
+        if (faltaEstaRegistrada) {
+            throw new AlreadyRegisteredException("Ja existe uma falta para esta data");
+        }
+
+        this.faltas.add(novaFalta);
+        return novaFalta;
+    }
+
+
+    public Falta removerFalta(String dataFalta){
+        Falta falta = this.getFaltas().stream().filter(f -> f.getData().equals(dataFalta)).findFirst().orElseThrow(() -> new EntityNotFoundException("Falta no dia " + dataFalta + " foi não encontrada"));
+
+        this.getFaltas().remove(falta);
         return falta;
     }
 

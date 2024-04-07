@@ -1,7 +1,11 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjQ4MjcwMH0.ZKvd2i-7MjsqnaxEHkgtU4L26CZpSTDS4SXFvSG2AH4
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjUyMjg0N30.bSC8sgj6Ntv7XfEIa00SIwtXDjyH17JaMcSEDLNHb4M
 @rg=123456789
 
+GET {{url}}?nome=Zé HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
 GET {{url}}?rg={{rg}} HTTP/1.1
 Authorization: Bearer {{token}}
 ###
@@ -10,7 +14,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "nome": "Zé do Pipo",
+  "nome": "Zé da Manga",
   "sobrenome": "a zé do pipo",
   "genero": "M",
   "dataNascimento": "2020-03-20",
@@ -35,7 +39,7 @@ Authorization: Bearer {{token}}
     "cep": "06140140",
     "numero": 565
   },
-  "rg": "123456789",
+  "rg": "000000000",
   "responsaveis": [
     {
       "nome": "Otavio Benedicto Domingues",
@@ -74,7 +78,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-POST {{url}}/falta/{{rg}}/1711187621273 HTTP/1.1
+POST {{url}}/falta/{{rg}}/1711940400000 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -83,17 +87,17 @@ Authorization: Bearer {{token}}
   "observacao":"luis trouxe atestado"
 }
 ###
-DELETE {{url}}/falta/{{rg}}?data=23-03-2024 HTTP/1.1
+DELETE {{url}}/falta/{{rg}}?data=01-04-2024 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
-PUT {{url}}/123456789 HTTP/1.1
+PUT {{url}}/{{rg}} HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
   "dadosEscolares": {
-    "turno": "NOITE"
+    "turno": "MANHA"
   }
 }
 
@@ -110,13 +114,13 @@ Authorization: Bearer {{token}}
 }
 
 ###
-DELETE {{url}}/responsavel/{{rg}}?cpf=45916466880 HTTP/1.1
+DELETE {{url}}/responsavel/{{rg}}?cpf=45202055636 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}}/deficiencia/123456789?deficiencia=fff HTTP/1.1
-Authorization: Bearer {{token}}'aluno'
+Authorization: Bearer {{token}}
 ###
-DELETE {{url}}/deficiencia/123456789?deficiencia=amidalite HTTP/1.1
+DELETE {{url}}/deficiencia/123456789?deficiencia=fff HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}}/acompanhamentoSaude/123456789?acompanhamento=fffff HTTP/1.1
@@ -135,21 +139,4 @@ POST {{url}}/graduacao/{{rg}}/reprovar HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
-###
-PUT {{url}}/historicoSaude/{{rg}} HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer {{token}}
 
-
-{
-    "fatorRh":"NEGATIVO",
-    "usoMedicamentoContinuo": {
-        "tipo": "Rivotril 2"
-    },
-    "cirurgia": {
-        "tipo": "Bariatrica"
-    },
-    "alergia": {
-        "tipo": "dddsdsdsdsd"
-    }
-}

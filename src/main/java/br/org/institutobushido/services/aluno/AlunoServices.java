@@ -1,11 +1,8 @@
 package br.org.institutobushido.services.aluno;
 
-import java.text.SimpleDateFormat;
-import java.time.ZoneOffset;
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,6 +22,7 @@ import br.org.institutobushido.mappers.aluno.DadosEscolaresMapper;
 import br.org.institutobushido.mappers.aluno.DadosSociaisMapper;
 import br.org.institutobushido.mappers.aluno.EnderecoMapper;
 import br.org.institutobushido.mappers.aluno.GraduacaoMapper;
+import br.org.institutobushido.mappers.aluno.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
@@ -39,8 +37,6 @@ import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.resources.exceptions.InactiveUserException;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 
 @Service
 public class AlunoServices implements AlunoServicesInterface {
@@ -54,7 +50,6 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     private static final String GRADUACAO = "graduacao";
-    private static final String DATA_FORMATO = "dd-MM-yyyy";
     private static final String HISTORICO_SAUDE = "historicoSaude.";
 
     @Override
@@ -74,107 +69,76 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public AlunoDTOResponse buscarAluno(String rg) {
-        Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
-
-        return AlunoMapper.mapToAlunoDTOResponse(alunoEncontrado);
+    public List<AlunoDTOResponse> buscarAluno(String rg) {
+        Query query = new Query(Criteria.where("rg").regex(rg, "si"));
+        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 
     @Override
     public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        Optional<Responsavel> responsavel = encontrarResponsavelPorCpf(aluno, responsavelDTORequest.cpf());
-
-        if (responsavel.isPresent()) {
-            throw new AlreadyRegisteredException("Esse responsável já existe");
-        }
+        Responsavel novoResponsavel = aluno
+                .adicionarResponsavel(ResponsavelMapper.mapToResponsavel(responsavelDTORequest));
 
         Query query = new Query();
-
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().push("responsaveis", responsavelDTORequest);
+        Update update = new Update().push("responsaveis", novoResponsavel);
         mongoTemplate.updateFirst(query, update, Aluno.class);
-        return ResponsavelDTOResponse.builder().withCpf(responsavelDTORequest.cpf())
-                .withEmail(responsavelDTORequest.email()).withFiliacao(responsavelDTORequest.filiacao().toString())
-                .withNome(responsavelDTORequest.nome())
-                .withTelefone(responsavelDTORequest.telefone()).build();
+
+        return ResponsavelDTOResponse.builder()
+                .withCpf(novoResponsavel.getCpf())
+                .withEmail(novoResponsavel.getEmail())
+                .withTelefone(novoResponsavel.getTelefone())
+                .withNome(novoResponsavel.getNome())
+                .withFiliacao(novoResponsavel.getFiliacao().name())
+                .build();
 
     }
 
     @Override
     public String removerResponsavel(String rg, String cpf) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        Optional<Responsavel> responsavel = encontrarResponsavelPorCpf(aluno, cpf);
-
-        if (aluno.getResponsaveis().size() == 1) {
-            throw new LimitQuantityException("O aluno deve ter pelo menos 1 responsavel!");
-        }
-
-        if (!responsavel.isPresent()) {
-            throw new EntityNotFoundException("Responsavel com o CPF: " + cpf + " nao foi encontrado.");
-        }
-
+        String cpfRemovido = aluno.removerResponsavel(cpf);
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull("responsaveis", Query.query(Criteria.where("cpf").is(cpf)));
+        Update update = new Update().pull("responsaveis", Query.query(Criteria.where("cpf").is(cpfRemovido)));
         mongoTemplate.updateFirst(query, update, Aluno.class);
-        return String.valueOf(aluno.getResponsaveis().size() - 1);
+        return String.valueOf(aluno.getResponsaveis().size());
     }
 
     @Override
     public String adicionarFaltaDoAluno(String rg, FaltaDTORequest falta, long dataFalta) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        int graduacaoAtual = aluno.getGraduacao().size();
+        int graduacaoAtual = aluno.getGraduacao().size() - 1;
+        Falta novaFalta = aluno.getGraduacao().get(graduacaoAtual).adicionarFalta(falta.motivo(), falta.observacao(),
+                dataFalta);
 
-        if (!aluno.getGraduacao().get(graduacaoAtual - 1).isStatus()) {
-            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
-        }
-
-        if (dataFalta > new Date().getTime()) {
-            throw new LimitQuantityException("A data deve ser menor ou igual a data atual");
-        }
-
-        if (dataFalta < aluno.getGraduacao().get(graduacaoAtual - 1).getInicioGraduacao().atStartOfDay()
-                .toInstant(ZoneOffset.UTC).toEpochMilli()) {
-            throw new LimitQuantityException("A data deve ser maior ou igual a data de inicio da graduacao");
-        }
-
-        boolean faltasDoAluno = checarSeFaltaEstaRegistrada(aluno, new Date(dataFalta));
-
-        if (faltasDoAluno) {
-            throw new AlreadyRegisteredException("Ja existe um registro de falta nessa data");
-        }
-
-        Falta novaFalta = new Falta();
-
-        novaFalta.setData(new SimpleDateFormat(DATA_FORMATO).format(new Date(dataFalta)));
-        novaFalta.setMotivo(falta.motivo());
-        novaFalta.setObservacao(falta.observacao());
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().addToSet(GRADUACAO + "." + (graduacaoAtual - 1) + ".faltas", novaFalta);
+        Update update = new Update().addToSet(GRADUACAO + "." + (graduacaoAtual) + ".faltas", novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
 
         if (aluno.getGraduacao().get(0).getFaltas().size() == 4) {
             mudarStatusGraduacaoAluno(aluno, false);
         }
 
-        return String.valueOf(aluno.getGraduacao().get(graduacaoAtual - 1).getFaltas().size() + 1);
+        return String.valueOf(aluno.getGraduacao().get(graduacaoAtual).getFaltas().size());
     }
 
     @Override
     public String retirarFaltaDoAluno(String rg, String faltasId) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        int graduacaoAtual = aluno.getGraduacao().size();
-        Falta faltasDoAluno = encontrarFaltasDoAluno(aluno, faltasId);
+        int graduacaoAtual = aluno.getGraduacao().size() - 1;
+        Falta faltaDoAluno = aluno.getGraduacao().get(graduacaoAtual).removerFalta(faltasId);
 
-        if (aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).getFaltas().size() == 5) {
+        if (aluno.getGraduacao().get(graduacaoAtual).getFaltas().size() == 5) {
             mudarStatusGraduacaoAluno(aluno, true);
         }
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(GRADUACAO + "." + (graduacaoAtual - 1) + ".faltas", faltasDoAluno);
+        Update update = new Update().pull(GRADUACAO + "." + (graduacaoAtual) +
+                ".faltas", faltaDoAluno);
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return String.valueOf(aluno.getGraduacao().get(0).getFaltas().size() - 1);
     }
@@ -182,14 +146,10 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String adicionarDeficiencia(String rg, String deficiencia) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-
-        if (aluno.getHistoricoSaude().getDeficiencias().contains(deficiencia)) {
-            throw new AlreadyRegisteredException(deficiencia + " ja existe no historico de saude");
-        }
-
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().push(HISTORICO_SAUDE + "deficiencias", deficiencia);
+        Update update = new Update().push(HISTORICO_SAUDE + "deficiencias",
+                aluno.getHistoricoSaude().adiconarDeficiencia(deficiencia));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return deficiencia;
     }
@@ -197,13 +157,10 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String removerDeficiencia(String rg, String deficiencia) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-
-        if (!aluno.getHistoricoSaude().getDeficiencias().contains(deficiencia)) {
-            throw new EntityNotFoundException(deficiencia + " nao existe no historico de saude");
-        }
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(HISTORICO_SAUDE + "deficiencias", deficiencia);
+        Update update = new Update().pull(HISTORICO_SAUDE + "deficiencias",
+                aluno.getHistoricoSaude().removerDeficiencia(deficiencia));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return deficiencia;
     }
@@ -211,14 +168,10 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String adicionarAcompanhamentoSaude(String rg, String acompanhamentoSaude) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-
-        if (aluno.getHistoricoSaude().getAcompanhamentoSaude().contains(acompanhamentoSaude)) {
-            throw new AlreadyRegisteredException(acompanhamentoSaude + " ja existe no historico de saude");
-        }
-
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().push(HISTORICO_SAUDE + "acompanhamentoSaude", acompanhamentoSaude);
+        Update update = new Update().push(HISTORICO_SAUDE + "acompanhamentoSaude",
+                aluno.getHistoricoSaude().adicionarAcompanhamento(acompanhamentoSaude));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return acompanhamentoSaude;
     }
@@ -226,14 +179,10 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String removerAcompanhamentoSaude(String rg, String acompanhamentoSaude) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-
-        if (!aluno.getHistoricoSaude().getAcompanhamentoSaude().contains(acompanhamentoSaude)) {
-            throw new EntityNotFoundException(acompanhamentoSaude + " nao existe no historico de saude");
-        }
-
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(HISTORICO_SAUDE + "acompanhamentoSaude", acompanhamentoSaude);
+        Update update = new Update().pull(HISTORICO_SAUDE + "acompanhamentoSaude",
+                aluno.getHistoricoSaude().removerAcompanhamento(acompanhamentoSaude));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return acompanhamentoSaude;
     }
@@ -261,6 +210,8 @@ public class AlunoServices implements AlunoServicesInterface {
         // Dados Sociais
         DadosSociais dadosSociais = DadosSociaisMapper.setDadosSociais(updateAlunoDTORequest.dadosSociais(),
                 alunoEncontrado);
+        // Historico de Saude
+        this.editarHistoricoDeSaude(updateAlunoDTORequest.historicoDeSaude(), alunoEncontrado);
 
         alunoEncontrado.setDadosSociais(dadosSociais);
         alunoEncontrado.setEndereco(endereco);
@@ -317,39 +268,11 @@ public class AlunoServices implements AlunoServicesInterface {
                 .orElseThrow(() -> new EntityNotFoundException("Rg: " + rgAluno + " não encontrado"));
     }
 
-    protected Optional<Responsavel> encontrarResponsavelPorCpf(Aluno aluno, String cpf) {
-        return aluno.getResponsaveis().stream()
-                .filter(responsaveis -> responsaveis.getCpf().equals(cpf))
-                .findFirst();
-    }
-
-    protected Falta encontrarFaltasDoAluno(Aluno aluno, String faltasId) {
-        Optional<Falta> faltaEncontrada = aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).getFaltas().stream()
-                .filter(falta -> falta.getData().equals(faltasId)).findFirst();
-
-        return faltaEncontrada
-                .orElseThrow(() -> new EntityNotFoundException("Falta com id " + faltasId + " não foi encontrada."));
-    }
-
-    protected boolean checarSeFaltaEstaRegistrada(Aluno aluno, Date data) {
-
-        int graduacaoAtual = aluno.getGraduacao().size();
-
-        String dataFormatada = new SimpleDateFormat(DATA_FORMATO).format(data);
-
-        if (aluno.getGraduacao().get(graduacaoAtual - 1).getFaltas().isEmpty()) {
-            return false;
-        }
-
-        return aluno.getGraduacao().get(graduacaoAtual - 1).getFaltas().stream()
-                .anyMatch(falta -> falta.getData().equals(dataFormatada));
-    }
-
     protected void mudarStatusGraduacaoAluno(Aluno aluno, boolean status) {
-        int graduacaoAtual = aluno.getGraduacao().size();
+        int graduacaoAtual = aluno.getGraduacao().size() - 1;
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().set(GRADUACAO + "." + (graduacaoAtual - 1) + ".status", status);
+        Update update = new Update().set(GRADUACAO + "." + (graduacaoAtual) + ".status", status);
         mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
@@ -367,9 +290,7 @@ public class AlunoServices implements AlunoServicesInterface {
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
-    @Override
-    public String editarHistoricoDeSaude(String rg, UpdateHistoricoSaudeDTORequest updateHistoricoSaudeDTORequest) {
-        Aluno aluno = encontrarAlunoPorRg(rg);
+    private void editarHistoricoDeSaude(UpdateHistoricoSaudeDTORequest updateHistoricoSaudeDTORequest, Aluno aluno) {
 
         aluno.getHistoricoSaude().setFatorRh(
                 updateHistoricoSaudeDTORequest.fatorRh());
@@ -399,6 +320,11 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set(HISTORICO_SAUDE + "cirurgia", aluno.getHistoricoSaude().getCirurgia());
         update.set(HISTORICO_SAUDE + "doencaCronica", aluno.getHistoricoSaude().getDoencaCronica());
         mongoTemplate.updateFirst(query, update, Aluno.class);
-        return "Historico de saude editado com sucesso";
+    }
+
+    @Override
+    public List<AlunoDTOResponse> buscarAlunosPorNome(String nome) {
+        Query query = new Query(Criteria.where("nome").regex(nome, "si"));
+        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 }

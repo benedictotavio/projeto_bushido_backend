@@ -1,6 +1,8 @@
 package br.org.institutobushido.controllers.routes.aluno;
 
 import java.net.URI;
+import java.util.List;
+
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +20,6 @@ import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
@@ -44,9 +45,13 @@ public class AlunoControllers {
         }
 
         @GetMapping()
-        ResponseEntity<AlunoDTOResponse> buscarAlunoPorRg(@RequestParam(name = "rg") String rg) {
-                AlunoDTOResponse alunoEncontrado = alunoServices.buscarAluno(rg);
-                return ResponseEntity.ok().body(alunoEncontrado);
+        ResponseEntity<List<AlunoDTOResponse>> buscarAluno(@RequestParam(name = "nome", required = false) String nome,
+                        @RequestParam(name = "rg", required = false) String rg) {
+                if (rg != null) {
+                        List<AlunoDTOResponse> alunoEncontrado = alunoServices.buscarAluno(rg);
+                        return ResponseEntity.ok().body(alunoEncontrado);
+                }
+                return ResponseEntity.ok().body(alunoServices.buscarAlunosPorNome(nome));
         }
 
         @PostMapping()
@@ -151,12 +156,5 @@ public class AlunoControllers {
                 return ResponseEntity.ok().body(
                                 new SuccessDeleteResponse(res,
                                                 "Acamponhamento " + acompanhamento + " foi removido com sucesso."));
-        }
-
-        @PutMapping("historicoSaude/{rg}")
-        public ResponseEntity<SuccessPutResponse> editarHistoricoDeSaude(@PathVariable String rg,
-                        @RequestBody UpdateHistoricoSaudeDTORequest object) {
-                String res = alunoServices.editarHistoricoDeSaude(rg, object);
-                return ResponseEntity.ok().body(new SuccessPutResponse(rg, res, HistoricoSaude.class.getSimpleName()));
         }
 }
