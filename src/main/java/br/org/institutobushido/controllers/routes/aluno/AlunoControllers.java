@@ -1,6 +1,8 @@
 package br.org.institutobushido.controllers.routes.aluno;
 
 import java.net.URI;
+import java.util.List;
+
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,9 +45,13 @@ public class AlunoControllers {
         }
 
         @GetMapping()
-        ResponseEntity<AlunoDTOResponse> buscarAlunoPorRg(@RequestParam(name = "rg") String rg) {
-                AlunoDTOResponse alunoEncontrado = alunoServices.buscarAluno(rg);
-                return ResponseEntity.ok().body(alunoEncontrado);
+        ResponseEntity<List<AlunoDTOResponse>> buscarAluno(@RequestParam(name = "nome", required = false) String nome,
+                        @RequestParam(name = "rg", required = false) String rg) {
+                if (rg != null) {
+                        List<AlunoDTOResponse> alunoEncontrado = alunoServices.buscarAluno(rg);
+                        return ResponseEntity.ok().body(alunoEncontrado);
+                }
+                return ResponseEntity.ok().body(alunoServices.buscarAlunosPorNome(nome));
         }
 
         @PostMapping()

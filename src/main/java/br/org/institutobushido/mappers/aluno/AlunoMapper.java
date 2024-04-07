@@ -1,5 +1,7 @@
 package br.org.institutobushido.mappers.aluno;
 
+import java.util.List;
+
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.model.aluno.Aluno;
@@ -49,5 +51,9 @@ public class AlunoMapper {
                 .withHistoricoSaude(
                         HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(aluno.getHistoricoSaude()))
                 .build();
+    }
+
+    public static List<AlunoDTOResponse> mapToListAlunoDTOResponse(List<Aluno> alunos) {
+        return alunos.stream().map(AlunoMapper::mapToAlunoDTOResponse).toList();
     }
 }

@@ -1,11 +1,8 @@
 package br.org.institutobushido.services.aluno;
 
-import java.text.SimpleDateFormat;
-import java.time.ZoneOffset;
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -40,8 +37,6 @@ import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.resources.exceptions.InactiveUserException;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 
 @Service
 public class AlunoServices implements AlunoServicesInterface {
@@ -55,7 +50,6 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     private static final String GRADUACAO = "graduacao";
-    private static final String DATA_FORMATO = "dd-MM-yyyy";
     private static final String HISTORICO_SAUDE = "historicoSaude.";
 
     @Override
@@ -75,8 +69,9 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public AlunoDTOResponse buscarAluno(String rg) {
-        return AlunoMapper.mapToAlunoDTOResponse(encontrarAlunoPorRg(rg));
+    public List<AlunoDTOResponse> buscarAluno(String rg) {
+        Query query = new Query(Criteria.where("rg").regex(rg, "si"));
+        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 
     @Override
@@ -153,7 +148,8 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().push(HISTORICO_SAUDE + "deficiencias", aluno.getHistoricoSaude().adiconarDeficiencia(deficiencia));
+        Update update = new Update().push(HISTORICO_SAUDE + "deficiencias",
+                aluno.getHistoricoSaude().adiconarDeficiencia(deficiencia));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return deficiencia;
     }
@@ -163,7 +159,8 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(HISTORICO_SAUDE + "deficiencias", aluno.getHistoricoSaude().removerDeficiencia(deficiencia));
+        Update update = new Update().pull(HISTORICO_SAUDE + "deficiencias",
+                aluno.getHistoricoSaude().removerDeficiencia(deficiencia));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return deficiencia;
     }
@@ -173,7 +170,8 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().push(HISTORICO_SAUDE + "acompanhamentoSaude", aluno.getHistoricoSaude().adicionarAcompanhamento(acompanhamentoSaude));
+        Update update = new Update().push(HISTORICO_SAUDE + "acompanhamentoSaude",
+                aluno.getHistoricoSaude().adicionarAcompanhamento(acompanhamentoSaude));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return acompanhamentoSaude;
     }
@@ -183,7 +181,8 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(HISTORICO_SAUDE + "acompanhamentoSaude", aluno.getHistoricoSaude().removerAcompanhamento(acompanhamentoSaude));
+        Update update = new Update().pull(HISTORICO_SAUDE + "acompanhamentoSaude",
+                aluno.getHistoricoSaude().removerAcompanhamento(acompanhamentoSaude));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return acompanhamentoSaude;
     }
@@ -270,7 +269,7 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     protected void mudarStatusGraduacaoAluno(Aluno aluno, boolean status) {
-        int graduacaoAtual = aluno.getGraduacao().size()- 1;
+        int graduacaoAtual = aluno.getGraduacao().size() - 1;
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
         Update update = new Update().set(GRADUACAO + "." + (graduacaoAtual) + ".status", status);
@@ -321,5 +320,11 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set(HISTORICO_SAUDE + "cirurgia", aluno.getHistoricoSaude().getCirurgia());
         update.set(HISTORICO_SAUDE + "doencaCronica", aluno.getHistoricoSaude().getDoencaCronica());
         mongoTemplate.updateFirst(query, update, Aluno.class);
+    }
+
+    @Override
+    public List<AlunoDTOResponse> buscarAlunosPorNome(String nome) {
+        Query query = new Query(Criteria.where("nome").regex(nome, "si"));
+        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 }

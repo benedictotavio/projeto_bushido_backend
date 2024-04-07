@@ -1,7 +1,11 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjUwODAyNH0.vfQp_76qRG4PQrQTBsB5lg0WNjqAm1UDc4LzyXGYz08
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjUxNTg4NH0.0ofMBukiG90aBavIfPHHtPEvuZvm62yNhOeD9meohnU
 @rg=123456789
 
+GET {{url}}?nome=Zé HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
 GET {{url}}?rg={{rg}} HTTP/1.1
 Authorization: Bearer {{token}}
 ###
@@ -10,7 +14,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "nome": "Zé do Pipo",
+  "nome": "Zé da Manga",
   "sobrenome": "a zé do pipo",
   "genero": "M",
   "dataNascimento": "2020-03-20",
@@ -35,7 +39,7 @@ Authorization: Bearer {{token}}
     "cep": "06140140",
     "numero": 565
   },
-  "rg": "123456789",
+  "rg": "000000000",
   "responsaveis": [
     {
       "nome": "Otavio Benedicto Domingues",
