@@ -5,7 +5,6 @@ import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 
@@ -37,6 +36,4 @@ public interface AlunoServicesInterface {
     public GraduacaoDTOResponse reprovarAluno(String rg);
 
     public Object editarHistoricoDeSaude(String rg, String campo, String historicoDeSaude, boolean resposta);
-
-    public String editarHistoricoDeSaude(String rg, UpdateHistoricoSaudeDTORequest updateHistoricoSaudeDTORequest);
 }

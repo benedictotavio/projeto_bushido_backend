@@ -18,7 +18,6 @@ import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
@@ -151,12 +150,5 @@ public class AlunoControllers {
                 return ResponseEntity.ok().body(
                                 new SuccessDeleteResponse(res,
                                                 "Acamponhamento " + acompanhamento + " foi removido com sucesso."));
-        }
-
-        @PutMapping("historicoSaude/{rg}")
-        public ResponseEntity<SuccessPutResponse> editarHistoricoDeSaude(@PathVariable String rg,
-                        @RequestBody UpdateHistoricoSaudeDTORequest object) {
-                String res = alunoServices.editarHistoricoDeSaude(rg, object);
-                return ResponseEntity.ok().body(new SuccessPutResponse(rg, res, HistoricoSaude.class.getSimpleName()));
         }
 }

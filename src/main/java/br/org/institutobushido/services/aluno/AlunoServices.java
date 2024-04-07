@@ -25,6 +25,7 @@ import br.org.institutobushido.mappers.aluno.DadosEscolaresMapper;
 import br.org.institutobushido.mappers.aluno.DadosSociaisMapper;
 import br.org.institutobushido.mappers.aluno.EnderecoMapper;
 import br.org.institutobushido.mappers.aluno.GraduacaoMapper;
+import br.org.institutobushido.mappers.aluno.ResponsavelMapper;
 import br.org.institutobushido.model.aluno.Aluno;
 import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
@@ -75,50 +76,38 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Override
     public AlunoDTOResponse buscarAluno(String rg) {
-        Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
-
-        return AlunoMapper.mapToAlunoDTOResponse(alunoEncontrado);
+        return AlunoMapper.mapToAlunoDTOResponse(encontrarAlunoPorRg(rg));
     }
 
     @Override
     public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        Optional<Responsavel> responsavel = encontrarResponsavelPorCpf(aluno, responsavelDTORequest.cpf());
-
-        if (responsavel.isPresent()) {
-            throw new AlreadyRegisteredException("Esse responsável já existe");
-        }
+        Responsavel novoResponsavel = aluno.adicionarResponsavel(ResponsavelMapper.mapToResponsavel(responsavelDTORequest));
 
         Query query = new Query();
-
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().push("responsaveis", responsavelDTORequest);
+        Update update = new Update().push("responsaveis", novoResponsavel);
         mongoTemplate.updateFirst(query, update, Aluno.class);
-        return ResponsavelDTOResponse.builder().withCpf(responsavelDTORequest.cpf())
-                .withEmail(responsavelDTORequest.email()).withFiliacao(responsavelDTORequest.filiacao().toString())
-                .withNome(responsavelDTORequest.nome())
-                .withTelefone(responsavelDTORequest.telefone()).build();
+
+        return ResponsavelDTOResponse.builder()
+                .withCpf(novoResponsavel.getCpf())
+                .withEmail(novoResponsavel.getEmail())
+                .withTelefone(novoResponsavel.getTelefone())
+                .withNome(novoResponsavel.getNome())
+                .withFiliacao(novoResponsavel.getFiliacao().name())
+                .build();
 
     }
 
     @Override
     public String removerResponsavel(String rg, String cpf) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        Optional<Responsavel> responsavel = encontrarResponsavelPorCpf(aluno, cpf);
-
-        if (aluno.getResponsaveis().size() == 1) {
-            throw new LimitQuantityException("O aluno deve ter pelo menos 1 responsavel!");
-        }
-
-        if (!responsavel.isPresent()) {
-            throw new EntityNotFoundException("Responsavel com o CPF: " + cpf + " nao foi encontrado.");
-        }
-
+        String cpfRemovido = aluno.removerResponsavel(cpf);
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull("responsaveis", Query.query(Criteria.where("cpf").is(cpf)));
+        Update update = new Update().pull("responsaveis", Query.query(Criteria.where("cpf").is(cpfRemovido)));
         mongoTemplate.updateFirst(query, update, Aluno.class);
-        return String.valueOf(aluno.getResponsaveis().size() - 1);
+        return String.valueOf(aluno.getResponsaveis().size());
     }
 
     @Override
@@ -261,6 +250,8 @@ public class AlunoServices implements AlunoServicesInterface {
         // Dados Sociais
         DadosSociais dadosSociais = DadosSociaisMapper.setDadosSociais(updateAlunoDTORequest.dadosSociais(),
                 alunoEncontrado);
+        // Historico de Saude
+        this.editarHistoricoDeSaude(updateAlunoDTORequest.historicoDeSaude(), alunoEncontrado);
 
         alunoEncontrado.setDadosSociais(dadosSociais);
         alunoEncontrado.setEndereco(endereco);
@@ -317,12 +308,6 @@ public class AlunoServices implements AlunoServicesInterface {
                 .orElseThrow(() -> new EntityNotFoundException("Rg: " + rgAluno + " não encontrado"));
     }
 
-    protected Optional<Responsavel> encontrarResponsavelPorCpf(Aluno aluno, String cpf) {
-        return aluno.getResponsaveis().stream()
-                .filter(responsaveis -> responsaveis.getCpf().equals(cpf))
-                .findFirst();
-    }
-
     protected Falta encontrarFaltasDoAluno(Aluno aluno, String faltasId) {
         Optional<Falta> faltaEncontrada = aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).getFaltas().stream()
                 .filter(falta -> falta.getData().equals(faltasId)).findFirst();
@@ -366,10 +351,7 @@ public class AlunoServices implements AlunoServicesInterface {
         update.addToSet(GRADUACAO, novaGraduacao);
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
     }
-
-    @Override
-    public String editarHistoricoDeSaude(String rg, UpdateHistoricoSaudeDTORequest updateHistoricoSaudeDTORequest) {
-        Aluno aluno = encontrarAlunoPorRg(rg);
+    private void editarHistoricoDeSaude(UpdateHistoricoSaudeDTORequest updateHistoricoSaudeDTORequest, Aluno aluno) {
 
         aluno.getHistoricoSaude().setFatorRh(
                 updateHistoricoSaudeDTORequest.fatorRh());
@@ -399,6 +381,5 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set(HISTORICO_SAUDE + "cirurgia", aluno.getHistoricoSaude().getCirurgia());
         update.set(HISTORICO_SAUDE + "doencaCronica", aluno.getHistoricoSaude().getDoencaCronica());
         mongoTemplate.updateFirst(query, update, Aluno.class);
-        return "Historico de saude editado com sucesso";
     }
 }
