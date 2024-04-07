@@ -3,8 +3,6 @@ package br.org.institutobushido.model.aluno.historico_de_saude;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import br.org.institutobushido.enums.aluno.FatorRH;
 import br.org.institutobushido.enums.aluno.TipoSanguineo;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergia;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgia;
@@ -23,7 +21,6 @@ public class HistoricoSaude implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
 
     private TipoSanguineo tipoSanguineo;
-    private FatorRH fatorRh;
     private UsoMedicamentoContinuo usoMedicamentoContinuo;
     private DoencaCronica doencaCronica;
     private Alergia alergia;
@@ -36,12 +33,6 @@ public class HistoricoSaude implements Serializable {
             return;
         }
         this.tipoSanguineo = tipoSanguineo;
-    }
-    public void setFatorRh(FatorRH fatorRh) {
-        if (fatorRh == null) {
-            return;
-        }
-        this.fatorRh = fatorRh;
     }
     public void setUsoMedicamentoContinuo(UsoMedicamentoContinuo usoMedicamentoContinuo) {
         if (usoMedicamentoContinuo == null) {
@@ -98,12 +89,5 @@ public class HistoricoSaude implements Serializable {
         }
         this.getAcompanhamentoSaude().remove(acompanhamento);
         return acompanhamento;
-    }
-
-    @Override
-    public String toString() {
-        return "HistoricoSaude [tipoSanguineo=" + tipoSanguineo + ", fatorRh=" + fatorRh + ", usoMedicamentoContinuo="
-                + usoMedicamentoContinuo + ", doencaCronica=" + doencaCronica + ", alergia=" + alergia + ", cirurgia="
-                + cirurgia + ", deficiencias=" + deficiencias + ", acompanhamentoSaude=" + acompanhamentoSaude + "]";
     }
 }

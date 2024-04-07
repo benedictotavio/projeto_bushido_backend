@@ -118,7 +118,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Update update = new Update().addToSet(GRADUACAO + "." + (graduacaoAtual) + ".faltas", novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
 
-        if (aluno.getGraduacao().get(0).getFaltas().size() == 4) {
+        if (aluno.getGraduacao().get(graduacaoAtual).getFaltas().size() == 4) {
             mudarStatusGraduacaoAluno(aluno, false);
         }
 
@@ -292,9 +292,6 @@ public class AlunoServices implements AlunoServicesInterface {
 
     private void editarHistoricoDeSaude(UpdateHistoricoSaudeDTORequest updateHistoricoSaudeDTORequest, Aluno aluno) {
 
-        aluno.getHistoricoSaude().setFatorRh(
-                updateHistoricoSaudeDTORequest.fatorRh());
-
         aluno.getHistoricoSaude().setTipoSanguineo(
                 updateHistoricoSaudeDTORequest.tipoSanguineo());
 
@@ -313,7 +310,6 @@ public class AlunoServices implements AlunoServicesInterface {
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
         Update update = new Update();
-        update.set(HISTORICO_SAUDE + "fatorRh", aluno.getHistoricoSaude().getFatorRh());
         update.set(HISTORICO_SAUDE + "tipoSanguineo", aluno.getHistoricoSaude().getTipoSanguineo());
         update.set(HISTORICO_SAUDE + "usoMedicamentoContinuo", aluno.getHistoricoSaude().getUsoMedicamentoContinuo());
         update.set(HISTORICO_SAUDE + "alergia", aluno.getHistoricoSaude().getAlergia());

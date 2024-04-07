@@ -39,7 +39,7 @@ Authorization: Bearer {{token}}
     "cep": "06140140",
     "numero": 565
   },
-  "rg": "000000000",
+  "rg": "112223334",
   "responsaveis": [
     {
       "nome": "Otavio Benedicto Domingues",
@@ -54,7 +54,6 @@ Authorization: Bearer {{token}}
   },
   "historicoSaude": {
     "tipoSanguineo": "A_POSITIVO",
-    "fatorRh": "POSITIVO",
     "usoMedicamentoContinuo": {
       "resposta": "",
       "tipo": "dd"

@@ -24,7 +24,6 @@ public class HistoricoSaudeMapper {
 
                 return new HistoricoSaude(
                                 historicoSaudeDTORequest.tipoSanguineo(),
-                                historicoSaudeDTORequest.fatorRh(),
                                 new UsoMedicamentoContinuo(
                                                 historicoSaudeDTORequest.usoMedicamentoContinuo().tipo()),
                                 new DoencaCronica(
@@ -42,7 +41,6 @@ public class HistoricoSaudeMapper {
                         return null;
                 }
                 return HistoricoSaudeDTOResponse.builder()
-                                .withFatorRh(historicoSaude.getFatorRh())
                                 .withTipoSanguineo(historicoSaude.getTipoSanguineo())
                                 .withAlergia(AlergiaDTOResponse.builder()
                                                 .withResposta(historicoSaude.getAlergia().getResposta())
