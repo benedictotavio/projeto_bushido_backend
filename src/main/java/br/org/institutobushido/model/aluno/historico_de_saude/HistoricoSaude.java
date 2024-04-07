@@ -10,6 +10,7 @@ import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgia;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
+import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -66,6 +67,39 @@ public class HistoricoSaude implements Serializable {
         }
         this.cirurgia = cirurgia;
     }
+    
+    public String adiconarDeficiencia(String deficiencia) {
+        if (this.getDeficiencias().contains(deficiencia)) {
+            throw new AlreadyRegisteredException(deficiencia + " ja existe no historico de saude");
+        }
+        this.getDeficiencias().add(deficiencia);
+        return deficiencia;
+    }
+
+    public String removerDeficiencia(String deficiencia) {
+        if (!this.getDeficiencias().contains(deficiencia)) {
+            throw new AlreadyRegisteredException(deficiencia + " nao existe no historico de saude");
+        }
+        this.getDeficiencias().remove(deficiencia);
+        return deficiencia;
+    }
+
+    public String adicionarAcompanhamento(String acompanhamento) {
+        if (this.getAcompanhamentoSaude().contains(acompanhamento)) {
+            throw new AlreadyRegisteredException(acompanhamento + " ja existe no historico de saude");
+        }
+        this.getAcompanhamentoSaude().add(acompanhamento);
+        return acompanhamento;
+    }
+
+    public String removerAcompanhamento(String acompanhamento) {
+        if (!this.getAcompanhamentoSaude().contains(acompanhamento)) {
+            throw new AlreadyRegisteredException(acompanhamento + " nao existe no historico de saude");
+        }
+        this.getAcompanhamentoSaude().remove(acompanhamento);
+        return acompanhamento;
+    }
+
     @Override
     public String toString() {
         return "HistoricoSaude [tipoSanguineo=" + tipoSanguineo + ", fatorRh=" + fatorRh + ", usoMedicamentoContinuo="

@@ -114,9 +114,9 @@ DELETE {{url}}/responsavel/{{rg}}?cpf=45202055636 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}}/deficiencia/123456789?deficiencia=fff HTTP/1.1
-Authorization: Bearer {{token}}'aluno'
+Authorization: Bearer {{token}}
 ###
-DELETE {{url}}/deficiencia/123456789?deficiencia=amidalite HTTP/1.1
+DELETE {{url}}/deficiencia/123456789?deficiencia=fff HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}}/acompanhamentoSaude/123456789?acompanhamento=fffff HTTP/1.1

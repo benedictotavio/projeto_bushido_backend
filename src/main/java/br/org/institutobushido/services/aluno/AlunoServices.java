@@ -136,8 +136,7 @@ public class AlunoServices implements AlunoServicesInterface {
         int graduacaoAtual = aluno.getGraduacao().size() - 1;
         Falta faltaDoAluno = aluno.getGraduacao().get(graduacaoAtual).removerFalta(faltasId);
 
-        if (aluno.getGraduacao().get(aluno.getGraduacao().size() -
-                1).getFaltas().size() == 5) {
+        if (aluno.getGraduacao().get(graduacaoAtual).getFaltas().size() == 5) {
             mudarStatusGraduacaoAluno(aluno, true);
         }
 
@@ -152,14 +151,9 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String adicionarDeficiencia(String rg, String deficiencia) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-
-        if (aluno.getHistoricoSaude().getDeficiencias().contains(deficiencia)) {
-            throw new AlreadyRegisteredException(deficiencia + " ja existe no historico de saude");
-        }
-
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().push(HISTORICO_SAUDE + "deficiencias", deficiencia);
+        Update update = new Update().push(HISTORICO_SAUDE + "deficiencias", aluno.getHistoricoSaude().adiconarDeficiencia(deficiencia));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return deficiencia;
     }
@@ -167,13 +161,9 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String removerDeficiencia(String rg, String deficiencia) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-
-        if (!aluno.getHistoricoSaude().getDeficiencias().contains(deficiencia)) {
-            throw new EntityNotFoundException(deficiencia + " nao existe no historico de saude");
-        }
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(HISTORICO_SAUDE + "deficiencias", deficiencia);
+        Update update = new Update().pull(HISTORICO_SAUDE + "deficiencias", aluno.getHistoricoSaude().removerDeficiencia(deficiencia));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return deficiencia;
     }
@@ -181,14 +171,9 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String adicionarAcompanhamentoSaude(String rg, String acompanhamentoSaude) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-
-        if (aluno.getHistoricoSaude().getAcompanhamentoSaude().contains(acompanhamentoSaude)) {
-            throw new AlreadyRegisteredException(acompanhamentoSaude + " ja existe no historico de saude");
-        }
-
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().push(HISTORICO_SAUDE + "acompanhamentoSaude", acompanhamentoSaude);
+        Update update = new Update().push(HISTORICO_SAUDE + "acompanhamentoSaude", aluno.getHistoricoSaude().adicionarAcompanhamento(acompanhamentoSaude));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return acompanhamentoSaude;
     }
@@ -196,14 +181,9 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String removerAcompanhamentoSaude(String rg, String acompanhamentoSaude) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-
-        if (!aluno.getHistoricoSaude().getAcompanhamentoSaude().contains(acompanhamentoSaude)) {
-            throw new EntityNotFoundException(acompanhamentoSaude + " nao existe no historico de saude");
-        }
-
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(HISTORICO_SAUDE + "acompanhamentoSaude", acompanhamentoSaude);
+        Update update = new Update().pull(HISTORICO_SAUDE + "acompanhamentoSaude", aluno.getHistoricoSaude().removerAcompanhamento(acompanhamentoSaude));
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return acompanhamentoSaude;
     }
@@ -290,10 +270,10 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     protected void mudarStatusGraduacaoAluno(Aluno aluno, boolean status) {
-        int graduacaoAtual = aluno.getGraduacao().size();
+        int graduacaoAtual = aluno.getGraduacao().size()- 1;
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().set(GRADUACAO + "." + (graduacaoAtual - 1) + ".status", status);
+        Update update = new Update().set(GRADUACAO + "." + (graduacaoAtual) + ".status", status);
         mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
