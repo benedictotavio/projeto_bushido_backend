@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjQ3NTgyOX0.7kllKkO9-R46jajg3W0BgytwAO0ftkO7D8QNLmhbsug
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjQ4MjcwMH0.ZKvd2i-7MjsqnaxEHkgtU4L26CZpSTDS4SXFvSG2AH4
 @rg=123456789
 
 GET {{url}}?rg={{rg}} HTTP/1.1
@@ -142,6 +142,7 @@ Authorization: Bearer {{token}}
 
 
 {
+    "fatorRh":"NEGATIVO",
     "usoMedicamentoContinuo": {
         "tipo": "Rivotril 2"
     },

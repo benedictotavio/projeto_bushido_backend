@@ -29,7 +29,19 @@ public class HistoricoSaude implements Serializable {
     private Cirurgia cirurgia;
     private List<String> deficiencias = new ArrayList<>();
     private List<String> acompanhamentoSaude = new ArrayList<>();
-    
+
+    public void setTipoSanguineo(TipoSanguineo tipoSanguineo) {
+        if (tipoSanguineo == null) {
+            return;
+        }
+        this.tipoSanguineo = tipoSanguineo;
+    }
+    public void setFatorRh(FatorRH fatorRh) {
+        if (fatorRh == null) {
+            return;
+        }
+        this.fatorRh = fatorRh;
+    }
     public void setUsoMedicamentoContinuo(UsoMedicamentoContinuo usoMedicamentoContinuo) {
         if (usoMedicamentoContinuo == null) {
             return;

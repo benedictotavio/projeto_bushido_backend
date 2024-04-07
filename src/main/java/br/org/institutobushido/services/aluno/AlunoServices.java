@@ -174,7 +174,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(GRADUACAO + "." +(graduacaoAtual - 1) + ".faltas", faltasDoAluno);
+        Update update = new Update().pull(GRADUACAO + "." + (graduacaoAtual - 1) + ".faltas", faltasDoAluno);
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return String.valueOf(aluno.getGraduacao().get(0).getFaltas().size() - 1);
     }
@@ -371,30 +371,34 @@ public class AlunoServices implements AlunoServicesInterface {
     public String editarHistoricoDeSaude(String rg, UpdateHistoricoSaudeDTORequest updateHistoricoSaudeDTORequest) {
         Aluno aluno = encontrarAlunoPorRg(rg);
 
+        aluno.getHistoricoSaude().setFatorRh(
+                updateHistoricoSaudeDTORequest.fatorRh());
+
+        aluno.getHistoricoSaude().setTipoSanguineo(
+                updateHistoricoSaudeDTORequest.tipoSanguineo());
+
         aluno.getHistoricoSaude().setUsoMedicamentoContinuo(
-            new UsoMedicamentoContinuo(updateHistoricoSaudeDTORequest.usoMedicamentoContinuo().tipo())
-        );
+                new UsoMedicamentoContinuo(updateHistoricoSaudeDTORequest.usoMedicamentoContinuo().tipo()));
 
         aluno.getHistoricoSaude().setAlergia(
-            new Alergia(updateHistoricoSaudeDTORequest.alergia().tipo())
-        );
+                new Alergia(updateHistoricoSaudeDTORequest.alergia().tipo()));
 
         aluno.getHistoricoSaude().setCirurgia(
-            new Cirurgia(updateHistoricoSaudeDTORequest.cirurgia().tipo())
-        );
+                new Cirurgia(updateHistoricoSaudeDTORequest.cirurgia().tipo()));
 
         aluno.getHistoricoSaude().setDoencaCronica(
-            new DoencaCronica(updateHistoricoSaudeDTORequest.doencaCronica().tipo())
-        );
+                new DoencaCronica(updateHistoricoSaudeDTORequest.doencaCronica().tipo()));
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
         Update update = new Update();
+        update.set(HISTORICO_SAUDE + "fatorRh", aluno.getHistoricoSaude().getFatorRh());
+        update.set(HISTORICO_SAUDE + "tipoSanguineo", aluno.getHistoricoSaude().getTipoSanguineo());
         update.set(HISTORICO_SAUDE + "usoMedicamentoContinuo", aluno.getHistoricoSaude().getUsoMedicamentoContinuo());
         update.set(HISTORICO_SAUDE + "alergia", aluno.getHistoricoSaude().getAlergia());
         update.set(HISTORICO_SAUDE + "cirurgia", aluno.getHistoricoSaude().getCirurgia());
         update.set(HISTORICO_SAUDE + "doencaCronica", aluno.getHistoricoSaude().getDoencaCronica());
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return "Historico de saude editado com sucesso";
-     }
+    }
 }
