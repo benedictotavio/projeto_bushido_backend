@@ -55,6 +55,16 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Override
+    public void removerAlunoDaTurma(String nomeTurma, String rg) {
+        Turma turma = this.encontrarTurmaPeloNome(nomeTurma);
+        turma.removerAluno(rg);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("nome").is(nomeTurma));
+        Update update = new Update().pull("alunos", new Query().addCriteria(Criteria.where("rg").is(rg)));
+        mongoTemplate.updateFirst(query, update, Turma.class);
+    }
+
+    @Override
     public void deletarTurma(String nomeTurma) {
         boolean turmaExiste = this.verificaSeTurmaExiste(nomeTurma);
         if (!turmaExiste) {
@@ -70,7 +80,7 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Override
-    public TurmaDTOResponse buscarTurmaPorNome(String nomeTurma) { 
+    public TurmaDTOResponse buscarTurmaPorNome(String nomeTurma) {
         return TurmaMapper.mapToTurmaDTOResponse(this.encontrarTurmaPeloNome(nomeTurma));
     }
 

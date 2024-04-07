@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 import br.org.institutobushido.abstracts.InformacaoSaude;
 
-public class Alergia extends InformacaoSaude implements Serializable{
+public class Alergia extends InformacaoSaude implements Serializable {
 
     private static final long serialVersionUID = 2405172041950251807L;
 
-    public Alergia(boolean resposta, String tipo) {
-        super(resposta, tipo);
+    public Alergia(String tipo) {
+        super(tipo);
     }
 }

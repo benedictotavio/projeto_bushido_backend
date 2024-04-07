@@ -17,6 +17,7 @@ import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.mappers.aluno.AlunoMapper;
@@ -30,6 +31,10 @@ import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
 import br.org.institutobushido.model.aluno.endereco.Endereco;
 import br.org.institutobushido.model.aluno.graduacao.Graduacao;
 import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
+import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergia;
+import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgia;
+import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
+import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
@@ -361,4 +366,35 @@ public class AlunoServices implements AlunoServicesInterface {
         update.addToSet(GRADUACAO, novaGraduacao);
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
     }
+
+    @Override
+    public String editarHistoricoDeSaude(String rg, UpdateHistoricoSaudeDTORequest updateHistoricoSaudeDTORequest) {
+        Aluno aluno = encontrarAlunoPorRg(rg);
+
+        aluno.getHistoricoSaude().setUsoMedicamentoContinuo(
+            new UsoMedicamentoContinuo(updateHistoricoSaudeDTORequest.usoMedicamentoContinuo().tipo())
+        );
+
+        aluno.getHistoricoSaude().setAlergia(
+            new Alergia(updateHistoricoSaudeDTORequest.alergia().tipo())
+        );
+
+        aluno.getHistoricoSaude().setCirurgia(
+            new Cirurgia(updateHistoricoSaudeDTORequest.cirurgia().tipo())
+        );
+
+        aluno.getHistoricoSaude().setDoencaCronica(
+            new DoencaCronica(updateHistoricoSaudeDTORequest.doencaCronica().tipo())
+        );
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
+        Update update = new Update();
+        update.set(HISTORICO_SAUDE + "usoMedicamentoContinuo", aluno.getHistoricoSaude().getUsoMedicamentoContinuo());
+        update.set(HISTORICO_SAUDE + "alergia", aluno.getHistoricoSaude().getAlergia());
+        update.set(HISTORICO_SAUDE + "cirurgia", aluno.getHistoricoSaude().getCirurgia());
+        update.set(HISTORICO_SAUDE + "doencaCronica", aluno.getHistoricoSaude().getDoencaCronica());
+        mongoTemplate.updateFirst(query, update, Aluno.class);
+        return "Historico de saude editado com sucesso";
+     }
 }

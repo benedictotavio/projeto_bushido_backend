@@ -3,6 +3,8 @@ package br.org.institutobushido.model.turma;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -39,6 +41,18 @@ public class Turma {
         }
 
         this.alunos.add(novoAluno);
+    }
+
+    public void removerAluno(String rg) {
+
+        for (Aluno aluno : alunos) {
+            if (aluno.getRg().equals(rg)) {
+                alunos.remove(aluno);
+                return;
+            }
+        }
+
+        throw new EntityNotFoundException("Aluno não encontrado nesta turma");
     }
 
 }

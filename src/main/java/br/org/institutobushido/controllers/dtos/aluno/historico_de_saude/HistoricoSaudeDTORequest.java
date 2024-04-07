@@ -22,16 +22,16 @@ public record HistoricoSaudeDTORequest(
 
     public HistoricoSaudeDTORequest {
         if (usoMedicamentoContinuo == null) {
-            usoMedicamentoContinuo = new UsoMedicamentoContinuoDTORequest(false, "");
+            usoMedicamentoContinuo = new UsoMedicamentoContinuoDTORequest( "");
         }
         if (alergia == null) {
-            alergia = new AlergiaDTORequest(false, "");
+            alergia = new AlergiaDTORequest("");
         }
         if (cirurgia == null) {
-            cirurgia = new CirurgiaDTORequest(false, "");
+            cirurgia = new CirurgiaDTORequest("");
         }
         if (doencaCronica == null) {
-            doencaCronica = new DoencaCronicaDTORequest(false, "");
+            doencaCronica = new DoencaCronicaDTORequest("");
         }
         if (deficiencia == null) {
             deficiencia = List.of();

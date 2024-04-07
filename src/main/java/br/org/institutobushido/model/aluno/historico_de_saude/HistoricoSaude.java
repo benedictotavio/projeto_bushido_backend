@@ -11,10 +11,10 @@ import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class HistoricoSaude implements Serializable {
@@ -29,4 +29,35 @@ public class HistoricoSaude implements Serializable {
     private Cirurgia cirurgia;
     private List<String> deficiencias = new ArrayList<>();
     private List<String> acompanhamentoSaude = new ArrayList<>();
+    
+    public void setUsoMedicamentoContinuo(UsoMedicamentoContinuo usoMedicamentoContinuo) {
+        if (usoMedicamentoContinuo == null) {
+            return;
+        }
+        this.usoMedicamentoContinuo = usoMedicamentoContinuo;
+    }
+    public void setDoencaCronica(DoencaCronica doencaCronica) {
+        if (doencaCronica == null) {
+            return;
+        }
+        this.doencaCronica = doencaCronica;
+    }
+    public void setAlergia(Alergia alergia) {
+        if (alergia == null) {
+            return;
+        }
+        this.alergia = alergia;
+    }
+    public void setCirurgia(Cirurgia cirurgia) {
+        if (cirurgia == null) {
+            return;
+        }
+        this.cirurgia = cirurgia;
+    }
+    @Override
+    public String toString() {
+        return "HistoricoSaude [tipoSanguineo=" + tipoSanguineo + ", fatorRh=" + fatorRh + ", usoMedicamentoContinuo="
+                + usoMedicamentoContinuo + ", doencaCronica=" + doencaCronica + ", alergia=" + alergia + ", cirurgia="
+                + cirurgia + ", deficiencias=" + deficiencias + ", acompanhamentoSaude=" + acompanhamentoSaude + "]";
+    }
 }

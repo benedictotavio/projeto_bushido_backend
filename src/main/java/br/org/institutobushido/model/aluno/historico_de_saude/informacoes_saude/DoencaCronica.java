@@ -8,7 +8,7 @@ public class DoencaCronica extends InformacaoSaude implements Serializable {
 
     private static final long serialVersionUID = 2405172041950251807L;
 
-    public DoencaCronica(boolean resposta, String tipo) {
-        super(resposta, tipo);
+    public DoencaCronica(String tipo) {
+        super(tipo);
     }
 }
