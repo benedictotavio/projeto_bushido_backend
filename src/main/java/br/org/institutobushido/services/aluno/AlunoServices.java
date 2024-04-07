@@ -118,7 +118,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Update update = new Update().addToSet(GRADUACAO + "." + (graduacaoAtual) + ".faltas", novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
 
-        if (aluno.getGraduacao().get(0).getFaltas().size() == 4) {
+        if (aluno.getGraduacao().get(graduacaoAtual).getFaltas().size() == 4) {
             mudarStatusGraduacaoAluno(aluno, false);
         }
 
