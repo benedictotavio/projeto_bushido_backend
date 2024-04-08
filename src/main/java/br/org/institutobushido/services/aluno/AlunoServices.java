@@ -75,6 +75,12 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
+    public List<AlunoDTOResponse> buscarAlunosPorNome(String nome) {
+        Query query = new Query(Criteria.where("nome").regex(nome, "si"));
+        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
+    }
+
+    @Override
     public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest) {
         Aluno aluno = encontrarAlunoPorRg(rg);
         Responsavel novoResponsavel = aluno
@@ -316,11 +322,5 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set(HISTORICO_SAUDE + "cirurgia", aluno.getHistoricoSaude().getCirurgia());
         update.set(HISTORICO_SAUDE + "doencaCronica", aluno.getHistoricoSaude().getDoencaCronica());
         mongoTemplate.updateFirst(query, update, Aluno.class);
-    }
-
-    @Override
-    public List<AlunoDTOResponse> buscarAlunosPorNome(String nome) {
-        Query query = new Query(Criteria.where("nome").regex(nome, "si"));
-        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 }

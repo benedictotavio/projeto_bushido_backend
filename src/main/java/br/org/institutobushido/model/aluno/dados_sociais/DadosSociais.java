@@ -77,7 +77,7 @@ public class DadosSociais implements Serializable {
         this.alunoContribuiParaRenda = alunoContribuiParaRenda;
     }
 
-    public void setrendaFamiliar(int rendaFamiliar) {
+    public void setRendaFamiliar(int rendaFamiliar) {
         this.rendaFamiliar = rendaFamiliar;
     }
 
