@@ -3,6 +3,7 @@ package br.org.institutobushido.model.aluno.dados_sociais;
 import java.io.Serializable;
 
 import br.org.institutobushido.enums.aluno.Imovel;
+import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,13 +14,34 @@ import lombok.NoArgsConstructor;
 public class DadosSociais implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
 
-    private boolean bolsaFamilia = false;
-    private boolean auxilioBrasil = false;
+    private boolean bolsaFamilia;
+    private boolean auxilioBrasil;
     private Imovel imovel;
-    private int numerosDePessoasNaCasa = 1;
-    private int contribuintesDaRendaFamiliar = 1;
-    private boolean alunoContribuiParaRenda = false;
-    private int rendaFamiliarEmSalariosMinimos;
+    private int numerosDePessoasNaCasa;
+    private int contribuintesDaRendaFamiliar;
+    private boolean alunoContribuiParaRenda;
+    private int rendaFamiliar;
+
+    public DadosSociais(Imovel imovel, int numerosDePessoasNaCasa, int contribuintesDaRendaFamiliar,
+            int rendaFamiliar) {
+
+        if (numerosDePessoasNaCasa < 1) {
+            throw new LimitQuantityException("A quantidade de pessoas deve ser maior que zero");
+        }
+
+        if (contribuintesDaRendaFamiliar > numerosDePessoasNaCasa) {
+            throw new LimitQuantityException(
+                    "A Quantidade de contribuintes deve ser menor ou igual a quantidade de pessoas na casa");
+        }
+
+        this.imovel = imovel;
+        this.numerosDePessoasNaCasa = numerosDePessoasNaCasa;
+        this.contribuintesDaRendaFamiliar = contribuintesDaRendaFamiliar;
+        this.rendaFamiliar = rendaFamiliar;
+        this.alunoContribuiParaRenda = false;
+        this.bolsaFamilia = false;
+        this.auxilioBrasil = false;
+    }
 
     public void setBolsaFamilia(boolean bolsaFamilia) {
         this.bolsaFamilia = bolsaFamilia;
@@ -37,10 +59,17 @@ public class DadosSociais implements Serializable {
     }
 
     public void setNumerosDePessoasNaCasa(int numerosDePessoasNaCasa) {
+        if (numerosDePessoasNaCasa < 1) {
+            throw new LimitQuantityException("A quantidade de pessoas deve ser maior que zero");
+        }
         this.numerosDePessoasNaCasa = numerosDePessoasNaCasa;
     }
 
     public void setContribuintesDaRendaFamiliar(int contribuintesDaRendaFamiliar) {
+        if (contribuintesDaRendaFamiliar > this.getNumerosDePessoasNaCasa()) {
+            throw new LimitQuantityException(
+                    "A Quantidade de contribuintes deve ser menor ou igual a quantidade de pessoas na casa");
+        }
         this.contribuintesDaRendaFamiliar = contribuintesDaRendaFamiliar;
     }
 
@@ -48,8 +77,8 @@ public class DadosSociais implements Serializable {
         this.alunoContribuiParaRenda = alunoContribuiParaRenda;
     }
 
-    public void setRendaFamiliarEmSalariosMinimos(int rendaFamiliarEmSalariosMinimos) {
-        this.rendaFamiliarEmSalariosMinimos = rendaFamiliarEmSalariosMinimos;
+    public void setrendaFamiliar(int rendaFamiliar) {
+        this.rendaFamiliar = rendaFamiliar;
     }
 
 }

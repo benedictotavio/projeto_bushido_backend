@@ -24,8 +24,8 @@ public class DadosSociaisMapper {
                 .setContribuintesDaRendaFamiliar(dadosSociaisDTORequest.contribuintesDaRendaFamiliar());
         aluno.getDadosSociais()
                 .setNumerosDePessoasNaCasa(dadosSociaisDTORequest.numerosDePessoasNaCasa());
-        aluno.getDadosSociais().setRendaFamiliarEmSalariosMinimos(
-                dadosSociaisDTORequest.rendaFamiliarEmSalariosMinimos());
+        aluno.getDadosSociais().setrendaFamiliar(
+                dadosSociaisDTORequest.rendaFamiliar());
 
         return aluno.getDadosSociais();
     }
@@ -43,7 +43,7 @@ public class DadosSociaisMapper {
         dadosSociais.setContribuintesDaRendaFamiliar(dadosSociaisDTORequest.contribuintesDaRendaFamiliar());
         dadosSociais.setImovel(dadosSociaisDTORequest.imovel());
         dadosSociais.setNumerosDePessoasNaCasa(dadosSociaisDTORequest.numerosDePessoasNaCasa());
-        dadosSociais.setRendaFamiliarEmSalariosMinimos(dadosSociaisDTORequest.rendaFamiliarEmSalariosMinimos());
+        dadosSociais.setrendaFamiliar(dadosSociaisDTORequest.rendaFamiliar());
 
         return dadosSociais;
     }
@@ -61,7 +61,7 @@ public class DadosSociaisMapper {
         dadosSociais.setContribuintesDaRendaFamiliar(dadosEditadosSociaisDTORequest.contribuintesDaRendaFamiliar());
         dadosSociais.setImovel(dadosEditadosSociaisDTORequest.imovel());
         dadosSociais.setNumerosDePessoasNaCasa(dadosEditadosSociaisDTORequest.numerosDePessoasNaCasa());
-        dadosSociais.setRendaFamiliarEmSalariosMinimos(dadosEditadosSociaisDTORequest.rendaFamiliarEmSalariosMinimos());
+        dadosSociais.setrendaFamiliar(dadosEditadosSociaisDTORequest.rendaFamiliar());
 
         return dadosSociais;
     }
@@ -75,7 +75,7 @@ public class DadosSociaisMapper {
                 .withContribuintesDaRendaFamiliar(dadosSociais.getContribuintesDaRendaFamiliar())
                 .withImovel(dadosSociais.getImovel())
                 .withNumerosDePessoasNaCasa(dadosSociais.getNumerosDePessoasNaCasa())
-                .withRendaFamiliarEmSalariosMinimos(dadosSociais.getRendaFamiliarEmSalariosMinimos()).build();
+                .withRendaFamiliar(dadosSociais.getRendaFamiliar()).build();
     }
 
     public static UpdateDadosSociaisDTORequest mapToUpdateDadosSociaisDTORequest(DadosSociais dadosSociais) {
@@ -89,6 +89,6 @@ public class DadosSociaisMapper {
                 .withContribuintesDaRendaFamiliar(dadosSociais.getContribuintesDaRendaFamiliar())
                 .withImovel(dadosSociais.getImovel())
                 .withNumerosDePessoasNaCasa(dadosSociais.getNumerosDePessoasNaCasa())
-                .withRendaFamiliarEmSalariosMinimos(dadosSociais.getRendaFamiliarEmSalariosMinimos()).build();
+                .withRendaFamiliar(dadosSociais.getRendaFamiliar()).build();
     }
 }

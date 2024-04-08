@@ -11,5 +11,5 @@ public record DadosSociaisDTOResponse(
         int numerosDePessoasNaCasa,
         int contribuintesDaRendaFamiliar,
         boolean alunoContribuiParaRenda,
-        int rendaFamiliarEmSalariosMinimos) {
+        int rendaFamiliar) {
 }

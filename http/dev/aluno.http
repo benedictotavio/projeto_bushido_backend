@@ -26,7 +26,7 @@ Authorization: Bearer {{token}}
     "numerosDePessoasNaCasa": 12,
     "contribuintesDaRendaFamiliar": 3,
     "alunoContribuiParaRenda": true,
-    "rendaFamiliarEmSalariosMinimos": 2000
+    "rendaFamiliar": 2000
   },
   "dadosEscolares": {
     "turno": "MANHA",

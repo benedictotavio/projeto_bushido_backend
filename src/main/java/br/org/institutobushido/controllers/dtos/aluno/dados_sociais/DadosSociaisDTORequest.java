@@ -20,5 +20,5 @@ public record DadosSociaisDTORequest(
 
                 boolean alunoContribuiParaRenda,
 
-                @NotNull(message = "Informe a renda familiar em salarios minimos.") int rendaFamiliarEmSalariosMinimos) {
+                @NotNull(message = "Informe a renda familiar em salarios minimos.") int rendaFamiliar) {
 }
