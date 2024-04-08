@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
-import br.org.institutobushido.model.aluno.graduacao.Graduacao;
+import br.org.institutobushido.models.aluno.graduacao.Graduacao;
 
 public class GraduacaoMapper {
 

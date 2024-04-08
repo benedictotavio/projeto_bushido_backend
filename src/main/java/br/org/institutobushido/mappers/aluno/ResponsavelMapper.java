@@ -8,25 +8,25 @@ import org.springframework.stereotype.Component;
 
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
+import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 
 @Component
 public class ResponsavelMapper {
 
-    private ResponsavelMapper() {}
+    private ResponsavelMapper() {
+    }
 
     public static Responsavel mapToResponsavel(ResponsavelDTORequest responsavelDTORequest) {
         if (responsavelDTORequest == null) {
             return null;
         }
 
-        Responsavel responsavel = new Responsavel();
-
-        responsavel.setNome(responsavelDTORequest.nome());
-        responsavel.setFiliacao(responsavelDTORequest.filiacao());
-        responsavel.setTelefone(responsavelDTORequest.telefone());
-        responsavel.setCpf(responsavelDTORequest.cpf());
-        responsavel.setEmail(responsavelDTORequest.email());
+        Responsavel responsavel = new Responsavel(
+                responsavelDTORequest.nome(),
+                responsavelDTORequest.cpf(),
+                responsavelDTORequest.telefone(),
+                responsavelDTORequest.email(),
+                responsavelDTORequest.filiacao());
 
         return responsavel;
     }

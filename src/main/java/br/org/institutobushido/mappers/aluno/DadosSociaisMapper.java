@@ -3,8 +3,8 @@ package br.org.institutobushido.mappers.aluno;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.UpdateDadosSociaisDTORequest;
-import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
+import br.org.institutobushido.models.aluno.Aluno;
+import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
 
 public class DadosSociaisMapper {
     private DadosSociaisMapper() {
@@ -36,14 +36,14 @@ public class DadosSociaisMapper {
             return null;
         }
 
-        DadosSociais dadosSociais = new DadosSociais();
-        dadosSociais.setAlunoContribuiParaRenda(dadosSociaisDTORequest.alunoContribuiParaRenda());
-        dadosSociais.setAuxilioBrasil(dadosSociaisDTORequest.auxilioBrasil());
-        dadosSociais.setBolsaFamilia(dadosSociaisDTORequest.bolsaFamilia());
-        dadosSociais.setNumerosDePessoasNaCasa(dadosSociaisDTORequest.numerosDePessoasNaCasa());
-        dadosSociais.setContribuintesDaRendaFamiliar(dadosSociaisDTORequest.contribuintesDaRendaFamiliar());
-        dadosSociais.setImovel(dadosSociaisDTORequest.imovel());
-        dadosSociais.setRendaFamiliar(dadosSociaisDTORequest.rendaFamiliar());
+        DadosSociais dadosSociais = new DadosSociais(
+                dadosSociaisDTORequest.bolsaFamilia(),
+                dadosSociaisDTORequest.auxilioBrasil(),
+                dadosSociaisDTORequest.imovel(),
+                dadosSociaisDTORequest.numerosDePessoasNaCasa(),
+                dadosSociaisDTORequest.contribuintesDaRendaFamiliar(),
+                dadosSociaisDTORequest.alunoContribuiParaRenda(),
+                dadosSociaisDTORequest.rendaFamiliar());
 
         return dadosSociais;
     }

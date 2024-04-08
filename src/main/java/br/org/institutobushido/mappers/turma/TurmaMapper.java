@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
-import br.org.institutobushido.model.turma.Turma;
+import br.org.institutobushido.models.turma.Turma;
 
 public class TurmaMapper {
     public static Turma mapToTurma(TurmaDTORequest turmaDTORequest) {

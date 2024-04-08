@@ -6,11 +6,11 @@ import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informa
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.cirurgia.CirurgiaDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.doenca_cronica.DoencaCronicaDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTOResponse;
-import br.org.institutobushido.model.aluno.historico_de_saude.HistoricoSaude;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergia;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgia;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
+import br.org.institutobushido.models.aluno.historico_de_saude.HistoricoSaude;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.Alergia;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.Cirurgia;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 
 public class HistoricoSaudeMapper {
 

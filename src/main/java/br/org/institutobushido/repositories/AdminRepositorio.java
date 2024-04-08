@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
-import br.org.institutobushido.model.admin.Admin;
+import br.org.institutobushido.models.admin.Admin;
 
 @Repository
 public interface AdminRepositorio extends MongoRepository<Admin, String> {

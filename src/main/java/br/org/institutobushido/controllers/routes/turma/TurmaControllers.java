@@ -14,7 +14,7 @@ import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
-import br.org.institutobushido.model.turma.Turma;
+import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.services.turma.TurmaServiceInterface;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;

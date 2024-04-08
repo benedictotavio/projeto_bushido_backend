@@ -22,12 +22,24 @@ import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.resources.exceptions.InactiveUserException;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.resources.exceptions.InvalidFormatDataException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
 
 @RestControllerAdvice
 public class ResourceExceptionHandler {
     ProblemDetail problem;
+
+    @ExceptionHandler(InvalidFormatDataException.class)
+    public ResponseEntity<StandardError> notSupportFormat(InvalidFormatDataException e, HttpServletRequest request) {
+        StandardError err = new StandardError();
+        err.setTimestamp(Instant.now());
+        err.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
+        err.setError("Data is not support for this format");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+        return ResponseEntity.status(err.getStatus()).body(err);
+    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<StandardError> objectNotFound(EntityNotFoundException e, HttpServletRequest request) {
