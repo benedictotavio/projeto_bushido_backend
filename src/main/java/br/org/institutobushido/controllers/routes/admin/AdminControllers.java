@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTORequest;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
-import br.org.institutobushido.model.admin.Admin;
+import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.services.admin.AdminServiceInterface;
 import jakarta.validation.Valid;
 

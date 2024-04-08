@@ -149,7 +149,7 @@ GET /aluno?rg={rg}
         "numerosDePessoasNaCasa": 0,
         "contribuintesDaRendaFamiliar": 0,
         "alunoContribuiParaRenda": true,
-        "rendaFamiliarEmSalariosMinimos": 0
+        "rendaFamiliar": 0
       },
       "dadosEscolares": {
         "turno": "MANHA", -> enum
@@ -241,7 +241,7 @@ Adiciona um aluno baseado nos dados cadastrais abaixo.
 | dadosSociais.numerosDePessoasNaCasa                   | integer          | Número de pessoas na casa do aluno                |
 | dadosSociais.contribuintesDaRendaFamiliar             | integer          | Número de contribuintes da renda familiar         |
 | dadosSociais.alunoContribuiParaRenda                  | boolean          | Indica se o aluno contribui para a renda familiar |
-| dadosSociais.rendaFamiliarEmSalariosMinimos`*`        | integer          | Renda familiar em salários mínimos                |
+| dadosSociais.rendaFamiliar`*`        | integer          | Renda familiar em salários mínimos                |
 | dadosEscolares                                        | objeto           | Dados escolares do aluno                          |
 | dadosEscolares.turno`*`                               | string (enum)    | Turno escolar do aluno (MANHA ou outro)           |
 | dadosEscolares.escola`*`                              | string           | Nome da escola do aluno                           |
@@ -297,7 +297,7 @@ POST /aluno
     "numerosDePessoasNaCasa": 0,
     "contribuintesDaRendaFamiliar": 0,
     "alunoContribuiParaRenda": true,
-    "rendaFamiliarEmSalariosMinimos": 0
+    "rendaFamiliar": 0
   },
    "dadosEscolares": {
     "turno": "MANHA", -> enum
@@ -438,7 +438,7 @@ PUT /aluno/{rg}
     "numerosDePessoasNaCasa": 0,
     "contribuintesDaRendaFamiliar": 0,
     "alunoContribuiParaRenda": true,
-    "rendaFamiliarEmSalariosMinimos": 0
+    "rendaFamiliar": 0
   },
    "dadosEscolares": {
     "turno": "MANHA", -> enum

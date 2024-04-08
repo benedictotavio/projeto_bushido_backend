@@ -23,17 +23,17 @@ import br.org.institutobushido.mappers.aluno.DadosSociaisMapper;
 import br.org.institutobushido.mappers.aluno.EnderecoMapper;
 import br.org.institutobushido.mappers.aluno.GraduacaoMapper;
 import br.org.institutobushido.mappers.aluno.ResponsavelMapper;
-import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
-import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
-import br.org.institutobushido.model.aluno.endereco.Endereco;
-import br.org.institutobushido.model.aluno.graduacao.Graduacao;
-import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Alergia;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.Cirurgia;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
-import br.org.institutobushido.model.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
-import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
+import br.org.institutobushido.models.aluno.Aluno;
+import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
+import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
+import br.org.institutobushido.models.aluno.endereco.Endereco;
+import br.org.institutobushido.models.aluno.graduacao.Graduacao;
+import br.org.institutobushido.models.aluno.graduacao.falta.Falta;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.Alergia;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.Cirurgia;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
+import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
@@ -71,6 +71,12 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public List<AlunoDTOResponse> buscarAluno(String rg) {
         Query query = new Query(Criteria.where("rg").regex(rg, "si"));
+        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
+    }
+
+    @Override
+    public List<AlunoDTOResponse> buscarAlunosPorNome(String nome) {
+        Query query = new Query(Criteria.where("nome").regex(nome, "si"));
         return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 
@@ -316,11 +322,5 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set(HISTORICO_SAUDE + "cirurgia", aluno.getHistoricoSaude().getCirurgia());
         update.set(HISTORICO_SAUDE + "doencaCronica", aluno.getHistoricoSaude().getDoencaCronica());
         mongoTemplate.updateFirst(query, update, Aluno.class);
-    }
-
-    @Override
-    public List<AlunoDTOResponse> buscarAlunosPorNome(String nome) {
-        Query query = new Query(Criteria.where("nome").regex(nome, "si"));
-        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 }

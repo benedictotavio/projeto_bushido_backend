@@ -3,8 +3,8 @@ package br.org.institutobushido.mappers.aluno;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.UpdateDadosSociaisDTORequest;
-import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.dados_sociais.DadosSociais;
+import br.org.institutobushido.models.aluno.Aluno;
+import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
 
 public class DadosSociaisMapper {
     private DadosSociaisMapper() {
@@ -19,13 +19,13 @@ public class DadosSociaisMapper {
         aluno.getDadosSociais().setBolsaFamilia(dadosSociaisDTORequest.bolsaFamilia());
         aluno.getDadosSociais().setAuxilioBrasil(dadosSociaisDTORequest.auxilioBrasil());
         aluno.getDadosSociais()
+                .setNumerosDePessoasNaCasa(dadosSociaisDTORequest.numerosDePessoasNaCasa());
+        aluno.getDadosSociais()
                 .setAlunoContribuiParaRenda(dadosSociaisDTORequest.alunoContribuiParaRenda());
         aluno.getDadosSociais()
                 .setContribuintesDaRendaFamiliar(dadosSociaisDTORequest.contribuintesDaRendaFamiliar());
-        aluno.getDadosSociais()
-                .setNumerosDePessoasNaCasa(dadosSociaisDTORequest.numerosDePessoasNaCasa());
-        aluno.getDadosSociais().setRendaFamiliarEmSalariosMinimos(
-                dadosSociaisDTORequest.rendaFamiliarEmSalariosMinimos());
+        aluno.getDadosSociais().setRendaFamiliar(
+                dadosSociaisDTORequest.rendaFamiliar());
 
         return aluno.getDadosSociais();
     }
@@ -36,14 +36,14 @@ public class DadosSociaisMapper {
             return null;
         }
 
-        DadosSociais dadosSociais = new DadosSociais();
-        dadosSociais.setAlunoContribuiParaRenda(dadosSociaisDTORequest.alunoContribuiParaRenda());
-        dadosSociais.setAuxilioBrasil(dadosSociaisDTORequest.auxilioBrasil());
-        dadosSociais.setBolsaFamilia(dadosSociaisDTORequest.bolsaFamilia());
-        dadosSociais.setContribuintesDaRendaFamiliar(dadosSociaisDTORequest.contribuintesDaRendaFamiliar());
-        dadosSociais.setImovel(dadosSociaisDTORequest.imovel());
-        dadosSociais.setNumerosDePessoasNaCasa(dadosSociaisDTORequest.numerosDePessoasNaCasa());
-        dadosSociais.setRendaFamiliarEmSalariosMinimos(dadosSociaisDTORequest.rendaFamiliarEmSalariosMinimos());
+        DadosSociais dadosSociais = new DadosSociais(
+                dadosSociaisDTORequest.bolsaFamilia(),
+                dadosSociaisDTORequest.auxilioBrasil(),
+                dadosSociaisDTORequest.imovel(),
+                dadosSociaisDTORequest.numerosDePessoasNaCasa(),
+                dadosSociaisDTORequest.contribuintesDaRendaFamiliar(),
+                dadosSociaisDTORequest.alunoContribuiParaRenda(),
+                dadosSociaisDTORequest.rendaFamiliar());
 
         return dadosSociais;
     }
@@ -61,7 +61,7 @@ public class DadosSociaisMapper {
         dadosSociais.setContribuintesDaRendaFamiliar(dadosEditadosSociaisDTORequest.contribuintesDaRendaFamiliar());
         dadosSociais.setImovel(dadosEditadosSociaisDTORequest.imovel());
         dadosSociais.setNumerosDePessoasNaCasa(dadosEditadosSociaisDTORequest.numerosDePessoasNaCasa());
-        dadosSociais.setRendaFamiliarEmSalariosMinimos(dadosEditadosSociaisDTORequest.rendaFamiliarEmSalariosMinimos());
+        dadosSociais.setRendaFamiliar(dadosEditadosSociaisDTORequest.rendaFamiliar());
 
         return dadosSociais;
     }
@@ -70,12 +70,14 @@ public class DadosSociaisMapper {
         if (dadosSociais == null) {
             return null;
         }
-        return DadosSociaisDTOResponse.builder().withAlunoContribuiParaRenda(dadosSociais.isAlunoContribuiParaRenda())
-                .withAuxilioBrasil(dadosSociais.isAuxilioBrasil()).withBolsaFamilia(dadosSociais.isBolsaFamilia())
-                .withContribuintesDaRendaFamiliar(dadosSociais.getContribuintesDaRendaFamiliar())
-                .withImovel(dadosSociais.getImovel())
-                .withNumerosDePessoasNaCasa(dadosSociais.getNumerosDePessoasNaCasa())
-                .withRendaFamiliarEmSalariosMinimos(dadosSociais.getRendaFamiliarEmSalariosMinimos()).build();
+        return new DadosSociaisDTOResponse(
+                dadosSociais.isBolsaFamilia(),
+                dadosSociais.isAuxilioBrasil(),
+                dadosSociais.getImovel(),
+                dadosSociais.getNumerosDePessoasNaCasa(),
+                dadosSociais.getContribuintesDaRendaFamiliar(),
+                dadosSociais.isAlunoContribuiParaRenda(),
+                dadosSociais.getRendaFamiliar());
     }
 
     public static UpdateDadosSociaisDTORequest mapToUpdateDadosSociaisDTORequest(DadosSociais dadosSociais) {
@@ -86,9 +88,9 @@ public class DadosSociaisMapper {
         return UpdateDadosSociaisDTORequest.builder()
                 .withAlunoContribuiParaRenda(dadosSociais.isAlunoContribuiParaRenda())
                 .withAuxilioBrasil(dadosSociais.isAuxilioBrasil()).withBolsaFamilia(dadosSociais.isBolsaFamilia())
+                .withNumerosDePessoasNaCasa(dadosSociais.getNumerosDePessoasNaCasa())
                 .withContribuintesDaRendaFamiliar(dadosSociais.getContribuintesDaRendaFamiliar())
                 .withImovel(dadosSociais.getImovel())
-                .withNumerosDePessoasNaCasa(dadosSociais.getNumerosDePessoasNaCasa())
-                .withRendaFamiliarEmSalariosMinimos(dadosSociais.getRendaFamiliarEmSalariosMinimos()).build();
+                .withRendaFamiliar(dadosSociais.getRendaFamiliar()).build();
     }
 }

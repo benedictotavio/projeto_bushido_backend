@@ -3,8 +3,8 @@ package br.org.institutobushido.mappers.aluno;
 import br.org.institutobushido.controllers.dtos.aluno.endereco.EnderecoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.endereco.EnderecoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.endereco.UpdateEnderecoDTORequest;
-import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.endereco.Endereco;
+import br.org.institutobushido.models.aluno.Aluno;
+import br.org.institutobushido.models.aluno.endereco.Endereco;
 
 public class EnderecoMapper {
 

@@ -4,8 +4,8 @@ import java.util.List;
 
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
-import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.graduacao.Graduacao;
+import br.org.institutobushido.models.aluno.Aluno;
+import br.org.institutobushido.models.aluno.graduacao.Graduacao;
 
 public class AlunoMapper {
     private AlunoMapper() {
@@ -20,7 +20,7 @@ public class AlunoMapper {
         aluno.setGenero(alunoDTORequest.genero());
         aluno.setDataNascimento(alunoDTORequest.dataNascimento());
         aluno.setNome(alunoDTORequest.nome());
-        aluno.addGraduacao(new Graduacao(alunoDTORequest.graduacao().kyu()));
+        aluno.adicionarGraduacao(new Graduacao(alunoDTORequest.graduacao().kyu()));
         aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
         aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
         aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));

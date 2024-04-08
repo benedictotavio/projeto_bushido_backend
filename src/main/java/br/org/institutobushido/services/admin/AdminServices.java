@@ -13,7 +13,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
-import br.org.institutobushido.model.admin.Admin;
+import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 

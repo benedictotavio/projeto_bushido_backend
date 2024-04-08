@@ -8,17 +8,17 @@ import lombok.Builder;
 @Builder(setterPrefix = "with")
 public record DadosSociaisDTORequest(
 
-                boolean bolsaFamilia,
+        boolean bolsaFamilia,
 
-                boolean auxilioBrasil,
+        boolean auxilioBrasil,
 
-                @NotNull(message = "Imovel é obrigatório") @Pattern(regexp = "^(ALUGADO|PROPRIO|CEDIDO)$") Imovel imovel,
+        @NotNull(message = "Imovel é obrigatório") @Pattern(regexp = "^(ALUGADO|PROPRIO|CEDIDO)$") Imovel imovel,
 
-                int numerosDePessoasNaCasa,
+        int numerosDePessoasNaCasa,
 
-                int contribuintesDaRendaFamiliar,
+        int contribuintesDaRendaFamiliar,
 
-                boolean alunoContribuiParaRenda,
+        boolean alunoContribuiParaRenda,
 
-                @NotNull(message = "Informe a renda familiar em salarios minimos.") int rendaFamiliarEmSalariosMinimos) {
+        @NotNull(message = "Informe a renda familiar em salarios minimos.") int rendaFamiliar) {
 }

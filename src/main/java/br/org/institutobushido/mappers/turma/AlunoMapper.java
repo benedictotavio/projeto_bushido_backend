@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTOResponse;
-import br.org.institutobushido.model.turma.Aluno;
+import br.org.institutobushido.models.turma.Aluno;
 
 public class AlunoMapper {
 

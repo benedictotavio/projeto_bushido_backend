@@ -25,11 +25,11 @@ import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTO
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPutResponse;
-import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.graduacao.Graduacao;
-import br.org.institutobushido.model.aluno.graduacao.falta.Falta;
-import br.org.institutobushido.model.aluno.historico_de_saude.HistoricoSaude;
-import br.org.institutobushido.model.aluno.responsaveis.Responsavel;
+import br.org.institutobushido.models.aluno.Aluno;
+import br.org.institutobushido.models.aluno.graduacao.Graduacao;
+import br.org.institutobushido.models.aluno.graduacao.falta.Falta;
+import br.org.institutobushido.models.aluno.historico_de_saude.HistoricoSaude;
+import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.services.aluno.AlunoServicesInterface;
 import jakarta.validation.Valid;
 

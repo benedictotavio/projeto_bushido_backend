@@ -11,6 +11,6 @@ public record UpdateDadosSociaisDTORequest(
     int numerosDePessoasNaCasa,
     int contribuintesDaRendaFamiliar,
     boolean alunoContribuiParaRenda,
-    int rendaFamiliarEmSalariosMinimos
+    int rendaFamiliar
 ) {
 }

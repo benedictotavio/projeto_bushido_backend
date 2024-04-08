@@ -3,8 +3,8 @@ package br.org.institutobushido.mappers.aluno;
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.DadosEscolaresDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.DadosEscolaresDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.UpdateDadosEscolaresDTORequest;
-import br.org.institutobushido.model.aluno.Aluno;
-import br.org.institutobushido.model.aluno.dados_escolares.DadosEscolares;
+import br.org.institutobushido.models.aluno.Aluno;
+import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
 
 public class DadosEscolaresMapper {
     private DadosEscolaresMapper() {
