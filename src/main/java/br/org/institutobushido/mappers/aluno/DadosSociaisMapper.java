@@ -10,7 +10,7 @@ public class DadosSociaisMapper {
     private DadosSociaisMapper() {
     }
 
-    public static DadosSociais setDadosSociais(UpdateDadosSociaisDTORequest dadosSociaisDTORequest, Aluno aluno) {
+    public static DadosSociais updateDadosSociais(UpdateDadosSociaisDTORequest dadosSociaisDTORequest, Aluno aluno) {
         if (dadosSociaisDTORequest == null) {
             return null;
         }
@@ -36,7 +36,7 @@ public class DadosSociaisMapper {
             return null;
         }
 
-        DadosSociais dadosSociais = new DadosSociais(
+        return new DadosSociais(
                 dadosSociaisDTORequest.bolsaFamilia(),
                 dadosSociaisDTORequest.auxilioBrasil(),
                 dadosSociaisDTORequest.imovel(),
@@ -44,26 +44,6 @@ public class DadosSociaisMapper {
                 dadosSociaisDTORequest.contribuintesDaRendaFamiliar(),
                 dadosSociaisDTORequest.alunoContribuiParaRenda(),
                 dadosSociaisDTORequest.rendaFamiliar());
-
-        return dadosSociais;
-    }
-
-    public static DadosSociais mapToDadosSociais(UpdateDadosSociaisDTORequest dadosEditadosSociaisDTORequest) {
-
-        if (dadosEditadosSociaisDTORequest == null) {
-            return null;
-        }
-
-        DadosSociais dadosSociais = new DadosSociais();
-        dadosSociais.setAlunoContribuiParaRenda(dadosEditadosSociaisDTORequest.alunoContribuiParaRenda());
-        dadosSociais.setAuxilioBrasil(dadosEditadosSociaisDTORequest.auxilioBrasil());
-        dadosSociais.setBolsaFamilia(dadosEditadosSociaisDTORequest.bolsaFamilia());
-        dadosSociais.setContribuintesDaRendaFamiliar(dadosEditadosSociaisDTORequest.contribuintesDaRendaFamiliar());
-        dadosSociais.setImovel(dadosEditadosSociaisDTORequest.imovel());
-        dadosSociais.setNumerosDePessoasNaCasa(dadosEditadosSociaisDTORequest.numerosDePessoasNaCasa());
-        dadosSociais.setRendaFamiliar(dadosEditadosSociaisDTORequest.rendaFamiliar());
-
-        return dadosSociais;
     }
 
     public static DadosSociaisDTOResponse mapToDadosSociaisDTOResponse(DadosSociais dadosSociais) {
@@ -78,19 +58,5 @@ public class DadosSociaisMapper {
                 dadosSociais.getContribuintesDaRendaFamiliar(),
                 dadosSociais.isAlunoContribuiParaRenda(),
                 dadosSociais.getRendaFamiliar());
-    }
-
-    public static UpdateDadosSociaisDTORequest mapToUpdateDadosSociaisDTORequest(DadosSociais dadosSociais) {
-        if (dadosSociais == null) {
-            return null;
-        }
-
-        return UpdateDadosSociaisDTORequest.builder()
-                .withAlunoContribuiParaRenda(dadosSociais.isAlunoContribuiParaRenda())
-                .withAuxilioBrasil(dadosSociais.isAuxilioBrasil()).withBolsaFamilia(dadosSociais.isBolsaFamilia())
-                .withNumerosDePessoasNaCasa(dadosSociais.getNumerosDePessoasNaCasa())
-                .withContribuintesDaRendaFamiliar(dadosSociais.getContribuintesDaRendaFamiliar())
-                .withImovel(dadosSociais.getImovel())
-                .withRendaFamiliar(dadosSociais.getRendaFamiliar()).build();
     }
 }

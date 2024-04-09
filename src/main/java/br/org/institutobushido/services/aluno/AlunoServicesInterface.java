@@ -11,9 +11,10 @@ import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTO
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 
 public interface AlunoServicesInterface {
-    AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest);
+    String adicionarAluno(AlunoDTORequest alunoDTORequest);
 
-    List<AlunoDTOResponse> buscarAluno(String rg);
+    List<AlunoDTOResponse> buscarAluno(String nome, String rg, int pagina, int tamanho, String ordenarPor,
+            String sequenciaOrdenacao);
 
     public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest);
 
@@ -36,8 +37,4 @@ public interface AlunoServicesInterface {
     public GraduacaoDTOResponse aprovarAluno(String rg);
 
     public GraduacaoDTOResponse reprovarAluno(String rg);
-
-    public Object editarHistoricoDeSaude(String rg, String campo, String historicoDeSaude, boolean resposta);
-
-    public List<AlunoDTOResponse> buscarAlunosPorNome(String nome);
 }

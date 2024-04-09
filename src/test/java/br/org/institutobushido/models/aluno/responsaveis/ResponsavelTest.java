@@ -3,10 +3,12 @@ package br.org.institutobushido.models.aluno.responsaveis;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import br.org.institutobushido.resources.exceptions.InvalidFormatDataException;
 
+@SpringBootTest
 class ResponsavelTest {
 
     @Test

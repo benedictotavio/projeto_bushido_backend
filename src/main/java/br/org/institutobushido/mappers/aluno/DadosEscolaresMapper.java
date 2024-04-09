@@ -10,7 +10,7 @@ public class DadosEscolaresMapper {
     private DadosEscolaresMapper() {
     }
 
-    public static DadosEscolares setDadosEscolares(UpdateDadosEscolaresDTORequest dadosEscolaresDTORequest, Aluno aluno) {
+    public static DadosEscolares updateDadosEscolares(UpdateDadosEscolaresDTORequest dadosEscolaresDTORequest, Aluno aluno) {
         
         if (dadosEscolaresDTORequest == null) {
             return null;
@@ -32,20 +32,6 @@ public class DadosEscolaresMapper {
        dadosEscolares.setEscola(dadosEscolaresDTORequest.escola());
        dadosEscolares.setSerie(dadosEscolaresDTORequest.serie());
        dadosEscolares.setTurno(dadosEscolaresDTORequest.turno());
-
-       return dadosEscolares;
-    }
-
-    public static DadosEscolares mapToDadosEscolares(UpdateDadosEscolaresDTORequest dadosEditadosEscolaresDTORequest) {
-
-        if (dadosEditadosEscolaresDTORequest == null) {
-            return null;
-        }
-
-       DadosEscolares dadosEscolares = new DadosEscolares();
-       dadosEscolares.setEscola(dadosEditadosEscolaresDTORequest.escola());
-       dadosEscolares.setSerie(dadosEditadosEscolaresDTORequest.serie());
-       dadosEscolares.setTurno(dadosEditadosEscolaresDTORequest.turno());
 
        return dadosEscolares;
     }

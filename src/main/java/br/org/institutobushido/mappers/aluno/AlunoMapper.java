@@ -12,14 +12,17 @@ public class AlunoMapper {
     }
 
     public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest) {
+
         if (alunoDTORequest == null) {
             return null;
         }
 
-        Aluno aluno = new Aluno(alunoDTORequest.rg());
-        aluno.setGenero(alunoDTORequest.genero());
-        aluno.setDataNascimento(alunoDTORequest.dataNascimento());
-        aluno.setNome(alunoDTORequest.nome());
+        Aluno aluno = new Aluno(
+                alunoDTORequest.rg(),
+                alunoDTORequest.nome(),
+                alunoDTORequest.dataNascimento(),
+                alunoDTORequest.genero());
+
         aluno.adicionarGraduacao(new Graduacao(alunoDTORequest.graduacao().kyu()));
         aluno.setResponsaveis(ResponsavelMapper.mapToResponsaveis(alunoDTORequest.responsaveis()));
         aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));

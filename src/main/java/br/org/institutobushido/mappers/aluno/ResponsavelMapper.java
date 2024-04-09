@@ -21,14 +21,12 @@ public class ResponsavelMapper {
             return null;
         }
 
-        Responsavel responsavel = new Responsavel(
+        return new Responsavel(
                 responsavelDTORequest.nome(),
                 responsavelDTORequest.cpf(),
                 responsavelDTORequest.telefone(),
                 responsavelDTORequest.email(),
                 responsavelDTORequest.filiacao());
-
-        return responsavel;
     }
 
     public static ResponsavelDTOResponse mapToResponsavelDTOResponse(Responsavel responsavel) {

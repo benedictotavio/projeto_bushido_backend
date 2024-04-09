@@ -31,7 +31,7 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Override
-    public void criarNovaTurma(TurmaDTORequest turma) {
+    public String criarNovaTurma(TurmaDTORequest turma) {
         boolean turmaExiste = this.verificaSeTurmaExiste(turma.nome());
 
         if (turmaExiste) {
@@ -40,11 +40,11 @@ public class TurmaService implements TurmaServiceInterface {
 
         Turma novaTurma = TurmaMapper.mapToTurma(turma);
         this.turmaRepositorio.save(novaTurma);
-
+        return "Turma criada " + turma.nome() + " com sucesso!";
     }
 
     @Override
-    public void adicionarAlunoATurma(String nomeTurma, AlunoDTORequest aluno) {
+    public String adicionarAlunoATurma(String nomeTurma, AlunoDTORequest aluno) {
         Turma turma = this.encontrarTurmaPeloNome(nomeTurma);
         Aluno alunoAdicionado = AlunoMapper.mapToAluno(aluno);
         turma.adicionarAluno(alunoAdicionado);
@@ -52,25 +52,28 @@ public class TurmaService implements TurmaServiceInterface {
         query.addCriteria(Criteria.where("nome").is(nomeTurma));
         Update update = new Update().push("alunos", alunoAdicionado);
         mongoTemplate.updateFirst(query, update, Turma.class);
+        return "Aluno adicionado com sucesso a turma " + nomeTurma + " !";
     }
 
     @Override
-    public void removerAlunoDaTurma(String nomeTurma, String rg) {
+    public String removerAlunoDaTurma(String nomeTurma, String rg) {
         Turma turma = this.encontrarTurmaPeloNome(nomeTurma);
         turma.removerAluno(rg);
         Query query = new Query();
         query.addCriteria(Criteria.where("nome").is(nomeTurma));
         Update update = new Update().pull("alunos", new Query().addCriteria(Criteria.where("rg").is(rg)));
         mongoTemplate.updateFirst(query, update, Turma.class);
+        return "Aluno removido com sucesso a turma " + nomeTurma + " !";
     }
 
     @Override
-    public void deletarTurma(String nomeTurma) {
+    public String deletarTurma(String nomeTurma) {
         boolean turmaExiste = this.verificaSeTurmaExiste(nomeTurma);
         if (!turmaExiste) {
             throw new EntityNotFoundException("Turma com esse nome não existe");
         }
         this.turmaRepositorio.deleteByNome(nomeTurma);
+        return "Turma " + nomeTurma + " deletada com sucesso";
     }
 
     @Override

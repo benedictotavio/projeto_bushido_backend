@@ -11,7 +11,7 @@ import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public record HistoricoSaudeDTOResponse(TipoSanguineo tipoSanguineo,
-                UsoMedicamentoContinuoDTOResponse usoMedicamento, AlergiaDTOResponse alergia,
-                CirurgiaDTOResponse cirurgia, DoencaCronicaDTOResponse doencaCronica, List<String> deficiencias,
-                List<String> acompanhamentoSaude) {
+        UsoMedicamentoContinuoDTOResponse usoMedicamentoContinuo, AlergiaDTOResponse alergia,
+        CirurgiaDTOResponse cirurgia, DoencaCronicaDTOResponse doencaCronica, List<String> deficiencias,
+        List<String> acompanhamentoSaude) {
 }

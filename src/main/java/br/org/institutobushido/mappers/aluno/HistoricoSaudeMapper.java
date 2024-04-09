@@ -54,7 +54,7 @@ public class HistoricoSaudeMapper {
                                                                                 .getResposta())
                                                                 .withTipo(historicoSaude.getDoencaCronica().getTipo())
                                                                 .build())
-                                .withUsoMedicamento(UsoMedicamentoContinuoDTOResponse.builder()
+                                .withUsoMedicamentoContinuo(UsoMedicamentoContinuoDTOResponse.builder()
                                                 .withResposta(historicoSaude.getUsoMedicamentoContinuo().getResposta())
                                                 .withTipo(historicoSaude.getUsoMedicamentoContinuo().getTipo()).build())
                                 .withDeficiencias(historicoSaude.getDeficiencias())

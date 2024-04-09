@@ -1,18 +1,23 @@
 package br.org.institutobushido.services.aluno;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
+
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
@@ -53,7 +58,7 @@ public class AlunoServices implements AlunoServicesInterface {
     private static final String HISTORICO_SAUDE = "historicoSaude.";
 
     @Override
-    public AlunoDTOResponse adicionarAluno(AlunoDTORequest alunoDTORequest) {
+    public String adicionarAluno(AlunoDTORequest alunoDTORequest) {
 
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByRg(alunoDTORequest.rg());
 
@@ -65,19 +70,16 @@ public class AlunoServices implements AlunoServicesInterface {
 
         Aluno novoAluno = alunoRepositorio.save(novoAlunoRequest);
 
-        return AlunoMapper.mapToAlunoDTOResponse(novoAluno);
+        return novoAluno.getRg();
     }
 
     @Override
-    public List<AlunoDTOResponse> buscarAluno(String rg) {
-        Query query = new Query(Criteria.where("rg").regex(rg, "si"));
-        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
-    }
-
-    @Override
-    public List<AlunoDTOResponse> buscarAlunosPorNome(String nome) {
-        Query query = new Query(Criteria.where("nome").regex(nome, "si"));
-        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
+    public List<AlunoDTOResponse> buscarAluno(String nome, String rg, int pagina, int tamanho, String ordenarPor,
+            String sequenciaOrdenacao) {
+        if (rg != null) {
+            return this.buscarAlunoPorRg(rg);
+        }
+        return this.buscarAlunosPorNome(nome, pagina, tamanho, ordenarPor, sequenciaOrdenacao);
     }
 
     @Override
@@ -146,7 +148,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Update update = new Update().pull(GRADUACAO + "." + (graduacaoAtual) +
                 ".faltas", faltaDoAluno);
         mongoTemplate.updateFirst(query, update, Aluno.class);
-        return String.valueOf(aluno.getGraduacao().get(0).getFaltas().size() - 1);
+        return String.valueOf(aluno.getGraduacao().get(0).getFaltas().size());
     }
 
     @Override
@@ -194,27 +196,17 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public Object editarHistoricoDeSaude(String rg, String campo, String historicoDeSaude, boolean resposta) {
-        Aluno aluno = encontrarAlunoPorRg(rg);
-        Query query = new Query();
-        query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().set(HISTORICO_SAUDE + campo + ".resposta", resposta)
-                .set(HISTORICO_SAUDE + campo + ".tipo", historicoDeSaude);
-        mongoTemplate.updateFirst(query, update, Aluno.class);
-        return Map.of("resposta", resposta, "tipo", historicoDeSaude);
-    }
-
-    @Override
     public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
 
         // Dados Escolares
-        DadosEscolares dadosEscolares = DadosEscolaresMapper.setDadosEscolares(updateAlunoDTORequest.dadosEscolares(),
+        DadosEscolares dadosEscolares = DadosEscolaresMapper.updateDadosEscolares(
+                updateAlunoDTORequest.dadosEscolares(),
                 alunoEncontrado);
         // Endereco
-        Endereco endereco = EnderecoMapper.setEndereco(updateAlunoDTORequest.endereco(), alunoEncontrado);
+        Endereco endereco = EnderecoMapper.updateEndereco(updateAlunoDTORequest.endereco(), alunoEncontrado);
         // Dados Sociais
-        DadosSociais dadosSociais = DadosSociaisMapper.setDadosSociais(updateAlunoDTORequest.dadosSociais(),
+        DadosSociais dadosSociais = DadosSociaisMapper.updateDadosSociais(updateAlunoDTORequest.dadosSociais(),
                 alunoEncontrado);
         // Historico de Saude
         this.editarHistoricoDeSaude(updateAlunoDTORequest.historicoDeSaude(), alunoEncontrado);
@@ -322,5 +314,19 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set(HISTORICO_SAUDE + "cirurgia", aluno.getHistoricoSaude().getCirurgia());
         update.set(HISTORICO_SAUDE + "doencaCronica", aluno.getHistoricoSaude().getDoencaCronica());
         mongoTemplate.updateFirst(query, update, Aluno.class);
+    }
+
+    private List<AlunoDTOResponse> buscarAlunoPorRg(String rg) {
+        Query query = new Query(Criteria.where("rg").regex(rg, "si"));
+        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
+    }
+
+    private List<AlunoDTOResponse> buscarAlunosPorNome(String nome, int page, int size, String sortOrder,
+            String sortBy) {
+        Direction direction = sortOrder.equalsIgnoreCase("asc") ? Direction.ASC : Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort.and(Sort.by("dataPreenchimento")));
+        Query query = new Query(Criteria.where("nome").regex(nome, "si")).with(pageable);
+        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 }

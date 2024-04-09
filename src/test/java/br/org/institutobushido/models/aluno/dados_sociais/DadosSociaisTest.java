@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 
 @SpringBootTest
-public class DadosSociaisTest {
+class DadosSociaisTest {
 
     private DadosSociais dadosSociais;
 

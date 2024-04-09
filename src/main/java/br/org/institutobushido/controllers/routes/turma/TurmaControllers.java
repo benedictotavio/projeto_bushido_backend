@@ -32,32 +32,32 @@ public class TurmaControllers {
 
     @PostMapping
     public ResponseEntity<SuccessPostResponse> criarNovaTurma(@Valid() @RequestBody TurmaDTORequest turmaDTORequest) {
-        this.turmaService.criarNovaTurma(turmaDTORequest);
+        String res = this.turmaService.criarNovaTurma(turmaDTORequest);
         return ResponseEntity.ok().body(
-                new SuccessPostResponse(turmaDTORequest.nome(), "Turma criada com sucesso",
+                new SuccessPostResponse(turmaDTORequest.nome(), res,
                         Turma.class.getSimpleName()));
     }
 
     @DeleteMapping("{nomeTurma}")
     public ResponseEntity<SuccessDeleteResponse> deletarTurma(@PathVariable String nomeTurma) {
-        this.turmaService.deletarTurma(nomeTurma);
+        String res = this.turmaService.deletarTurma(nomeTurma);
         return ResponseEntity.ok()
-                .body(new SuccessDeleteResponse(nomeTurma, "Turma removida com sucesso", Turma.class.getSimpleName()));
+                .body(new SuccessDeleteResponse(nomeTurma, res, Turma.class.getSimpleName()));
     }
 
     @PostMapping("{nomeTurma}/aluno")
     public ResponseEntity<SuccessPostResponse> adicionarAluno(@PathVariable String nomeTurma,
             @Valid @RequestBody AlunoDTORequest aluno) {
-        this.turmaService.adicionarAlunoATurma(nomeTurma, aluno);
+        String res = this.turmaService.adicionarAlunoATurma(nomeTurma, aluno);
         return ResponseEntity.ok()
-                .body(new SuccessPostResponse(aluno.rg(), "Aluno adicionado com sucesso", Turma.class.getSimpleName()));
+                .body(new SuccessPostResponse(aluno.rg(), res, Turma.class.getSimpleName()));
     }
 
     @DeleteMapping("{nomeTurma}/aluno/{rg}")
     public ResponseEntity<SuccessDeleteResponse> deletarAluno(@PathVariable String nomeTurma, @PathVariable String rg) {
-        this.turmaService.removerAlunoDaTurma(nomeTurma, rg);
+        String res = this.turmaService.removerAlunoDaTurma(nomeTurma, rg);
         return ResponseEntity.ok()
-                .body(new SuccessDeleteResponse(rg, "Aluno removido com sucesso", Turma.class.getSimpleName()));
+                .body(new SuccessDeleteResponse(rg, res, Turma.class.getSimpleName()));
     }
 
     @GetMapping

@@ -25,25 +25,17 @@ public class AlunoMapper {
     }
 
     public static AlunoDTOResponse mapToAlunoDTOResponse(Aluno aluno) {
+
         if (aluno == null) {
             return null;
         }
+
         return new AlunoDTOResponse(
+                 aluno.getRg(),
                 aluno.getNome(),
                 aluno.getDataNascimento().toString(),
-                aluno.getGenero(),
-                aluno.getRg());
-    }
-
-    public static AlunoDTORequest mapToAlunoDTORequest(Aluno aluno) {
-        if (aluno == null) {
-            return null;
-        }
-        return new AlunoDTORequest(
-                aluno.getNome(),
-                aluno.getDataNascimento(),
-                aluno.getGenero(),
-                aluno.getRg());
+                aluno.getGenero()
+                );
     }
 
     public static List<AlunoDTOResponse> mapToListAlunoDTOResponse(List<Aluno> alunos) {

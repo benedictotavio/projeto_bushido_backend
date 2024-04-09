@@ -83,10 +83,6 @@ public class Graduacao implements Serializable {
         this.cargaHoraria = cargaHoraria;
     }
 
-    public void setFaltas(List<Falta> faltas) {
-        this.faltas = faltas;
-    }
-
     public void setInicioGraduacao(LocalDate inicioGraduacao) {
         this.inicioGraduacao = inicioGraduacao;
     }
@@ -141,13 +137,6 @@ public class Graduacao implements Serializable {
         setAprovado(false);
         setCargaHoraria(definirCargaHoraria());
         setFrequencia(definirFrequencia());
-    }
-
-    @Override
-    public String toString() {
-        return "Graduacao [kyu=" + kyu + ", faltas=" + faltas + ", status=" + status + ", frequencia=" + frequencia
-                + ", inicioGraduacao=" + inicioGraduacao + ", fimGraduacao=" + fimGraduacao + ", aprovado=" + aprovado
-                + ", cargaHoraria=" + cargaHoraria + "]";
     }
 
     private int definirFrequencia() {
