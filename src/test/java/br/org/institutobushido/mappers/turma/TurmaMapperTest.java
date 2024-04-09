@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class TurmaMapperTest {
+class TurmaMapperTest {
     private Turma turma;
     private TurmaDTORequest turmaDTORequest;
     private TurmaDTOResponse turmaDTOResponse;

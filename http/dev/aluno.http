@@ -1,8 +1,8 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjYyMTM3Nn0.IqMXYovejsVLUyuA6qq396-3P6qAYhgRS4h5ouShEY0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjcxMjAzMn0.LiNiYSX6TOnMNGV0OBRlX1Dzu1ieHscogVCPZXO2Ssk
 @rg=000000000
 
-GET {{url}}?rg=998987871 HTTP/1.1
+GET {{url}}?nome=zé HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
@@ -17,6 +17,8 @@ Authorization: Bearer {{token}}
   "nome": "Abelardo Matheus",
   "genero": "M",
   "dataNascimento": "2020-03-20",
+  "rg":"000000000",
+  "turma":"turma",
   "dadosSociais": {
     "bolsaFamilia": true,
     "auxilioBrasil": true,
@@ -37,18 +39,15 @@ Authorization: Bearer {{token}}
     "cep": "06140140",
     "numero": 565
   },
-  "rg": "998987874",
-  "responsaveis": [
-    {
+  "responsaveis": {
       "nome": "Otavio Benedicto Domingues",
       "cpf": "45916466880",
       "telefone": "11972300768",
       "email": "otavio.w@outlook.com",
       "filiacao": "MAE"
-    }
-  ],
+  },
   "graduacao": {
-    "kyu": 4
+    "kyu": 2
   },
   "historicoSaude": {
     "tipoSanguineo": "A_POSITIVO",
@@ -84,7 +83,7 @@ Authorization: Bearer {{token}}
   "observacao":"luis trouxe atestado"
 }
 ###
-DELETE {{url}}/falta/{{rg}}?data=01-04-2024 HTTP/1.1
+DELETE {{url}}/falta/{{rg}}/01-04-2024 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
@@ -111,7 +110,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-DELETE {{url}}/responsavel/{{rg}}?cpf=45202055636 HTTP/1.1
+DELETE {{url}}/responsavel/{{rg}}?cpf=45612344551 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}}/deficiencia/123456789?deficiencia=fff HTTP/1.1

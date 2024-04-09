@@ -7,5 +7,6 @@ import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public record GraduacaoDTORequest(
-        @Min(1) @Max(7) @NotNull(message = "Kyu é obrigatório") int kyu) {
+                @Min(1) @Max(7) @NotNull(message = "Kyu é obrigatório") int kyu,
+                int dan) {
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 
 @Component
@@ -27,6 +28,20 @@ public class ResponsavelMapper {
                 responsavelDTORequest.telefone(),
                 responsavelDTORequest.email(),
                 responsavelDTORequest.filiacao());
+    }
+
+    public static Responsavel mapToResponsavel(ResponsavelDTOResponse responsavelDTOResponse) {
+        if (responsavelDTOResponse == null) {
+            return null;
+        }
+
+        return new Responsavel(
+                responsavelDTOResponse.nome(),
+                responsavelDTOResponse.cpf(),
+                responsavelDTOResponse.email(),
+                responsavelDTOResponse.telefone(),
+                FiliacaoResposavel.valueOf(responsavelDTOResponse.filiacao())
+        );
     }
 
     public static ResponsavelDTOResponse mapToResponsavelDTOResponse(Responsavel responsavel) {
@@ -53,6 +68,15 @@ public class ResponsavelMapper {
     }
 
     public static List<Responsavel> mapToResponsaveis(List<ResponsavelDTORequest> responsaveis) {
+        if (responsaveis == null) {
+            return Collections.emptyList();
+        }
+
+        return responsaveis.stream().map(ResponsavelMapper::mapToResponsavel)
+                .collect(Collectors.toList());
+    }
+
+    public static List<Responsavel> mapToListResponsaveis(List<ResponsavelDTOResponse> responsaveis) {
         if (responsaveis == null) {
             return Collections.emptyList();
         }

@@ -46,6 +46,22 @@ public class DadosSociaisMapper {
                 dadosSociaisDTORequest.rendaFamiliar());
     }
 
+    public static DadosSociais mapToDadosSociais(DadosSociaisDTOResponse dadosSociaisDTOResponse) {
+
+        if (dadosSociaisDTOResponse == null) {
+            return null;
+        }
+
+        return new DadosSociais(
+                dadosSociaisDTOResponse.bolsaFamilia(),
+                dadosSociaisDTOResponse.auxilioBrasil(),
+                dadosSociaisDTOResponse.imovel(),
+                dadosSociaisDTOResponse.numerosDePessoasNaCasa(),
+                dadosSociaisDTOResponse.contribuintesDaRendaFamiliar(),
+                dadosSociaisDTOResponse.alunoContribuiParaRenda(),
+                dadosSociaisDTOResponse.rendaFamiliar());
+    }
+
     public static DadosSociaisDTOResponse mapToDadosSociaisDTOResponse(DadosSociais dadosSociais) {
         if (dadosSociais == null) {
             return null;

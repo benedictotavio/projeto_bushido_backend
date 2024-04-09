@@ -24,7 +24,7 @@ class DadosEscolaresMapperTest {
     private DadosEscolaresDTOResponse dadosEscolaresDTOResponse;
     private UpdateDadosEscolaresDTORequest updateDadosEscolaresDTORequest;
 
-    private Aluno aluno = new Aluno("123456789", "nome", new Date(), Genero.M);
+    private Aluno aluno = new Aluno("123456789", "nome", new Date(), Genero.M, "Turma A");
     
     @BeforeEach
     void setUp() {

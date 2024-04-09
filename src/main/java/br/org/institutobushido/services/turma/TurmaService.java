@@ -7,11 +7,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
-import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTORequest;
-import br.org.institutobushido.mappers.turma.AlunoMapper;
+import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTORequest;
+import br.org.institutobushido.mappers.turma.AlunoTurmaMapper;
 import br.org.institutobushido.mappers.turma.TurmaMapper;
 import br.org.institutobushido.models.turma.Aluno;
 import br.org.institutobushido.models.turma.Turma;
@@ -44,9 +43,9 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Override
-    public String adicionarAlunoATurma(String nomeTurma, AlunoDTORequest aluno) {
+    public String adicionarAlunoATurma(String nomeTurma, AlunoTurmaDTORequest aluno) {
         Turma turma = this.encontrarTurmaPeloNome(nomeTurma);
-        Aluno alunoAdicionado = AlunoMapper.mapToAluno(aluno);
+        Aluno alunoAdicionado = AlunoTurmaMapper.mapToAluno(aluno);
         turma.adicionarAluno(alunoAdicionado);
         Query query = new Query();
         query.addCriteria(Criteria.where("nome").is(nomeTurma));
@@ -95,5 +94,4 @@ public class TurmaService implements TurmaServiceInterface {
         return this.turmaRepositorio.findByNome(nomeTurma).orElseThrow(
                 () -> new EntityNotFoundException("Turma com esse nome não existe"));
     }
-
 }

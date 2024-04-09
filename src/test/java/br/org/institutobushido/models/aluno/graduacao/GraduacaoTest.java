@@ -15,7 +15,7 @@ class GraduacaoTest {
 
     @BeforeEach
     void setUp() {
-        graduacao = new Graduacao(7);
+        graduacao = new Graduacao(7,0);
     }
 
     @Test
@@ -49,4 +49,25 @@ class GraduacaoTest {
         assertEquals(91, graduacao.getFrequencia());
     }
 
+    @Test
+    void deveInstaciarGraduacaoApenasComKyu() {
+        Graduacao graduacao = new Graduacao(7,5);
+
+        assertEquals(7, graduacao.getKyu());
+        assertEquals(1, graduacao.getDan());
+    }
+
+    @Test
+    void deveInstaciarGraduacaoComKyuEDan() {
+        Graduacao graduacao = new Graduacao(1,5);
+        assertEquals(1, graduacao.getKyu());
+        assertEquals(5, graduacao.getDan());
+    }
+
+    @Test
+    void deveInstaciarGraduacaoComKyuEDanMaiorQueZero() {
+        Graduacao graduacao = new Graduacao(1,0);
+        assertEquals(1, graduacao.getKyu());
+        assertEquals(1, graduacao.getDan());
+    }
 }

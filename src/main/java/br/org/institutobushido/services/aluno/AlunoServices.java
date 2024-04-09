@@ -2,7 +2,6 @@ package br.org.institutobushido.services.aluno;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +12,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -22,12 +20,14 @@ import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTOR
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTORequest;
 import br.org.institutobushido.mappers.aluno.AlunoMapper;
 import br.org.institutobushido.mappers.aluno.DadosEscolaresMapper;
 import br.org.institutobushido.mappers.aluno.DadosSociaisMapper;
 import br.org.institutobushido.mappers.aluno.EnderecoMapper;
 import br.org.institutobushido.mappers.aluno.GraduacaoMapper;
 import br.org.institutobushido.mappers.aluno.ResponsavelMapper;
+import br.org.institutobushido.mappers.turma.AlunoTurmaMapper;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
@@ -39,7 +39,9 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
+import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.repositories.AlunoRepositorio;
+import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 
@@ -47,9 +49,12 @@ import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 public class AlunoServices implements AlunoServicesInterface {
 
     private AlunoRepositorio alunoRepositorio;
+    private TurmaRepositorio turmaRepositorio;
     private MongoTemplate mongoTemplate;
 
-    public AlunoServices(AlunoRepositorio alunoRepositorio, MongoTemplate mongoTemplate) {
+    public AlunoServices(AlunoRepositorio alunoRepositorio, MongoTemplate mongoTemplate,
+            TurmaRepositorio turmaRepositorio) {
+        this.turmaRepositorio = turmaRepositorio;
         this.alunoRepositorio = alunoRepositorio;
         this.mongoTemplate = mongoTemplate;
     }
@@ -66,9 +71,16 @@ public class AlunoServices implements AlunoServicesInterface {
             throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
         }
 
-        Aluno novoAlunoRequest = AlunoMapper.mapToAluno(alunoDTORequest);
+        this.adicionarAlunoATurma(
+                alunoDTORequest.turma(),
+                new AlunoTurmaDTORequest(
+                        alunoDTORequest.nome(),
+                        alunoDTORequest.dataNascimento().toInstant().atZone(java.time.ZoneId.systemDefault())
+                                .toLocalDate(),
+                        alunoDTORequest.genero(),
+                        alunoDTORequest.rg()));
 
-        Aluno novoAluno = alunoRepositorio.save(novoAlunoRequest);
+        Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest));
 
         return novoAluno.getRg();
     }
@@ -118,6 +130,7 @@ public class AlunoServices implements AlunoServicesInterface {
     public String adicionarFaltaDoAluno(String rg, FaltaDTORequest falta, long dataFalta) {
         Aluno aluno = encontrarAlunoPorRg(rg);
         int graduacaoAtual = aluno.getGraduacao().size() - 1;
+
         Falta novaFalta = aluno.getGraduacao().get(graduacaoAtual).adicionarFalta(falta.motivo(), falta.observacao(),
                 dataFalta);
 
@@ -239,7 +252,7 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set(GRADUACAO, alunoEncontrado.getGraduacao());
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
 
-        adicionarNovaGraduacao(alunoEncontrado.getRg(), graduacaoAtual.getKyu() - 1, graduacaoAtual.getDan());
+        adicionarNovaGraduacao(alunoEncontrado.getRg(), graduacaoAtual.getKyu(), graduacaoAtual.getDan());
 
         return GraduacaoMapper.mapToGraduacaoDTOResponse(
                 alunoEncontrado.getGraduacao().get(alunoEncontrado.getGraduacao().size() - 1));
@@ -260,12 +273,6 @@ public class AlunoServices implements AlunoServicesInterface {
                 alunoEncontrado.getGraduacao().get(alunoEncontrado.getGraduacao().size() - 1));
     }
 
-    @Cacheable(value = "aluno", key = "#rg")
-    public Aluno encontrarAlunoPorRg(String rgAluno) {
-        return alunoRepositorio.findByRg(rgAluno)
-                .orElseThrow(() -> new EntityNotFoundException("Rg: " + rgAluno + " não encontrado"));
-    }
-
     protected void mudarStatusGraduacaoAluno(Aluno aluno, boolean status) {
         int graduacaoAtual = aluno.getGraduacao().size() - 1;
         Query query = new Query();
@@ -275,16 +282,11 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     public void adicionarNovaGraduacao(String rg, int kyu, int danAtual) {
-        Graduacao novaGraduacao = new Graduacao(kyu);
-
-        if (kyu <= 1) {
-            novaGraduacao.setDan(danAtual + 1);
-        }
-
+        Graduacao novaGraduacao = new Graduacao(kyu, danAtual);
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(rg));
         Update update = new Update();
-        update.addToSet(GRADUACAO, novaGraduacao);
+        update.push(GRADUACAO, novaGraduacao);
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
@@ -316,7 +318,18 @@ public class AlunoServices implements AlunoServicesInterface {
         mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
-    private List<AlunoDTOResponse> buscarAlunoPorRg(String rg) {
+    private Aluno encontrarAlunoPorRg(String rgAluno) {
+        List<AlunoDTOResponse> alunoEncontrado = buscarAlunoPorRg(rgAluno);
+
+        if (alunoEncontrado.isEmpty()) {
+            throw new EntityNotFoundException("Aluno com o rg " + rgAluno + " nao encontrado!");
+        }
+
+        return AlunoMapper.mapToAluno(alunoEncontrado.get(0));
+    }
+
+    @Cacheable(value = "aluno", key = "#rg")
+    public List<AlunoDTOResponse> buscarAlunoPorRg(String rg) {
         Query query = new Query(Criteria.where("rg").regex(rg, "si"));
         return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
@@ -328,5 +341,21 @@ public class AlunoServices implements AlunoServicesInterface {
         Pageable pageable = PageRequest.of(page, size, sort.and(Sort.by("dataPreenchimento")));
         Query query = new Query(Criteria.where("nome").regex(nome, "si")).with(pageable);
         return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
+    }
+
+    public void adicionarAlunoATurma(String nomeTurma, AlunoTurmaDTORequest aluno) {
+        Turma turma = this.turmaRepositorio.findByNome(nomeTurma).orElseThrow(
+                () -> new EntityNotFoundException("Turma com esse nome não existe"));
+        Query query = new Query();
+
+        if (turma.adicionarAluno(AlunoTurmaMapper.mapToAluno(aluno))) {
+            query.addCriteria(Criteria.where("nome").is(turma.getNome()));
+            Update update = new Update().push("alunos", aluno);
+            mongoTemplate.updateFirst(query, update, Turma.class);
+            return;
+        }
+
+        throw new AlreadyRegisteredException("Aluno ja existe nesta turma");
+
     }
 }

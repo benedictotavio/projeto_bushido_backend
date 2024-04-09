@@ -24,7 +24,7 @@ class DadosSociaisMapperTest {
         private DadosSociaisDTOResponse dadosSociaisDTOResponse;
         private UpdateDadosSociaisDTORequest updateDadosSociaisDTORequest;
 
-        private Aluno aluno = new Aluno("123456789", "nome", new Date(), Genero.M);
+        private Aluno aluno = new Aluno("123456789", "nome", new Date(), Genero.M, "Turma A");
 
         @BeforeEach
         void setUp() {

@@ -21,8 +21,8 @@ class GraduacaoMapperTest {
 
     @BeforeEach
     void setUp() {
-        graduacao = new Graduacao(7);
-        graduacaoDTORequest = new GraduacaoDTORequest(7);
+        graduacao = new Graduacao(7,0);
+        graduacaoDTORequest = new GraduacaoDTORequest(7,1);
         graduacaoDTOResponse = new GraduacaoDTOResponse(
                 7,
                 null,
