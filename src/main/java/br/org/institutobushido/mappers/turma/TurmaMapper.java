@@ -8,6 +8,7 @@ import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 import br.org.institutobushido.models.turma.Turma;
 
 public class TurmaMapper {
+    private TurmaMapper() {}
     public static Turma mapToTurma(TurmaDTORequest turmaDTORequest) {
         if (turmaDTORequest == null) {
             return null;
@@ -15,8 +16,7 @@ public class TurmaMapper {
         return new Turma(turmaDTORequest.endereco(), turmaDTORequest.nome(), turmaDTORequest.tutor());
     }
 
-    private TurmaMapper() {
-    }
+
 
     public static TurmaDTOResponse mapToTurmaDTOResponse(Turma turma) {
         if (turma == null) {

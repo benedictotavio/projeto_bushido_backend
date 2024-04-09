@@ -10,7 +10,7 @@ public class EnderecoMapper {
 
     private EnderecoMapper() {}
 
-    public static Endereco setEndereco(UpdateEnderecoDTORequest updateEnderecoDTORequest, Aluno aluno) {
+    public static Endereco updateEndereco(UpdateEnderecoDTORequest updateEnderecoDTORequest, Aluno aluno) {
 
         if (updateEnderecoDTORequest == null) {
             return null;
@@ -33,18 +33,6 @@ public class EnderecoMapper {
         endereco.setCidade(enderecoDTORequest.cidade());
         endereco.setEstado(enderecoDTORequest.estado());
         endereco.setNumero(enderecoDTORequest.numero());
-        return endereco;
-    }
-
-    public static Endereco mapToEndereco(UpdateEnderecoDTORequest enderecoEditadoDTORequest) {
-        if (enderecoEditadoDTORequest == null) {
-            return null;
-        }
-        Endereco endereco = new Endereco();
-        endereco.setCep(enderecoEditadoDTORequest.cep());
-        endereco.setCidade(enderecoEditadoDTORequest.cidade());
-        endereco.setEstado(enderecoEditadoDTORequest.estado());
-        endereco.setNumero(enderecoEditadoDTORequest.numero());
         return endereco;
     }
 

@@ -9,6 +9,7 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -72,7 +73,7 @@ public class HistoricoSaude implements Serializable {
 
     public String removerDeficiencia(String deficiencia) {
         if (!this.getDeficiencias().contains(deficiencia)) {
-            throw new AlreadyRegisteredException(deficiencia + " nao existe no historico de saude");
+            throw new EntityNotFoundException(deficiencia + " nao existe no historico de saude");
         }
         this.getDeficiencias().remove(deficiencia);
         return deficiencia;

@@ -1,8 +1,8 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjU1NTA1N30.gOIVZt7rKirlgGh7X-mIxffgPe2HcmTK1NMcgZDPjsQ
-@rg=123456789
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjYyMTM3Nn0.IqMXYovejsVLUyuA6qq396-3P6qAYhgRS4h5ouShEY0
+@rg=000000000
 
-GET {{url}}?nome=Zé HTTP/1.1
+GET {{url}}?rg=998987871 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
@@ -14,11 +14,9 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "nome": "Zé da Manga",
-  "sobrenome": "a zé do pipo",
+  "nome": "Abelardo Matheus",
   "genero": "M",
   "dataNascimento": "2020-03-20",
-  "turma":"Fundao I",
   "dadosSociais": {
     "bolsaFamilia": true,
     "auxilioBrasil": true,
@@ -39,7 +37,7 @@ Authorization: Bearer {{token}}
     "cep": "06140140",
     "numero": 565
   },
-  "rg": {{rg}},
+  "rg": "998987874",
   "responsaveis": [
     {
       "nome": "Otavio Benedicto Domingues",

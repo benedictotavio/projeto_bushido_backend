@@ -18,11 +18,11 @@ public class Responsavel implements Serializable {
     private FiliacaoResposavel filiacao;
 
     public Responsavel(String nome, String cpf, String telefone, String email, FiliacaoResposavel filiacao) {
-        
+
         if (cpf == null || cpf.length() != 11) {
-            throw new InvalidFormatDataException("Cpf inválido!");
+            throw new InvalidFormatDataException("Cpf inválido. siga o formato de 11 digitos: XXXXXXXXXX");
         }
-        
+
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
@@ -30,5 +30,4 @@ public class Responsavel implements Serializable {
         this.filiacao = filiacao;
     }
 
-    
 }

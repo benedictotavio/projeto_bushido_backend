@@ -19,6 +19,7 @@ import br.org.institutobushido.models.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.resources.exceptions.InvalidFormatDataException;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 import lombok.Getter;
 
@@ -26,13 +27,11 @@ import lombok.Getter;
 @Document(collection = "alunos")
 public class Aluno implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
-
+    @Indexed(unique = true, background = true)
+    private String rg;
     private String nome;
     private Date dataNascimento;
     private Genero genero;
-
-    @Indexed(unique = true, background = true)
-    private String rg;
 
     private DadosEscolares dadosEscolares;
     private Date dataPreenchimento;
@@ -42,7 +41,12 @@ public class Aluno implements Serializable {
     private List<Graduacao> graduacao;
     private HistoricoSaude historicoSaude;
 
-    public Aluno(String rg) {
+    public Aluno(String rg, String nome, Date dataNascimento, Genero genero) {
+
+        if (rg == null || rg.isEmpty() || rg.isBlank() || rg.length() != 9) {
+            throw new InvalidFormatDataException("RG inválido. siga o formato de nove digitos: XXXXXXXXXX");
+        }
+
         this.graduacao = new ArrayList<>();
         this.historicoSaude = new HistoricoSaude();
         this.dadosEscolares = new DadosEscolares();
@@ -50,14 +54,10 @@ public class Aluno implements Serializable {
         this.endereco = new Endereco();
         this.responsaveis = new ArrayList<>();
         this.dataPreenchimento = new Date();
-        this.nome = "";
-        this.dataNascimento = new Date();
-        this.genero = Genero.OUTRO;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.genero = genero;
         this.rg = rg;
-    }
-
-    public void setDataPreenchimento(Date dataPreenchimento) {
-        this.dataPreenchimento = dataPreenchimento;
     }
 
     public void setResponsaveis(List<Responsavel> responsaveis) {
@@ -117,6 +117,10 @@ public class Aluno implements Serializable {
 
     public Responsavel adicionarResponsavel(Responsavel novoResponsavel) {
 
+        if (this.getResponsaveis().size() >= 5) {
+            throw new LimitQuantityException("O Aluno so pode ter até 5 responsaveis!");
+        }
+
         if (this.encontrarResponsavelPorCpf(novoResponsavel.getCpf()) != null) {
             throw new AlreadyRegisteredException(
                     "O responsavel com o cpf " + novoResponsavel.getCpf() + " ja esta cadastrado!");
@@ -126,7 +130,7 @@ public class Aluno implements Serializable {
             boolean responsavelJaCadastrado = this.getResponsaveis().stream().anyMatch(
                     responsavel -> responsavel.getFiliacao().equals(novoResponsavel.getFiliacao()));
             if (responsavelJaCadastrado) {
-                throw new LimitQuantityException(
+                throw new AlreadyRegisteredException(
                         "O Aluno so pode ter um responsavel com a filiacao " + novoResponsavel.getFiliacao());
             }
         }

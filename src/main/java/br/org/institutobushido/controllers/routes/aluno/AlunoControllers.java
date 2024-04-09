@@ -2,8 +2,6 @@ package br.org.institutobushido.controllers.routes.aluno;
 
 import java.net.URI;
 import java.util.List;
-
-import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
@@ -45,21 +44,21 @@ public class AlunoControllers {
         }
 
         @GetMapping()
-        ResponseEntity<List<AlunoDTOResponse>> buscarAluno(@RequestParam(name = "nome", required = false) String nome,
-                        @RequestParam(name = "rg", required = false) String rg) {
-                if (rg != null) {
-                        List<AlunoDTOResponse> alunoEncontrado = alunoServices.buscarAluno(rg);
-                        return ResponseEntity.ok().body(alunoEncontrado);
-                }
-                return ResponseEntity.ok().body(alunoServices.buscarAlunosPorNome(nome));
+        ResponseEntity<List<AlunoDTOResponse>> buscarAluno(@RequestParam(name = "rg", required = false) String rg,
+                        @RequestParam(name = "nome", required = false) String nome,
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size,
+                        @RequestParam(defaultValue = "nome") String sortBy,
+                        @RequestParam(defaultValue = "asc") String sortOrder) {
+                return ResponseEntity.ok().body(alunoServices.buscarAluno(nome, rg, page, size, sortOrder, sortBy));
         }
 
         @PostMapping()
-        ResponseEntity<SuccessPostResponse> adicionarAluno(@Valid() @RequestBody AlunoDTORequest alunoDTORequest) {
-                AlunoDTOResponse novoAluno = alunoServices.adicionarAluno(alunoDTORequest);
+        ResponseEntity<SuccessPostResponse> adicionarAluno(@Valid @RequestBody AlunoDTORequest alunoDTORequest) {
+                String alunoAdicionado = this.alunoServices.adicionarAluno(alunoDTORequest);
                 URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
                 return ResponseEntity.created(location)
-                                .body(new SuccessPostResponse(novoAluno.rg(), "Aluno adicionado com sucesso",
+                                .body(new SuccessPostResponse(alunoAdicionado, "Aluno adicionado com sucesso",
                                                 Aluno.class.getSimpleName()));
         }
 

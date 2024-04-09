@@ -7,13 +7,13 @@ import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTORequest;
 
 public interface TurmaServiceInterface {
-    void criarNovaTurma(TurmaDTORequest turma);
+    String criarNovaTurma(TurmaDTORequest turma);
 
-    void deletarTurma(String nomeTurma);
+    String deletarTurma(String nomeTurma);
 
-    void adicionarAlunoATurma(String nomeTurma, AlunoDTORequest aluno);
+    String adicionarAlunoATurma(String nomeTurma, AlunoDTORequest aluno);
 
-    void removerAlunoDaTurma(String nomeTurma, String rg);
+    String removerAlunoDaTurma(String nomeTurma, String rg);
 
     List<TurmaDTOResponse> listarTurmas();
 
