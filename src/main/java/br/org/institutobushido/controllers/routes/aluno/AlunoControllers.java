@@ -36,7 +36,6 @@ import jakarta.validation.Valid;
 @RequestMapping("api/V1/aluno")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AlunoControllers {
-
         private final AlunoServicesInterface alunoServices;
 
         public AlunoControllers(AlunoServicesInterface alunoServices) {
@@ -95,8 +94,8 @@ public class AlunoControllers {
                                 .body(new SuccessPostResponse(res, "Falta adicionada", Falta.class.getSimpleName()));
         }
 
-        @DeleteMapping("falta/{rg}")
-        public ResponseEntity<SuccessDeleteResponse> retirarFaltaAoAluno(@RequestParam(name = "data") String data,
+        @DeleteMapping("falta/{rg}/{data}")
+        public ResponseEntity<SuccessDeleteResponse> retirarFaltaAoAluno(@PathVariable("data") String data,
                         @PathVariable String rg) {
                 String res = alunoServices.retirarFaltaDoAluno(rg, data);
                 return ResponseEntity.ok()

@@ -36,6 +36,20 @@ public class DadosEscolaresMapper {
        return dadosEscolares;
     }
 
+    public static DadosEscolares mapToDadosEscolares(DadosEscolaresDTOResponse dadosEscolaresDTOResponse) {
+
+        if (dadosEscolaresDTOResponse == null) {
+            return null;
+        }
+
+       DadosEscolares dadosEscolares = new DadosEscolares();
+       dadosEscolares.setEscola(dadosEscolaresDTOResponse.escola());
+       dadosEscolares.setSerie(dadosEscolaresDTOResponse.serie());
+       dadosEscolares.setTurno(dadosEscolaresDTOResponse.turno());
+
+       return dadosEscolares;
+    }
+
     public static DadosEscolaresDTOResponse mapToDadosEscolaresDTOResponse(DadosEscolares dadosEscolares) {
         if (dadosEscolares == null) {
             return null;

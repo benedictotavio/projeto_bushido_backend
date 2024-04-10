@@ -1,7 +1,7 @@
 package br.org.institutobushido.mappers.turma;
 
-import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTORequest;
-import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTOResponse;
+import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTORequest;
+import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTOResponse;
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.models.turma.Aluno;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,21 +16,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AlunoTest {
     private Aluno aluno;
 
-    private AlunoDTORequest alunoDTORequest;
-    private AlunoDTOResponse alunoDTOResponse;
+    private AlunoTurmaDTORequest alunoDTORequest;
+    private AlunoTurmaDTOResponse alunoDTOResponse;
 
 
 
     @BeforeEach
     void setUp() {
         aluno = new Aluno("123456789", "John Doe", LocalDate.of(1990, 1, 1), Genero.M);
-        alunoDTORequest = new AlunoDTORequest(
+        alunoDTORequest = new AlunoTurmaDTORequest(
                 "John Doe",
                 LocalDate.of(1990, 1, 1),
                 Genero.M,
                 "123456789"
         );
-        alunoDTOResponse = new AlunoDTOResponse(
+        alunoDTOResponse = new AlunoTurmaDTOResponse(
                 "123456789",
                 "John Doe",
                 LocalDate.of(1990, 1, 1).toString(),
@@ -40,7 +40,7 @@ public class AlunoTest {
 
     @Test
     void deveMapearAlunoDTORequestParaAluno() {
-        aluno = AlunoMapper.mapToAluno(alunoDTORequest);
+        aluno = AlunoTurmaMapper.mapToAluno(alunoDTORequest);
         assertEquals(aluno.getRg(), alunoDTORequest.rg());
         assertEquals(aluno.getNome(), alunoDTORequest.nome());
         assertEquals(aluno.getDataNascimento(), alunoDTORequest.dataNascimento());
@@ -49,7 +49,7 @@ public class AlunoTest {
 
     @Test
     void deveMapearAlunoParaAlunoDTOResponse() {
-        alunoDTOResponse = AlunoMapper.mapToAlunoDTOResponse(aluno);
+        alunoDTOResponse = AlunoTurmaMapper.mapToAlunoDTOResponse(aluno);
         assertEquals(alunoDTOResponse.rg(), aluno.getRg());
         assertEquals(alunoDTOResponse.nome(), aluno.getNome());
         assertEquals(alunoDTOResponse.dataNascimento(), aluno.getDataNascimento().toString());

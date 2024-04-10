@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTORequest;
+import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTORequest;
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
@@ -65,7 +65,7 @@ class TurmaServiceTest {
         // Arrange
         when(turmaRepositorio.findByNome(turma.getNome())).thenReturn(Optional.of(turma));
 
-        AlunoDTORequest alunoDTORequest = new AlunoDTORequest(
+        AlunoTurmaDTORequest alunoDTORequest = new AlunoTurmaDTORequest(
                 "John Doe",
                 LocalDate.of(1990, 1, 1),
                 Genero.M,

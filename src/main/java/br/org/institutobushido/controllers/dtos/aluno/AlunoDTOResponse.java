@@ -17,6 +17,7 @@ public record AlunoDTOResponse(
                 String nome,
                 Date dataNascimento,
                 Genero genero,
+                String turma,
                 DadosSociaisDTOResponse dadosSociais,
                 DadosEscolaresDTOResponse dadosEscolares,
                 Date dataPreenchimento,

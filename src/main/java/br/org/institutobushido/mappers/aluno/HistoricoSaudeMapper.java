@@ -36,6 +36,25 @@ public class HistoricoSaudeMapper {
                                 historicoSaudeDTORequest.acompanhamentoSaude());
         }
 
+        public static HistoricoSaude mapToHistoricoSaude(HistoricoSaudeDTOResponse historicoSaudeDTOResponse) {
+                if (historicoSaudeDTOResponse == null) {
+                        return null;
+                }
+
+                return new HistoricoSaude(
+                                historicoSaudeDTOResponse.tipoSanguineo(),
+                                new UsoMedicamentoContinuo(
+                                                historicoSaudeDTOResponse.usoMedicamentoContinuo().tipo()),
+                                new DoencaCronica(
+                                                historicoSaudeDTOResponse.doencaCronica().tipo()),
+                                new Alergia(
+                                                historicoSaudeDTOResponse.alergia().tipo()),
+                                new Cirurgia(
+                                                historicoSaudeDTOResponse.cirurgia().tipo()),
+                                historicoSaudeDTOResponse.deficiencias(),
+                                historicoSaudeDTOResponse.acompanhamentoSaude());
+        }
+
         public static HistoricoSaudeDTOResponse mapToHistoricoSaudeDTOResponse(HistoricoSaude historicoSaude) {
                 if (historicoSaude == null) {
                         return null;

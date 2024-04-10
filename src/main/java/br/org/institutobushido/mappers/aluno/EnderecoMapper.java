@@ -36,6 +36,18 @@ public class EnderecoMapper {
         return endereco;
     }
 
+    public static Endereco mapToEndereco(EnderecoDTOResponse enderecoDTOResponse) {
+        if (enderecoDTOResponse == null) {
+            return null;
+        }
+        Endereco endereco = new Endereco();
+        endereco.setCep(enderecoDTOResponse.cep());
+        endereco.setCidade(enderecoDTOResponse.cidade());
+        endereco.setEstado(enderecoDTOResponse.estado());
+        endereco.setNumero(enderecoDTOResponse.numero());
+        return endereco;
+    }
+
     public static EnderecoDTOResponse mapToEnderecoDTOResponse(Endereco endereco) {
         if (endereco == null) {
             return null;

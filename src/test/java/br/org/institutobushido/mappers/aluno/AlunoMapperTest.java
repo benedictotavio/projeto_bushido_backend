@@ -50,6 +50,7 @@ class AlunoMapperTest {
                 "John Doe",
                 new Date(),
                 Genero.OUTRO,
+                "TURMA",
                 new DadosSociaisDTORequest(
                         false,
                         false,
@@ -68,9 +69,8 @@ class AlunoMapperTest {
                         "CEP",
                         "100"),
                 "123456789",
-                List.of(
-                        new ResponsavelDTORequest("Nome", "12345678901", "Email", "Telefone",
-                                FiliacaoResposavel.OUTRO)),
+                new ResponsavelDTORequest("Nome", "12345678901", "Email", "Telefone",
+                        FiliacaoResposavel.OUTRO),
                 new HistoricoSaudeDTORequest(
                         TipoSanguineo.O_POSITIVO,
                         new UsoMedicamentoContinuoDTORequest("Tipo"),
@@ -79,64 +79,53 @@ class AlunoMapperTest {
                         new DoencaCronicaDTORequest("Doenca"),
                         List.of("Deficiencia"),
                         List.of("Acompanhamento")),
-                new GraduacaoDTORequest(7));
+                new GraduacaoDTORequest(7,1));
 
+        aluno = new Aluno(
+                "123456789",
+                "John Doe",
+                new Date(),
+                Genero.OUTRO,
+                "TURMA");
 
-                aluno = new Aluno(
-                    "123456789",
-                    "John Doe",
-                    new Date(),
-                    Genero.OUTRO
-                );
-
-                aluno.setDadosEscolares(
-                    new DadosEscolares(
+        aluno.setDadosEscolares(
+                new DadosEscolares(
                         Turno.MANHA,
                         "ESCOLA",
-                        "SERIE"
-                    )
-                );
+                        "SERIE"));
 
-                aluno.setEndereco(
-                    new Endereco(
+        aluno.setEndereco(
+                new Endereco(
                         "CIDADE",
                         "ESTADO",
                         "CEP",
-                        "100"
-                    )
-                );
+                        "100"));
 
-                aluno.setDadosSociais(
-                    new DadosSociais(
+        aluno.setDadosSociais(
+                new DadosSociais(
                         false,
                         false,
                         Imovel.PROPRIO,
                         5,
                         2,
                         false,
-                        0
-                    )
-                );
-                
-                aluno.setHistoricoSaude(
-                    new HistoricoSaude(
+                        0));
+
+        aluno.setHistoricoSaude(
+                new HistoricoSaude(
                         TipoSanguineo.O_POSITIVO,
                         new UsoMedicamentoContinuo("Tipo"),
                         new DoencaCronica("Doenca"),
                         new Alergia("Alergia"),
                         new Cirurgia("Cirurgia"),
                         List.of("Deficiencia"),
-                        List.of("Acompanhamento")
-                    )
-                );
+                        List.of("Acompanhamento")));
 
-                aluno.adicionarGraduacao(
-                    new Graduacao(7)
-                );
+        aluno.adicionarGraduacao(
+                new Graduacao(7,5));
 
-                aluno.adicionarResponsavel(
-                    new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO)
-                );
+        aluno.adicionarResponsavel(
+                new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
     }
 
     @Test
@@ -150,13 +139,13 @@ class AlunoMapperTest {
         assertEquals(alunoDTORequest.dadosSociais().auxilioBrasil(), aluno.getDadosSociais().isAuxilioBrasil());
         assertEquals(alunoDTORequest.dadosEscolares().escola(), aluno.getDadosEscolares().getEscola());
         assertEquals(alunoDTORequest.endereco().estado(), aluno.getEndereco().getEstado());
-        assertEquals(alunoDTORequest.responsaveis().size(), aluno.getResponsaveis().size());
+        assertEquals(alunoDTORequest.responsaveis().email(), aluno.getResponsaveis().get(0).getEmail());
         assertEquals(alunoDTORequest.historicoSaude().alergia().tipo(),
                 aluno.getHistoricoSaude().getAlergia().getTipo());
     }
 
     @Test
-    void deveMapearAlunoDTOResponseDeAluno(){
+    void deveMapearAlunoDTOResponseDeAluno() {
         alunoDTOResponse = AlunoMapper.mapToAlunoDTOResponse(aluno);
         assertEquals(aluno.getNome(), alunoDTOResponse.nome());
         assertEquals(aluno.getRg(), alunoDTOResponse.rg());
@@ -165,11 +154,12 @@ class AlunoMapperTest {
         assertEquals(aluno.getDadosSociais().isAuxilioBrasil(), alunoDTOResponse.dadosSociais().auxilioBrasil());
         assertEquals(aluno.getDadosEscolares().getEscola(), alunoDTOResponse.dadosEscolares().escola());
         assertEquals(aluno.getEndereco().getEstado(), alunoDTOResponse.endereco().estado());
-        assertEquals(aluno.getHistoricoSaude().getAlergia().getTipo(), alunoDTOResponse.historicoSaude().alergia().tipo());
+        assertEquals(aluno.getHistoricoSaude().getAlergia().getTipo(),
+                alunoDTOResponse.historicoSaude().alergia().tipo());
     }
 
     @Test
-    void deveMapearUmaListaAlunoParaUmaListaAlunoDTOResponse(){
+    void deveMapearUmaListaAlunoParaUmaListaAlunoDTOResponse() {
         List<Aluno> alunos = List.of(aluno);
         List<AlunoDTOResponse> alunosDTOResponses = AlunoMapper.mapToListAlunoDTOResponse(alunos);
         assertEquals(alunos.get(0).getNome(), alunosDTOResponses.get(0).nome());

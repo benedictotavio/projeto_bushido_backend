@@ -15,11 +15,33 @@ public class GraduacaoMapper {
         return graduacoes.stream().map(GraduacaoMapper::mapToGraduacaoDTOResponse).collect(Collectors.toList());
     }
 
+    public static List<Graduacao> mapToListGraduacao(List<GraduacaoDTOResponse> graduacoes) {
+        return graduacoes.stream().map(GraduacaoMapper::mapToGraduacao).collect(Collectors.toList());
+    }
+
     public static Graduacao mapToGraduacao(GraduacaoDTORequest graduacaoDTORequest) {
         if (graduacaoDTORequest == null) {
             return null;
         }
-        return new Graduacao(graduacaoDTORequest.kyu());
+
+        return new Graduacao(graduacaoDTORequest.kyu(),graduacaoDTORequest.dan());
+    }
+
+    public static Graduacao mapToGraduacao(GraduacaoDTOResponse graduacaoDTOResponse) {
+        if (graduacaoDTOResponse == null) {
+            return null;
+        }
+        return new Graduacao(
+            graduacaoDTOResponse.kyu(),
+            FaltaMapper.mapToListFalta(graduacaoDTOResponse.faltas()),
+            graduacaoDTOResponse.status(),
+            graduacaoDTOResponse.frequencia(),
+            graduacaoDTOResponse.inicioGraduacao(),
+            graduacaoDTOResponse.fimGraduacao(),
+            graduacaoDTOResponse.aprovado(),
+            graduacaoDTOResponse.cargaHoraria(),
+            graduacaoDTOResponse.dan()
+        );
     }
 
     public static GraduacaoDTOResponse mapToGraduacaoDTOResponse(Graduacao graduacao) {
@@ -30,7 +52,9 @@ public class GraduacaoMapper {
                 .withFrequencia(graduacao.getFrequencia())
                 .withKyu(graduacao.getKyu())
                 .withDan(graduacao.getDan())
-                .withFaltas(graduacao.getFaltas())
+                .withFaltas(
+                        FaltaMapper.mapToListFaltaDTOResponse(graduacao.getFaltas())
+                )
                 .withStatus(graduacao.isStatus())
                 .withAprovado(graduacao.isAprovado())
                 .withCargaHoraria(graduacao.getCargaHoraria())

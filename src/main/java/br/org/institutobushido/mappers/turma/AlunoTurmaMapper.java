@@ -3,16 +3,16 @@ package br.org.institutobushido.mappers.turma;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTORequest;
-import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTOResponse;
+import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTORequest;
+import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTOResponse;
 import br.org.institutobushido.models.turma.Aluno;
 
-public class AlunoMapper {
+public class AlunoTurmaMapper {
 
-    private AlunoMapper() {
+    private AlunoTurmaMapper() {
     }
 
-    public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest) {
+    public static Aluno mapToAluno(AlunoTurmaDTORequest alunoDTORequest) {
         if (alunoDTORequest == null) {
             return null;
         }
@@ -24,13 +24,13 @@ public class AlunoMapper {
                 alunoDTORequest.genero());
     }
 
-    public static AlunoDTOResponse mapToAlunoDTOResponse(Aluno aluno) {
+    public static AlunoTurmaDTOResponse mapToAlunoDTOResponse(Aluno aluno) {
 
         if (aluno == null) {
             return null;
         }
 
-        return new AlunoDTOResponse(
+        return new AlunoTurmaDTOResponse(
                  aluno.getRg(),
                 aluno.getNome(),
                 aluno.getDataNascimento().toString(),
@@ -38,7 +38,7 @@ public class AlunoMapper {
                 );
     }
 
-    public static List<AlunoDTOResponse> mapToListAlunoDTOResponse(List<Aluno> alunos) {
-        return alunos.stream().map(AlunoMapper::mapToAlunoDTOResponse).collect(Collectors.toList());
+    public static List<AlunoTurmaDTOResponse> mapToListAlunoDTOResponse(List<Aluno> alunos) {
+        return alunos.stream().map(AlunoTurmaMapper::mapToAlunoDTOResponse).collect(Collectors.toList());
     }
 }

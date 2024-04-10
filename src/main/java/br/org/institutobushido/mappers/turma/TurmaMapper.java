@@ -26,7 +26,7 @@ public class TurmaMapper {
                 .withEndereco(turma.getEndereco())
                 .withNome(turma.getNome())
                 .withTutor(turma.getTutor())
-                .withAlunos(AlunoMapper.mapToListAlunoDTOResponse(turma.getAlunos()))
+                .withAlunos(AlunoTurmaMapper.mapToListAlunoDTOResponse(turma.getAlunos()))
                 .build();
     }
 

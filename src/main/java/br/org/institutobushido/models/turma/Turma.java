@@ -29,26 +29,22 @@ public class Turma {
         this.alunos = new ArrayList<>();
     }
 
-    public void adicionarAluno(Aluno novoAluno) {
-        if (novoAluno == null) {
-            return;
-        }
-
+    public boolean adicionarAluno(Aluno novoAluno) {
         for (Aluno aluno : alunos) {
             if (aluno.getRg().equals(novoAluno.getRg())) {
                 throw new AlreadyRegisteredException("Aluno já esta cadastrado nesta turma");
             }
         }
 
-        this.alunos.add(novoAluno);
+        return this.alunos.add(novoAluno);
     }
 
-    public void removerAluno(String rg) {
+    public boolean removerAluno(String rg) {
 
         for (Aluno aluno : alunos) {
             if (aluno.getRg().equals(rg)) {
-                alunos.remove(aluno);
-                return;
+                return alunos.remove(aluno);
+                
             }
         }
 

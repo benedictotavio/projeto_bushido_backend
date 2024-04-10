@@ -32,6 +32,7 @@ public class Aluno implements Serializable {
     private String nome;
     private Date dataNascimento;
     private Genero genero;
+    private String turma;
 
     private DadosEscolares dadosEscolares;
     private Date dataPreenchimento;
@@ -41,7 +42,7 @@ public class Aluno implements Serializable {
     private List<Graduacao> graduacao;
     private HistoricoSaude historicoSaude;
 
-    public Aluno(String rg, String nome, Date dataNascimento, Genero genero) {
+    public Aluno(String rg, String nome, Date dataNascimento, Genero genero, String turma) {
 
         if (rg == null || rg.isEmpty() || rg.isBlank() || rg.length() != 9) {
             throw new InvalidFormatDataException("RG inválido. siga o formato de nove digitos: XXXXXXXXXX");
@@ -58,6 +59,7 @@ public class Aluno implements Serializable {
         this.dataNascimento = dataNascimento;
         this.genero = genero;
         this.rg = rg;
+        this.turma = turma;
     }
 
     public void setResponsaveis(List<Responsavel> responsaveis) {
@@ -106,6 +108,13 @@ public class Aluno implements Serializable {
             return;
         }
         this.dadosSociais = dadosSociais;
+    }
+
+    public void setGraduacao(List<Graduacao> graduacao) {
+        if (graduacao == null) {
+            return;
+        }
+        this.graduacao = graduacao;
     }
 
     public void adicionarGraduacao(Graduacao graduacao) {

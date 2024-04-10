@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
-import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoDTORequest;
+import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTORequest;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.models.turma.Turma;
@@ -47,7 +47,7 @@ public class TurmaControllers {
 
     @PostMapping("{nomeTurma}/aluno")
     public ResponseEntity<SuccessPostResponse> adicionarAluno(@PathVariable String nomeTurma,
-            @Valid @RequestBody AlunoDTORequest aluno) {
+            @Valid @RequestBody AlunoTurmaDTORequest aluno) {
         String res = this.turmaService.adicionarAlunoATurma(nomeTurma, aluno);
         return ResponseEntity.ok()
                 .body(new SuccessPostResponse(aluno.rg(), res, Turma.class.getSimpleName()));

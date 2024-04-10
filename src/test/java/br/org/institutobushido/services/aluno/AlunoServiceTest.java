@@ -1,18 +1,23 @@
 package br.org.institutobushido.services.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,6 +25,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -56,7 +62,9 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
+import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.repositories.AlunoRepositorio;
+import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 
@@ -67,6 +75,9 @@ class AlunoServiceTest {
         private AlunoRepositorio alunoRepositorio;
 
         @Mock
+        private TurmaRepositorio turmaRepositorio;
+
+        @Mock
         private MongoTemplate mongoTemplate;
 
         private AlunoServices alunoServices;
@@ -74,11 +85,12 @@ class AlunoServiceTest {
         private Aluno aluno;
 
         @BeforeEach
-        public void setUp() {
+        void setUp() {
                 alunoDTORequest = new AlunoDTORequest(
                                 "John Doe",
                                 new Date(),
                                 Genero.OUTRO,
+                                "Turma A",
                                 new DadosSociaisDTORequest(
                                                 false,
                                                 false,
@@ -97,9 +109,8 @@ class AlunoServiceTest {
                                                 "CEP",
                                                 "100"),
                                 "123456789",
-                                List.of(
-                                                new ResponsavelDTORequest("Nome", "12345678901", "Email", "Telefone",
-                                                                FiliacaoResposavel.OUTRO)),
+                                new ResponsavelDTORequest("Nome", "12345678901", "Email", "Telefone",
+                                                FiliacaoResposavel.OUTRO),
                                 new HistoricoSaudeDTORequest(
                                                 TipoSanguineo.O_POSITIVO,
                                                 new UsoMedicamentoContinuoDTORequest("Tipo"),
@@ -108,13 +119,14 @@ class AlunoServiceTest {
                                                 new DoencaCronicaDTORequest("Doenca"),
                                                 List.of("Deficiencia"),
                                                 List.of("Acompanhamento")),
-                                new GraduacaoDTORequest(7));
+                                new GraduacaoDTORequest(7, 2));
 
                 aluno = new Aluno(
                                 "123456789",
                                 "John Doe",
                                 new Date(),
-                                Genero.OUTRO);
+                                Genero.OUTRO,
+                                "Turma A");
 
                 aluno.setDadosEscolares(
                                 new DadosEscolares(
@@ -150,18 +162,20 @@ class AlunoServiceTest {
                                                 List.of("Acompanhamento")));
 
                 aluno.adicionarGraduacao(
-                                new Graduacao(7));
+                                new Graduacao(7, 0));
 
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
 
-                alunoServices = new AlunoServices(alunoRepositorio, mongoTemplate);
+                alunoServices = new AlunoServices(alunoRepositorio, mongoTemplate, turmaRepositorio);
         }
 
         @Test
         void deveCriarAluno() {
 
                 when(alunoRepositorio.findByRg(anyString())).thenReturn(Optional.empty());
+                when(turmaRepositorio.findByNome(anyString()))
+                                .thenReturn(Optional.of(new Turma("Endereço II", "Turma A", "Tutor")));
                 when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
 
                 // Act
@@ -215,8 +229,7 @@ class AlunoServiceTest {
                                 "Telefone",
                                 FiliacaoResposavel.OUTRO);
 
-                when(alunoRepositorio.findByRg(anyString())).thenReturn(Optional.of(aluno));
-
+                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
                 // Act
                 ResponsavelDTOResponse result = alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
 
@@ -244,23 +257,23 @@ class AlunoServiceTest {
         @Test
         void deveRemoverResponsavel() {
                 // Arrange
-                String rg = "validRg";
+                String cpf = "12345678902";
                 aluno.adicionarResponsavel(
-                                new Responsavel("Nome", "12345678910", "Email", "Telefone", FiliacaoResposavel.OUTRO));
+                                new Responsavel("Nome", cpf, "Email", "Telefone", FiliacaoResposavel.OUTRO));
 
-                when(alunoRepositorio.findByRg(anyString())).thenReturn(Optional.of(aluno));
+                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
-                alunoServices.removerResponsavel(rg, "12345678910");
+                String result = alunoServices.removerResponsavel(aluno.getRg(), cpf);
 
                 // Assert
-                assertEquals(1, aluno.getResponsaveis().size());
+                assertEquals("1", result);
         }
 
         @Test
         void deveAdicionarFaltaAoAluno() {
                 // Arrange
-                Graduacao graduacao = new Graduacao(7);
+                Graduacao graduacao = new Graduacao(7, 0);
                 graduacao.setInicioGraduacao(LocalDate.now().minusMonths(2));
                 aluno.adicionarGraduacao(graduacao);
 
@@ -269,7 +282,7 @@ class AlunoServiceTest {
                                 "Falta");
                 long dataFalta = new Date().getTime();
 
-                when(alunoRepositorio.findByRg(anyString())).thenReturn(Optional.of(aluno));
+                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
                 String result = alunoServices.adicionarFaltaDoAluno(aluno.getRg(), faltaDTORequest, dataFalta);
@@ -284,14 +297,14 @@ class AlunoServiceTest {
                 // Arrange
                 String rg = "123456789";
 
-                Graduacao graduacao = new Graduacao(7);
+                Graduacao graduacao = new Graduacao(7, 0);
                 graduacao.setInicioGraduacao(LocalDate.now().minusMonths(2));
                 graduacao.adicionarFalta("Motivo", "Observação",
                                 Date.from(LocalDate.now().minusDays(3).atStartOfDay(ZoneId.systemDefault()).toInstant())
                                                 .getTime());
                 aluno.adicionarGraduacao(graduacao);
 
-                when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
+                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
                 String result = alunoServices.retirarFaltaDoAluno(rg, graduacao.getFaltas().get(0).getData());
@@ -312,7 +325,7 @@ class AlunoServiceTest {
                                                 "Cidade", "Estado", "CEP", "Numero"),
                                 new UpdateHistoricoSaudeDTORequest(null, null, null, null, null));
 
-                when(alunoRepositorio.findByRg(rg)).thenReturn(Optional.of(aluno));
+                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
                 String result = alunoServices.editarAlunoPorRg(rg, updateAlunoDTORequest);
@@ -322,34 +335,78 @@ class AlunoServiceTest {
         }
 
         @Test
-        void aprovarAluno() {
-                // Arrange
-                Graduacao graduacao = new Graduacao(7);
-                graduacao.setInicioGraduacao(LocalDate.now().minusMonths(2));
-                aluno.adicionarGraduacao(graduacao);
-                when(alunoRepositorio.findByRg(anyString())).thenReturn(Optional.of(aluno));
+        void deveAprovarAluno() {
+                int kyu = 7;
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
+                aluno.setGraduacao(List.of(
+                                new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
+                                                LocalDate.now().plusMonths(4), false, 0, 1)));
 
                 // Act
-                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg());
+                GraduacaoDTOResponse result = alunoServices.aprovarAluno("123456789");
 
                 // Assert
-                assertNotNull(result);
-                assertEquals(graduacao.getKyu(), result.kyu());
+                assertEquals(7, result.kyu());
+                assertEquals(1, result.dan());
+                assertFalse(result.status());
+                assertTrue(result.aprovado());
         }
 
         @Test
-        void reprovarAluno() {
-                // Arrange
-                Graduacao graduacao = new Graduacao(7);
-                graduacao.setInicioGraduacao(LocalDate.now().minusMonths(2));
-                aluno.adicionarGraduacao(graduacao);
-                when(alunoRepositorio.findByRg(anyString())).thenReturn(Optional.of(aluno));
+        void deveReprovarAluno() {
+                int kyu = 7;
+                int dan = 1;
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
-                // Act
+                aluno.setGraduacao(List.of(
+                                new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
+                                                LocalDate.now().plusMonths(4), false, 0, dan)));
+
                 GraduacaoDTOResponse result = alunoServices.reprovarAluno(aluno.getRg());
 
                 // Assert
                 assertNotNull(result);
-                assertEquals(graduacao.getKyu(), result.kyu());
+                assertEquals(kyu, result.kyu());
+                assertEquals(dan, result.dan());
+                assertFalse(result.status());
+                assertFalse(result.aprovado());
+        }
+
+        @Test
+        void deveAprovarAlunoQuandoAlunoEstiverNoKyu1() {
+                int kyu = 1;
+                int dan = 1;
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
+
+                aluno.setGraduacao(List.of(
+                                new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
+                                                LocalDate.now().plusMonths(4), false, 0, dan)));
+
+                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg());
+
+                // Assert
+                assertNotNull(result);
+                assertEquals(kyu, result.kyu());
+                assertEquals(dan, result.dan());
+                assertFalse(result.status());
+                assertTrue(result.aprovado());
+        }
+
+        @Test
+        void deveAprovarAdicionarDanAlunoQuandoAlunoEstiverNoKyu1() {
+                int kyu = 1;
+                int dan = 2;
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
+
+                aluno.setGraduacao(List.of(
+                                new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
+                                                LocalDate.now().plusMonths(4), false, 0, dan)));
+
+                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg());
+
+                // Assert
+                assertNotNull(result);
+                assertEquals(kyu, result.kyu());
+                assertEquals(dan, result.dan());
         }
 }

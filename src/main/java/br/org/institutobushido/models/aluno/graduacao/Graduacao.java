@@ -7,7 +7,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import br.org.institutobushido.models.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
@@ -34,11 +33,13 @@ public class Graduacao implements Serializable {
     int cargaHoraria;
     int dan;
 
-    public Graduacao(int kyu) {
-        if (kyu <= 0) {
-            throw new IllegalArgumentException("O kyu deve ser maior que zero");
+    public Graduacao(int kyu, int dan) {
+
+        if (kyu < 1 || kyu > 7) {
+            throw new IllegalArgumentException("O kyu deve estar entre 1 a 7");
         }
-        if (kyu <= 1) {
+
+        if (kyu == 1) {
             this.kyu = 1;
             this.frequencia = 100;
             this.faltas = new ArrayList<>();
@@ -47,17 +48,20 @@ public class Graduacao implements Serializable {
             this.fimGraduacao = LocalDate.now().plusMonths(4);
             this.aprovado = false;
             this.cargaHoraria = 0;
-        } else {
-            this.kyu = kyu;
-            this.dan = 0;
-            this.frequencia = 100;
-            this.faltas = new ArrayList<>();
-            this.status = true;
-            this.inicioGraduacao = LocalDate.now();
-            this.fimGraduacao = LocalDate.now().plusMonths(4);
-            this.aprovado = false;
-            this.cargaHoraria = 0;
+            this.dan = dan > 0 ? dan : 1;
+            return;
         }
+
+        this.kyu = kyu;
+        this.dan = 1;
+        this.frequencia = 100;
+        this.faltas = new ArrayList<>();
+        this.status = true;
+        this.inicioGraduacao = LocalDate.now();
+        this.fimGraduacao = LocalDate.now().plusMonths(4);
+        this.aprovado = false;
+        this.cargaHoraria = 0;
+
     }
 
     public void setDan(int dan) {
@@ -111,9 +115,9 @@ public class Graduacao implements Serializable {
         return novaFalta;
     }
 
-
-    public Falta removerFalta(String dataFalta){
-        Falta falta = this.getFaltas().stream().filter(f -> f.getData().equals(dataFalta)).findFirst().orElseThrow(() -> new EntityNotFoundException("Falta no dia " + dataFalta + " foi não encontrada"));
+    public Falta removerFalta(String dataFalta) {
+        Falta falta = this.getFaltas().stream().filter(f -> f.getData().equals(dataFalta)).findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Falta no dia " + dataFalta + " foi não encontrada"));
 
         this.getFaltas().remove(falta);
         return falta;
@@ -123,12 +127,18 @@ public class Graduacao implements Serializable {
         this.aprovado = aprovado;
     }
 
-    public void aprovacao() {
+    public Graduacao aprovacao() {
         this.fimGraduacao = LocalDate.now();
+        // if (this.kyu == 1) {
+        //     setDan(this.dan + 1);
+        // } else {
+        //     setKyu(this.kyu - 1);
+        // }
         setStatus(false);
         setAprovado(true);
         setCargaHoraria(definirCargaHoraria());
         setFrequencia(definirFrequencia());
+        return this;
     }
 
     public void reprovacao() {
@@ -156,4 +166,12 @@ public class Graduacao implements Serializable {
         }
         return (int) ((weeksBetween * 3) - (this.faltas.size() * 1));
     }
+
+    @Override
+    public String toString() {
+        return "Graduacao [kyu=" + kyu + ", faltas=" + faltas + ", status=" + status + ", frequencia=" + frequencia
+                + ", inicioGraduacao=" + inicioGraduacao + ", fimGraduacao=" + fimGraduacao + ", aprovado=" + aprovado
+                + ", cargaHoraria=" + cargaHoraria + ", dan=" + dan + "]";
+    }
+
 }
