@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import br.org.institutobushido.enums.aluno.Genero;
+import br.org.institutobushido.models.aluno.graduacao.Graduacao;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
@@ -122,5 +123,11 @@ class AlunoTest {
         assertThrows(LimitQuantityException.class, () -> {
             aluno.removerResponsavel("12345678910");
         });
+    }
+    
+    @Test
+    void deveAdicionarUmaNovaGraduacao() {
+        aluno.adicionarGraduacao(new Graduacao(7, 5));
+        assertEquals(1, aluno.getGraduacao().size());
     }
 }

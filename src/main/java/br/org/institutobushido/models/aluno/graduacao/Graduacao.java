@@ -128,12 +128,12 @@ public class Graduacao implements Serializable {
     }
 
     public Graduacao aprovacao() {
+
+        if (!this.status) {
+            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
+        }
+
         this.fimGraduacao = LocalDate.now();
-        // if (this.kyu == 1) {
-        //     setDan(this.dan + 1);
-        // } else {
-        //     setKyu(this.kyu - 1);
-        // }
         setStatus(false);
         setAprovado(true);
         setCargaHoraria(definirCargaHoraria());

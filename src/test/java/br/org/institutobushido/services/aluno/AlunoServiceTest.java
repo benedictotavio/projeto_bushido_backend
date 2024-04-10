@@ -290,6 +290,7 @@ class AlunoServiceTest {
                 // Assert
                 assertEquals("1", result);
                 assertEquals(0, aluno.getGraduacao().get(0).getFaltas().size());
+                assertTrue(aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).isStatus());
         }
 
         @Test
