@@ -1,8 +1,10 @@
 package br.org.institutobushido.services.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -83,7 +85,7 @@ class AlunoServiceTest {
         private Aluno aluno;
 
         @BeforeEach
-        public void setUp() {
+        void setUp() {
                 alunoDTORequest = new AlunoDTORequest(
                                 "John Doe",
                                 new Date(),
@@ -344,8 +346,10 @@ class AlunoServiceTest {
                 GraduacaoDTOResponse result = alunoServices.aprovarAluno("123456789");
 
                 // Assert
-                assertEquals(kyu - 1, result.kyu());
+                assertEquals(7, result.kyu());
                 assertEquals(1, result.dan());
+                assertFalse(result.status());
+                assertTrue(result.aprovado());
         }
 
         @Test
@@ -356,7 +360,7 @@ class AlunoServiceTest {
 
                 aluno.setGraduacao(List.of(
                                 new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
-                                                LocalDate.now().plusMonths(4), false, 0, 1)));
+                                                LocalDate.now().plusMonths(4), false, 0, dan)));
 
                 GraduacaoDTOResponse result = alunoServices.reprovarAluno(aluno.getRg());
 
@@ -364,6 +368,8 @@ class AlunoServiceTest {
                 assertNotNull(result);
                 assertEquals(kyu, result.kyu());
                 assertEquals(dan, result.dan());
+                assertFalse(result.status());
+                assertFalse(result.aprovado());
         }
 
         @Test
@@ -374,13 +380,33 @@ class AlunoServiceTest {
 
                 aluno.setGraduacao(List.of(
                                 new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
-                                                LocalDate.now().plusMonths(4), false, 0, 1)));
+                                                LocalDate.now().plusMonths(4), false, 0, dan)));
 
                 GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg());
 
                 // Assert
                 assertNotNull(result);
                 assertEquals(kyu, result.kyu());
-                assertEquals(dan + 1, result.dan());
+                assertEquals(dan, result.dan());
+                assertFalse(result.status());
+                assertTrue(result.aprovado());
+        }
+
+        @Test
+        void deveAprovarAdicionarDanAlunoQuandoAlunoEstiverNoKyu1() {
+                int kyu = 1;
+                int dan = 2;
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
+
+                aluno.setGraduacao(List.of(
+                                new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
+                                                LocalDate.now().plusMonths(4), false, 0, dan)));
+
+                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg());
+
+                // Assert
+                assertNotNull(result);
+                assertEquals(kyu, result.kyu());
+                assertEquals(dan, result.dan());
         }
 }

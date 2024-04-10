@@ -244,12 +244,13 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public GraduacaoDTOResponse aprovarAluno(String rg) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
-        Graduacao graduacaoAtual = alunoEncontrado.getGraduacao().get(alunoEncontrado.getGraduacao().size() - 1);
-        graduacaoAtual.aprovacao();
+        int graduacaoAtualIndex = alunoEncontrado.getGraduacao().size() - 1;
+        Graduacao graduacaoAtual = alunoEncontrado.getGraduacao().get(graduacaoAtualIndex).aprovacao();
+        
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
         Update update = new Update();
-        update.set(GRADUACAO, alunoEncontrado.getGraduacao());
+        update.set(GRADUACAO + "." + (graduacaoAtualIndex), graduacaoAtual);
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
 
         adicionarNovaGraduacao(alunoEncontrado.getRg(), graduacaoAtual.getKyu(), graduacaoAtual.getDan());
@@ -283,6 +284,13 @@ public class AlunoServices implements AlunoServicesInterface {
 
     public void adicionarNovaGraduacao(String rg, int kyu, int danAtual) {
         Graduacao novaGraduacao = new Graduacao(kyu, danAtual);
+        
+        if (kyu == 1) {
+            novaGraduacao.setDan(danAtual + 1);
+        } else {
+           novaGraduacao.setKyu(kyu - 1);
+        }
+
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(rg));
         Update update = new Update();

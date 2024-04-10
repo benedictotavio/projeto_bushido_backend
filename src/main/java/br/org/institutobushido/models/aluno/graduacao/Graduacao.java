@@ -127,17 +127,18 @@ public class Graduacao implements Serializable {
         this.aprovado = aprovado;
     }
 
-    public void aprovacao() {
+    public Graduacao aprovacao() {
         this.fimGraduacao = LocalDate.now();
-        if (this.kyu == 1) {
-            setDan(this.dan + 1);
-        } else {
-            setKyu(this.kyu - 1);
-        }
+        // if (this.kyu == 1) {
+        //     setDan(this.dan + 1);
+        // } else {
+        //     setKyu(this.kyu - 1);
+        // }
         setStatus(false);
         setAprovado(true);
         setCargaHoraria(definirCargaHoraria());
         setFrequencia(definirFrequencia());
+        return this;
     }
 
     public void reprovacao() {
