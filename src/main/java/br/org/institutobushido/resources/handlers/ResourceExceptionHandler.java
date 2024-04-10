@@ -2,8 +2,6 @@ package br.org.institutobushido.resources.handlers;
 
 import java.time.Instant;
 import java.util.Map;
-
-import org.springframework.core.NestedRuntimeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -21,8 +19,8 @@ import br.org.institutobushido.controllers.response.error.StandardError;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.resources.exceptions.InactiveUserException;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 import br.org.institutobushido.resources.exceptions.InvalidFormatDataException;
+import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
 
@@ -91,9 +89,9 @@ public class ResourceExceptionHandler {
             HttpServletRequest request) {
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
-        err.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        err.setStatus(HttpStatus.BAD_REQUEST.value());
         err.setError("Invalid Property");
-        err.setMessage(e.getMessage());
+        err.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(err.getStatus()).body(err);
     }
@@ -109,21 +107,8 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(err.getStatus()).body(err);
     }
 
-    @ExceptionHandler(NestedRuntimeException.class)
-    public ResponseEntity<StandardError> invalidProperty(NestedRuntimeException e, HttpServletRequest request) {
-        StandardError err = new StandardError();
-        err.setTimestamp(Instant.now());
-        err.setStatus(HttpStatus.FORBIDDEN.value());
-        err.setError("Object not support");
-        err.setMessage(e.getLocalizedMessage());
-        err.setPath(request.getRequestURI());
-        return ResponseEntity.status(err.getStatus()).body(err);
-    }
-
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleSecurityException(Exception e) {
-
-        System.out.println("Exception: " + e.getMessage());
 
         if (e instanceof BadCredentialsException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), e.getMessage());

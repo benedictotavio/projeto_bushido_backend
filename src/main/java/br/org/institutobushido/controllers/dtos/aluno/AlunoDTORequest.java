@@ -18,21 +18,27 @@ import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public record AlunoDTORequest(
-                @NotNull(message = "Nome é obrigatório") String nome,
+                @NotNull(message = "Nome é obrigatório")
+                @NotEmpty(message = "Nome é obrigatório") String nome,
 
-                @NotNull(message = "Data de nascimento é obrigatória") @Past(message = "Data de nascimento deve ser no passado!") Date dataNascimento,
+                @NotNull(message = "Data de nascimento é obrigatória")
+                @Past(message = "Data de nascimento deve ser no passado!")
+                Date dataNascimento,
 
-                @NotNull(message = "Genero é obrigatório") Genero genero,
+                @NotNull(message = "Genero é obrigatório")
+                Genero genero,
 
-                @NotNull(message = "Turma é obrigatório", groups = {Turma.class}) String turma,
+                @NotNull(message = "Turma é obrigatório", groups = {Turma.class})
+                String turma,
 
-                @NotNull(message = "Dados sociais é obrigatório") DadosSociaisDTORequest dadosSociais,
+                @NotNull(message = "Dados sociais é obrigatório")
+                DadosSociaisDTORequest dadosSociais,
 
                 @NotNull(message = "Dados escolares é obrigatório") DadosEscolaresDTORequest dadosEscolares,
 
                 @NotNull(message = "Endereço é obrigatório!") EnderecoDTORequest endereco,
 
-                @NotNull(message = "Rg é obrigatório!") @Pattern(regexp = "^\\d{9}$", message = "Formato de rg inválido!") String rg,
+                @NotNull(message = "Rg é obrigatório!") @Pattern(regexp = "^\\d{9}$", message = "Formato de rg inválido! Ex: 123456789") @NotEmpty(message = "Rg é obrigatório!") String rg,
 
                 @NotEmpty(message = "Insira pelo menos um Responsavel!", groups = {Responsavel.class}) ResponsavelDTORequest responsaveis,
 
