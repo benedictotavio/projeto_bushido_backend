@@ -1,6 +1,7 @@
 package br.org.institutobushido.models.aluno.graduacao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -8,6 +9,8 @@ import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import br.org.institutobushido.resources.exceptions.InactiveUserException;
 
 @SpringBootTest
 class GraduacaoTest {
@@ -69,5 +72,12 @@ class GraduacaoTest {
         Graduacao graduacao = new Graduacao(1,0);
         assertEquals(1, graduacao.getKyu());
         assertEquals(1, graduacao.getDan());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoGraduacaoStatusForFalse() {
+        Graduacao graduacao = new Graduacao(4,0);
+        graduacao.setStatus(false);
+        assertThrows(InactiveUserException.class, () -> graduacao.aprovacao());
     }
 }

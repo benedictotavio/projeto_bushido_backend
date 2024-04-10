@@ -30,10 +30,18 @@ public class Falta implements Serializable {
     public void setData(String data) {
         this.data = data;
     }
+
     public void setMotivo(String motivo) {
         this.motivo = motivo;
     }
+
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
+
+    @Override
+    public String toString() {
+        return "Falta [data=" + data + ", motivo=" + motivo + ", observacao=" + observacao + "]";
+    }
+    
 }

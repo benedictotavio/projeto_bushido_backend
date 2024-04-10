@@ -130,7 +130,6 @@ public class AlunoServices implements AlunoServicesInterface {
     public String adicionarFaltaDoAluno(String rg, FaltaDTORequest falta, long dataFalta) {
         Aluno aluno = encontrarAlunoPorRg(rg);
         int graduacaoAtual = aluno.getGraduacao().size() - 1;
-
         Falta novaFalta = aluno.getGraduacao().get(graduacaoAtual).adicionarFalta(falta.motivo(), falta.observacao(),
                 dataFalta);
 
@@ -139,7 +138,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Update update = new Update().addToSet(GRADUACAO + "." + (graduacaoAtual) + ".faltas", novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
 
-        if (aluno.getGraduacao().get(graduacaoAtual).getFaltas().size() == 4) {
+        if (aluno.getGraduacao().get(graduacaoAtual).getFaltas().size() == 5) {
             mudarStatusGraduacaoAluno(aluno, false);
         }
 
@@ -152,7 +151,7 @@ public class AlunoServices implements AlunoServicesInterface {
         int graduacaoAtual = aluno.getGraduacao().size() - 1;
         Falta faltaDoAluno = aluno.getGraduacao().get(graduacaoAtual).removerFalta(faltasId);
 
-        if (aluno.getGraduacao().get(graduacaoAtual).getFaltas().size() == 5) {
+        if (aluno.getGraduacao().get(graduacaoAtual).getFaltas().size() == 4) {
             mudarStatusGraduacaoAluno(aluno, true);
         }
 
@@ -246,7 +245,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
         int graduacaoAtualIndex = alunoEncontrado.getGraduacao().size() - 1;
         Graduacao graduacaoAtual = alunoEncontrado.getGraduacao().get(graduacaoAtualIndex).aprovacao();
-        
+
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
         Update update = new Update();
@@ -284,11 +283,11 @@ public class AlunoServices implements AlunoServicesInterface {
 
     public void adicionarNovaGraduacao(String rg, int kyu, int danAtual) {
         Graduacao novaGraduacao = new Graduacao(kyu, danAtual);
-        
+
         if (kyu == 1) {
             novaGraduacao.setDan(danAtual + 1);
         } else {
-           novaGraduacao.setKyu(kyu - 1);
+            novaGraduacao.setKyu(kyu - 1);
         }
 
         Query query = new Query();

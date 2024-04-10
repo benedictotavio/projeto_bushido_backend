@@ -290,6 +290,36 @@ class AlunoServiceTest {
                 // Assert
                 assertEquals("1", result);
                 assertEquals(0, aluno.getGraduacao().get(0).getFaltas().size());
+                assertTrue(aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).isStatus());
+        }
+
+        @Test
+        void deveMudarStatusAoAdicionarA5FaltaAoAluno() {
+                FaltaDTORequest faltaDTORequest = new FaltaDTORequest(
+                                "Falta justificada",
+                                "Falta");
+
+                long dataFalta = new Date().getTime() - 200000;
+
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
+
+                Graduacao graduacao = new Graduacao(7, 0);
+                graduacao.setInicioGraduacao(LocalDate.now().minusMonths(6));
+                graduacao.adicionarFalta("Falta justificada", "Observação", new Date().getTime() - 100000000);
+                graduacao.adicionarFalta("Falta justificada", "Observação", new Date().getTime() - 210000000);
+                graduacao.adicionarFalta("Falta justificada", "Observação", new Date().getTime() - 320000000);
+                graduacao.adicionarFalta("Falta justificada", "Observação", new Date().getTime() - 430000000);
+                aluno.adicionarGraduacao(graduacao);
+
+                // Act
+                alunoServices.adicionarFaltaDoAluno(aluno.getRg(), new FaltaDTORequest("Falta justificada", "Falta"),
+                                dataFalta - 340000);
+                String result = alunoServices.adicionarFaltaDoAluno(aluno.getRg(), faltaDTORequest, dataFalta);
+
+                // Assert
+                assertEquals("5", result);
+                assertEquals(5, aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).getFaltas().size());
+                assertFalse(aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).isStatus());
         }
 
         @Test
