@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjcyNjA1Nn0.YBQObrqshON5MUqzHHQrnp0m747Ju9EfZjEptvDHUHQ
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjc4NzcxNX0.UtJXMI9n0n1HohuWBhP9r4eH1IJLT3rcB8hy1fmBBgk
 @rg=000000000
 
 GET {{url}}?nome=zé HTTP/1.1
@@ -17,7 +17,7 @@ Authorization: Bearer {{token}}
   "nome": "Abelardo Matheus",
   "genero": "M",
   "dataNascimento": "2020-03-20",
-  "rg":"000000000",
+  "rg":"22",
   "turma":"Fundão I",
   "dadosSociais": {
     "bolsaFamilia": true,
@@ -47,7 +47,8 @@ Authorization: Bearer {{token}}
       "filiacao": "MAE"
   },
   "graduacao": {
-    "kyu": 2
+    "kyu": 1,
+    "dan": 0
   },
   "historicoSaude": {
     "tipoSanguineo": "A_POSITIVO",
