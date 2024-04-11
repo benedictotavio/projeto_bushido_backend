@@ -13,10 +13,8 @@ import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.resources.exceptions.InactiveUserException;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Graduacao implements Serializable {
@@ -64,6 +62,15 @@ public class Graduacao implements Serializable {
 
     }
 
+    public void setFimGraduacao(LocalDate fimGraduacao) {
+
+        if (fimGraduacao.isBefore(this.inicioGraduacao)) {
+            throw new LimitQuantityException("O fim da graduação deve ser maior que o inicio da graduação");
+        }
+
+        this.fimGraduacao = fimGraduacao;
+    }
+
     public void setDan(int dan) {
         this.dan = dan;
     }
@@ -88,6 +95,11 @@ public class Graduacao implements Serializable {
     }
 
     public void setInicioGraduacao(LocalDate inicioGraduacao) {
+
+        if (inicioGraduacao.isAfter(this.fimGraduacao) || inicioGraduacao.isBefore(LocalDate.now())) {
+            throw new LimitQuantityException("O inicio da graduação deve ser menor que o fim da graduação");
+        }
+
         this.inicioGraduacao = inicioGraduacao;
     }
 
@@ -133,7 +145,7 @@ public class Graduacao implements Serializable {
             throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
         }
 
-        this.fimGraduacao = LocalDate.now();
+        setFimGraduacao(LocalDate.now());
         setStatus(false);
         setAprovado(true);
         setCargaHoraria(definirCargaHoraria());
@@ -142,29 +154,36 @@ public class Graduacao implements Serializable {
     }
 
     public void reprovacao() {
-        this.fimGraduacao = LocalDate.now();
+        setFimGraduacao(LocalDate.now());
         setStatus(false);
         setAprovado(false);
         setCargaHoraria(definirCargaHoraria());
         setFrequencia(definirFrequencia());
     }
 
-    private int definirFrequencia() {
-        long weeksBetween = ChronoUnit.WEEKS.between(this.inicioGraduacao, this.fimGraduacao);
+    public int definirFrequencia() {
+
+        long weeksBetween = ChronoUnit.WEEKS.between(this.getInicioGraduacao(), this.getFimGraduacao());
+
         if (weeksBetween <= 0) {
-            throw new LimitQuantityException("O periodo de graduação é muito curto");
+            return 100;
         }
+
         long totalHoursInGraduation = (weeksBetween * 3);
-        this.frequencia = (int) ((this.cargaHoraria * 100) / totalHoursInGraduation);
+        setFrequencia((int) ((this.cargaHoraria * 100) / totalHoursInGraduation));
         return this.frequencia;
     }
 
-    private int definirCargaHoraria() {
-        long weeksBetween = ChronoUnit.WEEKS.between(this.inicioGraduacao, this.fimGraduacao);
+    public int definirCargaHoraria() {
+
+        long weeksBetween = ChronoUnit.WEEKS.between(this.getInicioGraduacao(), this.getFimGraduacao());
+
         if (weeksBetween <= 0) {
-            throw new LimitQuantityException("O periodo de graduação é muito curto");
+            return 0;
         }
-        return (int) ((weeksBetween * 3) - (this.faltas.size() * 1));
+
+        setCargaHoraria((int) ((weeksBetween * 3) - (this.faltas.size() * 1)));
+        return this.cargaHoraria;
     }
 
     @Override
@@ -172,6 +191,42 @@ public class Graduacao implements Serializable {
         return "Graduacao [kyu=" + kyu + ", faltas=" + faltas + ", status=" + status + ", frequencia=" + frequencia
                 + ", inicioGraduacao=" + inicioGraduacao + ", fimGraduacao=" + fimGraduacao + ", aprovado=" + aprovado
                 + ", cargaHoraria=" + cargaHoraria + ", dan=" + dan + "]";
+    }
+
+    public int getKyu() {
+        return kyu;
+    }
+
+    public List<Falta> getFaltas() {
+        return faltas;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public int getFrequencia() {
+        return frequencia;
+    }
+
+    public LocalDate getInicioGraduacao() {
+        return inicioGraduacao;
+    }
+
+    public LocalDate getFimGraduacao() {
+        return LocalDate.now();
+    }
+
+    public boolean isAprovado() {
+        return aprovado;
+    }
+
+    public int getCargaHoraria() {
+        return cargaHoraria;
+    }
+
+    public int getDan() {
+        return dan;
     }
 
 }

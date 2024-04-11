@@ -2,6 +2,9 @@ package br.org.institutobushido.mappers.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,8 +24,9 @@ class GraduacaoMapperTest {
 
     @BeforeEach
     void setUp() {
-        graduacao = new Graduacao(7,0);
-        graduacaoDTORequest = new GraduacaoDTORequest(7,1);
+        graduacao = new Graduacao(7, new ArrayList<>(), true, 100, LocalDate.now().minusMonths(3),
+                LocalDate.now().plusMonths(3), false, 80, 1);
+        graduacaoDTORequest = new GraduacaoDTORequest(7, 1);
         graduacaoDTOResponse = new GraduacaoDTOResponse(
                 7,
                 null,
@@ -32,8 +36,7 @@ class GraduacaoMapperTest {
                 0,
                 true,
                 0,
-                0
-        );
+                0);
     }
 
     @Test

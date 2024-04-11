@@ -1,6 +1,6 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjc4NzcxNX0.UtJXMI9n0n1HohuWBhP9r4eH1IJLT3rcB8hy1fmBBgk
-@rg=000000000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjgwMTI4MX0.MzPn_5nl3vrD4kmT4tZlV4lxHR4YaFqeIo4nJnf0L0w
+@rg=000000001
 
 GET {{url}}?nome=zé HTTP/1.1
 Authorization: Bearer {{token}}
@@ -17,7 +17,7 @@ Authorization: Bearer {{token}}
   "nome": "Abelardo Matheus",
   "genero": "M",
   "dataNascimento": "2020-03-20",
-  "rg":"22",
+  "rg":"000000001",
   "turma":"Fundão I",
   "dadosSociais": {
     "bolsaFamilia": true,
@@ -75,7 +75,7 @@ Authorization: Bearer {{token}}
 
 
 ###
-POST {{url}}/falta/{{rg}}/1711940400000 HTTP/1.1
+POST {{url}}/falta/{{rg}}/1712705754891 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
