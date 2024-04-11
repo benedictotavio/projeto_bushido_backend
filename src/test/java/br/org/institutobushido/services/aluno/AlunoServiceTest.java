@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -162,7 +163,7 @@ class AlunoServiceTest {
                                                 List.of("Acompanhamento")));
 
                 aluno.adicionarGraduacao(
-                                new Graduacao(7, 0));
+                                new Graduacao(7, new ArrayList<>(), true, 100, LocalDate.now().minusMonths(3),LocalDate.now().plusMonths(3), false, 80, 1));
 
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
@@ -200,11 +201,12 @@ class AlunoServiceTest {
         @Test
         void testBuscarAlunoPorRg() {
                 // Mocking data
-                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 List<AlunoDTOResponse> result = alunoServices.buscarAluno(null, "123456789", 0, 10, "nome", "asc");
 
                 assertEquals(1, result.size());
+                assertEquals(result.get(0).graduacao().get(aluno.getGraduacao().size() - 1).fimGraduacao(), LocalDate.now());
         }
 
         @Test
@@ -216,6 +218,7 @@ class AlunoServiceTest {
 
                 // Verify if the result is as expected
                 assertEquals(1, result.size());
+                assertEquals(result.get(0).graduacao().get(0).fimGraduacao(), LocalDate.now());
         }
 
         @Test
@@ -274,7 +277,7 @@ class AlunoServiceTest {
         void deveAdicionarFaltaAoAluno() {
                 // Arrange
                 Graduacao graduacao = new Graduacao(7, 0);
-                graduacao.setInicioGraduacao(LocalDate.now().minusMonths(2));
+                graduacao.setFimGraduacao(LocalDate.now().plusMonths(2));
                 aluno.adicionarGraduacao(graduacao);
 
                 FaltaDTORequest faltaDTORequest = new FaltaDTORequest(
@@ -299,13 +302,13 @@ class AlunoServiceTest {
                 String rg = "123456789";
 
                 Graduacao graduacao = new Graduacao(7, 0);
-                graduacao.setInicioGraduacao(LocalDate.now().minusMonths(2));
+                graduacao.setFimGraduacao(LocalDate.now().plusMonths(2));
                 graduacao.adicionarFalta("Motivo", "Observação",
-                                Date.from(LocalDate.now().minusDays(3).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                                Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant())
                                                 .getTime());
                 aluno.adicionarGraduacao(graduacao);
 
-                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
                 String result = alunoServices.retirarFaltaDoAluno(rg, graduacao.getFaltas().get(0).getData());

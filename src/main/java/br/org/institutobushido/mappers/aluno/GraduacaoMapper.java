@@ -24,7 +24,7 @@ public class GraduacaoMapper {
             return null;
         }
 
-        return new Graduacao(graduacaoDTORequest.kyu(),graduacaoDTORequest.dan());
+        return new Graduacao(graduacaoDTORequest.kyu(), graduacaoDTORequest.dan());
     }
 
     public static Graduacao mapToGraduacao(GraduacaoDTOResponse graduacaoDTOResponse) {
@@ -32,16 +32,15 @@ public class GraduacaoMapper {
             return null;
         }
         return new Graduacao(
-            graduacaoDTOResponse.kyu(),
-            FaltaMapper.mapToListFalta(graduacaoDTOResponse.faltas()),
-            graduacaoDTOResponse.status(),
-            graduacaoDTOResponse.frequencia(),
-            graduacaoDTOResponse.inicioGraduacao(),
-            graduacaoDTOResponse.fimGraduacao(),
-            graduacaoDTOResponse.aprovado(),
-            graduacaoDTOResponse.cargaHoraria(),
-            graduacaoDTOResponse.dan()
-        );
+                graduacaoDTOResponse.kyu(),
+                FaltaMapper.mapToListFalta(graduacaoDTOResponse.faltas()),
+                graduacaoDTOResponse.status(),
+                graduacaoDTOResponse.frequencia(),
+                graduacaoDTOResponse.inicioGraduacao(),
+                graduacaoDTOResponse.fimGraduacao(),
+                graduacaoDTOResponse.aprovado(),
+                graduacaoDTOResponse.cargaHoraria(),
+                graduacaoDTOResponse.dan());
     }
 
     public static GraduacaoDTOResponse mapToGraduacaoDTOResponse(Graduacao graduacao) {
@@ -49,16 +48,15 @@ public class GraduacaoMapper {
             return null;
         }
         return GraduacaoDTOResponse.builder()
-                .withFrequencia(graduacao.getFrequencia())
                 .withKyu(graduacao.getKyu())
                 .withDan(graduacao.getDan())
                 .withFaltas(
-                        FaltaMapper.mapToListFaltaDTOResponse(graduacao.getFaltas())
-                )
+                        FaltaMapper.mapToListFaltaDTOResponse(graduacao.getFaltas()))
                 .withStatus(graduacao.isStatus())
                 .withAprovado(graduacao.isAprovado())
-                .withCargaHoraria(graduacao.getCargaHoraria())
                 .withFimGraduacao(graduacao.getFimGraduacao())
+                .withCargaHoraria(graduacao.definirCargaHoraria())
+                .withFrequencia(graduacao.definirFrequencia())
                 .withInicioGraduacao(graduacao.getInicioGraduacao())
                 .build();
     }
