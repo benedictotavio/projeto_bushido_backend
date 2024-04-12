@@ -63,7 +63,7 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
     @Override
     public LoginDTOResponse login(Admin admin) {
         var token = this.generateToken(admin);
-        return new LoginDTOResponse(token);
+        return new LoginDTOResponse(token, admin.getRole().getValue());
     }
 
     @Override
