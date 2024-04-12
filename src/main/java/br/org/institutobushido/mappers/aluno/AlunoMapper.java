@@ -1,6 +1,9 @@
 package br.org.institutobushido.mappers.aluno;
 
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.models.aluno.Aluno;
@@ -19,7 +22,7 @@ public class AlunoMapper {
                 Aluno aluno = new Aluno(
                                 alunoDTORequest.rg(),
                                 alunoDTORequest.nome(),
-                                alunoDTORequest.dataNascimento(),
+                                new Date(alunoDTORequest.dataNascimento()),
                                 alunoDTORequest.genero(),
                                 alunoDTORequest.turma());
 
@@ -93,6 +96,6 @@ public class AlunoMapper {
         }
 
         public static List<AlunoDTOResponse> mapToListAlunoDTOResponse(List<Aluno> alunos) {
-                return alunos.stream().map(AlunoMapper::mapToAlunoDTOResponse).toList();
+                return alunos.stream().map(AlunoMapper::mapToAlunoDTOResponse).collect(Collectors.toList());
         }
 }

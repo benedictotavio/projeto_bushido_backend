@@ -1,7 +1,9 @@
 package br.org.institutobushido.services.aluno;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.time.ZoneId;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -75,7 +77,7 @@ public class AlunoServices implements AlunoServicesInterface {
                 alunoDTORequest.turma(),
                 new AlunoTurmaDTORequest(
                         alunoDTORequest.nome(),
-                        alunoDTORequest.dataNascimento().toInstant().atZone(java.time.ZoneId.systemDefault())
+                        new Date(alunoDTORequest.dataNascimento()).toInstant().atZone(ZoneId.systemDefault())
                                 .toLocalDate(),
                         alunoDTORequest.genero(),
                         alunoDTORequest.rg()));

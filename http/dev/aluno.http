@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjgwMTI4MX0.MzPn_5nl3vrD4kmT4tZlV4lxHR4YaFqeIo4nJnf0L0w
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjg3OTkxNH0.fHDAMGet05TmEiPUp9jPhHNohNNDpYl6_XbBYT9PP4c
 @rg=000000001
 
 GET {{url}}?nome=zé HTTP/1.1
@@ -16,8 +16,8 @@ Authorization: Bearer {{token}}
 {
   "nome": "Abelardo Matheus",
   "genero": "M",
-  "dataNascimento": "2020-03-20",
-  "rg":"000000001",
+  "dataNascimento": "123456781",
+  "rg":"123456781",
   "turma":"Fundão I",
   "dadosSociais": {
     "bolsaFamilia": true,
@@ -36,12 +36,12 @@ Authorization: Bearer {{token}}
   "endereco": {
     "estado": "São Paulo",
     "cidade": "Osasco",
-    "cep": "06140140",
+    "cep": "06142-320",
     "numero": 565
   },
   "responsaveis": {
       "nome": "Otavio Benedicto Domingues",
-      "cpf": "45916466880",
+      "cpf": "05025244410",
       "telefone": "11972300768",
       "email": "otavio.w@outlook.com",
       "filiacao": "MAE"

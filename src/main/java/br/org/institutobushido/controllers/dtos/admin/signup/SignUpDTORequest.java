@@ -13,5 +13,5 @@ public record SignUpDTORequest(
                 @Email(message = "Formato de email inválido") @NotNull(message = "Email é obrigatório") String email,
                 @NotNull(message = "Senha é obrigatório") @NotEmpty(message = "Senha é obrigatório") String senha,
                 @NotNull(message = "Cargo é obrigatório") @NotEmpty(message = "Cargo é obrigatório") String cargo,
-                @NotNull(message = "Role é obrigatório") @Pattern(regexp = "ADMIN|USER") UserRole role) {
+                @NotNull(message = "Role é obrigatório") @Pattern(regexp = "ADMIN|TUTOR") UserRole role) {
 }

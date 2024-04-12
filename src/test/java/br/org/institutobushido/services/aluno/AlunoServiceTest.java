@@ -89,7 +89,7 @@ class AlunoServiceTest {
         void setUp() {
                 alunoDTORequest = new AlunoDTORequest(
                                 "John Doe",
-                                new Date(),
+                                new Date(new Date().getTime() - 2000 * 60 * 60 * 24 * 4).getTime(),
                                 Genero.OUTRO,
                                 "Turma A",
                                 new DadosSociaisDTORequest(
@@ -99,7 +99,7 @@ class AlunoServiceTest {
                                                 5,
                                                 2,
                                                 false,
-                                                0),
+                                                1000),
                                 new DadosEscolaresDTORequest(
                                                 Turno.MANHA,
                                                 "ESCOLA",
