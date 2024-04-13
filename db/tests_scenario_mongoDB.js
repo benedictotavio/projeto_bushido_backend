@@ -48,7 +48,7 @@ function addAlunos() {
     }
 
     function getRandomTurma() {
-        const options = ["turma", "test", "fundao"];
+        const options = ["turma 1", "turma 2", "turma 3"];
         const randomIndex = Math.floor(Math.random() * options.length);
         return options[randomIndex];
     }

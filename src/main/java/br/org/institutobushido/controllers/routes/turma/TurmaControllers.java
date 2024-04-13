@@ -22,7 +22,6 @@ import br.org.institutobushido.services.turma.TurmaServiceInterface;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 @RestController(value = "turma")
 @RequestMapping("api/V1/turma")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -34,17 +33,19 @@ public class TurmaControllers {
         this.turmaService = turmaService;
     }
 
-    @PostMapping
-    public ResponseEntity<SuccessPostResponse> criarNovaTurma(@Valid() @RequestBody TurmaDTORequest turmaDTORequest) {
-        String res = this.turmaService.criarNovaTurma(turmaDTORequest);
+    @PostMapping("{emailAdmin}")
+    public ResponseEntity<SuccessPostResponse> criarNovaTurma(@Valid() @RequestBody TurmaDTORequest turmaDTORequest,
+            @PathVariable String emailAdmin) {
+        String res = this.turmaService.criarNovaTurma(emailAdmin, turmaDTORequest);
         return ResponseEntity.ok().body(
                 new SuccessPostResponse(turmaDTORequest.nome(), res,
                         Turma.class.getSimpleName()));
     }
 
-    @DeleteMapping("{nomeTurma}")
-    public ResponseEntity<SuccessDeleteResponse> deletarTurma(@PathVariable String nomeTurma) {
-        String res = this.turmaService.deletarTurma(nomeTurma);
+    @DeleteMapping("{nomeTurma}/{emailAdmin}")
+    public ResponseEntity<SuccessDeleteResponse> deletarTurma(@PathVariable String nomeTurma,
+            @PathVariable String emailAdmin) {
+        String res = this.turmaService.deletarTurma(emailAdmin, nomeTurma);
         return ResponseEntity.ok()
                 .body(new SuccessDeleteResponse(nomeTurma, res, Turma.class.getSimpleName()));
     }
@@ -64,11 +65,11 @@ public class TurmaControllers {
     @GetMapping("{nome}/alunos")
     public List<TurmaAlunoResponse> listarAlunoPorTurma(@PathVariable String nome) {
         try {
-          return this.turmaService.listarAlunosDaTurma(nome);
+            return this.turmaService.listarAlunosDaTurma(nome);
         } catch (Exception e) {
-           throw new MongoException(e.getMessage());
+            throw new MongoException(e.getMessage());
         }
-        
+
     }
-    
+
 }

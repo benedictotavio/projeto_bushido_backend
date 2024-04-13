@@ -1,8 +1,8 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InplQGVtYWlsLmNvbS5iciIsInN1YiI6InplQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzAyNjE1NH0.5wDeeuUCeF_FhWqaVczC0MzwExtZwXn-kcPD0IPSX9c
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzA0ODY5MH0.AXPl6zkPF1o_ARrfcuzVEVTbkEpumPx2XWj5-CYPFC0
 @rg=168500801
 
-GET {{url}}?nome=FELIPE HTTP/1.1
+GET {{url}}?nome=Lara Gonçalves HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###

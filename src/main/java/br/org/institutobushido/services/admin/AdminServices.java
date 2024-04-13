@@ -50,12 +50,13 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
                     "O Administrador com o rg " + adminDTORequest.email() + " ja esta cadastrado!");
         }
 
-        Admin admin = new Admin();
-        admin.setNome(adminDTORequest.nome());
-        admin.setEmail(adminDTORequest.email());
-        admin.setSenha(new BCryptPasswordEncoder().encode(adminDTORequest.senha()));
-        admin.setCargo(adminDTORequest.cargo());
-        admin.setRole(adminDTORequest.role());
+        Admin admin = new Admin(
+            adminDTORequest.nome(),
+            adminDTORequest.email(),
+            new BCryptPasswordEncoder().encode(adminDTORequest.senha()),
+            adminDTORequest.cargo(),
+            adminDTORequest.role()
+        );
 
         adminRepositorio.save(admin);
     }

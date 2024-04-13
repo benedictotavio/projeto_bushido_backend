@@ -7,9 +7,9 @@ import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 
 public interface TurmaServiceInterface {
-    String criarNovaTurma(TurmaDTORequest turma);
+    String criarNovaTurma(String emailAdmin, TurmaDTORequest turma);
 
-    String deletarTurma(String nomeTurma);
+    String deletarTurma(String emailAdmin,String nomeTurma);
 
     List<TurmaDTOResponse> listarTurmas();
 

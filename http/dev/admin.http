@@ -1,14 +1,14 @@
 @url = http://0.0.0.0:8080/api/V1/admin
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjkyOTYxMn0.87jhBx6eGuNCQJZPlJwUSuyK7MMZ_jyjut8Rs-vztLU
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzA0NzQ4NH0.23srh0ifyuwu_Q_rA6QT0h761hRzptI1tOk6kCiAthU
 
 POST {{url}}/signup HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "nome": "admin tutor",
-    "email": "ze@email.com.br",
-    "cargo": "professor",
+    "nome": "admin",
+    "email": "tutor@email.com.br",
+    "cargo": "Presidente",
     "senha": "123456",
     "role": "TUTOR"
 }
@@ -27,7 +27,7 @@ POST {{url}}/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "ze@email.com.br",
+    "email": "tutor@email.com.br",
     "senha": "123456"
 }
 
