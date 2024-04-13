@@ -168,7 +168,7 @@ class AlunoServiceTest {
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
 
-                alunoServices = new AlunoServices(alunoRepositorio, mongoTemplate, turmaRepositorio);
+                alunoServices = new AlunoServices(alunoRepositorio, mongoTemplate);
         }
 
         @Test

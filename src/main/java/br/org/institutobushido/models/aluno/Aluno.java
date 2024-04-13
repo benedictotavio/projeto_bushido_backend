@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
@@ -24,8 +26,9 @@ import lombok.Getter;
 @Document(collection = "alunos")
 public class Aluno implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
-    @Indexed(unique = true, background = true)
+    @Id
     private String rg;
+    @Indexed(unique = true, background = true)
     private String nome;
     private Date dataNascimento;
     private Genero genero;
