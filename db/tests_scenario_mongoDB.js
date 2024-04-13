@@ -41,7 +41,7 @@ function addAlunos() {
     ]
     const totalDocuments = 6000
     const batchSize = 100;
-    const documents = []
+    let documents = []
 
     function generateRg() {
         return Math.floor(Math.random() * 999999999);
