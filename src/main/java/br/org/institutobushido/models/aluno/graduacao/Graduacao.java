@@ -96,7 +96,7 @@ public class Graduacao implements Serializable {
 
     public void setInicioGraduacao(LocalDate inicioGraduacao) {
 
-        if (inicioGraduacao.isAfter(this.fimGraduacao) || inicioGraduacao.isBefore(LocalDate.now())) {
+        if (inicioGraduacao.isBefore(LocalDate.now())) {
             throw new LimitQuantityException("O inicio da graduação deve ser menor que o fim da graduação");
         }
 
@@ -186,13 +186,6 @@ public class Graduacao implements Serializable {
         return this.cargaHoraria;
     }
 
-    @Override
-    public String toString() {
-        return "Graduacao [kyu=" + kyu + ", faltas=" + faltas + ", status=" + status + ", frequencia=" + frequencia
-                + ", inicioGraduacao=" + inicioGraduacao + ", fimGraduacao=" + fimGraduacao + ", aprovado=" + aprovado
-                + ", cargaHoraria=" + cargaHoraria + ", dan=" + dan + "]";
-    }
-
     public int getKyu() {
         return kyu;
     }
@@ -228,5 +221,4 @@ public class Graduacao implements Serializable {
     public int getDan() {
         return dan;
     }
-
 }

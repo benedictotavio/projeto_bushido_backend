@@ -50,7 +50,7 @@ class AlunoMapperTest {
         void setUp() {
                 alunoDTORequest = new AlunoDTORequest(
                                 "John Doe",
-                                new Date(),
+                                new Date().getTime(),
                                 Genero.OUTRO,
                                 "TURMA",
                                 new DadosSociaisDTORequest(
@@ -60,7 +60,7 @@ class AlunoMapperTest {
                                                 5,
                                                 2,
                                                 false,
-                                                0),
+                                                1000),
                                 new DadosEscolaresDTORequest(
                                                 Turno.MANHA,
                                                 "ESCOLA",
@@ -129,6 +129,8 @@ class AlunoMapperTest {
 
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
+
+                alunoDTOResponse = AlunoDTOResponse.builder().build();
         }
 
         @Test
@@ -137,7 +139,7 @@ class AlunoMapperTest {
 
                 assertEquals(alunoDTORequest.nome(), aluno.getNome());
                 assertEquals(alunoDTORequest.rg(), aluno.getRg());
-                assertEquals(alunoDTORequest.dataNascimento(), aluno.getDataNascimento());
+                assertEquals(alunoDTORequest.dataNascimento(), aluno.getDataNascimento().getTime());
                 assertEquals(alunoDTORequest.genero(), aluno.getGenero());
                 assertEquals(alunoDTORequest.dadosSociais().auxilioBrasil(), aluno.getDadosSociais().isAuxilioBrasil());
                 assertEquals(alunoDTORequest.dadosEscolares().escola(), aluno.getDadosEscolares().getEscola());

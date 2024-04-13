@@ -20,14 +20,12 @@ import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTOR
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTORequest;
 import br.org.institutobushido.mappers.aluno.AlunoMapper;
 import br.org.institutobushido.mappers.aluno.DadosEscolaresMapper;
 import br.org.institutobushido.mappers.aluno.DadosSociaisMapper;
 import br.org.institutobushido.mappers.aluno.EnderecoMapper;
 import br.org.institutobushido.mappers.aluno.GraduacaoMapper;
 import br.org.institutobushido.mappers.aluno.ResponsavelMapper;
-import br.org.institutobushido.mappers.turma.AlunoTurmaMapper;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
@@ -39,9 +37,7 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
-import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.repositories.AlunoRepositorio;
-import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 
@@ -49,12 +45,9 @@ import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 public class AlunoServices implements AlunoServicesInterface {
 
     private AlunoRepositorio alunoRepositorio;
-    private TurmaRepositorio turmaRepositorio;
     private MongoTemplate mongoTemplate;
 
-    public AlunoServices(AlunoRepositorio alunoRepositorio, MongoTemplate mongoTemplate,
-            TurmaRepositorio turmaRepositorio) {
-        this.turmaRepositorio = turmaRepositorio;
+    public AlunoServices(AlunoRepositorio alunoRepositorio, MongoTemplate mongoTemplate) {
         this.alunoRepositorio = alunoRepositorio;
         this.mongoTemplate = mongoTemplate;
     }
@@ -70,15 +63,6 @@ public class AlunoServices implements AlunoServicesInterface {
         if (alunoEncontrado.isPresent()) {
             throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
         }
-
-        this.adicionarAlunoATurma(
-                alunoDTORequest.turma(),
-                new AlunoTurmaDTORequest(
-                        alunoDTORequest.nome(),
-                        alunoDTORequest.dataNascimento().toInstant().atZone(java.time.ZoneId.systemDefault())
-                                .toLocalDate(),
-                        alunoDTORequest.genero(),
-                        alunoDTORequest.rg()));
 
         Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest));
 
@@ -348,21 +332,5 @@ public class AlunoServices implements AlunoServicesInterface {
         Pageable pageable = PageRequest.of(page, size, sort.and(Sort.by("dataPreenchimento")));
         Query query = new Query(Criteria.where("nome").regex(nome, "si")).with(pageable);
         return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
-    }
-
-    public void adicionarAlunoATurma(String nomeTurma, AlunoTurmaDTORequest aluno) {
-        Turma turma = this.turmaRepositorio.findByNome(nomeTurma).orElseThrow(
-                () -> new EntityNotFoundException("Turma com esse nome não existe"));
-        Query query = new Query();
-
-        if (turma.adicionarAluno(AlunoTurmaMapper.mapToAluno(aluno))) {
-            query.addCriteria(Criteria.where("nome").is(turma.getNome()));
-            Update update = new Update().push("alunos", aluno);
-            mongoTemplate.updateFirst(query, update, Turma.class);
-            return;
-        }
-
-        throw new AlreadyRegisteredException("Aluno ja existe nesta turma");
-
     }
 }

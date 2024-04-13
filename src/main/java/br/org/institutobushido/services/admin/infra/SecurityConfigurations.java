@@ -38,8 +38,10 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "api/V1/admin/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/V1/admin/signup").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "api/V1/aluno").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "api/V1/turma").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/V1/turma").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/V1/turma").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/V1/aluno").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/V1/aluno").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();

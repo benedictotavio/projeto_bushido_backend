@@ -9,15 +9,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.mongodb.MongoException;
+
+import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
-import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTORequest;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.services.turma.TurmaServiceInterface;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
+
 
 @RestController(value = "turma")
 @RequestMapping("api/V1/turma")
@@ -45,21 +49,6 @@ public class TurmaControllers {
                 .body(new SuccessDeleteResponse(nomeTurma, res, Turma.class.getSimpleName()));
     }
 
-    @PostMapping("{nomeTurma}/aluno")
-    public ResponseEntity<SuccessPostResponse> adicionarAluno(@PathVariable String nomeTurma,
-            @Valid @RequestBody AlunoTurmaDTORequest aluno) {
-        String res = this.turmaService.adicionarAlunoATurma(nomeTurma, aluno);
-        return ResponseEntity.ok()
-                .body(new SuccessPostResponse(aluno.rg(), res, Turma.class.getSimpleName()));
-    }
-
-    @DeleteMapping("{nomeTurma}/aluno/{rg}")
-    public ResponseEntity<SuccessDeleteResponse> deletarAluno(@PathVariable String nomeTurma, @PathVariable String rg) {
-        String res = this.turmaService.removerAlunoDaTurma(nomeTurma, rg);
-        return ResponseEntity.ok()
-                .body(new SuccessDeleteResponse(rg, res, Turma.class.getSimpleName()));
-    }
-
     @GetMapping
     public ResponseEntity<List<TurmaDTOResponse>> listarTurmas() {
         var turmas = this.turmaService.listarTurmas();
@@ -71,4 +60,15 @@ public class TurmaControllers {
         var turma = this.turmaService.buscarTurmaPorNome(nomeTurma);
         return ResponseEntity.ok().body(turma);
     }
+
+    @GetMapping("{nome}/alunos")
+    public List<TurmaAlunoResponse> listarAlunoPorTurma(@PathVariable String nome) {
+        try {
+          return this.turmaService.listarAlunosDaTurma(nome);
+        } catch (Exception e) {
+           throw new MongoException(e.getMessage());
+        }
+        
+    }
+    
 }

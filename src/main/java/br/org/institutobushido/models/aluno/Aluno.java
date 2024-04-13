@@ -6,9 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
@@ -19,7 +19,6 @@ import br.org.institutobushido.models.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.resources.exceptions.InvalidFormatDataException;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 import lombok.Getter;
 
@@ -27,8 +26,9 @@ import lombok.Getter;
 @Document(collection = "alunos")
 public class Aluno implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
-    @Indexed(unique = true, background = true)
+    @Id
     private String rg;
+    @Indexed(unique = true, background = true)
     private String nome;
     private Date dataNascimento;
     private Genero genero;
@@ -43,11 +43,6 @@ public class Aluno implements Serializable {
     private HistoricoSaude historicoSaude;
 
     public Aluno(String rg, String nome, Date dataNascimento, Genero genero, String turma) {
-
-        if (rg == null || rg.isEmpty() || rg.isBlank() || rg.length() != 9) {
-            throw new InvalidFormatDataException("RG inválido. siga o formato de nove digitos: XXXXXXXXXX");
-        }
-
         this.graduacao = new ArrayList<>();
         this.historicoSaude = new HistoricoSaude();
         this.dadosEscolares = new DadosEscolares();

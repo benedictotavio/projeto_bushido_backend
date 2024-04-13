@@ -1,6 +1,5 @@
 package br.org.institutobushido.controllers.dtos.aluno;
 
-import java.util.Date;
 import br.org.institutobushido.controllers.dtos.aluno.endereco.EnderecoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.DadosEscolaresDTORequest;
@@ -10,10 +9,7 @@ import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTO
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.models.turma.Turma;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 @Builder(setterPrefix = "with")
@@ -22,8 +18,8 @@ public record AlunoDTORequest(
                 @NotEmpty(message = "Nome é obrigatório") String nome,
 
                 @NotNull(message = "Data de nascimento é obrigatória")
-                @Past(message = "Data de nascimento deve ser no passado!")
-                Date dataNascimento,
+                @Min(value = 10000, message = "Data de nascimento deve ser no passado!")
+                long dataNascimento,
 
                 @NotNull(message = "Genero é obrigatório")
                 Genero genero,
@@ -38,7 +34,7 @@ public record AlunoDTORequest(
 
                 @NotNull(message = "Endereço é obrigatório!") EnderecoDTORequest endereco,
 
-                @NotNull(message = "Rg é obrigatório!") @Pattern(regexp = "^\\d{9}$", message = "Formato de rg inválido! Ex: 123456789") @NotEmpty(message = "Rg é obrigatório!") String rg,
+                @NotNull(message = "Rg é obrigatório!") @Pattern(regexp = "^\\d{6,12}", message = "Formato de rg inválido! Ex: 123456789") @NotEmpty(message = "Rg é obrigatório!") String rg,
 
                 @NotEmpty(message = "Insira pelo menos um Responsavel!", groups = {Responsavel.class}) ResponsavelDTORequest responsaveis,
 

@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
+import br.org.institutobushido.models.aluno.graduacao.falta.Falta;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,39 +20,32 @@ class GraduacaoTest {
 
     @BeforeEach
     void setUp() {
-        graduacao = new Graduacao(7,0);
+        graduacao = new Graduacao(7, List.of(
+                new Falta("doente", "Tem atestado", new Date(new Date().getTime() - 2000000000)),
+                new Falta("doente", "Tem atestado", new Date(new Date().getTime() - 1700000000))
+        ),
+                true,
+                100,
+                LocalDate.now().minusMonths(3),
+                LocalDate.now().plusMonths(3),
+                false,
+                0,
+                1
+        );
     }
 
-    // @Test
-    // void deveDefinirCargaHoraria() {
-    //     graduacao.setFimGraduacao(LocalDate.now().plusMonths(3));
-    //     graduacao.aprovacao();
-    //     assertEquals(63, graduacao.getCargaHoraria());
-    // }
+     @Test
+     void deveDefinirCargaHoraria() {
+         graduacao.aprovacao();
+         System.out.println("Graduacaa: " + graduacao.toString());
+         assertEquals(37, graduacao.getCargaHoraria());
+     }
 
-    // @Test
-    // void deveDefinirCargaHorariaComDuasFaltas() {
-    //     graduacao.setFimGraduacao(LocalDate.now().plusMonths(2));
-    //     graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime());
-    //     graduacao.aprovacao();
-    //     assertEquals(62, graduacao.getCargaHoraria());
-    // }
-
-    // @Test
-    // void deveDefinirFrequenciaComZeroFaltas() {
-    //     graduacao.setFimGraduacao(LocalDate.now().plusMonths(3));
-    //     graduacao.aprovacao();
-    //     assertEquals(100, graduacao.getFrequencia());
-    // }
-
-    // @Test
-    // void deveDefinirFrequenciaCom6Faltas() {
-    //     graduacao.setInicioGraduacao(LocalDate.now().minusMonths(2));
-    //     graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime());
-    //     graduacao.adicionarFalta("Doente", "Tem atestado", new Date().getTime() - 1000 * 60 * 60 * 24 * 4);
-    //     graduacao.aprovacao();
-    //     assertEquals(91, graduacao.getFrequencia());
-    // }
+     @Test
+     void deveDefinirFrequencias() {
+         graduacao.aprovacao();
+         assertEquals(94, graduacao.getFrequencia());
+     }
 
     @Test
     void deveInstaciarGraduacaoApenasComKyu() {

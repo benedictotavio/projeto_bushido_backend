@@ -1,41 +1,30 @@
 @url = http://0.0.0.0:8080/api/V1/turma
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMjcxNzIwMX0.nR-KEagR21Rr6FJUkV7qDRQgB6jC2OOdQ5PVBjwNaAM
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InplQGVtYWlsLmNvbS5iciIsInN1YiI6InplQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzAyNjQ4Nn0.xoQexo7ZICzkHWsZ7lNl8tjfaDTYUSmcEvxYdI4ho-4
 @rg=123456789
+@nomeTurma=fundao
 
 POST {{url}} HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "nome":"Fundão I",
+    "nome": "fundao",
     "endereco": "Rua Almir Juca",
     "tutor": "Luiz Roberto"
 }
 
 ###
-DELETE {{url}}/Fundão I HTTP/1.1
+DELETE {{url}}/{{nomeTurma}} HTTP/1.1
 Authorization: Bearer {{token}}
-
-###
-POST {{url}}/Fundão I/aluno HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-{
-  "nome": "nicolas souza",
-  "genero": "M",
-  "dataNascimento": "2008-05-08",
-  "rg":"000000000"
-}
 
 ###
 GET {{url}} HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}/Fundão I HTTP/1.1
+GET {{url}}/{{nomeTurma}} HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
-DELETE {{url}}/Fundão I/aluno/{{rg}} HTTP/1.1
+GET {{url}}/{{nomeTurma}}/alunos HTTP/1.1
 Authorization: Bearer {{token}}

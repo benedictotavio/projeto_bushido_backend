@@ -6,9 +6,6 @@ import br.org.institutobushido.models.turma.Turma;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -21,7 +18,7 @@ class TurmaMapperTest {
     void setUp() {
         turma = new Turma("Endereço", "Nome", "Tutor");
         turmaDTORequest = new TurmaDTORequest("Endereço", "Nome", "Tutor");
-        turmaDTOResponse = new TurmaDTOResponse("Endereço", "Nome", "Tutor", List.of());
+        turmaDTOResponse = new TurmaDTOResponse("Endereço", "Nome", "Tutor");
     }
 
     @Test

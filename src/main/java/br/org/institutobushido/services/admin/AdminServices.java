@@ -1,18 +1,27 @@
 package br.org.institutobushido.services.admin;
 
 import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+
+import br.org.institutobushido.controllers.dtos.admin.AdminDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
+import br.org.institutobushido.mappers.admin.AdminMapper;
 import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
@@ -24,9 +33,11 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
     private String secret;
 
     private AdminRepositorio adminRepositorio;
+    private MongoTemplate mongoTemplate;
 
-    public AdminServices(AdminRepositorio adminRepositorio) {
+    public AdminServices(AdminRepositorio adminRepositorio, MongoTemplate mongoTemplate) {
         this.adminRepositorio = adminRepositorio;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @Override
@@ -52,7 +63,7 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
     @Override
     public LoginDTOResponse login(Admin admin) {
         var token = this.generateToken(admin);
-        return new LoginDTOResponse(token);
+        return new LoginDTOResponse(token, admin.getRole().getValue());
     }
 
     @Override
@@ -82,5 +93,12 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         DecodedJWT decodedJWT = JWT.require(algorithm).withIssuer(secret).build().verify(token);
         return decodedJWT.getSubject();
+    }
+
+    public List<AdminDTOResponse> buscarAdminPorNome(String nome) {
+        Query query = new Query();
+        query.fields().exclude("senha");
+        query.addCriteria(Criteria.where("nome").regex(nome, "si"));
+        return AdminMapper.mapToListAdminDTOResponse(this.mongoTemplate.find(query, Admin.class));
     }
 }

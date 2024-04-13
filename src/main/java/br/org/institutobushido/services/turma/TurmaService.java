@@ -3,16 +3,15 @@ package br.org.institutobushido.services.turma;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
+import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
-import br.org.institutobushido.controllers.dtos.turma.aluno.AlunoTurmaDTORequest;
-import br.org.institutobushido.mappers.turma.AlunoTurmaMapper;
 import br.org.institutobushido.mappers.turma.TurmaMapper;
-import br.org.institutobushido.models.turma.Aluno;
 import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
@@ -43,29 +42,6 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Override
-    public String adicionarAlunoATurma(String nomeTurma, AlunoTurmaDTORequest aluno) {
-        Turma turma = this.encontrarTurmaPeloNome(nomeTurma);
-        Aluno alunoAdicionado = AlunoTurmaMapper.mapToAluno(aluno);
-        turma.adicionarAluno(alunoAdicionado);
-        Query query = new Query();
-        query.addCriteria(Criteria.where("nome").is(nomeTurma));
-        Update update = new Update().push("alunos", alunoAdicionado);
-        mongoTemplate.updateFirst(query, update, Turma.class);
-        return "Aluno adicionado com sucesso a turma " + nomeTurma + " !";
-    }
-
-    @Override
-    public String removerAlunoDaTurma(String nomeTurma, String rg) {
-        Turma turma = this.encontrarTurmaPeloNome(nomeTurma);
-        turma.removerAluno(rg);
-        Query query = new Query();
-        query.addCriteria(Criteria.where("nome").is(nomeTurma));
-        Update update = new Update().pull("alunos", new Query().addCriteria(Criteria.where("rg").is(rg)));
-        mongoTemplate.updateFirst(query, update, Turma.class);
-        return "Aluno removido com sucesso a turma " + nomeTurma + " !";
-    }
-
-    @Override
     public String deletarTurma(String nomeTurma) {
         boolean turmaExiste = this.verificaSeTurmaExiste(nomeTurma);
         if (!turmaExiste) {
@@ -84,6 +60,26 @@ public class TurmaService implements TurmaServiceInterface {
     @Override
     public TurmaDTOResponse buscarTurmaPorNome(String nomeTurma) {
         return TurmaMapper.mapToTurmaDTOResponse(this.encontrarTurmaPeloNome(nomeTurma));
+    }
+
+    @Override
+    public List<TurmaAlunoResponse> listarAlunosDaTurma(String nomeTurma) {
+        AggregationOperation match = Aggregation.match(Criteria.where("nome").is(nomeTurma));
+
+        AggregationOperation lookup = Aggregation.lookup("alunos", "nome", "turma", "alunos_turma");
+
+        AggregationOperation unwind = Aggregation.unwind("$alunos_turma");
+
+        AggregationOperation project = Aggregation.project()
+                .and("alunos_turma.nome").as("nome")
+                .and("alunos_turma._id").as("rg")
+                .and("alunos_turma.genero").as("genero")
+                .and("alunos_turma.dataNascimento").as("dataNascimento")
+                .andExclude("_id");
+
+        Aggregation aggregation = Aggregation.newAggregation(match, lookup, unwind, project);
+        var result = mongoTemplate.aggregate(aggregation, "turmas", TurmaAlunoResponse.class);
+        return result.getMappedResults();
     }
 
     private boolean verificaSeTurmaExiste(String nomeTurma) {

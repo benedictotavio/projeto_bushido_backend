@@ -2,7 +2,7 @@ package br.org.institutobushido.enums.admin;
 
 public enum UserRole {
     ADMIN("admin"),
-    USER("user");
+    TUTOR("tutor"),;
 
     private String role;
 
@@ -10,7 +10,7 @@ public enum UserRole {
         this.role = role;
     }
 
-    public String getRole() {
+    public String getValue() {
         return role;
     }
 }
