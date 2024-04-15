@@ -1,7 +1,7 @@
 @url = http://0.0.0.0:8080/api/V1/turma
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzA1MzM4Mn0.HlXreeYRBARlUjE52EuoBIwcNBBXVXMZkh5gquLQoWc
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzE1NDUxMX0.VUIIOnPHXH6CfpAOVOITM6rdXT7f5PESTizRNuhBylE
 @rg=123456789
-@nomeTurma=turma
+@nomeTurma=turma 4
 @emailTutor=tutor@email.com.br
 @emailAdmin=super_admin@email.com.br
 
@@ -10,7 +10,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "nome": "turma",
+    "nome": "turma 4",
     "endereco": "Rua Almir Juca",
     "tutor": "tutor"
 }

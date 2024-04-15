@@ -17,6 +17,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
+import br.org.institutobushido.enums.admin.UserRole;
+import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
@@ -36,10 +38,13 @@ class TurmaServiceTest {
     private TurmaService turmaServices;
     private TurmaDTORequest turmaDTORequest;
     private Turma turma;
+    private Admin admin;
 
     @BeforeEach
     void setUp() {
         turmaServices = new TurmaService(turmaRepositorio, mongoTemplate, adminRepositorio);
+
+        admin = new Admin("admin", "admin@email.com", "admin", "admin", UserRole.ADMIN);
 
         turmaDTORequest = new TurmaDTORequest(
                 "Turma A",
@@ -53,10 +58,8 @@ class TurmaServiceTest {
 
     @Test
     void deveCriarNovaTurma() {
-        // Arrange
-        // Act
-
         when(turmaRepositorio.save(any(Turma.class))).thenReturn(turma);
+        when(adminRepositorio.findByEmailAdmin(anyString())).thenReturn(Optional.of(admin));
         String result = turmaServices.criarNovaTurma("admin", turmaDTORequest);
         // Assert
         assertEquals("Turma criada " + turma.getNome() + " com sucesso!", result);

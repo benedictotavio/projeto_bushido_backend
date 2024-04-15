@@ -102,8 +102,7 @@ public class TurmaService implements TurmaServiceInterface {
                 .andExclude("_id");
 
         Aggregation aggregation = Aggregation.newAggregation(match, lookup, unwind, project);
-        var result = mongoTemplate.aggregate(aggregation, "turmas", TurmaAlunoResponse.class);
-        return result.getMappedResults();
+        return mongoTemplate.aggregate(aggregation, "turmas", TurmaAlunoResponse.class).getMappedResults();
     }
 
     private boolean verificaSeTurmaExiste(String nomeTurma) {

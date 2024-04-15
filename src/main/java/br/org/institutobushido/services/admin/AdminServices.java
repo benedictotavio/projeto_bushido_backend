@@ -12,12 +12,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
 import br.org.institutobushido.controllers.dtos.admin.AdminDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
