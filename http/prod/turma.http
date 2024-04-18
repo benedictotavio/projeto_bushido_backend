@@ -1,5 +1,5 @@
-@url = http://0.0.0.0:8080/api/V1/turma
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzQ4NDg4OH0.dr6hB5RAU9FHMWlQ5Jt2xm78vPCz0XIO2hprm_kY0CQ
+@url = https://projeto-bushido-backend.onrender.com/api/V1/turma
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzQ4NTc5NH0.3XkNh8xOreg8ZYNdt3ePYREPun_-fIvLa-eyNEPnJ3I
 @rg=123456789
 @nomeTurma=turma 2
 @emailTutor=tutor@email.com.br

@@ -2,6 +2,9 @@ package br.org.institutobushido.services.turma;
 
 import java.util.List;
 
+import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -9,7 +12,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoResponse;
+
+import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 import br.org.institutobushido.mappers.turma.TurmaMapper;
@@ -26,7 +30,7 @@ import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 public class TurmaService implements TurmaServiceInterface {
 
     private final TurmaRepositorio turmaRepositorio;
-    private MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
     private final AdminRepositorio adminRepositorio;
 
     public TurmaService(TurmaRepositorio turmaRepositorio, MongoTemplate mongoTemplate,
@@ -41,15 +45,18 @@ public class TurmaService implements TurmaServiceInterface {
         boolean turmaExiste = this.verificaSeTurmaExiste(turma.nome());
 
         if (turmaExiste) {
-            throw new AlreadyRegisteredException("Turma com esse nome ja está registrada");
+            throw new AlreadyRegisteredException("Turma " + turma.nome() + " ja está registrada.");
         }
 
         Turma novaTurma = TurmaMapper.mapToTurma(turma);
-        this.vinculrTurmaAoAdmin(emailAdmin,
+
+        Admin admin = this.vinculrTurmaAoAdmin(emailAdmin,
                 new TurmaResponsavel(novaTurma.getEndereco(), novaTurma.getNome()));
 
+        novaTurma.setTutor(admin.getNome());
+
         this.turmaRepositorio.save(novaTurma);
-        return "Turma criada " + turma.nome() + " com sucesso!";
+        return "Turma " + turma.nome() + " foi criada com sucesso!";
     }
 
     @Override
@@ -62,14 +69,10 @@ public class TurmaService implements TurmaServiceInterface {
         }
 
         if (this.vefrificarSeExistemAlunosAtivosNaTurma(nomeTurma)) {
-            throw new EntityNotFoundException("Turma com alunos não pode ser deletada");
+            throw new LimitQuantityException("Turma com alunos não pode ser deletada");
         }
 
-        try {
-            this.desvicularTurmaDoAdmin(emailAdmin, nomeTurma);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.desvicularTurmaDoAdmin(emailAdmin, nomeTurma);
 
         this.turmaRepositorio.deleteByNome(nomeTurma);
         return "Turma " + nomeTurma + " deletada com sucesso";
@@ -81,13 +84,14 @@ public class TurmaService implements TurmaServiceInterface {
         return TurmaMapper.mapToListTurmaDTOResponse(turmas);
     }
 
+    @Cacheable(value = "turma", key = "#nomeTurma")
     @Override
     public TurmaDTOResponse buscarTurmaPorNome(String nomeTurma) {
         return TurmaMapper.mapToTurmaDTOResponse(this.encontrarTurmaPeloNome(nomeTurma));
     }
 
     @Override
-    public List<TurmaAlunoResponse> listarAlunosDaTurma(String nomeTurma) {
+    public List<TurmaAlunoDTOResponse> listarAlunosDaTurma(String nomeTurma) {
         AggregationOperation match = Aggregation.match(Criteria.where("nome").is(nomeTurma));
 
         AggregationOperation lookup = Aggregation.lookup("alunos", "nome", "turma", "alunos_turma");
@@ -102,20 +106,21 @@ public class TurmaService implements TurmaServiceInterface {
                 .andExclude("_id");
 
         Aggregation aggregation = Aggregation.newAggregation(match, lookup, unwind, project);
-        return mongoTemplate.aggregate(aggregation, "turmas", TurmaAlunoResponse.class).getMappedResults();
+        return mongoTemplate.aggregate(aggregation, "turmas", TurmaAlunoDTOResponse.class).getMappedResults();
     }
 
     private boolean verificaSeTurmaExiste(String nomeTurma) {
         return this.turmaRepositorio.findByNome(nomeTurma).isPresent();
     }
 
-    private void vinculrTurmaAoAdmin(String emailAdmin, TurmaResponsavel turma) {
+    private Admin vinculrTurmaAoAdmin(String emailAdmin, TurmaResponsavel turma) {
         Admin admin = this.encontrarAdminPeloEmail(emailAdmin);
         Query query = new Query();
         query.addCriteria(Criteria.where("email").is(emailAdmin));
         Update update = new Update();
         update.push("turmas", admin.adicionarTurma(turma));
         this.mongoTemplate.updateFirst(query, update, Admin.class);
+        return admin;
     }
 
     private void desvicularTurmaDoAdmin(String emailAdmin, String nomeTurma) {

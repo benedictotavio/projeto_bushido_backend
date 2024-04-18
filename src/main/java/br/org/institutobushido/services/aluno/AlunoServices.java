@@ -44,8 +44,8 @@ import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 @Service
 public class AlunoServices implements AlunoServicesInterface {
 
-    private AlunoRepositorio alunoRepositorio;
-    private MongoTemplate mongoTemplate;
+    private final AlunoRepositorio alunoRepositorio;
+    private final MongoTemplate mongoTemplate;
 
     public AlunoServices(AlunoRepositorio alunoRepositorio, MongoTemplate mongoTemplate) {
         this.alunoRepositorio = alunoRepositorio;
@@ -309,7 +309,7 @@ public class AlunoServices implements AlunoServicesInterface {
         mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
-    private Aluno encontrarAlunoPorRg(String rgAluno) {
+    protected Aluno encontrarAlunoPorRg(String rgAluno) {
         List<AlunoDTOResponse> alunoEncontrado = buscarAlunoPorRg(rgAluno);
 
         if (alunoEncontrado.isEmpty()) {
@@ -321,7 +321,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Cacheable(value = "aluno", key = "#rg")
     public List<AlunoDTOResponse> buscarAlunoPorRg(String rg) {
-        Query query = new Query(Criteria.where("rg").regex(rg, "si"));
+        Query query = new Query(Criteria.where("rg").is(rg));
         return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 

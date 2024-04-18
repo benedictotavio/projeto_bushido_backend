@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mongodb.MongoException;
 
-import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoResponse;
+import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
@@ -25,11 +25,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController(value = "turma")
 @RequestMapping("api/V1/turma")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class TurmaControllers {
+public class TurmaController {
 
     private final TurmaServiceInterface turmaService;
 
-    public TurmaControllers(TurmaServiceInterface turmaService) {
+    public TurmaController(TurmaServiceInterface turmaService) {
         this.turmaService = turmaService;
     }
 
@@ -63,7 +63,7 @@ public class TurmaControllers {
     }
 
     @GetMapping("{nome}/alunos")
-    public List<TurmaAlunoResponse> listarAlunoPorTurma(@PathVariable String nome) {
+    public List<TurmaAlunoDTOResponse> listarAlunoPorTurma(@PathVariable String nome) {
         try {
             return this.turmaService.listarAlunosDaTurma(nome);
         } catch (Exception e) {

@@ -94,6 +94,6 @@ public class Admin implements UserDetails {
                 return turmaResponsavel.getNome();
             }
         }
-        throw new EntityNotFoundException("O " + this.getCargo() + " nao possui turma com o nome " + nomeTurma);
+        throw new EntityNotFoundException(this.getCargo() + " nao possui turma com o nome " + nomeTurma);
     }
 }

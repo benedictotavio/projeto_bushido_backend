@@ -21,4 +21,10 @@ public class Turma {
         this.tutor = tutor;
     }
 
+    public void setTutor(String tutor) {
+        if (tutor == null) {
+            return;
+        }
+        this.tutor = tutor;
+    }
 }

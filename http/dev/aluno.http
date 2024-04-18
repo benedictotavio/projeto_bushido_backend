@@ -1,10 +1,9 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzE1MzU0MX0.M5koQILIqKyv_c5n-sTQRlm97OJ2AvP7GxfWIn7qPME
-@rg=168500801
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzQ4NDU5N30.nBrqAg021qye4HrJC-fls1IeUR-cPqg8hyHg5h0fwMw
+@rg=182482408
 
 GET {{url}}?nome=Lara Gonçalves HTTP/1.1
 Authorization: Bearer {{token}}
-
 ###
 GET {{url}}?rg={{rg}} HTTP/1.1
 Authorization: Bearer {{token}}
@@ -72,8 +71,6 @@ Authorization: Bearer {{token}}
         "acompanhamentoSaude": []
     }
 }
-
-
 ###
 POST {{url}}/falta/{{rg}}/1712705754891 HTTP/1.1
 Content-Type: application/json
@@ -86,7 +83,6 @@ Authorization: Bearer {{token}}
 ###
 DELETE {{url}}/falta/{{rg}}/01-04-2024 HTTP/1.1
 Authorization: Bearer {{token}}
-
 ###
 PUT {{url}}/{{rg}} HTTP/1.1
 Content-Type: application/json

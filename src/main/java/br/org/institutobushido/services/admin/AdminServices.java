@@ -2,14 +2,13 @@ package br.org.institutobushido.services.admin;
 
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
@@ -23,6 +22,7 @@ import br.org.institutobushido.mappers.admin.AdminMapper;
 import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 
 @Service
 public class AdminServices implements AdminServiceInterface, UserDetailsService {
@@ -65,16 +65,17 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
         return new LoginDTOResponse(token, admin.getRole().getValue());
     }
 
+    @Cacheable(value = "admin", key = "#username")
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws EntityNotFoundException {
         UserDetails adminEncontrado = adminRepositorio.findByEmail(username);
         if (adminEncontrado == null) {
-            throw new UsernameNotFoundException("O Administrador com o email " + username + " nao foi encontrado!");
+            throw new EntityNotFoundException("O Administrador com o email " + username + " nao foi encontrado!");
         }
         return adminEncontrado;
     }
 
-    public String generateToken(Admin admin) {
+    private String generateToken(Admin admin) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
             return JWT.create()
@@ -89,7 +90,7 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
     }
 
     public String validateToken(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
+         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         DecodedJWT decodedJWT = JWT.require(algorithm).withIssuer(secret).build().verify(token);
         return decodedJWT.getSubject();
     }

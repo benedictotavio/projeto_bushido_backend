@@ -1,16 +1,16 @@
 @url = https://projeto-bushido-backend.onrender.com/api/V1/admin
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMTExODUyMH0.ueGedfb38jVkQnwFezE8RPEaLakQ-XHTB5qQlHH9pHU
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzQ4NTY4M30.lQAj2b4y8KYjfI-Ev1vYjwynx0OKEXsz5O-MTBprjR8
 
 POST {{url}}/signup HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "nome": "Super Admin",
-    "email":"super_admin1@email.com.br",
-    "cargo":"Administrador",
+    "nome": "admin",
+    "email": "tutor@email.com.br",
+    "cargo": "Presidente",
     "senha": "123456",
-    "role": "USER"
+    "role": "TUTOR"
 }
 
 ###
@@ -21,3 +21,17 @@ Content-Type: application/json
     "email": "super_admin@email.com.br",
     "senha": "123456"
 }
+
+###
+POST {{url}}/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "tutor@email.com.br",
+    "senha": "123456"
+}
+
+###
+GET {{url}}/users?nome=admin HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}

@@ -4,7 +4,7 @@ import br.org.institutobushido.enums.aluno.Imovel;
 import lombok.Builder;
 
 @Builder(setterPrefix = "with")
-public record UpdateDadosSociaisDTORequest(
+public record   UpdateDadosSociaisDTORequest(
     boolean bolsaFamilia,
     boolean auxilioBrasil,
     Imovel imovel,

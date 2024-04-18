@@ -1,6 +1,7 @@
 package br.org.institutobushido.controllers.routes.aluno;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -35,10 +35,10 @@ import jakarta.validation.Valid;
 @RestController(value = "aluno")
 @RequestMapping("api/V1/aluno")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class AlunoControllers {
+public class AlunoController {
         private final AlunoServicesInterface alunoServices;
 
-        public AlunoControllers(AlunoServicesInterface alunoServices) {
+        public AlunoController(AlunoServicesInterface alunoServices) {
                 this.alunoServices = alunoServices;
         }
 
@@ -53,20 +53,21 @@ public class AlunoControllers {
         }
 
         @PostMapping()
-        ResponseEntity<SuccessPostResponse> adicionarAluno(@Valid @RequestBody AlunoDTORequest alunoDTORequest) {
+        ResponseEntity<SuccessPostResponse> adicionarAluno(@Valid @RequestBody AlunoDTORequest alunoDTORequest) throws URISyntaxException {
                 String alunoAdicionado = this.alunoServices.adicionarAluno(alunoDTORequest);
-                URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-                return ResponseEntity.created(location)
+                return ResponseEntity.created(
+                        new URI("/api/V1/aluno/")
+                        )
                                 .body(new SuccessPostResponse(alunoAdicionado, "Aluno adicionado com sucesso",
                                                 Aluno.class.getSimpleName()));
         }
 
-        @PutMapping("{id}")
-        public ResponseEntity<SuccessPutResponse> editarAluno(@PathVariable String id,
+        @PutMapping("{rg}")
+        public ResponseEntity<SuccessPutResponse> editarAluno(@PathVariable String rg,
                         @RequestBody UpdateAlunoDTORequest aluno) {
-                String alunoEditado = this.alunoServices.editarAlunoPorRg(id, aluno);
+                String alunoEditado = this.alunoServices.editarAlunoPorRg(rg, aluno);
                 return ResponseEntity.ok().body(
-                                new SuccessPutResponse(id, alunoEditado, Aluno.class.getSimpleName()));
+                                new SuccessPutResponse(rg, alunoEditado, Aluno.class.getSimpleName()));
         }
 
         @PostMapping("responsavel/{rg}")
@@ -131,6 +132,15 @@ public class AlunoControllers {
                                                 HistoricoSaude.class.getSimpleName()));
         }
 
+        @DeleteMapping("acompanhamentoSaude/{rg}")
+        public ResponseEntity<SuccessDeleteResponse> removerAcompanhamentoSaude(@PathVariable String rg,
+                                                                                @RequestParam(name = "acompanhamento") String acompanhamento) {
+                String res = alunoServices.removerAcompanhamentoSaude(rg, acompanhamento);
+                return ResponseEntity.ok().body(
+                        new SuccessDeleteResponse(res,
+                                "Acamponhamento " + acompanhamento + " foi removido com sucesso."));
+        }
+
         @PostMapping("graduacao/{rg}/aprovar")
         public ResponseEntity<SuccessPostResponse> aprovarAluno(@PathVariable String rg) {
                 GraduacaoDTOResponse res = alunoServices.aprovarAluno(rg);
@@ -145,14 +155,5 @@ public class AlunoControllers {
                 return ResponseEntity.ok()
                                 .body(new SuccessPostResponse(String.valueOf(res.kyu()),
                                                 "Graduação concluída com sucesso.", Graduacao.class.getSimpleName()));
-        }
-
-        @DeleteMapping("acompanhamentoSaude/{rg}")
-        public ResponseEntity<SuccessDeleteResponse> removerAcompanhamentoSaude(@PathVariable String rg,
-                        @RequestParam(name = "acompanhamento") String acompanhamento) {
-                String res = alunoServices.removerAcompanhamentoSaude(rg, acompanhamento);
-                return ResponseEntity.ok().body(
-                                new SuccessDeleteResponse(res,
-                                                "Acamponhamento " + acompanhamento + " foi removido com sucesso."));
         }
 }
