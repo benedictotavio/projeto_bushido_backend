@@ -65,7 +65,7 @@ class AdminControllerTest {
     void deveCriarUmNovoAdmin() throws URISyntaxException {
         // Act
         SuccessPostResponse response = adminController.signup(signUpDTORequest).getBody();
-    
+
         // Assert
         assert response != null;
         assertEquals("Admin criado com sucesso.", response.getMessage());
@@ -76,7 +76,8 @@ class AdminControllerTest {
     @Test
     void deveRetornarTokenDeLogin_200() {
         Authentication authentication = mock(Authentication.class);
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenReturn(authentication);
         when(adminServices.login(any())).thenReturn(loginDTOResponse);
         ResponseEntity<SuccessLoginAuthenticated> response = adminController.login(loginDTORequest);
 
@@ -86,6 +87,7 @@ class AdminControllerTest {
         assertEquals(loginDTOResponse.token(), response.getBody().getToken());
         assertEquals(loginDTOResponse.role(), response.getBody().getRole());
     }
+
     @Test
     void deveLancarExcecao_401() {
         when(authenticationManager.authenticate(any())).thenThrow(
@@ -94,8 +96,7 @@ class AdminControllerTest {
                     public String getMessage() {
                         return "Invalid credentials";
                     }
-                }
-        );
+                });
         assertThrows(AuthenticationException.class, () -> adminController.login(loginDTORequest));
     }
 

@@ -4,9 +4,7 @@ import br.org.institutobushido.enums.aluno.Imovel;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Builder;
 
-@Builder(setterPrefix = "with")
 public record DadosSociaisDTORequest(
 
         boolean bolsaFamilia,

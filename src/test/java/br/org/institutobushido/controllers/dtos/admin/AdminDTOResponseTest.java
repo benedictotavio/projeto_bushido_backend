@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-public class AdminDTOResponseTest {
+class AdminDTOResponseTest {
     @Test
-    public void test_create_instance_with_valid_parameters() {
+    void test_create_instance_with_valid_parameters() {
         // Arrange
         String nome = "John";
         String email = "john@example.com";

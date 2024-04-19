@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-public class SignUpDTORequestTest {
+class SignUpDTORequestTest {
     @Test
-    public void test_createSignUpDTORequestWithValidData() {
+    void test_createSignUpDTORequestWithValidData() {
         SignUpDTORequest signUpDTORequest = new SignUpDTORequest("John Doe", "john.doe@example.com", "password", "role", UserRole.ADMIN);
         assertNotNull(signUpDTORequest);
         assertEquals("John Doe", signUpDTORequest.nome());

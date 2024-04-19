@@ -177,4 +177,12 @@ public class Aluno implements Serializable {
 
         return null;
     }
+
+    public Graduacao getGraduacaoAtual(){
+        return this.getGraduacao().get(this.getGraduacao().size() - 1);
+    }
+
+    public int getGraduacaoAtualIndex(){
+        return this.getGraduacao().size() - 1;
+    }
 }

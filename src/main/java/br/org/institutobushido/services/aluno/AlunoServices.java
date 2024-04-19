@@ -113,38 +113,36 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public String adicionarFaltaDoAluno(String rg, FaltaDTORequest falta, long dataFalta) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        int graduacaoAtual = aluno.getGraduacao().size() - 1;
-        Falta novaFalta = aluno.getGraduacao().get(graduacaoAtual).adicionarFalta(falta.motivo(), falta.observacao(),
+        Falta novaFalta = aluno.getGraduacaoAtual().adicionarFalta(falta.motivo(), falta.observacao(),
                 dataFalta);
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().addToSet(GRADUACAO + "." + (graduacaoAtual) + ".faltas", novaFalta);
+        Update update = new Update().addToSet(GRADUACAO + "." + (aluno.getGraduacaoAtualIndex()) + ".faltas", novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
 
-        if (aluno.getGraduacao().get(graduacaoAtual).getFaltas().size() == 5) {
+        if (aluno.getGraduacaoAtual().getFaltas().size() == 5) {
             mudarStatusGraduacaoAluno(aluno, false);
         }
 
-        return String.valueOf(aluno.getGraduacao().get(graduacaoAtual).getFaltas().size());
+        return String.valueOf(aluno.getGraduacaoAtual().getFaltas().size());
     }
 
     @Override
     public String retirarFaltaDoAluno(String rg, String faltasId) {
         Aluno aluno = encontrarAlunoPorRg(rg);
-        int graduacaoAtual = aluno.getGraduacao().size() - 1;
-        Falta faltaDoAluno = aluno.getGraduacao().get(graduacaoAtual).removerFalta(faltasId);
+        Falta faltaDoAluno = aluno.getGraduacaoAtual().removerFalta(faltasId);
 
-        if (aluno.getGraduacao().get(graduacaoAtual).getFaltas().size() == 4) {
+        if (aluno.getGraduacaoAtual().getFaltas().size() == 4) {
             mudarStatusGraduacaoAluno(aluno, true);
         }
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().pull(GRADUACAO + "." + (graduacaoAtual) +
+        Update update = new Update().pull(GRADUACAO + "." + (aluno.getGraduacaoAtualIndex()) +
                 ".faltas", faltaDoAluno);
         mongoTemplate.updateFirst(query, update, Aluno.class);
-        return String.valueOf(aluno.getGraduacao().get(0).getFaltas().size());
+        return String.valueOf(aluno.getGraduacaoAtual().getFaltas().size());
     }
 
     @Override
@@ -227,13 +225,12 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public GraduacaoDTOResponse aprovarAluno(String rg) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
-        int graduacaoAtualIndex = alunoEncontrado.getGraduacao().size() - 1;
-        Graduacao graduacaoAtual = alunoEncontrado.getGraduacao().get(graduacaoAtualIndex).aprovacao();
+        Graduacao graduacaoAtual = alunoEncontrado.getGraduacaoAtual().aprovacao();
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
         Update update = new Update();
-        update.set(GRADUACAO + "." + (graduacaoAtualIndex), graduacaoAtual);
+        update.set(GRADUACAO + "." + (alunoEncontrado.getGraduacaoAtualIndex()), graduacaoAtual);
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
 
         adicionarNovaGraduacao(alunoEncontrado.getRg(), graduacaoAtual.getKyu(), graduacaoAtual.getDan());
@@ -245,7 +242,7 @@ public class AlunoServices implements AlunoServicesInterface {
     @Override
     public GraduacaoDTOResponse reprovarAluno(String rg) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
-        Graduacao graduacaoAtual = alunoEncontrado.getGraduacao().get(alunoEncontrado.getGraduacao().size() - 1);
+        Graduacao graduacaoAtual = alunoEncontrado.getGraduacaoAtual();
         graduacaoAtual.reprovacao();
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
@@ -258,10 +255,9 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     protected void mudarStatusGraduacaoAluno(Aluno aluno, boolean status) {
-        int graduacaoAtual = aluno.getGraduacao().size() - 1;
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(aluno.getRg()));
-        Update update = new Update().set(GRADUACAO + "." + (graduacaoAtual) + ".status", status);
+        Update update = new Update().set(GRADUACAO + "." + (aluno.getGraduacaoAtualIndex()) + ".status", status);
         mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 

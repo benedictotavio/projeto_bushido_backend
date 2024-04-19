@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class LoginDTOResponseTest {
+class LoginDTOResponseTest {
     @Test
-    public void deveRetornarTokenESenhaDoAdmin() {
+    void deveRetornarTokenESenhaDoAdmin() {
         String token = "valid_token";
         String role = "valid_role";
         LoginDTOResponse loginDTOResponse = new LoginDTOResponse(token, role);

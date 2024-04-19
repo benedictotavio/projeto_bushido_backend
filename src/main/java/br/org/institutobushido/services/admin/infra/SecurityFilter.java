@@ -1,6 +1,5 @@
 package br.org.institutobushido.services.admin.infra;
 
-import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +11,6 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.services.admin.AdminServiceInterface;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -25,7 +23,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private AdminRepositorio adminRepositorio;
 
-    private HandlerExceptionResolver handlerExceptionResolver;
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
     // @Autowired
     public SecurityFilter(HandlerExceptionResolver handlerExceptionResolver) {
@@ -33,8 +31,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         var token = this.recoverToken(request);
 
         try {
