@@ -1,5 +1,6 @@
 package br.org.institutobushido.models.aluno;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +26,7 @@ import lombok.Getter;
 @Getter
 @Document(collection = "alunos")
 public class Aluno implements Serializable {
+    @Serial
     private static final long serialVersionUID = 2405172041950251807L;
     @Id
     private String rg;
@@ -33,7 +35,6 @@ public class Aluno implements Serializable {
     private Date dataNascimento;
     private Genero genero;
     private String turma;
-
     private DadosEscolares dadosEscolares;
     private Date dataPreenchimento;
     private Endereco endereco;
@@ -58,32 +59,41 @@ public class Aluno implements Serializable {
     }
 
     public void setResponsaveis(List<Responsavel> responsaveis) {
+        if (responsaveis.isEmpty()) {
+            return;
+        }
         this.responsaveis = responsaveis;
     }
 
+    public void setTurma(String turma) {
+        if (turma == null || turma.isEmpty()) {
+            return;
+        }
+        this.turma = turma;
+    }
+
     public void setNome(String nome) {
-        if (nome == null) {
-            nome = this.nome;
+        if (nome == null || nome.isEmpty()) {
+           return;
         }
         this.nome = nome;
     }
 
     public void setDataNascimento(Date dataNascimento) {
-        if (dataNascimento == null) {
-            dataNascimento = this.dataNascimento;
+        if (dataNascimento == null || dataNascimento.after(new Date())) {
+            return;
         }
         this.dataNascimento = dataNascimento;
     }
 
     public void setGenero(Genero genero) {
         if (genero == null) {
-            genero = this.genero;
+            return;
         }
         this.genero = genero;
     }
 
     public void setDadosEscolares(DadosEscolares dadosEscolares) {
-
         if (dadosEscolares == null) {
             return;
         }
@@ -171,11 +181,7 @@ public class Aluno implements Serializable {
                 .filter(responsavel -> responsavel.getCpf().equals(cpf))
                 .findFirst();
 
-        if (encontrado.isPresent()) {
-            return encontrado.get();
-        }
-
-        return null;
+        return encontrado.orElse(null);
     }
 
     public Graduacao getGraduacaoAtual(){

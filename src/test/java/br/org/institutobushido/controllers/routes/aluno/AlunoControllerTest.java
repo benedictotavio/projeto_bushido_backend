@@ -222,6 +222,10 @@ class AlunoControllerTest {
         @Test
         void deveEditarAluno() {
                 updateAlunoDTORequest = new UpdateAlunoDTORequest(
+                                "NOME 1",
+                                new Date().getTime(),
+                                Genero.M,
+                                "TURMA 1",
                                 new UpdateDadosSociaisDTORequest(
                                                 false,
                                                 false,

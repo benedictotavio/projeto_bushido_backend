@@ -3,7 +3,6 @@ package br.org.institutobushido.mappers.aluno;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.models.aluno.Aluno;
@@ -69,6 +68,7 @@ public class AlunoMapper {
         }
 
         public static AlunoDTOResponse mapToAlunoDTOResponse(Aluno aluno) {
+
                 if (aluno == null) {
                         return null;
                 }

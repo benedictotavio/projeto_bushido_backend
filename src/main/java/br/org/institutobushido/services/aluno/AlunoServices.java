@@ -1,5 +1,6 @@
 package br.org.institutobushido.services.aluno;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.cache.annotation.Cacheable;
@@ -193,15 +194,30 @@ public class AlunoServices implements AlunoServicesInterface {
     public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
 
+        // Nome
+        alunoEncontrado.setNome(updateAlunoDTORequest.nome());
+
+        //  Data de Nascimento
+        alunoEncontrado.setDataNascimento(new Date(updateAlunoDTORequest.dataNascimento()));
+
+        // Genero
+        alunoEncontrado.setGenero(updateAlunoDTORequest.genero());
+
+        // Turma
+        alunoEncontrado.setTurma(updateAlunoDTORequest.turma());
+
         // Dados Escolares
         DadosEscolares dadosEscolares = DadosEscolaresMapper.updateDadosEscolares(
                 updateAlunoDTORequest.dadosEscolares(),
                 alunoEncontrado);
+
         // Endereco
         Endereco endereco = EnderecoMapper.updateEndereco(updateAlunoDTORequest.endereco(), alunoEncontrado);
+
         // Dados Sociais
         DadosSociais dadosSociais = DadosSociaisMapper.updateDadosSociais(updateAlunoDTORequest.dadosSociais(),
                 alunoEncontrado);
+
         // Historico de Saude
         this.editarHistoricoDeSaude(updateAlunoDTORequest.historicoDeSaude(), alunoEncontrado);
 
@@ -213,6 +229,10 @@ public class AlunoServices implements AlunoServicesInterface {
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
         Update update = new Update();
 
+        update.set("nome", alunoEncontrado.getNome());
+        update.set("genero", alunoEncontrado.getGenero());
+        update.set("dataNascimento", alunoEncontrado.getDataNascimento());
+        update.set("turma", alunoEncontrado.getTurma());
         update.set("dadosSociais", alunoEncontrado.getDadosSociais());
         update.set("endereco", alunoEncontrado.getEndereco());
         update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
@@ -278,6 +298,10 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     private void editarHistoricoDeSaude(UpdateHistoricoSaudeDTORequest updateHistoricoSaudeDTORequest, Aluno aluno) {
+
+        if (updateHistoricoSaudeDTORequest == null) {
+            return;
+        }
 
         aluno.getHistoricoSaude().setTipoSanguineo(
                 updateHistoricoSaudeDTORequest.tipoSanguineo());
