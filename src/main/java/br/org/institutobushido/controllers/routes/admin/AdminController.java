@@ -59,7 +59,7 @@ public class AdminController {
         Authentication auth = this.authenticationManager.authenticate(login);
         LoginDTOResponse admin = this.adminServices.login((Admin) auth.getPrincipal());
         return ResponseEntity.ok().body(
-                new SuccessLoginAuthenticated(admin.token(), admin.role()));
+                new SuccessLoginAuthenticated(admin.token(), admin.role(),admin.turmas()));
     }
 
     @GetMapping("users")

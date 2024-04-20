@@ -91,7 +91,17 @@ POST /admin/login
   "token": "string",
   "role": "string",
   "status": 200,
-  "success": true
+  "success": true,
+  "turmas": [
+    {
+      "endereco": "string",
+      "nome": "string"
+    },
+    {
+      "endereco": "string",
+      "nome": "string"
+    }
+  ]
 }
 ```
 </details>

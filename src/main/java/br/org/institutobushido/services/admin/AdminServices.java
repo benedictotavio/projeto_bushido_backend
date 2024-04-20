@@ -62,7 +62,7 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
     @Override
     public LoginDTOResponse login(Admin admin) {
         String token = this.generateToken(admin);
-        return new LoginDTOResponse(token, admin.getRole().getValue());
+        return new LoginDTOResponse(token, admin.getRole().getValue(), admin.getTurmas());
     }
 
     @Cacheable(value = "admin", key = "#username")

@@ -54,7 +54,7 @@ class AdminControllerTest {
     void setUp() {
         signUpDTORequest = new SignUpDTORequest("NOME", "email@email.com.br", "senha", "CARGO", UserRole.ADMIN);
         admin = new Admin("NOME", "email@email.com.br", "senha", "CARGO", UserRole.ADMIN);
-        loginDTOResponse = new LoginDTOResponse("token", UserRole.ADMIN.getValue());
+        loginDTOResponse = new LoginDTOResponse("token", UserRole.ADMIN.getValue(), admin.getTurmas());
         loginDTORequest = new LoginDTORequest("email@email.com.br", "senha");
         adminDTOResponse = new AdminDTOResponse("NOME", "email@email.com.br", "CARGO", UserRole.ADMIN.getValue());
 
