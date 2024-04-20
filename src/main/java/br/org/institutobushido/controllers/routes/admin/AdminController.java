@@ -33,19 +33,23 @@ public class AdminController {
     private AdminServiceInterface adminServices;
     private AuthenticationManager authenticationManager;
 
+    private static final String URI_ADMIN = "/api/V1/admin";
+
     public AdminController(AdminServiceInterface adminServices, AuthenticationManager authenticationManager) {
         this.adminServices = adminServices;
         this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("signup")
-    public ResponseEntity<SuccessPostResponse> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest) throws URISyntaxException {
+    public ResponseEntity<SuccessPostResponse> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest)
+            throws URISyntaxException {
         this.adminServices.signup(signUpDTORequest);
         return ResponseEntity.created(
-               new URI("/api/V1/admin/signup")
-        ).body(
-                new SuccessPostResponse(signUpDTORequest.email(), "Admin criado com sucesso.",
-                        Admin.class.getSimpleName()));
+                new URI(
+                        URI_ADMIN))
+                .body(
+                        new SuccessPostResponse(signUpDTORequest.email(), "Admin criado com sucesso.",
+                                Admin.class.getSimpleName()));
     }
 
     @PostMapping("login")

@@ -38,6 +38,8 @@ import jakarta.validation.Valid;
 public class AlunoController {
         private final AlunoServicesInterface alunoServices;
 
+        private static final String URI_ALUNO="/api/V1/aluno";
+
         public AlunoController(AlunoServicesInterface alunoServices) {
                 this.alunoServices = alunoServices;
         }
@@ -56,7 +58,7 @@ public class AlunoController {
         ResponseEntity<SuccessPostResponse> adicionarAluno(@Valid @RequestBody AlunoDTORequest alunoDTORequest) throws URISyntaxException {
                 String alunoAdicionado = this.alunoServices.adicionarAluno(alunoDTORequest);
                 return ResponseEntity.created(
-                        new URI("/api/V1/aluno/")
+                        new URI(URI_ALUNO)
                         )
                                 .body(new SuccessPostResponse(alunoAdicionado, "Aluno adicionado com sucesso",
                                                 Aluno.class.getSimpleName()));

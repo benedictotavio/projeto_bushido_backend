@@ -185,7 +185,7 @@ class AlunoControllerTest {
 
                 verify(alunoServices).adicionarAluno(alunoDTORequest);
 
-                URI expectedUri = new URI("/api/V1/aluno/");
+                URI expectedUri = new URI("/api/V1/aluno");
                 assertEquals(expectedUri, response.getHeaders().getLocation());
 
                 SuccessPostResponse responseBody = response.getBody();

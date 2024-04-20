@@ -142,6 +142,123 @@ GET /aluno?rg={rg}
       "nome": "string",
       "genero": "M" | "F",
       "dataNascimento": "YYYY-MM-DD. YYYY-MM-DDThh:mm:ss",
+      "turma": "string",
+      "dadosSociais":{
+        "bolsaFamilia": true,
+        "auxilioBrasil": false,
+        "imovel": "CEDIDO", -> enum
+        "numerosDePessoasNaCasa": 0,
+        "contribuintesDaRendaFamiliar": 0,
+        "alunoContribuiParaRenda": true,
+        "rendaFamiliar": 0
+      },
+      "dadosEscolares": {
+        "turno": "MANHA", -> enum
+        "escola": "string",
+        "serie": 0
+      },
+      "dataPreenchimento": "2023-01-01T12:00:00",
+      "endereco":{
+        "cidade": "string",
+        "estado": "string",
+        "cep":"string",
+        "numero":"string"
+      },
+      "rg": "{rg}",
+      "responsaveis": [
+          {
+          "nome":"string",
+          "cpf": "string",
+          "telefone":"string",
+          "email":"string",
+          "filiacao":"PAI" -> enum
+          }
+        ],
+      "graduacao": {
+            "kyu": 0,
+            "frequencia": 0
+        },
+        "historicoSaude": {
+        "tipoSanguineo": "A_POSITIVO",
+        "fatorRh": "POSITIVO",
+        "usoMedicamentoContinuo": {
+          "resposta": "string",
+          "qualMedicamento": "string"
+        },
+        "cirurgia": {
+          "resposta": true,
+          "tipo": "string"
+        },
+        "alergia": {
+          "resposta": true,
+          "tipo": "string"
+        },
+        "doencaCronica": {
+          "resposta": true,
+          "tipo": "string"
+        },
+        "deficiencia":["string"],
+        "acompanhamentoSaude":["string"]
+      }
+  }
+```
+
+</details>
+
+<details>
+<summary><i>404</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 404,
+  "error": "Object Not Found",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+
+</details>
+
+</p>
+
+## Buscar aluno por Nome
+
+Retorna um objeto de um array de alunos com base no nome passado uma Query String como parâmetro.
+
+#### Request
+
+- **nome:** string
+- Parametros Opcionais
+  - **page** int
+    - index da pagina
+  - **size** int
+    - tamanho de documentos por pagina
+  - **sortBy** string
+    - filtragem por propriedade
+  - **sortOrder** string
+    - tipo de filtragem por valor
+      - asc
+      - desc
+
+```http
+GET /aluno?nome={nome}
+```
+
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+    {
+      "nome": "string",
+      "genero": "M" | "F",
+      "dataNascimento": "YYYY-MM-DD. YYYY-MM-DDThh:mm:ss",
+      "turma": "string",
       "dadosSociais":{
         "bolsaFamilia": true,
         "auxilioBrasil": false,
@@ -234,6 +351,7 @@ Adiciona um aluno baseado nos dados cadastrais abaixo.
 | nome`*`                                               | string           | Nome completo do aluno                            |
 | genero`*`                                             | string           | Gênero do aluno (M ou F)                          |
 | dataNascimento`*`                                     | Date             | Data de nascimento do aluno (ISO String)          |
+| turma`*`                                              | string           | Turma registrada do aluno                         |
 | dadosSociais                                          | objeto           | Dados sociais do aluno                            |
 | dadosSociais.bolsaFamilia                             | boolean          | Indica se o aluno recebe Bolsa Família            |
 | dadosSociais.auxilioBrasil                            | boolean          | Indica se o aluno recebe Auxílio Brasil           |
@@ -241,7 +359,7 @@ Adiciona um aluno baseado nos dados cadastrais abaixo.
 | dadosSociais.numerosDePessoasNaCasa                   | integer          | Número de pessoas na casa do aluno                |
 | dadosSociais.contribuintesDaRendaFamiliar             | integer          | Número de contribuintes da renda familiar         |
 | dadosSociais.alunoContribuiParaRenda                  | boolean          | Indica se o aluno contribui para a renda familiar |
-| dadosSociais.rendaFamiliar`*`        | integer          | Renda familiar em salários mínimos                |
+| dadosSociais.rendaFamiliar`*`                         | integer          | Renda familiar em salários mínimos                |
 | dadosEscolares                                        | objeto           | Dados escolares do aluno                          |
 | dadosEscolares.turno`*`                               | string (enum)    | Turno escolar do aluno (MANHA ou outro)           |
 | dadosEscolares.escola`*`                              | string           | Nome da escola do aluno                           |
@@ -289,7 +407,8 @@ POST /aluno
 {
   "nome": "string",
   "genero": "M" ou "F",
-  "dataNascimento": "dd-MM-yyyy",
+  "turma":"string",
+  "dataNascimento": long (data em milisegundo),
   "dadosSociais":{
     "bolsaFamilia": true,
     "auxilioBrasil": false,
@@ -383,6 +502,21 @@ POST /aluno
 </details>
 
 <details>
+<summary><i>403</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 406,
+  "error": "Propriedade Invalida",
+  "message": "string",
+  "path": "/api/V1/aluno"
+}
+```
+
+</details>
+
+<details>
 <summary><i>409</i></summary>
 
 ```json
@@ -411,9 +545,6 @@ POST /aluno
 ```
 
 </details>
-
-</details>
-
 </p>
 
 ## Editar aluno por rg
@@ -430,7 +561,8 @@ PUT /aluno/{rg}
 {
   "nome": "string",
   "genero": "M" ou "F",
-  "dataNascimento": "dd-MM-yyyy",
+  "dataNascimento": long (data em milisegundo),
+  "turma": "string",
   "dadosSociais":{
     "bolsaFamilia": true,
     "auxilioBrasil": false,
@@ -451,11 +583,7 @@ PUT /aluno/{rg}
     "estado": "string",
     "cep":"string",
     "numero":"string"
-  },
-   "graduacao": {
-        "kyu": 0,
-        "frequencia": 0
-    }
+  }
 }
 ```
 
@@ -927,7 +1055,6 @@ DELETE /aluno/acompanhamentoSaude/{rg}
 ```
 
 </details>
-
 <details>
 <summary><i>404</i></summary>
 
@@ -943,32 +1070,42 @@ DELETE /aluno/acompanhamentoSaude/{rg}
 
 </details>
 </details>
+<details>
+<summary><i>400</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 400,
+  "error": "Bad Request",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+</details>
 </p>
 
+# Turma
 
-## Editar historico de saude ao aluno
+## Criar nova turma
 
-Edita uma valor no historico de saude baseado no sis
+Cria uma nova turma com um admin
 
 #### Request
 
-- **rg:** string
+- **email_admin:** string
 
 ```http
-PUT /aluno/historicoSaude/{rg}
+POST /turma/{email_admin}
 ```
 
-- **historico de saude:**
-  - alergia
-  - cirurgia
-  - doencaCronica
-  - deficiencia
-
 ```body
-"{{historico de saude}}": {
-      "tipo": "p",
-      "resposta": true
- }
+{
+    "nome": "string",
+    "endereco": "string"
+}
 ```
 
 #### Response
@@ -987,20 +1124,194 @@ PUT /aluno/historicoSaude/{rg}
 ```
 
 </details>
-
 <details>
-<summary><i>400</i></summary>
+<summary><i>409</i></summary>
 
 ```json
 {
   "timestamp": 0,
-  "status": 400,
-  "error": "Bad Request",
+  "status": 409,
+  "error": "Object is already Registered",
   "message": "string",
   "path": "string"
 }
 ```
 
 </details>
+</details>
+</p>
+
+
+
+## Deletar turma
+
+
+Deletar uma turma sem alunos ativos
+
+#### Request
+
+- **nome_turma:** string
+- **email_admin:** string
+
+```http
+DELETE /turma/{nome_turma}/{email_admin}
+```
+
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "id": "string",
+  "status": 200,
+  "message": "string",
+  "entity": "string"
+}
+```
+
+</details>
+<details>
+<summary><i>404</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 404,
+  "error": "Object not found",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+<details>
+<summary><i>409</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 409,
+  "error": "Object is already Registered",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+</p>
+
+## Buscar todas as turmas
+
+#### Request
+
+```http
+GET /turma
+```
+
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+[
+  {
+    "nome": "string",
+    "tutor": "string",
+    "endereco": "string"
+  },
+  {
+    "nome": "string",
+    "tutor": "string",
+    "endereco": "string"
+  },
+]
+```
+
+</details>
+</p>
+
+## Buscar turma pelo nome
+
+Buscar unica turma pelo nome
+
+#### Request
+
+- **nome_turma:** string
+
+```http
+GET /admin/{nome_turma}
+```
+
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+{
+  "nome": "string",
+  "tutor": "string",
+  "endereco": "string"
+}
+```
+
+</details>
+</p>
+
+## Buscar alunos pela turma
+
+Buscar todos os alunos registrados em uma turma
+
+#### Request
+
+- **nome_turma:** string
+
+```http
+GET /admin/{nome_turma}/alunos
+```
+
+#### Response
+
+<p>
+<details>
+<summary><i>200</i></summary>
+
+```json
+[
+  {
+    "nome": "string",
+    "rg": "string",
+    "genero": "M",
+    "dataNascimento": "2014-03-16T18:39:50.968+00:00"
+  },
+  {
+    "nome": "string",
+    "rg": "string",
+    "genero": "F",
+    "dataNascimento": "2014-03-04T18:39:50.969+00:00"
+  },
+]
+```
+
+</details>
+<details>
+<summary><i>404</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 404,
+  "error": "Object not found",
+  "message": "string",
+  "path": "string"
+}
+```
+
 </details>
 </p>

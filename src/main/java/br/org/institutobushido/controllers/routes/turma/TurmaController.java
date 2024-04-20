@@ -1,5 +1,7 @@
 package br.org.institutobushido.controllers.routes.turma;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TurmaController {
 
     private final TurmaServiceInterface turmaService;
+    
+    private static final String URI_TURMA="/api/V1/turma";
 
     public TurmaController(TurmaServiceInterface turmaService) {
         this.turmaService = turmaService;
@@ -35,9 +39,13 @@ public class TurmaController {
 
     @PostMapping("{emailAdmin}")
     public ResponseEntity<SuccessPostResponse> criarNovaTurma(@Valid() @RequestBody TurmaDTORequest turmaDTORequest,
-            @PathVariable String emailAdmin) {
+            @PathVariable String emailAdmin) throws URISyntaxException {
         String res = this.turmaService.criarNovaTurma(emailAdmin, turmaDTORequest);
-        return ResponseEntity.ok().body(
+        return ResponseEntity.created(
+            new URI(
+                URI_TURMA
+            )
+        ).body(
                 new SuccessPostResponse(turmaDTORequest.nome(), res,
                         Turma.class.getSimpleName()));
     }
