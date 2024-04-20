@@ -61,7 +61,7 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
 
     @Override
     public LoginDTOResponse login(Admin admin) {
-        var token = this.generateToken(admin);
+        String token = this.generateToken(admin);
         return new LoginDTOResponse(token, admin.getRole().getValue());
     }
 
@@ -75,7 +75,7 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
         return adminEncontrado;
     }
 
-    private String generateToken(Admin admin) {
+    protected String generateToken(Admin admin) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
             return JWT.create()

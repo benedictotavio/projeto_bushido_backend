@@ -6,21 +6,27 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+
 import br.org.institutobushido.controllers.dtos.admin.AdminDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
@@ -49,10 +55,6 @@ class AdminServicesTest {
     private AdminServices adminServices;
 
     private Admin admin;
-
-    public AdminServicesTest() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @BeforeEach
     void setUp() {
@@ -87,11 +89,32 @@ class AdminServicesTest {
     @Test
     @Disabled("Teste pendente")
     void testLogin() {
-        Admin admin = new Admin("John", "john@example.com", "password", "Admin", UserRole.ADMIN);
-        when(adminRepositorio.findByEmail(anyString())).thenReturn(admin);
-        AdminServices adminServices = new AdminServices(adminRepositorio, mongoTemplate);
-        LoginDTOResponse loginDTOResponse = adminServices.login(admin);
+        // Arrange
+        // Mock your Admin object
+        Admin admin = Mockito.mock(Admin.class);
+        Mockito.when(admin.getEmail()).thenReturn("test@example.com");
+
+        // Mock the Algorithm creation
+        Algorithm algorithmMock = Mockito.mock(Algorithm.class);
+        when(algorithmMock.sign(any())).thenReturn("token".getBytes());
+
+        // Mock JWT
+        JWT jwt = Mockito.mock(JWT.class);
+        when(jwt.create()
+        .withIssuer(anyString())
+        .withClaim("email", admin.getEmail())
+        .withSubject(eq(admin.getEmail()))
+        .withExpiresAt(any(Date.class))
+        .sign(algorithmMock)).thenReturn("token");
+
+        // Mock the generateToken method
+        AdminServices spy = Mockito.spy(adminServices);
+        Mockito.when(spy.generateToken(admin)).thenReturn("mockedToken");
+        LoginDTOResponse loginDTOResponse = spy.login(admin);
+
         assertNotNull(loginDTOResponse);
+        assertEquals("token", loginDTOResponse.token());
+        assertEquals(UserRole.ADMIN.getValue(), loginDTOResponse.role());
     }
 
     @Test
@@ -99,17 +122,12 @@ class AdminServicesTest {
         // Arrange
         String validEmail = "valid@example.com";
 
-        // Mock the adminRepositorio.findByEmail() method to return the
-        // expectedUserDetails
         when(adminRepositorio.findByEmail(validEmail)).thenReturn(expectedUserDetails);
 
-        // Create an instance of AdminServices
         AdminServices adminServices = new AdminServices(adminRepositorio, mongoTemplate);
 
-        // Act
         UserDetails actualUserDetails = adminServices.loadUserByUsername(validEmail);
 
-        // Assert
         assertEquals(expectedUserDetails, actualUserDetails);
     }
 

@@ -6,15 +6,15 @@ Esta é a documentação da API Aluno, que permite realizar operações relacion
 https://projeto-bushido-backend.onrender.com/api/V1
 ```
 
-## Descrição
+# Descrição
 
 O desenvolvimento de uma API RESTful para cadastro de alunos em um projeto social de aulas de caratê demanda a utilização de tecnologias como Java, Spring Boot, Docker e MongoDB. Java oferece robustez e flexibilidade no desenvolvimento, enquanto Spring Boot simplifica a criação de aplicativos web. O Docker facilita a implantação e gerenciamento de contêineres, garantindo portabilidade e escalabilidade. MongoDB é ideal para armazenar dados flexíveis e não estruturados, com alta performance em consultas. Essas tecnologias combinadas garantem uma solução eficiente, escalável e altamente performática para o projeto.
 
-## Autorização
+# Autorização
 
 Antes de tudo o usuario deve possuir um cadastro de admnistrador, o cadastro devera ser feito por outro administrador com acesso ilimitados. Apos efetuar o cadastro, o usuário devera relizar um _[login](#login)_ para receber o token de autorização para cada requisição.
 
-### Sign up
+## Sign up
 
 Cadastro para novos admnistradores que serão responsaveis por realizar o cadastro dos alunos.
 
@@ -61,11 +61,9 @@ POST /admin/signup
 }
 ```
 </details>
-</p>
 
 
-
-### Login
+## Login
 
 Retorna um token que sera utilizado nas demais requisições
 
@@ -84,16 +82,18 @@ POST /admin/login
 
 ### Response
 
-<p>
+
 <details>
 <summary><i>200</i></summary>
 
 ```json
 {
-  "token": "string"
+  "token": "string",
+  "role": "string",
+  "status": 200,
+  "success": true
 }
 ```
-
 </details>
 
 <details>
@@ -113,9 +113,58 @@ POST /admin/login
 
 </details>
 
+## Buscar admin pelo nome
+
+Retorna os admin cadastrados no sistema
+
+### Request
+
+- **nome**: string
+
+```http
+GET /admin/users?nome={nome}
+```
+
+### Response
+
+
+<details>
+<summary><i>200</i></summary>
+
+```json
+[
+  {
+    "nome": "admin",
+    "email": "string",
+    "role": "string",
+    "cargo": "string"
+  },
+  {
+    "nome": "admin",
+    "email": "string",
+    "role": "string",
+    "cargo": "string"
+  }
+]
+```
 </details>
 
-</p>
+<details>
+<summary><i>401</i></summary>
+
+```json
+{
+  "type": "string",
+  "title": "Erro de Autenticação",
+  "status": 401,
+  "detail": "string",
+  "instance": "/api/V1/admin/login",
+  "message:": "string",
+  "error:": "Credenciais Inválidas"
+}
+```
+
+</details>
 
 # Aluno
 
@@ -431,18 +480,16 @@ POST /aluno
     "numero":"string"
   },
   "rg": "{rg}",
-  "responsaveis": [
-      {
+  "responsaveis": {
       "nome":"string",
       "cpf": "string",
       "telefone":"string",
       "email":"string",
       "filiacao":"PAI" -> enum
-      }
-    ],
+    },
    "graduacao": {
         "kyu": 0,
-        "frequencia": 0
+        "dan": 0
     },
     "historicoSaude": {
     "tipoSanguineo": "A_POSITIVO",
@@ -545,7 +592,6 @@ POST /aluno
 ```
 
 </details>
-</p>
 
 ## Editar aluno por rg
 
@@ -649,10 +695,6 @@ PUT /aluno/{rg}
 
 </details>
 
-</details>
-
-</p>
-
 ## Adicionar falta ao aluno na data especifica
 
 Adiciona uma falta ao aluno na data especificada no parâmetro data.
@@ -665,7 +707,7 @@ Adiciona uma falta ao aluno na data especificada no parâmetro data.
     - exemplo: **1609459200000**
 
 ```http
-POST /aluno/adicionarFalta/{rg}/{data}
+POST /aluno/falta/{rg}/{data}
 ```
 
 ```body
@@ -720,9 +762,6 @@ POST /aluno/adicionarFalta/{rg}/{data}
 ```
 
 </details>
-</details>
-
-</p>
 
 ## Retirar falta do aluno
 
@@ -769,8 +808,6 @@ DELETE /aluno/falta/{rg}?data=dd-MM-yyyy
 ```
 
 </details>
-</details>
-</p>
 
 ## Adicionar responsável ao aluno
 
@@ -826,6 +863,22 @@ POST /aluno/responsavel/{rg}
 ```
 
 </details>
+
+<details>
+<summary><i>409</i></summary>
+
+```json
+{
+  "timestamp": 0,
+  "status": 409,
+  "error": "string",
+  "message": "string",
+  "path": "string"
+}
+```
+
+</details>
+
 <details>
 <summary><i>422</i></summary>
 
@@ -840,8 +893,6 @@ POST /aluno/responsavel/{rg}
 ```
 
 </details>
-</details>
-</p>
 
 ## Remover responsável do aluno
 
@@ -887,8 +938,6 @@ DELETE /aluno/responsavel/{rg}?cpf=string
 ```
 
 </details>
-</details>
-</p>
 
 ## Adicionar deficiência ao aluno
 
@@ -932,8 +981,6 @@ POST /aluno/deficiencia/{rg}?deficiencia=string
 ```
 
 </details>
-</details>
-</p>
 
 ## Remover deficiência do aluno
 
@@ -949,7 +996,6 @@ DELETE /aluno/deficiencia/{rg}?deficiencia=string
 
 #### Response
 
-<p>
 <details>
 <summary><i>200</i></summary>
 
@@ -979,7 +1025,6 @@ DELETE /aluno/deficiencia/{rg}?deficiencia=string
 ```
 
 </details>
-</p>
 
 ## Adicionar acompanhamento de saúde ao aluno
 
