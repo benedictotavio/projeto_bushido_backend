@@ -135,7 +135,7 @@ public class TurmaService implements TurmaServiceInterface {
 
     private boolean vefrificarSeExistemAlunosAtivosNaTurma(String nomeTurma) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("turma").is(nomeTurma));
+        query.addCriteria(Criteria.where("turma").is(nomeTurma).and("graduacao").elemMatch(Criteria.where("status").is(true)));
         return this.mongoTemplate.exists(query, Aluno.class);
     }
 
