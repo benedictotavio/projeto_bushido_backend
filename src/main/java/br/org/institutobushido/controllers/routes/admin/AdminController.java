@@ -1,6 +1,10 @@
 package br.org.institutobushido.controllers.routes.admin;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+
+import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,20 +28,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController(value = "admin")
 @RequestMapping("api/V1/admin")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class AdminControllers {
+public class AdminController {
 
     private AdminServiceInterface adminServices;
     private AuthenticationManager authenticationManager;
 
-    public AdminControllers(AdminServiceInterface adminServices, AuthenticationManager authenticationManager) {
+    private static final String URI_ADMIN = "/api/V1/admin";
+
+    public AdminController(AdminServiceInterface adminServices, AuthenticationManager authenticationManager) {
         this.adminServices = adminServices;
         this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("signup")
-    public ResponseEntity<String> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest) {
+    public ResponseEntity<SuccessPostResponse> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest)
+            throws URISyntaxException {
         this.adminServices.signup(signUpDTORequest);
-        return ResponseEntity.ok().body("Admin criado com sucesso");
+        return ResponseEntity.created(
+                new URI(
+                        URI_ADMIN))
+                .body(
+                        new SuccessPostResponse(signUpDTORequest.email(), "Admin criado com sucesso.",
+                                Admin.class.getSimpleName()));
     }
 
     @PostMapping("login")
@@ -47,7 +59,7 @@ public class AdminControllers {
         Authentication auth = this.authenticationManager.authenticate(login);
         LoginDTOResponse admin = this.adminServices.login((Admin) auth.getPrincipal());
         return ResponseEntity.ok().body(
-                new SuccessLoginAuthenticated(admin.token(), admin.role()));
+                new SuccessLoginAuthenticated(admin.token(), admin.role(),admin.turmas()));
     }
 
     @GetMapping("users")

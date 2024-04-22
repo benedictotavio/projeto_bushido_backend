@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 import br.org.institutobushido.enums.aluno.Genero;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class TurmaAlunoResponse implements Serializable {
+@AllArgsConstructor
+public class TurmaAlunoDTOResponse implements Serializable {
     private String nome;
     private String rg;
     private Genero genero;

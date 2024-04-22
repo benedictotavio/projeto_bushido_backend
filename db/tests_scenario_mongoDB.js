@@ -41,14 +41,14 @@ function addAlunos() {
     ]
     const totalDocuments = 6000
     const batchSize = 100;
-    const documents = []
+    let documents = []
 
     function generateRg() {
         return Math.floor(Math.random() * 999999999);
     }
 
     function getRandomTurma() {
-        const options = ["turma", "test", "fundao"];
+        const options = ["turma 1", "turma 2", "turma 3"];
         const randomIndex = Math.floor(Math.random() * options.length);
         return options[randomIndex];
     }

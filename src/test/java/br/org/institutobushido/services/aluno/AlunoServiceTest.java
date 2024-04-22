@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,7 +28,6 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -38,7 +39,6 @@ import br.org.institutobushido.controllers.dtos.aluno.endereco.EnderecoDTOReques
 import br.org.institutobushido.controllers.dtos.aluno.endereco.UpdateEnderecoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
-import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.HistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.alergia.AlergiaDTORequest;
@@ -163,7 +163,8 @@ class AlunoServiceTest {
                                                 List.of("Acompanhamento")));
 
                 aluno.adicionarGraduacao(
-                                new Graduacao(7, new ArrayList<>(), true, 100, LocalDate.now().minusMonths(3),LocalDate.now().plusMonths(3), false, 80, 1));
+                                new Graduacao(7, new ArrayList<>(), true, 100, LocalDate.now().minusMonths(3),
+                                                LocalDate.now().plusMonths(3), false, 80, 1));
 
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
@@ -199,18 +200,19 @@ class AlunoServiceTest {
         }
 
         @Test
-        void testBuscarAlunoPorRg() {
+        void deveBuscarAlunoPorRg() {
                 // Mocking data
                 when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 List<AlunoDTOResponse> result = alunoServices.buscarAluno(null, "123456789", 0, 10, "nome", "asc");
 
                 assertEquals(1, result.size());
-                assertEquals(result.get(0).graduacao().get(aluno.getGraduacao().size() - 1).fimGraduacao(), LocalDate.now());
+                assertEquals(result.get(0).graduacao().get(aluno.getGraduacao().size() - 1).fimGraduacao(),
+                                LocalDate.now());
         }
 
         @Test
-        void testBuscarAlunoPorNome() {
+        void deveBuscarAlunoPorNome() {
                 // Mocking data
                 when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
 
@@ -297,6 +299,19 @@ class AlunoServiceTest {
         }
 
         @Test
+        void deveMudarStatusGraduacaoAlunoAoAdicionarFalta() {
+                // Arrange
+                Graduacao graduacao = new Graduacao(7, 0);
+                graduacao.setFimGraduacao(LocalDate.now().plusMonths(2));
+                aluno.adicionarGraduacao(graduacao);
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
+                // Act
+                alunoServices.mudarStatusGraduacaoAluno(aluno, true);
+                // Assert
+                assertTrue(aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).isStatus());
+        }
+
+        @Test
         void deveRetirarFaltaDoAluno() {
                 // Arrange
                 String rg = "123456789";
@@ -323,6 +338,10 @@ class AlunoServiceTest {
                 // Arrange
                 String rg = "123456789";
                 UpdateAlunoDTORequest updateAlunoDTORequest = new UpdateAlunoDTORequest(
+                                "NOME 1",
+                                new Date().getTime(),
+                                Genero.M,
+                                "TURMA 1",
                                 new UpdateDadosSociaisDTORequest(false, false, null, 5, 2, false, 0),
                                 new UpdateDadosEscolaresDTORequest(Turno.TARDE, "Escola", "Serie"),
                                 new UpdateEnderecoDTORequest(
@@ -412,5 +431,25 @@ class AlunoServiceTest {
                 assertNotNull(result);
                 assertEquals(kyu, result.kyu());
                 assertEquals(dan, result.dan());
+        }
+
+        @Test
+        void deveRetornarAlunoPorRg() {
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
+                List<AlunoDTOResponse> result = alunoServices.buscarAlunoPorRg("123456789");
+                assertNotNull(result);
+                assertEquals(1, result.size());
+        }
+
+        // should raise an EntityNotFoundException when buscarAlunoPorRg returns an
+        // empty list
+        @Test
+        void test_empty_list() {
+                try {
+                        alunoServices.encontrarAlunoPorRg("invalid_rg");
+                        fail("Expected EntityNotFoundException to be thrown");
+                } catch (EntityNotFoundException e) {
+                        assertEquals("Aluno com o rg invalid_rg nao encontrado!", e.getMessage());
+                }
         }
 }

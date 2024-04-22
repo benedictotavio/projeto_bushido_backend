@@ -2,22 +2,19 @@ package br.org.institutobushido.services.admin;
 
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
 import br.org.institutobushido.controllers.dtos.admin.AdminDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
@@ -25,6 +22,7 @@ import br.org.institutobushido.mappers.admin.AdminMapper;
 import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 
 @Service
 public class AdminServices implements AdminServiceInterface, UserDetailsService {
@@ -50,32 +48,34 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
                     "O Administrador com o rg " + adminDTORequest.email() + " ja esta cadastrado!");
         }
 
-        Admin admin = new Admin();
-        admin.setNome(adminDTORequest.nome());
-        admin.setEmail(adminDTORequest.email());
-        admin.setSenha(new BCryptPasswordEncoder().encode(adminDTORequest.senha()));
-        admin.setCargo(adminDTORequest.cargo());
-        admin.setRole(adminDTORequest.role());
+        Admin admin = new Admin(
+            adminDTORequest.nome(),
+            adminDTORequest.email(),
+            new BCryptPasswordEncoder().encode(adminDTORequest.senha()),
+            adminDTORequest.cargo(),
+            adminDTORequest.role()
+        );
 
         adminRepositorio.save(admin);
     }
 
     @Override
     public LoginDTOResponse login(Admin admin) {
-        var token = this.generateToken(admin);
-        return new LoginDTOResponse(token, admin.getRole().getValue());
+        String token = this.generateToken(admin);
+        return new LoginDTOResponse(token, admin.getRole().getValue(), admin.getTurmas());
     }
 
+    @Cacheable(value = "admin", key = "#username")
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws EntityNotFoundException {
         UserDetails adminEncontrado = adminRepositorio.findByEmail(username);
         if (adminEncontrado == null) {
-            throw new UsernameNotFoundException("O Administrador com o email " + username + " nao foi encontrado!");
+            throw new EntityNotFoundException("O Administrador com o email " + username + " nao foi encontrado!");
         }
         return adminEncontrado;
     }
 
-    public String generateToken(Admin admin) {
+    protected String generateToken(Admin admin) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
             return JWT.create()
@@ -90,7 +90,7 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
     }
 
     public String validateToken(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
+         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         DecodedJWT decodedJWT = JWT.require(algorithm).withIssuer(secret).build().verify(token);
         return decodedJWT.getSubject();
     }

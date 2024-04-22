@@ -16,8 +16,6 @@ public class TurmaMapper {
         return new Turma(turmaDTORequest.endereco(), turmaDTORequest.nome(), turmaDTORequest.tutor());
     }
 
-
-
     public static TurmaDTOResponse mapToTurmaDTOResponse(Turma turma) {
         if (turma == null) {
             return null;

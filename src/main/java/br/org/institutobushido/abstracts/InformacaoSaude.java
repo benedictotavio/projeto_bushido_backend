@@ -4,10 +4,11 @@ public abstract class InformacaoSaude {
     private boolean resposta;
     private String tipo;
 
-    protected InformacaoSaude() {}
+    protected InformacaoSaude() {
+    }
 
     protected InformacaoSaude(String tipo) {
-        
+
         if (tipo == null || tipo.isEmpty() || tipo.isBlank()) {
             this.tipo = "";
             this.resposta = false;

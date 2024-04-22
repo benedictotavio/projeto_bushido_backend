@@ -1,0 +1,31 @@
+@url = https://projeto-bushido-backend.onrender.com/api/V1/turma
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzQ4NTc5NH0.3XkNh8xOreg8ZYNdt3ePYREPun_-fIvLa-eyNEPnJ3I
+@rg=123456789
+@nomeTurma=turma 2
+@emailTutor=tutor@email.com.br
+@emailAdmin=super_admin@email.com.br
+
+POST {{url}}/{{emailAdmin}} HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nome": "turma 6",
+    "endereco": "Rua Almir Juca"
+}
+
+###
+DELETE {{url}}/{{nomeTurma}}/{{emailAdmin}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+GET {{url}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+GET {{url}}/{{nomeTurma}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+GET {{url}}/{{nomeTurma}}/alunos HTTP/1.1
+Authorization: Bearer {{token}}
