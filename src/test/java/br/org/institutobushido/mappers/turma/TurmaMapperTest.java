@@ -2,7 +2,11 @@ package br.org.institutobushido.mappers.turma;
 
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
+import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTORequest;
+import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTOResponse;
 import br.org.institutobushido.models.turma.Turma;
+import br.org.institutobushido.models.turma.tutor.Tutor;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,9 +20,9 @@ class TurmaMapperTest {
 
     @BeforeEach
     void setUp() {
-        turma = new Turma("Endereço", "Nome", "Tutor");
-        turmaDTORequest = new TurmaDTORequest("Endereço", "Nome", "Tutor");
-        turmaDTOResponse = new TurmaDTOResponse("Endereço", "Nome", "Tutor");
+        turma = new Turma("Endereço", "Nome", new Tutor("Tutor", "Tutor@email.com"));
+        turmaDTORequest = new TurmaDTORequest("Endereço", new TutorDTORequest("Tutor", "Tutor@email.com"), "Tutor");
+        turmaDTOResponse = new TurmaDTOResponse("Endereço", new TutorDTOResponse("Tutor", "Tutor@email.com"), "Tutor");
     }
 
     @Test
@@ -26,7 +30,8 @@ class TurmaMapperTest {
         turmaDTOResponse = TurmaMapper.mapToTurmaDTOResponse(turma);
         assertEquals(turmaDTOResponse.nome(), turma.getNome());
         assertEquals(turmaDTOResponse.endereco(), turma.getEndereco());
-        assertEquals(turmaDTOResponse.tutor(), turma.getTutor());
+        assertEquals(turmaDTOResponse.tutor().email(), turma.getTutor().getEmail());
+        assertEquals(turmaDTOResponse.tutor().nome(), turma.getTutor().getNome());
     }
 
     @Test
@@ -34,6 +39,7 @@ class TurmaMapperTest {
         turma = TurmaMapper.mapToTurma(turmaDTORequest);
         assertEquals(turma.getNome(), turmaDTORequest.nome());
         assertEquals(turma.getEndereco(), turmaDTORequest.endereco());
-        assertEquals(turma.getTutor(), turmaDTORequest.tutor());
+        assertEquals(turma.getTutor().getEmail(), turmaDTORequest.tutor().email());
+        assertEquals(turma.getTutor().getNome(), turmaDTORequest.tutor().nome());
     }
 }

@@ -23,11 +23,14 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Query;
 import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
+import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTORequest;
+import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTOResponse;
 import br.org.institutobushido.enums.admin.UserRole;
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
 import br.org.institutobushido.models.turma.Turma;
+import br.org.institutobushido.models.turma.tutor.Tutor;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
@@ -63,17 +66,17 @@ class TurmaServiceTest {
 
         turmaDTORequest = new TurmaDTORequest(
                 "Turma A",
-                "Nome",
+                new TutorDTORequest("Tutor", "Tutor@email.com"),
                 "Endereço I");
 
         turmaDTOResponse = new TurmaDTOResponse(
                 "Turma A",
-                "Tutor",
+                new TutorDTOResponse("Tutor", "Tutor@email.com"),
                 "Endereço I");
 
         turma = new Turma("Endereço I",
                 "Turma A",
-                "Tutor");
+                new Tutor("Tutor", "Tutor@email.com"));
     }
 
     @Test
@@ -81,9 +84,10 @@ class TurmaServiceTest {
         when(turmaRepositorio.save(any(Turma.class))).thenReturn(turma);
         when(adminRepositorio.findByEmailAdmin(anyString())).thenReturn(Optional.of(admin));
 
-        TurmaDTORequest novaTurma = new TurmaDTORequest("Endereço", "Nome", "Tutor");
+        TurmaDTORequest novaTurma = new TurmaDTORequest("Endereço", new TutorDTORequest("Tutor", "Tutor@email.com"),
+                "Tutor");
 
-        String result = turmaServices.criarNovaTurma("admin", novaTurma);
+        String result = turmaServices.criarNovaTurma(novaTurma);
         assertEquals("Turma " + novaTurma.nome() + " foi criada com sucesso!", result);
     }
 
@@ -91,15 +95,16 @@ class TurmaServiceTest {
     void deveLancarExcecaoQuandoTurmaJaExiste() {
         when(turmaRepositorio.findByNome(anyString())).thenReturn(Optional.of(turma));
         when(adminRepositorio.findByEmailAdmin(anyString())).thenReturn(Optional.of(admin));
-        assertThrows(AlreadyRegisteredException.class, () -> turmaServices.criarNovaTurma("admin", turmaDTORequest));
+        assertThrows(AlreadyRegisteredException.class, () -> turmaServices.criarNovaTurma(turmaDTORequest));
     }
 
     @Test
     void deveLancarExcecaoQuandoAdminNaoExiste() {
         when(turmaRepositorio.findByNome(anyString())).thenReturn(Optional.empty());
         when(adminRepositorio.findByEmailAdmin(anyString())).thenReturn(Optional.empty());
-        TurmaDTORequest novaTurma = new TurmaDTORequest("Turma B", "Tutor", "Endereço II");
-        assertThrows(EntityNotFoundException.class, () -> turmaServices.criarNovaTurma("adminNotFound", novaTurma));
+        TurmaDTORequest novaTurma = new TurmaDTORequest("Turma B", new TutorDTORequest("Tutor", "Tutor@email.com"),
+                "Endereço II");
+        assertThrows(EntityNotFoundException.class, () -> turmaServices.criarNovaTurma(novaTurma));
     }
 
     @Test
@@ -143,8 +148,8 @@ class TurmaServiceTest {
 
         when(turmaRepositorio.findAll()).thenReturn(List.of(
                 turma,
-                new Turma("Turma B", "Nome", "Tutor"),
-                new Turma("Turma C", "Nome", "Tutor")));
+                new Turma("Turma B", "Nome", new Tutor("Tutor", "Tutor@email.com")),
+                new Turma("Turma C", "Nome", new Tutor("Tutor", "Tutor@email.com"))));
 
         // Act
         List<TurmaDTOResponse> result = turmaServices.listarTurmas();

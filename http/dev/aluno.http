@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InR1dG9yQGVtYWlsLmNvbS5iciIsInN1YiI6InR1dG9yQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzU2NjIyM30.g1YeZ_mRGBD-mkOENq549Tqw72sJw-zFTGhnld1UnMY
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InR1dG9yQGVtYWlsLmNvbS5iciIsInN1YiI6InR1dG9yQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzU4NDYxNH0.tCyiu0Cdm9JLKcUdzFt5WNWzAo4pN8hSuLykPDtNG7s
 @rg=182482408
 
 GET {{url}}?nome=Lara Martins HTTP/1.1
@@ -71,6 +71,7 @@ Authorization: Bearer {{token}}
         "acompanhamentoSaude": []
     }
 }
+
 ###
 POST {{url}}/falta/{{rg}}/1712705754891 HTTP/1.1
 Content-Type: application/json
@@ -89,7 +90,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "nome":"Lara Martins"
+  "turma":"turma 4"
 }
 
 ###
@@ -130,5 +131,3 @@ Authorization: Bearer {{token}}
 POST {{url}}/graduacao/{{rg}}/reprovar HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
-
-

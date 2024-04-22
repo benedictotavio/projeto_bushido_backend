@@ -64,6 +64,7 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.models.turma.Turma;
+import br.org.institutobushido.models.turma.tutor.Tutor;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
@@ -177,7 +178,8 @@ class AlunoServiceTest {
 
                 when(alunoRepositorio.findByRg(anyString())).thenReturn(Optional.empty());
                 when(turmaRepositorio.findByNome(anyString()))
-                                .thenReturn(Optional.of(new Turma("Endereço II", "Turma A", "Tutor")));
+                                .thenReturn(Optional.of(new Turma("Endereço II", "Turma A",
+                                                new Tutor("Tutor", "Tutor@email.com"))));
                 when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
 
                 // Act

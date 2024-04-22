@@ -90,12 +90,9 @@ class AdminServicesTest {
     @Disabled("Teste pendente")
     void testLogin() {
         // Arrange
-        // Mock your Admin object
-        Admin admin = Mockito.mock(Admin.class);
+        Admin admin = Mockito.spy(Admin.class);
         Mockito.when(admin.getEmail()).thenReturn("test@example.com");
-
-        // Mock the Algorithm creation
-        Algorithm algorithmMock = Mockito.mock(Algorithm.class);
+        Algorithm algorithmMock = Mockito.spy(Algorithm.class);
         when(algorithmMock.sign(any())).thenReturn("token".getBytes());
 
         // Mock JWT
