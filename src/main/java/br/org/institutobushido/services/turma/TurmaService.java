@@ -3,8 +3,6 @@ package br.org.institutobushido.services.turma;
 import java.util.List;
 
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
-
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -12,7 +10,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
@@ -21,6 +18,7 @@ import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.turma.Turma;
+import br.org.institutobushido.models.turma.tutor.Tutor;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
@@ -41,7 +39,7 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Override
-    public String criarNovaTurma(String emailAdmin, TurmaDTORequest turma) {
+    public String criarNovaTurma(TurmaDTORequest turma) {
         boolean turmaExiste = this.verificaSeTurmaExiste(turma.nome());
 
         if (turmaExiste) {
@@ -50,10 +48,12 @@ public class TurmaService implements TurmaServiceInterface {
 
         Turma novaTurma = TurmaMapper.mapToTurma(turma);
 
-        Admin admin = this.vinculrTurmaAoAdmin(emailAdmin,
+        Admin admin = this.vinculrTurmaAoAdmin(turma.tutor().email(),
                 new TurmaResponsavel(novaTurma.getEndereco(), novaTurma.getNome()));
 
-        novaTurma.setTutor(admin.getNome());
+        novaTurma.setTutor(
+            new Tutor(admin.getNome(), admin.getEmail())
+        );
 
         this.turmaRepositorio.save(novaTurma);
         return "Turma " + turma.nome() + " foi criada com sucesso!";
@@ -84,7 +84,6 @@ public class TurmaService implements TurmaServiceInterface {
         return TurmaMapper.mapToListTurmaDTOResponse(turmas);
     }
 
-    @Cacheable(value = "turma", key = "#nomeTurma")
     @Override
     public TurmaDTOResponse buscarTurmaPorNome(String nomeTurma) {
         return TurmaMapper.mapToTurmaDTOResponse(this.encontrarTurmaPeloNome(nomeTurma));

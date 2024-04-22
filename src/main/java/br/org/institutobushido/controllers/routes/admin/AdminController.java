@@ -30,40 +30,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminController {
 
-    private AdminServiceInterface adminServices;
-    private AuthenticationManager authenticationManager;
+        private AdminServiceInterface adminServices;
+        private AuthenticationManager authenticationManager;
 
-    private static final String URI_ADMIN = "/api/V1/admin";
+        private static final String URI_ADMIN = "/api/V1/admin";
 
-    public AdminController(AdminServiceInterface adminServices, AuthenticationManager authenticationManager) {
-        this.adminServices = adminServices;
-        this.authenticationManager = authenticationManager;
-    }
+        public AdminController(AdminServiceInterface adminServices, AuthenticationManager authenticationManager) {
+                this.adminServices = adminServices;
+                this.authenticationManager = authenticationManager;
+        }
 
-    @PostMapping("signup")
-    public ResponseEntity<SuccessPostResponse> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest)
-            throws URISyntaxException {
-        this.adminServices.signup(signUpDTORequest);
-        return ResponseEntity.created(
-                new URI(
-                        URI_ADMIN))
-                .body(
-                        new SuccessPostResponse(signUpDTORequest.email(), "Admin criado com sucesso.",
-                                Admin.class.getSimpleName()));
-    }
+        @PostMapping("signup")
+        public ResponseEntity<SuccessPostResponse> signup(@Valid @RequestBody SignUpDTORequest signUpDTORequest)
+                        throws URISyntaxException {
+                this.adminServices.signup(signUpDTORequest);
+                return ResponseEntity.created(
+                                new URI(
+                                                URI_ADMIN))
+                                .body(
+                                                new SuccessPostResponse(signUpDTORequest.email(),
+                                                                "Admin criado com sucesso.",
+                                                                Admin.class.getSimpleName()));
+        }
 
-    @PostMapping("login")
-    public ResponseEntity<SuccessLoginAuthenticated> login(@Valid @RequestBody LoginDTORequest loginDTORequest) {
-        UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDTORequest.email(),
-                loginDTORequest.senha());
-        Authentication auth = this.authenticationManager.authenticate(login);
-        LoginDTOResponse admin = this.adminServices.login((Admin) auth.getPrincipal());
-        return ResponseEntity.ok().body(
-                new SuccessLoginAuthenticated(admin.token(), admin.role(),admin.turmas()));
-    }
+        @PostMapping("login")
+        public ResponseEntity<SuccessLoginAuthenticated> login(@Valid @RequestBody LoginDTORequest loginDTORequest) {
+                UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(
+                                loginDTORequest.email(),
+                                loginDTORequest.senha());
+                Authentication auth = this.authenticationManager.authenticate(login);
+                System.out.println("Admin:" + auth.getPrincipal());
+                LoginDTOResponse admin = this.adminServices.login((Admin) auth.getPrincipal());
+                return ResponseEntity.ok().body(
+                                new SuccessLoginAuthenticated(admin.token(), admin.role(), admin.turmas()));
+        }
 
-    @GetMapping("users")
-    public List<AdminDTOResponse> users(@RequestParam(name = "nome") String nome) {
-        return this.adminServices.buscarAdminPorNome(nome);
-    }
+        @GetMapping("users")
+        public List<AdminDTOResponse> users(@RequestParam(name = "nome") String nome) {
+                return this.adminServices.buscarAdminPorNome(nome);
+        }
 }

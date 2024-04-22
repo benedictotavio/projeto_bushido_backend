@@ -1,3 +1,26 @@
+function addTurmas() {
+    const admins = ["admin1", "admin2", "admin3"];
+    const turmas = ["turma 1", "turma 2", "turma 3"];
+
+    admins.forEach((admin) => {
+        db.admins.insertOne({
+            nome: admin,
+            email: admin + "@gmail.com",
+            senha: "123456",
+            cargo: "admin",
+            role: "ADMIN",
+            turmas: turmas.map((_, i) => {
+                db.turmas.insertOne({
+                    nome: "turma " + (i + 1),
+                    tutor: admin,
+                    endereco: "endereço " + (i + 1),
+                });
+                return "turma " + (i + 1);
+            }),
+        });
+    });
+}
+
 function addAlunos() {
     const primeiroNome = [
         "João",
@@ -17,7 +40,7 @@ function addAlunos() {
         "Lara",
         "Luciana",
         "Letiça",
-    ]
+    ];
 
     const sobrenome = [
         "Silva",
@@ -38,10 +61,10 @@ function addAlunos() {
         "Mendes",
         "Alves",
         "Moura",
-    ]
-    const totalDocuments = 6000
+    ];
+    const totalDocuments = 6000;
     const batchSize = 100;
-    let documents = []
+    let documents = [];
 
     function generateRg() {
         return Math.floor(Math.random() * 999999999);
@@ -71,13 +94,16 @@ function addAlunos() {
         return options[randomIndex];
     }
 
-    db.getSiblingDB("bushido_test")
+    db.getSiblingDB("bushido_test");
 
-    let index = 0
+    let index = 0;
 
     for (let i = 0; i < totalDocuments; i++) {
-        index++
-        const nome = primeiroNome[Math.floor(Math.random() * primeiroNome.length)] + " " + sobrenome[Math.floor(Math.random() * sobrenome.length)]
+        index++;
+        const nome =
+            primeiroNome[Math.floor(Math.random() * primeiroNome.length)] +
+            " " +
+            sobrenome[Math.floor(Math.random() * sobrenome.length)];
 
         const document = {
             _id: generateRg().toString(),
@@ -85,78 +111,74 @@ function addAlunos() {
             dataNascimento: getRandomDateTenYearsAgo(),
             genero: getRandomGender(),
             turma: getRandomTurma(),
-            "dadosEscolares": {
-                "turno": "TARDE",
-                "escola": "Emef Luis Ziraldo",
-                "serie": "5"
+            dadosEscolares: {
+                turno: "TARDE",
+                escola: "Emef Luis Ziraldo",
+                serie: "5",
             },
-            "dataPreenchimento": new Date(),
-            "endereco": {
-                "cidade": "Osasco",
-                "estado": "SP",
-                "cep": "06140-140",
-                "numero": ""
+            dataPreenchimento: new Date(),
+            endereco: {
+                cidade: "Osasco",
+                estado: "SP",
+                cep: "06140-140",
+                numero: "",
             },
-            "dadosSociais": {
-                "bolsaFamilia": true,
-                "auxilioBrasil": true,
-                "imovel": "ALUGADO",
-                "numerosDePessoasNaCasa": 5,
-                "contribuintesDaRendaFamiliar": 2,
-                "alunoContribuiParaRenda": false,
-                "rendaFamiliar": 0
+            dadosSociais: {
+                bolsaFamilia: true,
+                auxilioBrasil: true,
+                imovel: "ALUGADO",
+                numerosDePessoasNaCasa: 5,
+                contribuintesDaRendaFamiliar: 2,
+                alunoContribuiParaRenda: false,
+                rendaFamiliar: Math.random() * 100000,
             },
-            "responsaveis": [
+            responsaveis: [
                 {
-                    "nome": "Marcio Domingues",
-                    "cpf": "45961366880",
-                    "telefone": "11973800547",
-                    "email": "otavio.bene2212@gmail.com",
-                    "filiacao": "PAI"
-                }
+                    nome: "Marcio Domingues",
+                    cpf: "45961366880",
+                    telefone: "11973800547",
+                    email: "otavio.bene2212@gmail.com",
+                    filiacao: "PAI",
+                },
             ],
-            "graduacao": [
+            graduacao: [
                 {
-                    "kyu": 1,
-                    "faltas": [],
-                    "status": true,
-                    "frequencia": 100,
-                    "inicioGraduacao": new Date("2024-04-13T03:00:00.000Z"),
-                    "fimGraduacao": new Date("2024-08-13T03:00:00.000Z"),
-                    "aprovado": false,
-                    "cargaHoraria": 0,
-                    "dan": 4
-                }
+                    kyu: 1,
+                    faltas: [],
+                    status: true,
+                    frequencia: 100,
+                    inicioGraduacao: new Date("2024-04-13T03:00:00.000Z"),
+                    fimGraduacao: new Date("2024-08-13T03:00:00.000Z"),
+                    aprovado: false,
+                    cargaHoraria: 0,
+                    dan: 4,
+                },
             ],
-            "historicoSaude": {
-                "tipoSanguineo": "A_NEGATIVO",
-                "usoMedicamentoContinuo": {
-                    "resposta": true,
-                    "tipo": "11111111111"
+            historicoSaude: {
+                tipoSanguineo: "A_NEGATIVO",
+                usoMedicamentoContinuo: {
+                    resposta: true,
+                    tipo: "11111111111",
                 },
-                "doencaCronica": {
-                    "resposta": false,
-                    "tipo": ""
+                doencaCronica: {
+                    resposta: false,
+                    tipo: "",
                 },
-                "alergia": {
-                    "resposta": false,
-                    "tipo": ""
+                alergia: {
+                    resposta: false,
+                    tipo: "",
                 },
-                "cirurgia": {
-                    "resposta": false,
-                    "tipo": ""
+                cirurgia: {
+                    resposta: false,
+                    tipo: "",
                 },
-                "deficiencias": [
-                    "ddddddddd"
-                ],
-                "acompanhamentoSaude": [
-                    "dddddddddd"
-                ]
+                deficiencias: ["ddddddddd"],
+                acompanhamentoSaude: ["dddddddddd"],
             },
-            "_class": "br.org.institutobushido.models.aluno.Aluno"
+            _class: "br.org.institutobushido.models.aluno.Aluno",
         };
 
-        documents.push(document)
+        documents.push(document);
 
         if (documents.length === batchSize || i === totalDocuments - 1) {
             db.alunos.insertMany(documents);
@@ -170,4 +192,4 @@ function addAlunos() {
     print("Inserted " + totalDocuments + " documents");
 }
 
-addAlunos()
+addAlunos();

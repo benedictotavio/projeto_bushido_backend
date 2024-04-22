@@ -30,24 +30,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TurmaController {
 
     private final TurmaServiceInterface turmaService;
-    
-    private static final String URI_TURMA="/api/V1/turma";
+
+    private static final String URI_TURMA = "/api/V1/turma";
 
     public TurmaController(TurmaServiceInterface turmaService) {
         this.turmaService = turmaService;
     }
 
-    @PostMapping("{emailAdmin}")
-    public ResponseEntity<SuccessPostResponse> criarNovaTurma(@Valid() @RequestBody TurmaDTORequest turmaDTORequest,
-            @PathVariable String emailAdmin) throws URISyntaxException {
-        String res = this.turmaService.criarNovaTurma(emailAdmin, turmaDTORequest);
+    @PostMapping
+    public ResponseEntity<SuccessPostResponse> criarNovaTurma(@Valid @RequestBody TurmaDTORequest turmaDTORequest)
+            throws URISyntaxException {
+        String res = this.turmaService.criarNovaTurma(turmaDTORequest);
         return ResponseEntity.created(
-            new URI(
-                URI_TURMA
-            )
-        ).body(
-                new SuccessPostResponse(turmaDTORequest.nome(), res,
-                        Turma.class.getSimpleName()));
+                new URI(
+                        URI_TURMA))
+                .body(
+                        new SuccessPostResponse(turmaDTORequest.nome(), res,
+                                Turma.class.getSimpleName()));
     }
 
     @DeleteMapping("{nomeTurma}/{emailAdmin}")
