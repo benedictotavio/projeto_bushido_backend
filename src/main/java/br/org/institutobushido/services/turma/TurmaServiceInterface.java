@@ -2,7 +2,7 @@ package br.org.institutobushido.services.turma;
 
 import java.util.List;
 
-import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
+import br.org.institutobushido.controllers.dtos.turma.DadosTurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 
@@ -15,5 +15,5 @@ public interface TurmaServiceInterface {
 
     TurmaDTOResponse buscarTurmaPorNome(String nomeTurma);
 
-    public List<TurmaAlunoDTOResponse> listarAlunosDaTurma(String nomeTurma);
+    DadosTurmaDTOResponse listarAlunosDaTurma(String nomeTurma);
 }

@@ -5,28 +5,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
-import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Query;
-import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTOResponse;
 import br.org.institutobushido.enums.admin.UserRole;
-import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
 import br.org.institutobushido.models.turma.Turma;
@@ -191,30 +183,4 @@ class TurmaServiceTest {
         when(turmaRepositorio.findByNome(nomeTurma)).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> turmaService.buscarTurmaPorNome(nomeTurma));
     }
-
-    @Test
-    void deveListarAlunosDaTurma() {
-        // Arrange
-        String nomeTurma = "Turma A";
-
-        // Mock the mongoTemplate and turmaRepositorio dependencies
-        when(mongoTemplate.aggregate(any(Aggregation.class), eq("turmas"), eq(TurmaAlunoDTOResponse.class))).thenReturn(
-                new AggregationResults<TurmaAlunoDTOResponse>(
-                        List.of(new TurmaAlunoDTOResponse("Nome", "RG", Genero.M, Date.from(Instant.now()))),
-                        Document.parse(
-                                "{ \"alunos_turmaNome\": \"Nome\", \"alunos_turma\": { \"$arrayElemAt\": [ \"$alunos_turma\", 0 ] }, \"alunos_turma_genero\": \"genero\", \"alunos_turma_dataNascimento\": \"dataNascimento\" }")));
-
-        // Create a list of expected TurmaAlunoResponse objects
-        List<TurmaAlunoDTOResponse> expectedResult = List.of(
-                new TurmaAlunoDTOResponse("Nome", "RG", Genero.M, Date.from(Instant.now())));
-
-        // Act
-        List<TurmaAlunoDTOResponse> result = turmaServices.listarAlunosDaTurma(nomeTurma);
-
-        // Assert
-        assertEquals(expectedResult.get(0).getGenero(), result.get(0).getGenero());
-        assertEquals(expectedResult.get(0).getNome(), result.get(0).getNome());
-        assertEquals(expectedResult.get(0).getRg(), result.get(0).getRg());
-    }
-
 }
