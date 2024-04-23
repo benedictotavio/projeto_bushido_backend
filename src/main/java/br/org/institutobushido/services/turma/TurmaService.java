@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
+import br.org.institutobushido.controllers.dtos.turma.DadosTurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
@@ -52,8 +54,7 @@ public class TurmaService implements TurmaServiceInterface {
                 new TurmaResponsavel(novaTurma.getEndereco(), novaTurma.getNome()));
 
         novaTurma.setTutor(
-            new Tutor(admin.getNome(), admin.getEmail())
-        );
+                new Tutor(admin.getNome(), admin.getEmail()));
 
         this.turmaRepositorio.save(novaTurma);
         return "Turma " + turma.nome() + " foi criada com sucesso!";
@@ -90,7 +91,12 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Override
-    public List<TurmaAlunoDTOResponse> listarAlunosDaTurma(String nomeTurma) {
+    public DadosTurmaDTOResponse listarAlunosDaTurma(String nomeTurma) {
+        Turma turma = this.encontrarTurmaPeloNome(nomeTurma);
+        return new DadosTurmaDTOResponse(turma.getTutor().getEmail(), this.listarAlunosAtivosDaTurma(nomeTurma));
+    }
+
+    private List<TurmaAlunoDTOResponse> listarAlunosAtivosDaTurma(String nomeTurma) {
         AggregationOperation match = Aggregation.match(Criteria.where("nome").is(nomeTurma));
 
         AggregationOperation lookup = Aggregation.lookup("alunos", "nome", "turma", "alunos_turma");
@@ -134,7 +140,8 @@ public class TurmaService implements TurmaServiceInterface {
 
     private boolean vefrificarSeExistemAlunosAtivosNaTurma(String nomeTurma) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("turma").is(nomeTurma).and("graduacao").elemMatch(Criteria.where("status").is(true)));
+        query.addCriteria(
+                Criteria.where("turma").is(nomeTurma).and("graduacao").elemMatch(Criteria.where("status").is(true)));
         return this.mongoTemplate.exists(query, Aluno.class);
     }
 

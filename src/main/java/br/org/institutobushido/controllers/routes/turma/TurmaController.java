@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.mongodb.MongoException;
-
-import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
+import br.org.institutobushido.controllers.dtos.turma.DadosTurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
@@ -69,14 +67,13 @@ public class TurmaController {
         return ResponseEntity.ok().body(turma);
     }
 
-    @GetMapping("{nome}/alunos")
-    public List<TurmaAlunoDTOResponse> listarAlunoPorTurma(@PathVariable String nome) {
+    @GetMapping("{nomeTurma}/alunos")
+    public DadosTurmaDTOResponse listarAlunoPorTurma(@PathVariable String nomeTurma) {
         try {
-            return this.turmaService.listarAlunosDaTurma(nome);
+            return this.turmaService.listarAlunosDaTurma(nomeTurma);
         } catch (Exception e) {
             throw new MongoException(e.getMessage());
         }
-
     }
 
 }
