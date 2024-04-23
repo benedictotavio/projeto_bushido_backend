@@ -1079,8 +1079,6 @@ POST /aluno/acompanhamentoSaude/{rg}?acompanhamento=string
 ```
 
 </details>
-</details>
-</p>
 
 ## Remover acompanhamento de saúde do aluno
 
@@ -1124,7 +1122,6 @@ DELETE /aluno/acompanhamentoSaude/{rg}
 ```
 
 </details>
-</details>
 <details>
 <summary><i>400</i></summary>
 
@@ -1139,8 +1136,6 @@ DELETE /aluno/acompanhamentoSaude/{rg}
 ```
 
 </details>
-</details>
-</p>
 
 # Turma
 
@@ -1153,13 +1148,17 @@ Cria uma nova turma com um admin
 - **email_admin:** string
 
 ```http
-POST /turma/{email_admin}
+POST /turma
 ```
 
 ```body
 {
     "nome": "string",
-    "endereco": "string"
+    "endereco": "string",
+    "tutor": {
+        "nome":"string",
+        "email": "string"
+    }
 }
 ```
 
@@ -1193,13 +1192,8 @@ POST /turma/{email_admin}
 ```
 
 </details>
-</details>
-</p>
-
-
 
 ## Deletar turma
-
 
 Deletar uma turma sem alunos ativos
 
@@ -1256,7 +1250,6 @@ DELETE /turma/{nome_turma}/{email_admin}
 ```
 
 </details>
-</p>
 
 ## Buscar todas as turmas
 
@@ -1276,19 +1269,24 @@ GET /turma
 [
   {
     "nome": "string",
-    "tutor": "string",
+    "tutor": {
+      "nome":"string",
+      "email": "string"
+    },
     "endereco": "string"
   },
   {
     "nome": "string",
-    "tutor": "string",
+    "tutor": {
+      "nome":"string",
+      "email": "string"
+    },
     "endereco": "string"
-  },
+  }
 ]
 ```
 
 </details>
-</p>
 
 ## Buscar turma pelo nome
 
@@ -1311,13 +1309,15 @@ GET /admin/{nome_turma}
 ```json
 {
   "nome": "string",
-  "tutor": "string",
+  "tutor": {
+    "nome":"string",
+    "email": "string"
+  },
   "endereco": "string"
 }
 ```
 
 </details>
-</p>
 
 ## Buscar alunos pela turma
 
@@ -1350,7 +1350,7 @@ GET /admin/{nome_turma}/alunos
     "rg": "string",
     "genero": "F",
     "dataNascimento": "2014-03-04T18:39:50.969+00:00"
-  },
+  }
 ]
 ```
 
@@ -1369,4 +1369,3 @@ GET /admin/{nome_turma}/alunos
 ```
 
 </details>
-</p>
