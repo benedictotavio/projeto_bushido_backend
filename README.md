@@ -1257,10 +1257,12 @@ DELETE /turma/{nome_turma}/{email_admin}
 
 #### Request
 - Parametros Opcionais
-  - **dataInicial**: long
-  formato: UTC datetime in milliseconds
-exemplo: 1609459200000
-  - **dataFinal**: long 
+  - **dataInicial**: inteiro
+    - formato: UTC datetime in milliseconds
+    - exemplo: 1609459200000
+  - **dataFinal**: inteiro
+    - formato: UTC datetime in milliseconds
+    - exemplo: 1609459200000
 
 ```http
 GET /turma
