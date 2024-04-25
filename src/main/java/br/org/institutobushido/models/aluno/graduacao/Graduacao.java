@@ -7,11 +7,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import br.org.institutobushido.models.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.resources.exceptions.InactiveUserException;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.utils.ValoresPadraoGraduacao;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -30,36 +32,49 @@ public class Graduacao implements Serializable {
     boolean aprovado;
     int cargaHoraria;
     int dan;
+    int nota;
 
     public Graduacao(int kyu, int dan) {
 
-        if (kyu < 1 || kyu > 7) {
-            throw new IllegalArgumentException("O kyu deve estar entre 1 a 7");
+        if (kyu > ValoresPadraoGraduacao.PRIMEIRO_KYU) {
+            throw new IllegalArgumentException("O kyu deve estar entre até 7");
         }
 
-        if (kyu == 1) {
-            this.kyu = 1;
-            this.frequencia = 100;
+        if (kyu == 0 && dan == 0) {
+            throw new LimitQuantityException("informe corretamente o kyu ou o dan");
+        }
+
+        if (kyu <= 0) {
+            this.kyu = 0;
+            this.frequencia = ValoresPadraoGraduacao.FREQUENCIA_TOTAL;
             this.faltas = new ArrayList<>();
             this.status = true;
             this.inicioGraduacao = LocalDate.now();
             this.fimGraduacao = LocalDate.now().plusMonths(4);
             this.aprovado = false;
-            this.cargaHoraria = 0;
+            this.cargaHoraria = ValoresPadraoGraduacao.CARGA_HORARIA_INICIAL;
             this.dan = dan > 0 ? dan : 1;
+            this.nota = 0;
             return;
         }
 
         this.kyu = kyu;
-        this.dan = 1;
-        this.frequencia = 100;
+        this.dan = 0;
+        this.frequencia = ValoresPadraoGraduacao.FREQUENCIA_TOTAL;
         this.faltas = new ArrayList<>();
         this.status = true;
         this.inicioGraduacao = LocalDate.now();
         this.fimGraduacao = LocalDate.now().plusMonths(4);
         this.aprovado = false;
-        this.cargaHoraria = 0;
+        this.cargaHoraria = ValoresPadraoGraduacao.CARGA_HORARIA_INICIAL;
+        this.nota = 0;
+    }
 
+    public void setNota(int nota) {
+        if (nota < ValoresPadraoGraduacao.MENOR_NOTA_POSSIVEL || nota > ValoresPadraoGraduacao.MAIOR_NOTA_POSSIVEL) {
+            throw new LimitQuantityException("A nota deve estar entre 0 e 10");
+        }
+        this.nota = nota;
     }
 
     public void setFimGraduacao(LocalDate fimGraduacao) {
@@ -76,6 +91,10 @@ public class Graduacao implements Serializable {
     }
 
     public void setKyu(int kyu) {
+        if (kyu < 0) {
+            this.kyu = 0;
+        }
+
         this.kyu = kyu;
     }
 
@@ -97,7 +116,7 @@ public class Graduacao implements Serializable {
     public void setInicioGraduacao(LocalDate inicioGraduacao) {
 
         if (inicioGraduacao.isBefore(LocalDate.now())) {
-            throw new LimitQuantityException("O inicio da graduação deve ser menor que o fim da graduação");
+            throw new LimitQuantityException("O inicio da graduação não pode ser menor que a data atual");
         }
 
         this.inicioGraduacao = inicioGraduacao;
@@ -105,7 +124,7 @@ public class Graduacao implements Serializable {
 
     public Falta adicionarFalta(String motivo, String observacao, long data) {
 
-        if (!this.status) {
+        if (!this.isStatus()) {
             throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
         }
 
@@ -121,6 +140,12 @@ public class Graduacao implements Serializable {
 
         if (faltaEstaRegistrada) {
             throw new AlreadyRegisteredException("Ja existe uma falta para esta data");
+        }
+
+        if (this.definirQuantidadeSemanasNaGraduacao(this.getInicioGraduacao(),
+                this.getFimGraduacao()) > ValoresPadraoGraduacao.NUMERO_MINIMO_DE_SEMANAS
+                && this.getCargaHoraria() <= ValoresPadraoGraduacao.CARGA_HORARIA_INICIAL + 1) {
+            throw new LimitQuantityException("Aulas insuficientes para o aluno");
         }
 
         this.faltas.add(novaFalta);
@@ -139,10 +164,14 @@ public class Graduacao implements Serializable {
         this.aprovado = aprovado;
     }
 
-    public Graduacao aprovacao() {
+    public Graduacao aprovacao(int notaDaProva) {
 
         if (!this.status) {
             throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
+        }
+
+        if (notaDaProva < ValoresPadraoGraduacao.NOTA_MINIMA_APROVACAO) {
+            throw new LimitQuantityException("Para aprovar o aluno, a nota deve ser maior que 6");
         }
 
         setFimGraduacao(LocalDate.now());
@@ -150,40 +179,55 @@ public class Graduacao implements Serializable {
         setAprovado(true);
         setCargaHoraria(definirCargaHoraria());
         setFrequencia(definirFrequencia());
+        setNota(notaDaProva);
         return this;
     }
 
-    public void reprovacao() {
+    public void reprovacao(int notaDaProva) {
+
+        if (notaDaProva > ValoresPadraoGraduacao.NOTA_MINIMA_APROVACAO) {
+            throw new LimitQuantityException("Para reprovar o aluno, a nota ser menor que 6");
+        }
+
         setFimGraduacao(LocalDate.now());
         setStatus(false);
         setAprovado(false);
         setCargaHoraria(definirCargaHoraria());
         setFrequencia(definirFrequencia());
+        setNota(notaDaProva);
     }
 
     public int definirFrequencia() {
 
-        long weeksBetween = ChronoUnit.WEEKS.between(this.getInicioGraduacao(), this.getFimGraduacao());
+        long quantidadeSemanasNaGraduacao = this.definirQuantidadeSemanasNaGraduacao(this.getInicioGraduacao(),
+                this.getFimGraduacao());
 
-        if (weeksBetween <= 0) {
-            return 100;
+        if (quantidadeSemanasNaGraduacao < ValoresPadraoGraduacao.NUMERO_MINIMO_DE_SEMANAS) {
+            return ValoresPadraoGraduacao.FREQUENCIA_TOTAL;
         }
 
-        long totalHoursInGraduation = (weeksBetween * 3);
+        long totalHoursInGraduation = (quantidadeSemanasNaGraduacao
+                * ValoresPadraoGraduacao.CARGA_HORARIA_SEMANAL_HORAS);
         setFrequencia((int) ((this.cargaHoraria * 100) / totalHoursInGraduation));
         return this.frequencia;
     }
 
     public int definirCargaHoraria() {
 
-        long weeksBetween = ChronoUnit.WEEKS.between(this.getInicioGraduacao(), this.getFimGraduacao());
+        long quantidadeSemanasNaGraduacao = this.definirQuantidadeSemanasNaGraduacao(this.getInicioGraduacao(),
+                this.getFimGraduacao());
 
-        if (weeksBetween <= 0) {
-            return 0;
+        if (quantidadeSemanasNaGraduacao <= ValoresPadraoGraduacao.NUMERO_MINIMO_DE_SEMANAS) {
+            return ValoresPadraoGraduacao.CARGA_HORARIA_INICIAL;
         }
 
-        setCargaHoraria((int) ((weeksBetween * 3) - (this.faltas.size() * 1)));
+        setCargaHoraria((int) ((quantidadeSemanasNaGraduacao * ValoresPadraoGraduacao.CARGA_HORARIA_SEMANAL_HORAS)
+                - (this.faltas.size() * 1)));
         return this.cargaHoraria;
+    }
+
+    private long definirQuantidadeSemanasNaGraduacao(LocalDate inicioGraduacao, LocalDate fimGraduacao) {
+        return ChronoUnit.WEEKS.between(inicioGraduacao, fimGraduacao);
     }
 
     public int getKyu() {
@@ -210,6 +254,10 @@ public class Graduacao implements Serializable {
         return LocalDate.now();
     }
 
+    public int getNota() {
+        return nota;
+    }
+
     public boolean isAprovado() {
         return aprovado;
     }
@@ -220,5 +268,24 @@ public class Graduacao implements Serializable {
 
     public int getDan() {
         return dan;
+    }
+
+    public static Graduacao gerarNovaGraduacao(int kyu, int dan) {
+
+        Graduacao novaGraduacao = new Graduacao(kyu, dan);
+
+        if (kyu == 1) {
+            novaGraduacao.setKyu(kyu - 1);
+            novaGraduacao.setDan(1);
+            return novaGraduacao;
+        }
+
+        if (kyu == 0) {
+            novaGraduacao.setDan(dan + 1);
+            return novaGraduacao;
+        }
+
+        novaGraduacao.setKyu(kyu - 1);
+        return novaGraduacao;
     }
 }

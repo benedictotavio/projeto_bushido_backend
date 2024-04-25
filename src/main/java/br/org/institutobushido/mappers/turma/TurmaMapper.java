@@ -34,6 +34,7 @@ public class TurmaMapper {
                         new TutorDTOResponse(
                                 turma.getTutor().getNome(),
                                 turma.getTutor().getEmail()))
+                .withDataCriacao(turma.getDataCriacao())
                 .build();
     }
 

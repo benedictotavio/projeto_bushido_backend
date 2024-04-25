@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
+
 @SpringBootTest
 class TurmaMapperTest {
     private Turma turma;
@@ -22,7 +24,7 @@ class TurmaMapperTest {
     void setUp() {
         turma = new Turma("Endereço", "Nome", new Tutor("Tutor", "Tutor@email.com"));
         turmaDTORequest = new TurmaDTORequest("Endereço", new TutorDTORequest("Tutor", "Tutor@email.com"), "Tutor");
-        turmaDTOResponse = new TurmaDTOResponse("Endereço", new TutorDTOResponse("Tutor", "Tutor@email.com"), "Tutor");
+        turmaDTOResponse = new TurmaDTOResponse("Endereço", new TutorDTOResponse("Tutor", "Tutor@email.com"), "Tutor", LocalDate.now());
     }
 
     @Test

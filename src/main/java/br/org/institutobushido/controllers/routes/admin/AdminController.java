@@ -59,7 +59,6 @@ public class AdminController {
                                 loginDTORequest.email(),
                                 loginDTORequest.senha());
                 Authentication auth = this.authenticationManager.authenticate(login);
-                System.out.println("Admin:" + auth.getPrincipal());
                 LoginDTOResponse admin = this.adminServices.login((Admin) auth.getPrincipal());
                 return ResponseEntity.ok().body(
                                 new SuccessLoginAuthenticated(admin.token(), admin.role(), admin.turmas()));

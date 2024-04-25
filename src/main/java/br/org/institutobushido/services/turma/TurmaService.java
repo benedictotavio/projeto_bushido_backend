@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import br.org.institutobushido.controllers.dtos.turma.DadosTurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
@@ -42,9 +41,8 @@ public class TurmaService implements TurmaServiceInterface {
 
     @Override
     public String criarNovaTurma(TurmaDTORequest turma) {
-        boolean turmaExiste = this.verificaSeTurmaExiste(turma.nome());
 
-        if (turmaExiste) {
+        if (this.verificaSeTurmaExiste(turma.nome())) {
             throw new AlreadyRegisteredException("Turma " + turma.nome() + " ja está registrada.");
         }
 
@@ -63,9 +61,7 @@ public class TurmaService implements TurmaServiceInterface {
     @Override
     public String deletarTurma(String emailAdmin, String nomeTurma) {
 
-        boolean turmaExiste = this.verificaSeTurmaExiste(nomeTurma);
-
-        if (!turmaExiste) {
+        if (!this.verificaSeTurmaExiste(nomeTurma)) {
             throw new EntityNotFoundException("Turma com esse nome não existe");
         }
 
@@ -115,7 +111,8 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     private boolean verificaSeTurmaExiste(String nomeTurma) {
-        return this.turmaRepositorio.findByNome(nomeTurma).isPresent();
+        Query query = new Query(Criteria.where("nome").regex(nomeTurma, "si"));
+        return this.mongoTemplate.exists(query, Turma.class);
     }
 
     private Admin vinculrTurmaAoAdmin(String emailAdmin, TurmaResponsavel turma) {
@@ -146,8 +143,14 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     private Turma encontrarTurmaPeloNome(String nomeTurma) {
-        return this.turmaRepositorio.findByNome(nomeTurma).orElseThrow(
-                () -> new EntityNotFoundException("Turma com esse nome não existe"));
+        Query query = new Query(Criteria.where("nome").regex(nomeTurma, "si"));
+        Turma turma = this.mongoTemplate.findOne(query, Turma.class);
+
+        if (turma == null) {
+            throw new EntityNotFoundException("Turma com esse nome não existe");
+        }
+
+        return turma;
     }
 
     private Admin encontrarAdminPeloEmail(String email) {

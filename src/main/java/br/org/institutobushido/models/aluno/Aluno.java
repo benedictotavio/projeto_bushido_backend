@@ -21,6 +21,7 @@ import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.utils.ValoresPadraoResponsavel;
 import lombok.Getter;
 
 @Getter
@@ -131,7 +132,7 @@ public class Aluno implements Serializable {
 
     public Responsavel adicionarResponsavel(Responsavel novoResponsavel) {
 
-        if (this.getResponsaveis().size() >= 5) {
+        if (this.getResponsaveis().size() >= ValoresPadraoResponsavel.MAXIMO_DE_RESPONSAVEIS) {
             throw new LimitQuantityException("O Aluno so pode ter até 5 responsaveis!");
         }
 
@@ -155,7 +156,7 @@ public class Aluno implements Serializable {
 
     public String removerResponsavel(String cpf) {
 
-        if (this.getResponsaveis().size() == 1) {
+        if (this.getResponsaveis().size() == ValoresPadraoResponsavel.MINIMO_DE_RESPONSAVEIS) {
             throw new LimitQuantityException("O aluno deve ter pelo menos 1 responsavel!");
         }
 

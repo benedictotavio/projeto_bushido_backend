@@ -487,7 +487,8 @@ POST /aluno
     "cidade": "string",
     "estado": "string",
     "cep":"string",
-    "numero":"string"
+    "numero":"string",
+    "logradouro":"string"
   },
   "rg": "{rg}",
   "responsaveis": {
@@ -638,7 +639,8 @@ PUT /aluno/{rg}
     "cidade": "string",
     "estado": "string",
     "cep":"string",
-    "numero":"string"
+    "numero":"string",
+    "logradouro":"string"
   }
 }
 ```

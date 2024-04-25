@@ -3,6 +3,7 @@ package br.org.institutobushido.services.aluno;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -243,9 +244,9 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public GraduacaoDTOResponse aprovarAluno(String rg) {
+    public GraduacaoDTOResponse aprovarAluno(String rg, int notaDaProva) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
-        Graduacao graduacaoAtual = alunoEncontrado.getGraduacaoAtual().aprovacao();
+        Graduacao graduacaoAtual = alunoEncontrado.getGraduacaoAtual().aprovacao(notaDaProva);
 
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
@@ -260,10 +261,10 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public GraduacaoDTOResponse reprovarAluno(String rg) {
+    public GraduacaoDTOResponse reprovarAluno(String rg, int notaDaProva) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
         Graduacao graduacaoAtual = alunoEncontrado.getGraduacaoAtual();
-        graduacaoAtual.reprovacao();
+        graduacaoAtual.reprovacao(notaDaProva);
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(alunoEncontrado.getRg()));
         Update update = new Update();
@@ -282,18 +283,10 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     public void adicionarNovaGraduacao(String rg, int kyu, int danAtual) {
-        Graduacao novaGraduacao = new Graduacao(kyu, danAtual);
-
-        if (kyu == 1) {
-            novaGraduacao.setDan(danAtual + 1);
-        } else {
-            novaGraduacao.setKyu(kyu - 1);
-        }
-
         Query query = new Query();
         query.addCriteria(Criteria.where("rg").is(rg));
         Update update = new Update();
-        update.push(GRADUACAO, novaGraduacao);
+        update.push(GRADUACAO, Graduacao.gerarNovaGraduacao(kyu, danAtual));
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 

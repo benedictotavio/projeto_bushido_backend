@@ -1,5 +1,25 @@
 package br.org.institutobushido.controllers.routes.aluno;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -23,7 +43,11 @@ import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTO
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPutResponse;
-import br.org.institutobushido.enums.aluno.*;
+import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
+import br.org.institutobushido.enums.aluno.Genero;
+import br.org.institutobushido.enums.aluno.Imovel;
+import br.org.institutobushido.enums.aluno.TipoSanguineo;
+import br.org.institutobushido.enums.aluno.Turno;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
@@ -36,24 +60,6 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.services.aluno.AlunoServicesInterface;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class AlunoControllerTest {
@@ -90,7 +96,8 @@ class AlunoControllerTest {
                                                 "CIDADE",
                                                 "ESTADO",
                                                 "CEP",
-                                                "100"));
+                                                "100",
+                                                "LOGRADOURO"));
 
                 aluno.setDadosSociais(
                                 new DadosSociais(
@@ -114,7 +121,7 @@ class AlunoControllerTest {
 
                 aluno.adicionarGraduacao(
                                 new Graduacao(7, new ArrayList<>(), true, 100, LocalDate.now().minusMonths(3),
-                                                LocalDate.now().plusMonths(3), false, 80, 1));
+                                                LocalDate.now().plusMonths(3), false, 80, 1, 10));
 
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
@@ -140,7 +147,8 @@ class AlunoControllerTest {
                                                 "CIDADE",
                                                 "ESTADO",
                                                 "CEP",
-                                                "100"),
+                                                "100",
+                                                "LOGRADOURO"),
                                 "123456789",
                                 new ResponsavelDTORequest("Nome", "12345678901", "Email", "Telefone",
                                                 FiliacaoResposavel.OUTRO),
@@ -171,7 +179,8 @@ class AlunoControllerTest {
                                 100,
                                 false,
                                 80,
-                                1);
+                                1,
+                                10);
         }
 
         @Test
@@ -242,7 +251,8 @@ class AlunoControllerTest {
                                                 "CIDADE",
                                                 "ESTADO",
                                                 "CEP",
-                                                "100"),
+                                                "100",
+                                                ""),
                                 new UpdateHistoricoSaudeDTORequest(
                                                 TipoSanguineo.O_POSITIVO,
                                                 new UsoMedicamentoContinuoDTORequest("Tipo"),
@@ -301,7 +311,6 @@ class AlunoControllerTest {
                 // Verify response body
                 SuccessPostResponse responseBody = responseEntity.getBody();
                 assert responseBody != null;
-                System.out.println(responseBody.toString());
                 assertEquals(responsavelDTORequest.cpf(), responseBody.getId());
                 assertEquals("Responsável adicionado com sucesso", responseBody.getMessage());
                 assertEquals("Responsavel", responseBody.getEntity());
@@ -485,18 +494,19 @@ class AlunoControllerTest {
         void deveAprovarAluno() {
                 // Arrange
                 String rg = "123456789";
+                int nota = 10;
 
                 // Mock service method
-                when(alunoServices.aprovarAluno(rg)).thenReturn(graduacaoDTOResponse);
+                when(alunoServices.aprovarAluno(rg, nota)).thenReturn(graduacaoDTOResponse);
 
                 // Act
-                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.aprovarAluno(rg);
+                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.aprovarAluno(rg, nota);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct argument
-                verify(alunoServices).aprovarAluno(rg);
+                verify(alunoServices).aprovarAluno(rg, nota);
 
                 // Verify response body
                 SuccessPostResponse responseBody = responseEntity.getBody();
@@ -510,18 +520,19 @@ class AlunoControllerTest {
         void deveReprovarAluno() {
                 // Arrange
                 String rg = "123456789";
+                int nota = 5;
 
                 // Mock service method
-                when(alunoServices.reprovarAluno(rg)).thenReturn(graduacaoDTOResponse);
+                when(alunoServices.reprovarAluno(rg, nota)).thenReturn(graduacaoDTOResponse);
 
                 // Act
-                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.reprovarAluno(rg);
+                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.reprovarAluno(rg, nota);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct argument
-                verify(alunoServices).reprovarAluno(rg);
+                verify(alunoServices).reprovarAluno(rg, nota);
 
                 // Verify response body
                 SuccessPostResponse responseBody = responseEntity.getBody();

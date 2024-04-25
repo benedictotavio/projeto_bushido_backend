@@ -30,10 +30,10 @@ public class SecurityFilter extends OncePerRequestFilter {
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
+    @SuppressWarnings("null")
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         var token = this.recoverToken(request);
-
         try {
             if (token != null) {
                 var login = this.adminServices.validateToken(token);

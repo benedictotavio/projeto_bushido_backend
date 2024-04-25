@@ -5,7 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
@@ -21,6 +24,7 @@ import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTOResponse;
 import br.org.institutobushido.enums.admin.UserRole;
 import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
+import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.models.turma.tutor.Tutor;
 import br.org.institutobushido.repositories.AdminRepositorio;
@@ -41,8 +45,9 @@ class TurmaServiceTest {
     @Mock
     private MongoTemplate mongoTemplate;
 
-    private TurmaResponsavel turmaResponsavel;
     private TurmaService turmaServices;
+
+    private TurmaResponsavel turmaResponsavel;
     private TurmaDTORequest turmaDTORequest;
     private TurmaDTOResponse turmaDTOResponse;
     private Turma turma;
@@ -50,7 +55,9 @@ class TurmaServiceTest {
 
     @BeforeEach
     void setUp() {
+
         turmaServices = new TurmaService(turmaRepositorio, mongoTemplate, adminRepositorio);
+
         turmaResponsavel = new TurmaResponsavel("Rua A", "Turma A");
 
         admin = new Admin("admin", "admin@email.com", "admin", "admin", UserRole.ADMIN);
@@ -64,7 +71,8 @@ class TurmaServiceTest {
         turmaDTOResponse = new TurmaDTOResponse(
                 "Turma A",
                 new TutorDTOResponse("Tutor", "Tutor@email.com"),
-                "Endereço I");
+                "Endereço I",
+                LocalDate.now());
 
         turma = new Turma("Endereço I",
                 "Turma A",
@@ -103,7 +111,9 @@ class TurmaServiceTest {
     void deveDeletarTurma() {
         // Arrange
         String nomeTurma = "Turma A";
-        when(turmaRepositorio.findByNome(anyString())).thenReturn(Optional.of(turma));
+
+        when(mongoTemplate.exists(any(Query.class), eq(Turma.class))).thenReturn(true);
+        when(mongoTemplate.exists(any(Query.class), eq(Aluno.class))).thenReturn(false);
         when(adminRepositorio.findByEmailAdmin(anyString())).thenReturn(Optional.of(admin));
 
         // Act
@@ -155,11 +165,11 @@ class TurmaServiceTest {
     void deveBuscarTurmaPorNome() {
         // Arrange
         String nomeTurma = "Turma A";
-        TurmaService turmaService = new TurmaService(turmaRepositorio, mongoTemplate, adminRepositorio);
-        when(turmaRepositorio.findByNome(nomeTurma)).thenReturn(Optional.of(turma));
+
+        when(mongoTemplate.findOne(any(Query.class), eq(Turma.class))).thenReturn(turma);
 
         // Act
-        TurmaDTOResponse actualResponse = turmaService.buscarTurmaPorNome(nomeTurma);
+        TurmaDTOResponse actualResponse = turmaServices.buscarTurmaPorNome(nomeTurma);
 
         // Assert
         assertEquals(turmaDTOResponse, actualResponse);

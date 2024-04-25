@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,6 +27,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -39,6 +39,7 @@ import br.org.institutobushido.controllers.dtos.aluno.endereco.EnderecoDTOReques
 import br.org.institutobushido.controllers.dtos.aluno.endereco.UpdateEnderecoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.HistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.alergia.AlergiaDTORequest;
@@ -109,7 +110,8 @@ class AlunoServiceTest {
                                                 "CIDADE",
                                                 "ESTADO",
                                                 "CEP",
-                                                "100"),
+                                                "100",
+                                                "LOGRADOURO"),
                                 "123456789",
                                 new ResponsavelDTORequest("Nome", "12345678901", "Email", "Telefone",
                                                 FiliacaoResposavel.OUTRO),
@@ -141,7 +143,8 @@ class AlunoServiceTest {
                                                 "CIDADE",
                                                 "ESTADO",
                                                 "CEP",
-                                                "100"));
+                                                "100",
+                                                "LOGRADOURO"));
 
                 aluno.setDadosSociais(
                                 new DadosSociais(
@@ -165,7 +168,7 @@ class AlunoServiceTest {
 
                 aluno.adicionarGraduacao(
                                 new Graduacao(7, new ArrayList<>(), true, 100, LocalDate.now().minusMonths(3),
-                                                LocalDate.now().plusMonths(3), false, 80, 1));
+                                                LocalDate.now().plusMonths(3), false, 80, 1, 10));
 
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
@@ -347,7 +350,7 @@ class AlunoServiceTest {
                                 new UpdateDadosSociaisDTORequest(false, false, null, 5, 2, false, 0),
                                 new UpdateDadosEscolaresDTORequest(Turno.TARDE, "Escola", "Serie"),
                                 new UpdateEnderecoDTORequest(
-                                                "Cidade", "Estado", "CEP", "Numero"),
+                                                "Cidade", "Estado", "CEP", "Numero", "LOGRADOURO"),
                                 new UpdateHistoricoSaudeDTORequest(null, null, null, null, null));
 
                 when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
@@ -365,10 +368,10 @@ class AlunoServiceTest {
                 when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
                 aluno.setGraduacao(List.of(
                                 new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
-                                                LocalDate.now().plusMonths(4), false, 0, 1)));
+                                                LocalDate.now().plusMonths(4), false, 0, 1, 10)));
 
                 // Act
-                GraduacaoDTOResponse result = alunoServices.aprovarAluno("123456789");
+                GraduacaoDTOResponse result = alunoServices.aprovarAluno("123456789", 10);
 
                 // Assert
                 assertEquals(7, result.kyu());
@@ -385,9 +388,9 @@ class AlunoServiceTest {
 
                 aluno.setGraduacao(List.of(
                                 new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
-                                                LocalDate.now().plusMonths(4), false, 0, dan)));
+                                                LocalDate.now().plusMonths(4), false, 0, dan, 10)));
 
-                GraduacaoDTOResponse result = alunoServices.reprovarAluno(aluno.getRg());
+                GraduacaoDTOResponse result = alunoServices.reprovarAluno(aluno.getRg(), 5);
 
                 // Assert
                 assertNotNull(result);
@@ -405,9 +408,9 @@ class AlunoServiceTest {
 
                 aluno.setGraduacao(List.of(
                                 new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
-                                                LocalDate.now().plusMonths(4), false, 0, dan)));
+                                                LocalDate.now().plusMonths(4), false, 0, dan, 10)));
 
-                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg());
+                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg(), 9);
 
                 // Assert
                 assertNotNull(result);
@@ -425,9 +428,9 @@ class AlunoServiceTest {
 
                 aluno.setGraduacao(List.of(
                                 new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
-                                                LocalDate.now().plusMonths(4), false, 0, dan)));
+                                                LocalDate.now().plusMonths(4), false, 0, dan, 10)));
 
-                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg());
+                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg(), 10);
 
                 // Assert
                 assertNotNull(result);

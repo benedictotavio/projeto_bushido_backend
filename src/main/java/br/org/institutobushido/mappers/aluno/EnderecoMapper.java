@@ -8,7 +8,8 @@ import br.org.institutobushido.models.aluno.endereco.Endereco;
 
 public class EnderecoMapper {
 
-    private EnderecoMapper() {}
+    private EnderecoMapper() {
+    }
 
     public static Endereco updateEndereco(UpdateEnderecoDTORequest updateEnderecoDTORequest, Aluno aluno) {
 
@@ -20,6 +21,7 @@ public class EnderecoMapper {
         aluno.getEndereco().setCidade(updateEnderecoDTORequest.cidade());
         aluno.getEndereco().setNumero(updateEnderecoDTORequest.numero());
         aluno.getEndereco().setEstado(updateEnderecoDTORequest.estado());
+        aluno.getEndereco().setLogradouro(updateEnderecoDTORequest.logradouro());
 
         return aluno.getEndereco();
     }
@@ -33,6 +35,7 @@ public class EnderecoMapper {
         endereco.setCidade(enderecoDTORequest.cidade());
         endereco.setEstado(enderecoDTORequest.estado());
         endereco.setNumero(enderecoDTORequest.numero());
+        endereco.setLogradouro(enderecoDTORequest.logradouro());
         return endereco;
     }
 
@@ -45,6 +48,7 @@ public class EnderecoMapper {
         endereco.setCidade(enderecoDTOResponse.cidade());
         endereco.setEstado(enderecoDTOResponse.estado());
         endereco.setNumero(enderecoDTOResponse.numero());
+        endereco.setLogradouro(enderecoDTOResponse.logradouro());
         return endereco;
     }
 
@@ -52,6 +56,8 @@ public class EnderecoMapper {
         if (endereco == null) {
             return null;
         }
-        return EnderecoDTOResponse.builder().withCep(endereco.getCep()).withCidade(endereco.getCidade()).withEstado(endereco.getEstado()).withNumero(endereco.getNumero()).build();
+        return EnderecoDTOResponse.builder().withCep(endereco.getCep()).withCidade(endereco.getCidade())
+                .withEstado(endereco.getEstado()).withNumero(endereco.getNumero())
+                .withLogradouro(endereco.getLogradouro()).build();
     }
 }
