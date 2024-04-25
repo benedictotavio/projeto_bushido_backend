@@ -11,13 +11,15 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+
+import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTOResponse;
@@ -154,7 +156,7 @@ class TurmaServiceTest {
                 new Turma("Turma C", "Nome", new Tutor("Tutor", "Tutor@email.com"))));
 
         // Act
-        List<TurmaDTOResponse> result = turmaServices.listarTurmas();
+        List<TurmaDTOResponse> result = turmaServices.listarTurmas(0L, 0L);
 
         // Assert
         assertNotNull(result);

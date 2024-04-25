@@ -24,7 +24,7 @@ import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 
 @Service
-public class AdminServices implements AdminServiceInterface, UserDetailsService {
+public class AdminServices implements AdminServicesInterface, UserDetailsService {
 
     @Value("${jwt.secret}")
     private String secret;

@@ -1256,6 +1256,11 @@ DELETE /turma/{nome_turma}/{email_admin}
 ## Buscar todas as turmas
 
 #### Request
+- Parametros Opcionais
+  - **dataInicial**: long
+  formato: UTC datetime in milliseconds
+exemplo: 1609459200000
+  - **dataFinal**: long 
 
 ```http
 GET /turma

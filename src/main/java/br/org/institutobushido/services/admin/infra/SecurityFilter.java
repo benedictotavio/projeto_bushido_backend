@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import br.org.institutobushido.repositories.AdminRepositorio;
-import br.org.institutobushido.services.admin.AdminServiceInterface;
+import br.org.institutobushido.services.admin.AdminServicesInterface;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    private AdminServiceInterface adminServices;
+    private AdminServicesInterface adminServices;
 
     @Autowired
     private AdminRepositorio adminRepositorio;

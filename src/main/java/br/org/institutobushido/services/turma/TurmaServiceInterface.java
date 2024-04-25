@@ -11,7 +11,7 @@ public interface TurmaServiceInterface {
 
     String deletarTurma(String emailAdmin, String nomeTurma);
 
-    List<TurmaDTOResponse> listarTurmas();
+    List<TurmaDTOResponse> listarTurmas(long dataInicial, long dataFinal);
 
     TurmaDTOResponse buscarTurmaPorNome(String nomeTurma);
 

@@ -1,8 +1,8 @@
 package br.org.institutobushido.services.turma;
 
+import java.util.Date;
 import java.util.List;
-
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -24,6 +24,7 @@ import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 
 @Service
 public class TurmaService implements TurmaServiceInterface {
@@ -76,9 +77,30 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Override
-    public List<TurmaDTOResponse> listarTurmas() {
-        List<Turma> turmas = this.turmaRepositorio.findAll();
-        return TurmaMapper.mapToListTurmaDTOResponse(turmas);
+    public List<TurmaDTOResponse> listarTurmas(long dataInicial, long dataFinal) {
+
+        if (dataInicial > System.currentTimeMillis()) {
+            throw new LimitQuantityException("Data inicial deve ser menor que data atual");
+        }
+
+        if (dataInicial == 0 && dataFinal == 0) {
+            return TurmaMapper.mapToListTurmaDTOResponse(this.turmaRepositorio.findAll());
+        }
+
+        if (dataFinal == 0) {
+            dataFinal = System.currentTimeMillis();
+        }
+
+        if (dataInicial >= dataFinal) {
+            throw new LimitQuantityException("Data inicial deve ser menor que data final");
+        }
+
+        Criteria criteria = Criteria.where("dataCriacao")
+                .gte(new Date(dataInicial))
+                .lte(new Date(dataFinal));
+        Query query = new Query();
+        query.addCriteria(criteria).with(Sort.by(Sort.Direction.ASC, "dataCriacao"));
+        return TurmaMapper.mapToListTurmaDTOResponse(this.mongoTemplate.find(query, Turma.class));
     }
 
     @Override

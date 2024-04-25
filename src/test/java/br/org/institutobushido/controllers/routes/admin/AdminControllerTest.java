@@ -27,7 +27,7 @@ import br.org.institutobushido.controllers.response.success.SuccessLoginAuthenti
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.enums.admin.UserRole;
 import br.org.institutobushido.models.admin.Admin;
-import br.org.institutobushido.services.admin.AdminServiceInterface;
+import br.org.institutobushido.services.admin.AdminServicesInterface;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -43,7 +43,7 @@ class AdminControllerTest {
     private AdminController adminController;
 
     @Mock
-    private AdminServiceInterface adminServices;
+    private AdminServicesInterface adminServices;
 
     @Mock
     private AuthenticationManager authenticationManager;
