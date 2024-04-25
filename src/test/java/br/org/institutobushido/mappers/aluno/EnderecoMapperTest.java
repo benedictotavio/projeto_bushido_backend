@@ -27,11 +27,11 @@ class EnderecoMapperTest {
     void setUp() {
         endereco = new Endereco();
         enderecoDTORequest = new EnderecoDTORequest(
-                "CIDADE", "ESTADO", "CEP", "NUMERO");
+                "CIDADE", "ESTADO", "CEP", "NUMERO", "logradouro");
         updateEnderecoDTORequest = new UpdateEnderecoDTORequest(
-                "CIDADE", "ESTADO", "CEP", "NUMERO");
+                "CIDADE", "ESTADO", "CEP", "NUMERO", "logradouro");
         enderecoDTOResponse = new EnderecoDTOResponse(
-                "CIDADE", "ESTADO", "CEP", "NUMERO");
+                "CIDADE", "ESTADO", "CEP", "NUMERO", "logradouro");
     }
 
     @Test

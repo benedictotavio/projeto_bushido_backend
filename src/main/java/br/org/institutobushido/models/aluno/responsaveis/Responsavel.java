@@ -3,7 +3,7 @@ package br.org.institutobushido.models.aluno.responsaveis;
 import java.io.Serializable;
 import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import br.org.institutobushido.resources.exceptions.InvalidFormatDataException;
-
+import br.org.institutobushido.utils.ValoresPadraoResponsavel;
 import lombok.Getter;
 
 @Getter
@@ -19,7 +19,7 @@ public class Responsavel implements Serializable {
 
     public Responsavel(String nome, String cpf, String telefone, String email, FiliacaoResposavel filiacao) {
 
-        if (cpf == null || cpf.length() != 11) {
+        if (cpf == null || cpf.length() != ValoresPadraoResponsavel.DIGITOS_CPF) {
             throw new InvalidFormatDataException("Cpf inválido. siga o formato de 11 digitos: XXXXXXXXXX");
         }
 

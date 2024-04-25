@@ -38,7 +38,7 @@ import jakarta.validation.Valid;
 public class AlunoController {
         private final AlunoServicesInterface alunoServices;
 
-        private static final String URI_ALUNO="/api/V1/aluno";
+        private static final String URI_ALUNO = "/api/V1/aluno";
 
         public AlunoController(AlunoServicesInterface alunoServices) {
                 this.alunoServices = alunoServices;
@@ -55,11 +55,11 @@ public class AlunoController {
         }
 
         @PostMapping()
-        ResponseEntity<SuccessPostResponse> adicionarAluno(@Valid @RequestBody AlunoDTORequest alunoDTORequest) throws URISyntaxException {
+        ResponseEntity<SuccessPostResponse> adicionarAluno(@Valid @RequestBody AlunoDTORequest alunoDTORequest)
+                        throws URISyntaxException {
                 String alunoAdicionado = this.alunoServices.adicionarAluno(alunoDTORequest);
                 return ResponseEntity.created(
-                        new URI(URI_ALUNO)
-                        )
+                                new URI(URI_ALUNO))
                                 .body(new SuccessPostResponse(alunoAdicionado, "Aluno adicionado com sucesso",
                                                 Aluno.class.getSimpleName()));
         }
@@ -136,24 +136,24 @@ public class AlunoController {
 
         @DeleteMapping("acompanhamentoSaude/{rg}")
         public ResponseEntity<SuccessDeleteResponse> removerAcompanhamentoSaude(@PathVariable String rg,
-                                                                                @RequestParam(name = "acompanhamento") String acompanhamento) {
+                        @RequestParam(name = "acompanhamento") String acompanhamento) {
                 String res = alunoServices.removerAcompanhamentoSaude(rg, acompanhamento);
                 return ResponseEntity.ok().body(
-                        new SuccessDeleteResponse(res,
-                                "Acamponhamento " + acompanhamento + " foi removido com sucesso."));
+                                new SuccessDeleteResponse(res,
+                                                "Acamponhamento " + acompanhamento + " foi removido com sucesso."));
         }
 
-        @PostMapping("graduacao/{rg}/aprovar")
-        public ResponseEntity<SuccessPostResponse> aprovarAluno(@PathVariable String rg) {
-                GraduacaoDTOResponse res = alunoServices.aprovarAluno(rg);
+        @PostMapping("graduacao/{rg}/aprovar/{nota}")
+        public ResponseEntity<SuccessPostResponse> aprovarAluno(@PathVariable String rg, @PathVariable int nota) {
+                GraduacaoDTOResponse res = alunoServices.aprovarAluno(rg, nota);
                 return ResponseEntity.ok()
                                 .body(new SuccessPostResponse(String.valueOf(res.kyu()),
                                                 "Graduação concluída com sucesso.", Graduacao.class.getSimpleName()));
         }
 
-        @PostMapping("graduacao/{rg}/reprovar")
-        public ResponseEntity<SuccessPostResponse> reprovarAluno(@PathVariable String rg) {
-                GraduacaoDTOResponse res = alunoServices.reprovarAluno(rg);
+        @PostMapping("graduacao/{rg}/reprovar/{nota}")
+        public ResponseEntity<SuccessPostResponse> reprovarAluno(@PathVariable String rg, @PathVariable int nota) {
+                GraduacaoDTOResponse res = alunoServices.reprovarAluno(rg, nota);
                 return ResponseEntity.ok()
                                 .body(new SuccessPostResponse(String.valueOf(res.kyu()),
                                                 "Graduação concluída com sucesso.", Graduacao.class.getSimpleName()));

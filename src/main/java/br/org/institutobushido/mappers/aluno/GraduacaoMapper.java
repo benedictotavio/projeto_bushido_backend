@@ -40,7 +40,9 @@ public class GraduacaoMapper {
                 graduacaoDTOResponse.fimGraduacao(),
                 graduacaoDTOResponse.aprovado(),
                 graduacaoDTOResponse.cargaHoraria(),
-                graduacaoDTOResponse.dan());
+                graduacaoDTOResponse.dan(),
+                graduacaoDTOResponse.nota()
+                );
     }
 
     public static GraduacaoDTOResponse mapToGraduacaoDTOResponse(Graduacao graduacao) {
@@ -58,6 +60,7 @@ public class GraduacaoMapper {
                 .withCargaHoraria(graduacao.definirCargaHoraria())
                 .withFrequencia(graduacao.definirFrequencia())
                 .withInicioGraduacao(graduacao.getInicioGraduacao())
+                .withNota(graduacao.getNota())
                 .build();
     }
 }

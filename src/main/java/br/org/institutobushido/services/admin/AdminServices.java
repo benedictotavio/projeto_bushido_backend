@@ -3,7 +3,6 @@ package br.org.institutobushido.services.admin;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -25,7 +24,7 @@ import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
 
 @Service
-public class AdminServices implements AdminServiceInterface, UserDetailsService {
+public class AdminServices implements AdminServicesInterface, UserDetailsService {
 
     @Value("${jwt.secret}")
     private String secret;
@@ -65,7 +64,6 @@ public class AdminServices implements AdminServiceInterface, UserDetailsService 
         return new LoginDTOResponse(token, admin.getRole().getValue(), admin.getTurmas());
     }
 
-    @Cacheable(value = "admin", key = "#username")
     @Override
     public UserDetails loadUserByUsername(String username) throws EntityNotFoundException {
         UserDetails adminEncontrado = adminRepositorio.findByEmail(username);

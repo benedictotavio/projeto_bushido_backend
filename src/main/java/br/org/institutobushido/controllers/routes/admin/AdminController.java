@@ -20,7 +20,7 @@ import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
 import br.org.institutobushido.controllers.response.success.SuccessLoginAuthenticated;
 import br.org.institutobushido.models.admin.Admin;
-import br.org.institutobushido.services.admin.AdminServiceInterface;
+import br.org.institutobushido.services.admin.AdminServicesInterface;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,12 +30,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminController {
 
-        private AdminServiceInterface adminServices;
+        private AdminServicesInterface adminServices;
         private AuthenticationManager authenticationManager;
 
         private static final String URI_ADMIN = "/api/V1/admin";
 
-        public AdminController(AdminServiceInterface adminServices, AuthenticationManager authenticationManager) {
+        public AdminController(AdminServicesInterface adminServices, AuthenticationManager authenticationManager) {
                 this.adminServices = adminServices;
                 this.authenticationManager = authenticationManager;
         }
@@ -59,7 +59,6 @@ public class AdminController {
                                 loginDTORequest.email(),
                                 loginDTORequest.senha());
                 Authentication auth = this.authenticationManager.authenticate(login);
-                System.out.println("Admin:" + auth.getPrincipal());
                 LoginDTOResponse admin = this.adminServices.login((Admin) auth.getPrincipal());
                 return ResponseEntity.ok().body(
                                 new SuccessLoginAuthenticated(admin.token(), admin.role(), admin.turmas()));

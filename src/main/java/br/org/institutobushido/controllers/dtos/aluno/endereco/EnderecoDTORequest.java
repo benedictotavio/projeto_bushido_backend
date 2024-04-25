@@ -10,5 +10,6 @@ public record EnderecoDTORequest(
         String cidade,
         String estado,
         @NotNull(message = "Cep é obrigatório") @Pattern(regexp = "^\\d{8}$", message = "Cep inválido") @NotEmpty(message = "Cep é obrigatório") String cep,
-        @NotNull(message = "Numero é obrigatório") @NotEmpty(message = "Numero é obrigatório") String numero) {
+        @NotNull(message = "Numero é obrigatório") @NotEmpty(message = "Numero é obrigatório") String numero,
+        @NotNull(message = "logradouro é obrigatório") @NotEmpty(message = "logradouro é obrigatório") String logradouro) {
 }

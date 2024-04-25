@@ -487,7 +487,8 @@ POST /aluno
     "cidade": "string",
     "estado": "string",
     "cep":"string",
-    "numero":"string"
+    "numero":"string",
+    "logradouro":"string"
   },
   "rg": "{rg}",
   "responsaveis": {
@@ -638,7 +639,8 @@ PUT /aluno/{rg}
     "cidade": "string",
     "estado": "string",
     "cep":"string",
-    "numero":"string"
+    "numero":"string",
+    "logradouro":"string"
   }
 }
 ```
@@ -1254,6 +1256,11 @@ DELETE /turma/{nome_turma}/{email_admin}
 ## Buscar todas as turmas
 
 #### Request
+- Parametros Opcionais
+  - **dataInicial**: long
+  formato: UTC datetime in milliseconds
+exemplo: 1609459200000
+  - **dataFinal**: long 
 
 ```http
 GET /turma

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.mongodb.MongoException;
 import br.org.institutobushido.controllers.dtos.turma.DadosTurmaDTOResponse;
@@ -56,8 +57,8 @@ public class TurmaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TurmaDTOResponse>> listarTurmas() {
-        var turmas = this.turmaService.listarTurmas();
+    public ResponseEntity<List<TurmaDTOResponse>> listarTurmas(@RequestParam(required = false, name = "dataInicial", defaultValue = "0") long dataInicial, @RequestParam(required = false, name = "dataFinal", defaultValue = "0") long dataFinal) {
+        var turmas = this.turmaService.listarTurmas(dataInicial, dataFinal);
         return ResponseEntity.ok().body(turmas);
     }
 

@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/admin
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxMzgwNTA2M30.iW6jAD_1W_qSDoJURwc09XplqmeHe5_6t8oD4D278G0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDA2ODM3MH0.zmWxCbMHpXtYwlppCM6f44srJJyoLA7_cW506sqnBQY
 
 POST {{url}}/signup HTTP/1.1
 Content-Type: application/json

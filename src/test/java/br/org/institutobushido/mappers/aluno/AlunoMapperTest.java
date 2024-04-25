@@ -69,7 +69,8 @@ class AlunoMapperTest {
                                                 "CIDADE",
                                                 "ESTADO",
                                                 "CEP",
-                                                "100"),
+                                                "100",
+                                                "LOGRADOURO"),
                                 "123456789",
                                 new ResponsavelDTORequest("Nome", "12345678901", "Email", "Telefone",
                                                 FiliacaoResposavel.OUTRO),
@@ -101,7 +102,8 @@ class AlunoMapperTest {
                                                 "CIDADE",
                                                 "ESTADO",
                                                 "CEP",
-                                                "100"));
+                                                "100",
+                                                "LOGRADOURO"));
 
                 aluno.setDadosSociais(
                                 new DadosSociais(
@@ -125,7 +127,7 @@ class AlunoMapperTest {
 
                 aluno.adicionarGraduacao(
                                 new Graduacao(7, new ArrayList<>(), true, 100, LocalDate.now().minusMonths(3),
-                                                LocalDate.now().plusMonths(3), false, 80, 1));
+                                                LocalDate.now().plusMonths(3), false, 80, 1, 10));
 
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));

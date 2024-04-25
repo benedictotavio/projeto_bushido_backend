@@ -1,8 +1,8 @@
 package br.org.institutobushido.services.turma;
 
+import java.util.Date;
 import java.util.List;
-
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import br.org.institutobushido.controllers.dtos.turma.DadosTurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
@@ -25,6 +24,7 @@ import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.resources.exceptions.LimitQuantityException;
 
 @Service
 public class TurmaService implements TurmaServiceInterface {
@@ -42,9 +42,8 @@ public class TurmaService implements TurmaServiceInterface {
 
     @Override
     public String criarNovaTurma(TurmaDTORequest turma) {
-        boolean turmaExiste = this.verificaSeTurmaExiste(turma.nome());
 
-        if (turmaExiste) {
+        if (this.verificaSeTurmaExiste(turma.nome())) {
             throw new AlreadyRegisteredException("Turma " + turma.nome() + " ja está registrada.");
         }
 
@@ -63,9 +62,7 @@ public class TurmaService implements TurmaServiceInterface {
     @Override
     public String deletarTurma(String emailAdmin, String nomeTurma) {
 
-        boolean turmaExiste = this.verificaSeTurmaExiste(nomeTurma);
-
-        if (!turmaExiste) {
+        if (!this.verificaSeTurmaExiste(nomeTurma)) {
             throw new EntityNotFoundException("Turma com esse nome não existe");
         }
 
@@ -80,9 +77,30 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Override
-    public List<TurmaDTOResponse> listarTurmas() {
-        List<Turma> turmas = this.turmaRepositorio.findAll();
-        return TurmaMapper.mapToListTurmaDTOResponse(turmas);
+    public List<TurmaDTOResponse> listarTurmas(long dataInicial, long dataFinal) {
+
+        if (dataInicial > System.currentTimeMillis()) {
+            throw new LimitQuantityException("Data inicial deve ser menor que data atual");
+        }
+
+        if (dataInicial == 0 && dataFinal == 0) {
+            return TurmaMapper.mapToListTurmaDTOResponse(this.turmaRepositorio.findAll());
+        }
+
+        if (dataFinal == 0) {
+            dataFinal = System.currentTimeMillis();
+        }
+
+        if (dataInicial >= dataFinal) {
+            throw new LimitQuantityException("Data inicial deve ser menor que data final");
+        }
+
+        Criteria criteria = Criteria.where("dataCriacao")
+                .gte(new Date(dataInicial))
+                .lte(new Date(dataFinal));
+        Query query = new Query();
+        query.addCriteria(criteria).with(Sort.by(Sort.Direction.ASC, "dataCriacao"));
+        return TurmaMapper.mapToListTurmaDTOResponse(this.mongoTemplate.find(query, Turma.class));
     }
 
     @Override
@@ -115,7 +133,8 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     private boolean verificaSeTurmaExiste(String nomeTurma) {
-        return this.turmaRepositorio.findByNome(nomeTurma).isPresent();
+        Query query = new Query(Criteria.where("nome").regex(nomeTurma, "si"));
+        return this.mongoTemplate.exists(query, Turma.class);
     }
 
     private Admin vinculrTurmaAoAdmin(String emailAdmin, TurmaResponsavel turma) {
@@ -146,8 +165,14 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     private Turma encontrarTurmaPeloNome(String nomeTurma) {
-        return this.turmaRepositorio.findByNome(nomeTurma).orElseThrow(
-                () -> new EntityNotFoundException("Turma com esse nome não existe"));
+        Query query = new Query(Criteria.where("nome").regex(nomeTurma, "si"));
+        Turma turma = this.mongoTemplate.findOne(query, Turma.class);
+
+        if (turma == null) {
+            throw new EntityNotFoundException("Turma com esse nome não existe");
+        }
+
+        return turma;
     }
 
     private Admin encontrarAdminPeloEmail(String email) {

@@ -2,14 +2,12 @@ package br.org.institutobushido.models.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.models.aluno.graduacao.Graduacao;

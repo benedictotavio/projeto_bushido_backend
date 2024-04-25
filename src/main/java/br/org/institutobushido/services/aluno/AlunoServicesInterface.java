@@ -34,7 +34,7 @@ public interface AlunoServicesInterface {
 
     public String removerAcompanhamentoSaude(String rg, String acompanhamentoSaude);
 
-    public GraduacaoDTOResponse aprovarAluno(String rg);
+    public GraduacaoDTOResponse aprovarAluno(String rg, int nota);
 
-    public GraduacaoDTOResponse reprovarAluno(String rg);
+    public GraduacaoDTOResponse reprovarAluno(String rg, int nota);
 }

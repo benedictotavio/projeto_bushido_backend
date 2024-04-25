@@ -7,12 +7,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -23,10 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-
 import br.org.institutobushido.controllers.dtos.admin.AdminDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
@@ -89,21 +83,6 @@ class AdminServicesTest {
     @Test
     @Disabled("Teste pendente")
     void testLogin() {
-        // Arrange
-        Admin admin = Mockito.spy(Admin.class);
-        Mockito.when(admin.getEmail()).thenReturn("test@example.com");
-        Algorithm algorithmMock = Mockito.spy(Algorithm.class);
-        when(algorithmMock.sign(any())).thenReturn("token".getBytes());
-
-        // Mock JWT
-        JWT jwt = Mockito.mock(JWT.class);
-        when(jwt.create()
-        .withIssuer(anyString())
-        .withClaim("email", admin.getEmail())
-        .withSubject(eq(admin.getEmail()))
-        .withExpiresAt(any(Date.class))
-        .sign(algorithmMock)).thenReturn("token");
-
         // Mock the generateToken method
         AdminServices spy = Mockito.spy(adminServices);
         Mockito.when(spy.generateToken(admin)).thenReturn("mockedToken");

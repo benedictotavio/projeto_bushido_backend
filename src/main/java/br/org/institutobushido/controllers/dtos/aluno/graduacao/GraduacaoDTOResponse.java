@@ -15,6 +15,7 @@ public record GraduacaoDTOResponse(
                 int frequencia,
                 boolean aprovado,
                 int cargaHoraria,
-                int dan
+                int dan,
+                int nota
 ) {
 }

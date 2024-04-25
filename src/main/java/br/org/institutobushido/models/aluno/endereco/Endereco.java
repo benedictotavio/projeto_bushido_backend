@@ -15,31 +15,39 @@ public class Endereco implements Serializable {
     private String estado;
     private String cep;
     private String numero;
+    private String logradouro;
+
+    public void setLogradouro(String logradouro) {
+        if (logradouro == null) {
+            return;
+        }
+        this.logradouro = logradouro;
+    }
 
     public void setCidade(String cidade) {
         if (cidade == null) {
-            cidade = this.cidade;
+            return;
         }
         this.cidade = cidade;
     }
 
     public void setEstado(String estado) {
         if (estado == null) {
-            estado = this.estado;
+            return;
         }
         this.estado = estado;
     }
 
     public void setCep(String cep) {
         if (cep == null) {
-            cep = this.cep;
+            return;
         }
         this.cep = cep;
     }
 
     public void setNumero(String numero) {
         if (numero == null) {
-            numero = this.numero;
+            return;
         }
         this.numero = numero;
     }

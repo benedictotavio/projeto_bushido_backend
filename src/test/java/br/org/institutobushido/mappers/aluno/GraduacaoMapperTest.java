@@ -25,7 +25,7 @@ class GraduacaoMapperTest {
     @BeforeEach
     void setUp() {
         graduacao = new Graduacao(7, new ArrayList<>(), true, 100, LocalDate.now().minusMonths(3),
-                LocalDate.now().plusMonths(3), false, 80, 1);
+                LocalDate.now().plusMonths(3), false, 80, 1, 10);
         graduacaoDTORequest = new GraduacaoDTORequest(7, 1);
         graduacaoDTOResponse = new GraduacaoDTOResponse(
                 7,
@@ -36,7 +36,8 @@ class GraduacaoMapperTest {
                 0,
                 true,
                 0,
-                0);
+                0,
+                10);
     }
 
     @Test

@@ -4,6 +4,7 @@ public record UpdateEnderecoDTORequest(
     String cidade,
     String estado,
     String cep,
-    String numero
+    String numero,
+    String logradouro
 ) {
 }
