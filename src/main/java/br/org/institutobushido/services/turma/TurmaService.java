@@ -111,7 +111,7 @@ public class TurmaService implements TurmaServiceInterface {
     @Override
     public DadosTurmaDTOResponse listarAlunosDaTurma(String nomeTurma) {
         Turma turma = this.encontrarTurmaPeloNome(nomeTurma);
-        return new DadosTurmaDTOResponse(turma.getTutor().getEmail(), this.listarAlunosAtivosDaTurma(nomeTurma));
+        return new DadosTurmaDTOResponse(turma.getTutor().getEmail(), this.listarAlunosAtivosDaTurma(turma.getNome()));
     }
 
     private List<TurmaAlunoDTOResponse> listarAlunosAtivosDaTurma(String nomeTurma) {
