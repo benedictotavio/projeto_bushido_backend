@@ -2,6 +2,9 @@ package br.org.institutobushido.services.turma;
 
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -10,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
 import br.org.institutobushido.controllers.dtos.turma.DadosTurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
@@ -40,6 +44,7 @@ public class TurmaService implements TurmaServiceInterface {
         this.adminRepositorio = adminRepositorio;
     }
 
+    @CacheEvict(value = { "turma", "admin" }, allEntries = true)
     @Override
     public String criarNovaTurma(TurmaDTORequest turma) {
 
@@ -59,6 +64,7 @@ public class TurmaService implements TurmaServiceInterface {
         return "Turma " + turma.nome() + " foi criada com sucesso!";
     }
 
+    @CacheEvict(value = { "turma", "admin" }, allEntries = true)
     @Override
     public String deletarTurma(String emailAdmin, String nomeTurma) {
 
@@ -164,6 +170,7 @@ public class TurmaService implements TurmaServiceInterface {
         return this.mongoTemplate.exists(query, Aluno.class);
     }
 
+    @Cacheable(value = "turma", key = "#nomeTurma")
     private Turma encontrarTurmaPeloNome(String nomeTurma) {
         Query query = new Query(Criteria.where("nome").regex(nomeTurma, "si"));
         Turma turma = this.mongoTemplate.findOne(query, Turma.class);
@@ -175,6 +182,7 @@ public class TurmaService implements TurmaServiceInterface {
         return turma;
     }
 
+    @Cacheable(value = "admin", key = "#email")
     private Admin encontrarAdminPeloEmail(String email) {
         return this.adminRepositorio.findByEmailAdmin(email).orElseThrow(
                 () -> new EntityNotFoundException("Admin com esse email não existe"));

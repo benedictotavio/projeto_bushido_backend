@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/turma
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDEzODI4OX0.8QV3eqEKtUT1TYG-Hx1FwJw5cDbgfq6gkchqbLHOtSM
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDE0MTY5Nn0.nsUz3IuN_SPJ_-IKmH6fiOS21uALAfbk-2mN-c6zpDg
 @rg=123456789
 @nomeTurma=Primeiro Horario
 @emailTutor=tutor@email.com.br
