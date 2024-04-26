@@ -107,7 +107,7 @@ class AdminControllerTest {
 
         // Act
         when(adminServices.buscarAdminPorNome(validName)).thenReturn(List.of(adminDTOResponse));
-        List<AdminDTOResponse> result = new AdminController(adminServices, authenticationManager).users(validName);
+        List<AdminDTOResponse> result = new AdminController(adminServices, authenticationManager).buscarAdmins(validName);
 
         // Assert
         assertNotNull(result);

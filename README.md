@@ -132,7 +132,7 @@ Retorna os admin cadastrados no sistema
 - **nome**: string
 
 ```http
-GET /admin/users?nome={nome}
+GET /admin/buscar?nome={nome}
 ```
 
 ### Response

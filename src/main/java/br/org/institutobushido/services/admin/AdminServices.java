@@ -29,6 +29,8 @@ public class AdminServices implements AdminServicesInterface, UserDetailsService
     @Value("${jwt.secret}")
     private String secret;
 
+    private static final long ONE_HOUR_IN_MILLIS = 3600000;
+
     private AdminRepositorio adminRepositorio;
     private MongoTemplate mongoTemplate;
 
@@ -80,7 +82,7 @@ public class AdminServices implements AdminServicesInterface, UserDetailsService
                     .withIssuer(secret)
                     .withClaim("email", admin.getEmail())
                     .withSubject(admin.getEmail())
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 100 * 60 * 1000))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + ONE_HOUR_IN_MILLIS))
                     .sign(algorithm);
         } catch (JWTCreationException e) {
             throw new JWTCreationException("Error ao gerar token", e);

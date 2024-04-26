@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -192,6 +194,7 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
+    @CachePut(value = "aluno", key = "#rg")
     public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest) {
         Aluno alunoEncontrado = encontrarAlunoPorRg(rg);
 
