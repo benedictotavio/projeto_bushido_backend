@@ -30,7 +30,7 @@ public class AdminServices implements AdminServicesInterface, UserDetailsService
     private String secret;
 
     private static final long ONE_HOUR_IN_MILLIS = 3600000;
-
+    
     private AdminRepositorio adminRepositorio;
     private MongoTemplate mongoTemplate;
 
@@ -88,7 +88,7 @@ public class AdminServices implements AdminServicesInterface, UserDetailsService
             throw new JWTCreationException("Error ao gerar token", e);
         }
     }
-
+      
     public String validateToken(String token) {
          Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         DecodedJWT decodedJWT = JWT.require(algorithm).withIssuer(secret).build().verify(token);

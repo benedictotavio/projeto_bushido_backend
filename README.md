@@ -1161,6 +1161,7 @@ POST /turma
         "nome":"string",
         "email": "string"
     }
+    ""
 }
 ```
 
