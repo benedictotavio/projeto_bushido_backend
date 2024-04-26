@@ -275,7 +275,7 @@ public class Graduacao implements Serializable {
         Graduacao novaGraduacao = new Graduacao(kyu, dan);
 
         if (kyu == 1) {
-            novaGraduacao.setKyu(kyu - 1);
+            novaGraduacao.setKyu(0);
             novaGraduacao.setDan(1);
             return novaGraduacao;
         }

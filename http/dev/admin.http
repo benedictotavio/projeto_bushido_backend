@@ -1,5 +1,5 @@
 @url = http://0.0.0.0:8080/api/V1/admin
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDA2ODM3MH0.zmWxCbMHpXtYwlppCM6f44srJJyoLA7_cW506sqnBQY
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDEwMzYyN30.K-6RWwxDb07ZmDQTRoVoNfmidCnoT0fTijYFa2Jum9w
 
 POST {{url}}/signup HTTP/1.1
 Content-Type: application/json
@@ -32,6 +32,6 @@ Content-Type: application/json
 }
 
 ###
-GET {{url}}/users?nome=admin HTTP/1.1
+GET {{url}}/buscar?nome=admin HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}

@@ -45,12 +45,10 @@ public class AdminController {
                         throws URISyntaxException {
                 this.adminServices.signup(signUpDTORequest);
                 return ResponseEntity.created(
-                                new URI(
-                                                URI_ADMIN))
-                                .body(
-                                                new SuccessPostResponse(signUpDTORequest.email(),
-                                                                "Admin criado com sucesso.",
-                                                                Admin.class.getSimpleName()));
+                                new URI(URI_ADMIN))
+                                .body(new SuccessPostResponse(signUpDTORequest.email(),
+                                                "Admin criado com sucesso.",
+                                                Admin.class.getSimpleName()));
         }
 
         @PostMapping("login")
@@ -64,8 +62,8 @@ public class AdminController {
                                 new SuccessLoginAuthenticated(admin.token(), admin.role(), admin.turmas()));
         }
 
-        @GetMapping("users")
-        public List<AdminDTOResponse> users(@RequestParam(name = "nome") String nome) {
+        @GetMapping("buscar")
+        public List<AdminDTOResponse> buscarAdmins(@RequestParam(name = "nome") String nome) {
                 return this.adminServices.buscarAdminPorNome(nome);
         }
 }
