@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -163,7 +162,7 @@ class AlunoControllerTest {
                                 new GraduacaoDTORequest(7, 2));
 
                 alunoDTOResponse = AlunoDTOResponse.builder()
-                                .withRg(aluno.getRg())
+                                .withCpf(aluno.getCpf())
                                 .withNome(aluno.getNome())
                                 .withDataNascimento(aluno.getDataNascimento())
                                 .withGenero(aluno.getGenero())
@@ -187,7 +186,7 @@ class AlunoControllerTest {
         void deveCriarAluno() throws URISyntaxException {
 
                 // Act
-                when(alunoServices.adicionarAluno(alunoDTORequest)).thenReturn(aluno.getRg());
+                when(alunoServices.adicionarAluno(alunoDTORequest)).thenReturn(aluno.getCpf());
                 ResponseEntity<SuccessPostResponse> response = alunoController.adicionarAluno(alunoDTORequest);
 
                 assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -200,7 +199,7 @@ class AlunoControllerTest {
                 SuccessPostResponse responseBody = response.getBody();
 
                 assert responseBody != null;
-                assertEquals(aluno.getRg(), responseBody.getId());
+                assertEquals(aluno.getCpf(), responseBody.getId());
                 assertEquals("Aluno adicionado com sucesso", responseBody.getMessage());
                 assertEquals("Aluno", responseBody.getEntity());
         }
@@ -260,23 +259,23 @@ class AlunoControllerTest {
                                                 new CirurgiaDTORequest("Cirurgia"),
                                                 new DoencaCronicaDTORequest("Doenca")));
 
-                when(alunoServices.editarAlunoPorRg(aluno.getRg(), updateAlunoDTORequest))
+                when(alunoServices.editarAlunoPorCpf(aluno.getCpf(), updateAlunoDTORequest))
                                 .thenReturn("Aluno editado com sucesso!");
 
                 // Act
-                ResponseEntity<SuccessPutResponse> responseEntity = alunoController.editarAluno(aluno.getRg(),
+                ResponseEntity<SuccessPutResponse> responseEntity = alunoController.editarAluno(aluno.getCpf(),
                                 updateAlunoDTORequest);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).editarAlunoPorRg(aluno.getRg(), updateAlunoDTORequest);
+                verify(alunoServices).editarAlunoPorCpf(aluno.getCpf(), updateAlunoDTORequest);
 
                 // Verify response body
                 SuccessPutResponse responseBody = responseEntity.getBody();
                 assert responseBody != null;
-                assertEquals(aluno.getRg(), responseBody.getId());
+                assertEquals(aluno.getCpf(), responseBody.getId());
                 assertEquals("Aluno editado com sucesso!", responseBody.getMessage());
                 assertEquals("Aluno", responseBody.getEntity());
         }
@@ -290,7 +289,7 @@ class AlunoControllerTest {
                                 "RG",
                                 FiliacaoResposavel.OUTRO);
 
-                when(alunoServices.adicionarResponsavel(aluno.getRg(), responsavelDTORequest))
+                when(alunoServices.adicionarResponsavel(aluno.getCpf(), responsavelDTORequest))
                                 .thenReturn(new ResponsavelDTOResponse(
                                                 responsavelDTORequest.nome(),
                                                 responsavelDTORequest.cpf(),
@@ -299,14 +298,14 @@ class AlunoControllerTest {
                                                 responsavelDTORequest.filiacao().name()));
 
                 // Act
-                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.adicionarResponsavel(aluno.getRg(),
+                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.adicionarResponsavel(aluno.getCpf(),
                                 responsavelDTORequest);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).adicionarResponsavel(aluno.getRg(), responsavelDTORequest);
+                verify(alunoServices).adicionarResponsavel(aluno.getCpf(), responsavelDTORequest);
 
                 // Verify response body
                 SuccessPostResponse responseBody = responseEntity.getBody();
@@ -328,18 +327,18 @@ class AlunoControllerTest {
                                 FiliacaoResposavel.OUTRO);
 
                 // Mock service method
-                when(alunoServices.removerResponsavel(aluno.getRg(), responsavelDTORequest.cpf()))
+                when(alunoServices.removerResponsavel(aluno.getCpf(), responsavelDTORequest.cpf()))
                                 .thenReturn(String.valueOf(aluno.getResponsaveis().size()));
 
                 // Act
-                ResponseEntity<SuccessDeleteResponse> responseEntity = alunoController.removerResponsavel(aluno.getRg(),
+                ResponseEntity<SuccessDeleteResponse> responseEntity = alunoController.removerResponsavel(aluno.getCpf(),
                                 responsavelDTORequest.cpf());
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).removerResponsavel(aluno.getRg(), responsavelDTORequest.cpf());
+                verify(alunoServices).removerResponsavel(aluno.getCpf(), responsavelDTORequest.cpf());
 
                 // Verify response body
                 SuccessDeleteResponse responseBody = responseEntity.getBody();

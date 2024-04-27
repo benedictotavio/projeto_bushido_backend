@@ -7,6 +7,7 @@ public class ValoresPadraoGraduacao {
     public static final int ULTIMO_KYU = 1;
     public static final int FREQUENCIA_TOTAL = 100;
     public static final int CARGA_HORARIA_INICIAL = 0;
+    public static final int CARGA_HORARIA_MINIMA_PROVA = 24;
     public static final int MENOR_NOTA_POSSIVEL = 0;
     public static final int MAIOR_NOTA_POSSIVEL = 10;
     public static final int NOTA_MINIMA_APROVACAO = 6;

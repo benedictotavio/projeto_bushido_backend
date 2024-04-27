@@ -74,6 +74,13 @@ class GraduacaoTest {
     }
 
     @Test
+    void deveLancarExcecaoQuandoCargaHorariaOuInicioDaGraduaçãoForBaixo() {
+        Graduacao graduacao = new Graduacao(4, 0);
+        graduacao.setCargaHoraria(0);
+        assertThrows(InactiveUserException.class, () -> graduacao.aprovacao(8));
+    }
+
+    @Test
     void deveLancarExcecaoQuandoNotaForMenorQue6() {
         Graduacao graduacao = new Graduacao(4, 0);
         graduacao.setStatus(false);

@@ -22,7 +22,7 @@ public record AlunoDTOResponse(
                 DadosEscolaresDTOResponse dadosEscolares,
                 Date dataPreenchimento,
                 EnderecoDTOResponse endereco,
-                String rg,
+                String cpf,
                 List<ResponsavelDTOResponse> responsaveis,
                 List<GraduacaoDTOResponse> graduacao,
                 HistoricoSaudeDTOResponse historicoSaude) {

@@ -26,10 +26,13 @@ import lombok.Getter;
 @Getter
 @Document(collection = "alunos")
 public class Aluno implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 2405172041950251807L;
+
     @Id
-    private String rg;
+    private String cpf;
+
     @Indexed(unique = true, background = true)
     private String nome;
     private Date dataNascimento;
@@ -43,7 +46,7 @@ public class Aluno implements Serializable {
     private List<Graduacao> graduacao;
     private HistoricoSaude historicoSaude;
 
-    public Aluno(String rg, String nome, Date dataNascimento, Genero genero, String turma) {
+    public Aluno(String cpf, String nome, Date dataNascimento, Genero genero, String turma) {
         this.graduacao = new ArrayList<>();
         this.historicoSaude = new HistoricoSaude();
         this.dadosEscolares = new DadosEscolares();
@@ -54,7 +57,7 @@ public class Aluno implements Serializable {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.genero = genero;
-        this.rg = rg;
+        this.cpf = cpf;
         this.turma = turma;
     }
 

@@ -1,11 +1,11 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDE0MzU0OH0.BrJc58hqzpR-b-XxOiOui_oiMVvNjf2F--G5NFtXpsg
-@rg=000000000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDI0NTY3Mn0.f6XoYftEU5doKTDX1SFn_uYxzBNXo43D-jTJeVrGMCI
+@cpf=12345678910
 
 GET {{url}}?nome=Otavio HTTP/1.1
 Authorization: Bearer {{token}}
 ###
-GET {{url}}?rg={{rg}} HTTP/1.1
+GET {{url}}?cpf={{cpf}} HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}} HTTP/1.1
@@ -38,7 +38,7 @@ Authorization: Bearer {{token}}
         "numero": 111,
         "logradouro": "Rua Luiz Santos"
     },
-    "rg": "000000000",
+    "cpf": "12345678910",
     "responsaveis": {
         "nome": "Otavio Benedicto Domingues",
         "cpf": "45916466880",
@@ -74,7 +74,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-POST {{url}}/falta/{{rg}}/1712705754891 HTTP/1.1
+POST {{url}}/falta/{{cpf}}/1712705754891 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -83,10 +83,10 @@ Authorization: Bearer {{token}}
   "observacao":"luis trouxe atestado"
 }
 ###
-DELETE {{url}}/falta/{{rg}}/21-04-2024 HTTP/1.1
+DELETE {{url}}/falta/{{cpf}}/21-04-2024 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
-PUT {{url}}/{{rg}} HTTP/1.1
+PUT {{url}}/{{cpf}} HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -95,7 +95,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-POST {{url}}/responsavel/{{rg}} HTTP/1.1
+POST {{url}}/responsavel/{{cpf}} HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -108,7 +108,7 @@ Authorization: Bearer {{token}}
 }
 
 ###
-DELETE {{url}}/responsavel/{{rg}}?cpf=45612344551 HTTP/1.1
+DELETE {{url}}/responsavel/{{cpf}}?cpf=45612344551 HTTP/1.1
 Authorization: Bearer {{token}}
 ###
 POST {{url}}/deficiencia/123456789?deficiencia=fff HTTP/1.1
@@ -124,11 +124,11 @@ DELETE {{url}}/acompanhamentoSaude/123456789?acompanhamento=aaa HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
-POST {{url}}/graduacao/{{rg}}/aprovar/10 HTTP/1.1
+POST {{url}}/graduacao/{{cpf}}/aprovar/10 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###
-POST {{url}}/graduacao/{{rg}}/reprovar/3 HTTP/1.1
+POST {{url}}/graduacao/{{cpf}}/reprovar/3 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}

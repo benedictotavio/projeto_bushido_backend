@@ -19,7 +19,7 @@ public class AlunoMapper {
                 }
 
                 Aluno aluno = new Aluno(
-                                alunoDTORequest.rg(),
+                                alunoDTORequest.cpf(),
                                 alunoDTORequest.nome(),
                                 new Date(alunoDTORequest.dataNascimento()),
                                 alunoDTORequest.genero(),
@@ -44,7 +44,7 @@ public class AlunoMapper {
                 }
 
                 Aluno aluno = new Aluno(
-                                alunoDTOResponse.rg(),
+                                alunoDTOResponse.cpf(),
                                 alunoDTOResponse.nome(),
                                 alunoDTOResponse.dataNascimento(),
                                 alunoDTOResponse.genero(),
@@ -78,7 +78,7 @@ public class AlunoMapper {
                                 .withGenero(aluno.getGenero())
                                 .withDataNascimento(aluno.getDataNascimento())
                                 .withDataPreenchimento(aluno.getDataPreenchimento())
-                                .withRg(aluno.getRg())
+                                .withCpf(aluno.getCpf())
                                 .withTurma(aluno.getTurma())
                                 .withResponsaveis(
                                                 ResponsavelMapper.mapToResponsaveisDTOResponse(aluno.getResponsaveis()))

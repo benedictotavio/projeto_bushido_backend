@@ -174,6 +174,10 @@ public class Graduacao implements Serializable {
             throw new LimitQuantityException("Para aprovar o aluno, a nota deve ser maior que 6");
         }
 
+        if (this.getCargaHoraria() < ValoresPadraoGraduacao.CARGA_HORARIA_MINIMA_PROVA) {
+            throw new LimitQuantityException("Carga horaria insuficiente para realizar a prova.");
+        }
+
         setFimGraduacao(LocalDate.now());
         setStatus(false);
         setAprovado(true);
@@ -187,6 +191,10 @@ public class Graduacao implements Serializable {
 
         if (notaDaProva > ValoresPadraoGraduacao.NOTA_MINIMA_APROVACAO) {
             throw new LimitQuantityException("Para reprovar o aluno, a nota ser menor que 6");
+        }
+
+        if (this.getCargaHoraria() < ValoresPadraoGraduacao.CARGA_HORARIA_MINIMA_PROVA) {
+            throw new LimitQuantityException("Carga horaria insuficiente para realizar a prova.");
         }
 
         setFimGraduacao(LocalDate.now());

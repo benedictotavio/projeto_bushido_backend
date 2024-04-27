@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import br.org.institutobushido.models.aluno.Aluno;
 
+
+
 @Repository
 public interface AlunoRepositorio extends MongoRepository<Aluno, String> {
-    Optional<Aluno> findByRg(String rg);
+    Optional<Aluno> findByCpf(String cpf);
 }
