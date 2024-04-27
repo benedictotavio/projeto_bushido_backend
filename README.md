@@ -197,58 +197,69 @@ GET /aluno?rg={rg}
 <summary><i>200</i></summary>
 
 ```json
+[
     {
       "nome": "string",
-      "genero": "M" | "F",
-      "dataNascimento": "YYYY-MM-DD. YYYY-MM-DDThh:mm:ss",
+      "dataNascimento": "string",
+      "genero": "string",
       "turma": "string",
-      "dadosSociais":{
+      "dadosSociais": {
         "bolsaFamilia": true,
-        "auxilioBrasil": false,
-        "imovel": "CEDIDO", -> enum
-        "numerosDePessoasNaCasa": 0,
-        "contribuintesDaRendaFamiliar": 0,
+        "auxilioBrasil": true,
+        "imovel": "string",
+        "numerosDePessoasNaCasa": 4,
+        "contribuintesDaRendaFamiliar": 2,
         "alunoContribuiParaRenda": true,
-        "rendaFamiliar": 0
+        "rendaFamiliar": 3000
       },
       "dadosEscolares": {
-        "turno": "MANHA", -> enum
+        "turno": "string",
         "escola": "string",
-        "serie": 0
+        "serie": "string"
       },
-      "dataPreenchimento": "2023-01-01T12:00:00",
-      "endereco":{
+      "dataPreenchimento": "string",
+      "endereco": {
         "cidade": "string",
         "estado": "string",
-        "cep":"string",
-        "numero":"string"
+        "cep": "string",
+        "numero": "string",
+        "logradouro": "string"
       },
-      "rg": "{rg}",
+      "rg": "string",
       "responsaveis": [
-          {
-          "nome":"string",
+        {
+          "nome": "string",
           "cpf": "string",
-          "telefone":"string",
-          "email":"string",
-          "filiacao":"PAI" -> enum
-          }
-        ],
-      "graduacao": {
-            "kyu": 0,
-            "frequencia": 0
+          "telefone": "string",
+          "email": "string",
+          "filiacao": "string"
+        }
+      ],
+      "graduacao": [
+        {
+          "kyu": 0,
+          "faltas": [],
+          "status": false,
+          "inicioGraduacao": "string",
+          "fimGraduacao": "string",
+          "frequencia": 100,
+          "aprovado": true,
+          "cargaHoraria": 39,
+          "dan": 1,
+          "nota": 8
         },
-        "historicoSaude": {
-        "tipoSanguineo": "A_POSITIVO",
-        "fatorRh": "POSITIVO",
+      ],
+      "historicoSaude": {
+        "tipoSanguineo": "string",
         "usoMedicamentoContinuo": {
-          "resposta": "string",
-          "qualMedicamento": "string"
+          "resposta": false,
+          "tipo": ""
         },
-        "cirurgia": {
+        "alergia": {
           "resposta": true,
           "tipo": "string"
         },
-        "alergia": {
+        "cirurgia": {
           "resposta": true,
           "tipo": "string"
         },
@@ -256,10 +267,15 @@ GET /aluno?rg={rg}
           "resposta": true,
           "tipo": "string"
         },
-        "deficiencia":["string"],
-        "acompanhamentoSaude":["string"]
+        "deficiencias": [
+          "string"
+        ],
+        "acompanhamentoSaude": [
+          "string"
+        ]
       }
-  }
+    }
+]
 ```
 
 </details>
@@ -313,58 +329,69 @@ GET /aluno?nome={nome}
 <summary><i>200</i></summary>
 
 ```json
+[
     {
       "nome": "string",
-      "genero": "M" | "F",
-      "dataNascimento": "YYYY-MM-DD. YYYY-MM-DDThh:mm:ss",
+      "dataNascimento": "string",
+      "genero": "string",
       "turma": "string",
-      "dadosSociais":{
+      "dadosSociais": {
         "bolsaFamilia": true,
-        "auxilioBrasil": false,
-        "imovel": "CEDIDO", -> enum
-        "numerosDePessoasNaCasa": 0,
-        "contribuintesDaRendaFamiliar": 0,
+        "auxilioBrasil": true,
+        "imovel": "string",
+        "numerosDePessoasNaCasa": 4,
+        "contribuintesDaRendaFamiliar": 2,
         "alunoContribuiParaRenda": true,
-        "rendaFamiliar": 0
+        "rendaFamiliar": 3000
       },
       "dadosEscolares": {
-        "turno": "MANHA", -> enum
+        "turno": "string",
         "escola": "string",
-        "serie": 0
+        "serie": "string"
       },
-      "dataPreenchimento": "2023-01-01T12:00:00",
-      "endereco":{
+      "dataPreenchimento": "string",
+      "endereco": {
         "cidade": "string",
         "estado": "string",
-        "cep":"string",
-        "numero":"string"
+        "cep": "string",
+        "numero": "string",
+        "logradouro": "string"
       },
-      "rg": "{rg}",
+      "rg": "string",
       "responsaveis": [
-          {
-          "nome":"string",
+        {
+          "nome": "string",
           "cpf": "string",
-          "telefone":"string",
-          "email":"string",
-          "filiacao":"PAI" -> enum
-          }
-        ],
-      "graduacao": {
-            "kyu": 0,
-            "frequencia": 0
+          "telefone": "string",
+          "email": "string",
+          "filiacao": "string"
+        }
+      ],
+      "graduacao": [
+        {
+          "kyu": 0,
+          "faltas": [],
+          "status": false,
+          "inicioGraduacao": "string",
+          "fimGraduacao": "string",
+          "frequencia": 100,
+          "aprovado": true,
+          "cargaHoraria": 39,
+          "dan": 1,
+          "nota": 8
         },
-        "historicoSaude": {
-        "tipoSanguineo": "A_POSITIVO",
-        "fatorRh": "POSITIVO",
+      ],
+      "historicoSaude": {
+        "tipoSanguineo": "string",
         "usoMedicamentoContinuo": {
-          "resposta": "string",
-          "qualMedicamento": "string"
+          "resposta": false,
+          "tipo": ""
         },
-        "cirurgia": {
+        "alergia": {
           "resposta": true,
           "tipo": "string"
         },
-        "alergia": {
+        "cirurgia": {
           "resposta": true,
           "tipo": "string"
         },
@@ -372,10 +399,15 @@ GET /aluno?nome={nome}
           "resposta": true,
           "tipo": "string"
         },
-        "deficiencia":["string"],
-        "acompanhamentoSaude":["string"]
+        "deficiencias": [
+          "string"
+        ],
+        "acompanhamentoSaude": [
+          "string"
+        ]
       }
-  }
+    }
+]
 ```
 
 </details>
