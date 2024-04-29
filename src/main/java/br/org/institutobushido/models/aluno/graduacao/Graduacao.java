@@ -37,7 +37,7 @@ public class Graduacao implements Serializable {
     public Graduacao(int kyu, int dan) {
 
         if (kyu > ValoresPadraoGraduacao.PRIMEIRO_KYU) {
-            throw new IllegalArgumentException("O kyu deve estar entre até 7");
+            throw new LimitQuantityException("O kyu deve ser até 7");
         }
 
         if (kyu == 0 && dan == 0) {

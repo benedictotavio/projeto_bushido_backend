@@ -28,7 +28,7 @@ POST /admin/signup
 {
   "nome": string,
   "email": string,
-  "cargo": string,
+  "cacpfo": string,
   "senha": string,
   "role": string
 }
@@ -147,13 +147,13 @@ GET /admin/buscar?nome={nome}
     "nome": "admin",
     "email": "string",
     "role": "string",
-    "cargo": "string"
+    "cacpfo": "string"
   },
   {
     "nome": "admin",
     "email": "string",
     "role": "string",
-    "cargo": "string"
+    "cacpfo": "string"
   }
 ]
 ```
@@ -178,16 +178,16 @@ GET /admin/buscar?nome={nome}
 
 # Aluno
 
-## Buscar aluno por RG
+## Buscar aluno por CPF
 
-Retorna um objeto de uma aluno com base no rg passado uma Query String como parâmetro.
+Retorna um objeto de uma aluno com base no cpf passado uma Query String como parâmetro.
 
 #### Request
 
-- **rg:** string
+- **cpf:** string
 
 ```http
-GET /aluno?rg={rg}
+GET /aluno?cpf={cpf}
 ```
 
 #### Response
@@ -225,7 +225,7 @@ GET /aluno?rg={rg}
         "numero": "string",
         "logradouro": "string"
       },
-      "rg": "string",
+      "cpf": "string",
       "responsaveis": [
         {
           "nome": "string",
@@ -244,7 +244,7 @@ GET /aluno?rg={rg}
           "fimGraduacao": "string",
           "frequencia": 100,
           "aprovado": true,
-          "cargaHoraria": 39,
+          "cacpfaHoraria": 39,
           "dan": 1,
           "nota": 8
         },
@@ -255,11 +255,11 @@ GET /aluno?rg={rg}
           "resposta": false,
           "tipo": ""
         },
-        "alergia": {
+        "alecpfia": {
           "resposta": true,
           "tipo": "string"
         },
-        "cirurgia": {
+        "cirucpfia": {
           "resposta": true,
           "tipo": "string"
         },
@@ -357,7 +357,7 @@ GET /aluno?nome={nome}
         "numero": "string",
         "logradouro": "string"
       },
-      "rg": "string",
+      "cpf": "string",
       "responsaveis": [
         {
           "nome": "string",
@@ -376,7 +376,7 @@ GET /aluno?nome={nome}
           "fimGraduacao": "string",
           "frequencia": 100,
           "aprovado": true,
-          "cargaHoraria": 39,
+          "cacpfaHoraria": 39,
           "dan": 1,
           "nota": 8
         },
@@ -387,11 +387,11 @@ GET /aluno?nome={nome}
           "resposta": false,
           "tipo": ""
         },
-        "alergia": {
+        "alecpfia": {
           "resposta": true,
           "tipo": "string"
         },
-        "cirurgia": {
+        "cirucpfia": {
           "resposta": true,
           "tipo": "string"
         },
@@ -460,7 +460,7 @@ Adiciona um aluno baseado nos dados cadastrais abaixo.
 | endereco.estado                                       | string           | Estado do aluno                                   |
 | endereco.cep`*`                                       | string           | CEP do aluno                                      |
 | endereco.numero`*`                                    | string           | Número do endereço do aluno                       |
-| rg`*`                                                 | string           | Número do RG do aluno                             |
+| cpf`*`                                                 | string           | Número do cpf do aluno                             |
 | responsaveis                                          | array de objetos | Responsáveis legais do aluno                      |
 | responsaveis.nome                                     | string           | Nome do responsável legal                         |
 | responsaveis.cpf                                      | string           | CPF do responsável legal                          |
@@ -476,12 +476,12 @@ Adiciona um aluno baseado nos dados cadastrais abaixo.
 | historicoSaude.usoMedicamentoContinuo                 | objeto           | Uso de medicamento contínuo pelo aluno            |
 | historicoSaude.usoMedicamentoContinuo.resposta        | string           | Resposta sobre uso de medicamento contínuo        |
 | historicoSaude.usoMedicamentoContinuo.qualMedicamento | string           | Nome do medicamento contínuo                      |
-| historicoSaude.cirurgia                               | objeto           | Informações sobre cirurgia do aluno               |
-| historicoSaude.cirurgia.resposta                      | boolean          | Indica se o aluno fez alguma cirurgia             |
-| historicoSaude.cirurgia.tipo                          | string           | Tipo de cirurgia realizada, se houver             |
-| historicoSaude.alergia                                | objeto           | Informações sobre alergias do aluno               |
-| historicoSaude.alergia.resposta                       | boolean          | Indica se o aluno tem alguma alergia              |
-| historicoSaude.alergia.tipo                           | string           | Tipo de alergia, se houver                        |
+| historicoSaude.cirucpfia                               | objeto           | Informações sobre cirucpfia do aluno               |
+| historicoSaude.cirucpfia.resposta                      | boolean          | Indica se o aluno fez alguma cirucpfia             |
+| historicoSaude.cirucpfia.tipo                          | string           | Tipo de cirucpfia realizada, se houver             |
+| historicoSaude.alecpfia                                | objeto           | Informações sobre alecpfias do aluno               |
+| historicoSaude.alecpfia.resposta                       | boolean          | Indica se o aluno tem alguma alecpfia              |
+| historicoSaude.alecpfia.tipo                           | string           | Tipo de alecpfia, se houver                        |
 | historicoSaude.doencaCronica                          | objeto           | Informações sobre doenças crônicas do aluno       |
 | historicoSaude.doencaCronica.resposta                 | boolean          | Indica se o aluno tem alguma doença crônica       |
 | historicoSaude.doencaCronica.tipo                     | string           | Tipo de doença crônica, se houver                 |
@@ -522,7 +522,7 @@ POST /aluno
     "numero":"string",
     "logradouro":"string"
   },
-  "rg": "{rg}",
+  "cpf": "{cpf}",
   "responsaveis": {
       "nome":"string",
       "cpf": "string",
@@ -541,11 +541,11 @@ POST /aluno
       "resposta": "string",
       "qualMedicamento": "string"
     },
-    "cirurgia": {
+    "cirucpfia": {
       "resposta": true,
       "tipo": "string"
     },
-    "alergia": {
+    "alecpfia": {
       "resposta": true,
       "tipo": "string"
     },
@@ -636,14 +636,14 @@ POST /aluno
 
 </details>
 
-## Editar aluno por rg
+## Editar aluno por cpf
 
 #### Request
 
-- *rg*: string
+- *cpf*: string
 
 ```http
-PUT /aluno/{rg}
+PUT /aluno/{cpf}
 ```
 
 ```body
@@ -745,13 +745,13 @@ Adiciona uma falta ao aluno na data especificada no parâmetro data.
 
 #### Request
 
-- **rg:** string
+- **cpf:** string
 - **data:** inteiro 
   - formato: _UTC datetime in milliseconds_
     - exemplo: **1609459200000**
 
 ```http
-POST /aluno/falta/{rg}/{data}
+POST /aluno/falta/{cpf}/{data}
 ```
 
 ```body
@@ -813,11 +813,11 @@ Retira a falta do aluno na data especificada no parâmetro data.
 
 #### Request
 
-- **rg:** string
+- **cpf:** string
 - **data:** dd-MM-yyyy
 
 ```http
-DELETE /aluno/falta/{rg}?data=dd-MM-yyyy
+DELETE /aluno/falta/{cpf}?data=dd-MM-yyyy
 ```
 
 #### Response
@@ -859,10 +859,10 @@ Adiciona um responsável ao aluno com base nos dados abaixo.
 
 #### Request
 
-- **rg:** string
+- **cpf:** string
 
 ```http
-POST /aluno/responsavel/{rg}
+POST /aluno/responsavel/{cpf}
 ```
 
 
@@ -944,11 +944,11 @@ Remover responsável do aluno com base no cpf informado.
 
 #### Request
 
-- **rg:** string
+- **cpf:** string
 - **deficiencia:** string
 
 ```http
-DELETE /aluno/responsavel/{rg}?cpf=string
+DELETE /aluno/responsavel/{cpf}?cpf=string
 ```
 
 #### Response
@@ -987,11 +987,11 @@ DELETE /aluno/responsavel/{rg}?cpf=string
 
 Adiciona uma string no campo deficiência ao aluno com base no parâmetro deficiência.
 
-- **rg:** string
+- **cpf:** string
 - **deficiencia:** string
 
 ```http
-POST /aluno/deficiencia/{rg}?deficiencia=string
+POST /aluno/deficiencia/{cpf}?deficiencia=string
 ```
 
 #### Response
@@ -1032,10 +1032,10 @@ Remove uma string no campo deficiência do aluno com base no parâmetro deficiê
 
 #### Request
 
-- **rg:** string
+- **cpf:** string
 - **deficiencia:** string
 ```http
-DELETE /aluno/deficiencia/{rg}?deficiencia=string
+DELETE /aluno/deficiencia/{cpf}?deficiencia=string
 ```
 
 #### Response
@@ -1076,11 +1076,11 @@ Adiciona uma string no campo acompanhamento de alunos ao aluno com base no parâ
 
 #### Request
 
-- **rg:** string
+- **cpf:** string
 - **acompanhamento:** string
 
 ```http
-POST /aluno/acompanhamentoSaude/{rg}?acompanhamento=string
+POST /aluno/acompanhamentoSaude/{cpf}?acompanhamento=string
 ```
 
 #### Response
@@ -1120,10 +1120,10 @@ Remove uma string no campo acompanhamento de alunos do aluno com base no parâme
 
 #### Request
 
-- **rg:** string
+- **cpf:** string
 
 ```http
-DELETE /aluno/acompanhamentoSaude/{rg}
+DELETE /aluno/acompanhamentoSaude/{cpf}
 ```
 
 #### Response
@@ -1383,13 +1383,13 @@ GET /admin/{nome_turma}/alunos
 [
   {
     "nome": "string",
-    "rg": "string",
+    "cpf": "string",
     "genero": "M",
     "dataNascimento": "2014-03-16T18:39:50.968+00:00"
   },
   {
     "nome": "string",
-    "rg": "string",
+    "cpf": "string",
     "genero": "F",
     "dataNascimento": "2014-03-04T18:39:50.969+00:00"
   }
