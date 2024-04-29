@@ -1,4 +1,4 @@
-package br.org.institutobushido.resources.exceptions;
+package br.org.institutobushido.utils.resources.exceptions;
 
 public class AlreadyRegisteredException extends RuntimeException {
     public AlreadyRegisteredException(String message) {

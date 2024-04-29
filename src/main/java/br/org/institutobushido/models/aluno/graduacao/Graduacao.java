@@ -9,11 +9,11 @@ import java.util.Date;
 import java.util.List;
 
 import br.org.institutobushido.models.aluno.graduacao.falta.Falta;
-import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.resources.exceptions.InactiveUserException;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
-import br.org.institutobushido.utils.ValoresPadraoGraduacao;
+import br.org.institutobushido.utils.default_values.ValoresPadraoGraduacao;
+import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.utils.resources.exceptions.InactiveUserException;
+import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -37,7 +37,7 @@ public class Graduacao implements Serializable {
     public Graduacao(int kyu, int dan) {
 
         if (kyu > ValoresPadraoGraduacao.PRIMEIRO_KYU) {
-            throw new IllegalArgumentException("O kyu deve estar entre até 7");
+            throw new LimitQuantityException("O kyu deve ser até 7");
         }
 
         if (kyu == 0 && dan == 0) {
@@ -174,6 +174,10 @@ public class Graduacao implements Serializable {
             throw new LimitQuantityException("Para aprovar o aluno, a nota deve ser maior que 6");
         }
 
+        if (this.getCargaHoraria() < ValoresPadraoGraduacao.CARGA_HORARIA_MINIMA_PROVA) {
+            throw new LimitQuantityException("Carga horaria insuficiente para realizar a prova.");
+        }
+
         setFimGraduacao(LocalDate.now());
         setStatus(false);
         setAprovado(true);
@@ -187,6 +191,10 @@ public class Graduacao implements Serializable {
 
         if (notaDaProva > ValoresPadraoGraduacao.NOTA_MINIMA_APROVACAO) {
             throw new LimitQuantityException("Para reprovar o aluno, a nota ser menor que 6");
+        }
+
+        if (this.getCargaHoraria() < ValoresPadraoGraduacao.CARGA_HORARIA_MINIMA_PROVA) {
+            throw new LimitQuantityException("Carga horaria insuficiente para realizar a prova.");
         }
 
         setFimGraduacao(LocalDate.now());

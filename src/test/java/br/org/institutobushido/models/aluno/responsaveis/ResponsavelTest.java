@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
-import br.org.institutobushido.resources.exceptions.InvalidFormatDataException;
+import br.org.institutobushido.utils.resources.exceptions.InvalidFormatDataException;
 
 @SpringBootTest
 class ResponsavelTest {

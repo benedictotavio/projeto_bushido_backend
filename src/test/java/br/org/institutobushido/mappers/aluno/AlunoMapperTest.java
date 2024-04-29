@@ -140,7 +140,7 @@ class AlunoMapperTest {
                 aluno = AlunoMapper.mapToAluno(alunoDTORequest);
 
                 assertEquals(alunoDTORequest.nome(), aluno.getNome());
-                assertEquals(alunoDTORequest.rg(), aluno.getRg());
+                assertEquals(alunoDTORequest.cpf(), aluno.getCpf());
                 assertEquals(alunoDTORequest.dataNascimento(), aluno.getDataNascimento().getTime());
                 assertEquals(alunoDTORequest.genero(), aluno.getGenero());
                 assertEquals(alunoDTORequest.dadosSociais().auxilioBrasil(), aluno.getDadosSociais().isAuxilioBrasil());
@@ -155,7 +155,7 @@ class AlunoMapperTest {
         void deveMapearAlunoDTOResponseDeAluno() {
                 alunoDTOResponse = AlunoMapper.mapToAlunoDTOResponse(aluno);
                 assertEquals(aluno.getNome(), alunoDTOResponse.nome());
-                assertEquals(aluno.getRg(), alunoDTOResponse.rg());
+                assertEquals(aluno.getCpf(), alunoDTOResponse.cpf());
                 assertEquals(aluno.getDataNascimento(), alunoDTOResponse.dataNascimento());
                 assertEquals(aluno.getGenero(), alunoDTOResponse.genero());
                 assertEquals(aluno.getDadosSociais().isAuxilioBrasil(),
@@ -171,7 +171,7 @@ class AlunoMapperTest {
                 List<Aluno> alunos = List.of(aluno);
                 List<AlunoDTOResponse> alunosDTOResponses = AlunoMapper.mapToListAlunoDTOResponse(alunos);
                 assertEquals(alunos.get(0).getNome(), alunosDTOResponses.get(0).nome());
-                assertEquals(alunos.get(0).getRg(), alunosDTOResponses.get(0).rg());
+                assertEquals(alunos.get(0).getCpf(), alunosDTOResponses.get(0).cpf());
                 assertEquals(alunos.get(0).getDataNascimento(), alunosDTOResponses.get(0).dataNascimento());
                 assertEquals(alunos.get(0).getGenero(), alunosDTOResponses.get(0).genero());
         }

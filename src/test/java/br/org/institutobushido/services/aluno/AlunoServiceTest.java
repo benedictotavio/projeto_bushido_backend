@@ -68,8 +68,8 @@ import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.models.turma.tutor.Tutor;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
-import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
 
 @SpringBootTest
 class AlunoServiceTest {
@@ -179,17 +179,17 @@ class AlunoServiceTest {
         @Test
         void deveCriarAluno() {
 
-                when(alunoRepositorio.findByRg(anyString())).thenReturn(Optional.empty());
+                when(alunoRepositorio.findByCpf(anyString())).thenReturn(Optional.empty());
                 when(turmaRepositorio.findByNome(anyString()))
                                 .thenReturn(Optional.of(new Turma("Endereço II", "Turma A",
                                                 new Tutor("Tutor", "Tutor@email.com"))));
                 when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
 
                 // Act
-                String rg = alunoServices.adicionarAluno(alunoDTORequest);
+                String cpf = alunoServices.adicionarAluno(alunoDTORequest);
 
                 // Assert
-                assertEquals(alunoDTORequest.rg(), rg);
+                assertEquals(alunoDTORequest.cpf(), cpf);
                 // Verify that the repository's save method was called
                 verify(alunoRepositorio, times(1)).save(any(Aluno.class));
         }
@@ -197,7 +197,7 @@ class AlunoServiceTest {
         @Test
         void deveRetornarExceçãoQuandoAlunoJaExistir() {
 
-                when(alunoRepositorio.findByRg(anyString())).thenReturn(Optional.of(aluno));
+                when(alunoRepositorio.findByCpf(anyString())).thenReturn(Optional.of(aluno));
 
                 // Assert
                 assertThrows(AlreadyRegisteredException.class,
@@ -231,7 +231,7 @@ class AlunoServiceTest {
         @Test
         void deveAdicionarResponsavel() {
                 // Arrange
-                String rg = "validRg";
+                String cpf = "validRg";
                 ResponsavelDTORequest responsavelDTORequest = new ResponsavelDTORequest(
                                 "Nome",
                                 "12345678902",
@@ -241,7 +241,7 @@ class AlunoServiceTest {
 
                 when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
                 // Act
-                ResponsavelDTOResponse result = alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
+                ResponsavelDTOResponse result = alunoServices.adicionarResponsavel(cpf, responsavelDTORequest);
 
                 // Assert
                 assertNotNull(result);
@@ -250,7 +250,7 @@ class AlunoServiceTest {
         @Test
         void deveRetornarExceçãoQuandoResponsavelNaoExistir() {
                 // Arrange
-                String rg = "invalidRg";
+                String cpf = "invalidRg";
                 ResponsavelDTORequest responsavelDTORequest = new ResponsavelDTORequest(
                                 "Nome",
                                 "12345678903",
@@ -260,7 +260,7 @@ class AlunoServiceTest {
 
                 // Act and Assert
                 assertThrows(EntityNotFoundException.class, () -> {
-                        alunoServices.adicionarResponsavel(rg, responsavelDTORequest);
+                        alunoServices.adicionarResponsavel(cpf, responsavelDTORequest);
                 });
         }
 
@@ -274,7 +274,7 @@ class AlunoServiceTest {
                 when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
-                String result = alunoServices.removerResponsavel(aluno.getRg(), cpf);
+                String result = alunoServices.removerResponsavel(aluno.getCpf(), cpf);
 
                 // Assert
                 assertEquals("1", result);
@@ -295,7 +295,7 @@ class AlunoServiceTest {
                 when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
-                String result = alunoServices.adicionarFaltaDoAluno(aluno.getRg(), faltaDTORequest, dataFalta);
+                String result = alunoServices.adicionarFaltaDoAluno(aluno.getCpf(), faltaDTORequest, dataFalta);
 
                 // Assert
                 assertEquals("1", result);
@@ -319,7 +319,7 @@ class AlunoServiceTest {
         @Test
         void deveRetirarFaltaDoAluno() {
                 // Arrange
-                String rg = "123456789";
+                String cpf = "123456789";
 
                 Graduacao graduacao = new Graduacao(7, 0);
                 graduacao.setFimGraduacao(LocalDate.now().plusMonths(2));
@@ -331,7 +331,7 @@ class AlunoServiceTest {
                 when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
-                String result = alunoServices.retirarFaltaDoAluno(rg, graduacao.getFaltas().get(0).getData());
+                String result = alunoServices.retirarFaltaDoAluno(cpf, graduacao.getFaltas().get(0).getData());
 
                 // Assert
                 assertEquals("0", result);
@@ -341,7 +341,7 @@ class AlunoServiceTest {
         @Test
         void deveRetornarEdiçãoDeAlunoPorRg() {
                 // Arrange
-                String rg = "123456789";
+                String cpf = "123456789";
                 UpdateAlunoDTORequest updateAlunoDTORequest = new UpdateAlunoDTORequest(
                                 "NOME 1",
                                 new Date().getTime(),
@@ -356,7 +356,7 @@ class AlunoServiceTest {
                 when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
-                String result = alunoServices.editarAlunoPorRg(rg, updateAlunoDTORequest);
+                String result = alunoServices.editarAlunoPorCpf(cpf, updateAlunoDTORequest);
 
                 // Assert
                 assertEquals("Aluno editado com sucesso!", result);
@@ -390,7 +390,7 @@ class AlunoServiceTest {
                                 new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
                                                 LocalDate.now().plusMonths(4), false, 0, dan, 10)));
 
-                GraduacaoDTOResponse result = alunoServices.reprovarAluno(aluno.getRg(), 5);
+                GraduacaoDTOResponse result = alunoServices.reprovarAluno(aluno.getCpf(), 5);
 
                 // Assert
                 assertNotNull(result);
@@ -410,7 +410,7 @@ class AlunoServiceTest {
                                 new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
                                                 LocalDate.now().plusMonths(4), false, 0, dan, 10)));
 
-                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg(), 9);
+                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getCpf(), 9);
 
                 // Assert
                 assertNotNull(result);
@@ -430,7 +430,7 @@ class AlunoServiceTest {
                                 new Graduacao(kyu, List.of(), true, 100, LocalDate.now().minusMonths(2),
                                                 LocalDate.now().plusMonths(4), false, 0, dan, 10)));
 
-                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getRg(), 10);
+                GraduacaoDTOResponse result = alunoServices.aprovarAluno(aluno.getCpf(), 10);
 
                 // Assert
                 assertNotNull(result);
@@ -441,20 +441,18 @@ class AlunoServiceTest {
         @Test
         void deveRetornarAlunoPorRg() {
                 when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
-                List<AlunoDTOResponse> result = alunoServices.buscarAlunoPorRg("123456789");
+                List<AlunoDTOResponse> result = alunoServices.buscarAlunoPorCpf("123456789");
                 assertNotNull(result);
                 assertEquals(1, result.size());
         }
 
-        // should raise an EntityNotFoundException when buscarAlunoPorRg returns an
-        // empty list
         @Test
-        void test_empty_list() {
+        void deveRetornarExcecaoQuandoAlunoNaoEncontrado() {
                 try {
-                        alunoServices.encontrarAlunoPorRg("invalid_rg");
+                        alunoServices.encontrarAlunoPorCpf("invalid_cpf");
                         fail("Expected EntityNotFoundException to be thrown");
                 } catch (EntityNotFoundException e) {
-                        assertEquals("Aluno com o rg invalid_rg nao encontrado!", e.getMessage());
+                        assertEquals("Aluno com o cpf invalid_cpf nao encontrado!", e.getMessage());
                 }
         }
 }

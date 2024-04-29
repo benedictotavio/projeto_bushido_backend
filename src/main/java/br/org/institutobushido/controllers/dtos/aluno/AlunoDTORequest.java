@@ -34,7 +34,7 @@ public record AlunoDTORequest(
 
                 @NotNull(message = "Endereço é obrigatório!") EnderecoDTORequest endereco,
 
-                @NotNull(message = "Rg é obrigatório!") @Pattern(regexp = "^\\d{6,12}", message = "Formato de rg inválido! Ex: 123456789") @NotEmpty(message = "Rg é obrigatório!") String rg,
+                @NotNull(message = "Cpf é obrigatório!") @NotEmpty(message = "Cpf é obrigatório!") @Pattern(regexp = "^\\d{11}$", message = "Cpf inválido! Ex: 12345678910") String cpf,
 
                 @NotEmpty(message = "Insira pelo menos um Responsavel!", groups = {Responsavel.class}) ResponsavelDTORequest responsaveis,
 

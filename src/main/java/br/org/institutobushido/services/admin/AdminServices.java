@@ -20,8 +20,8 @@ import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
 import br.org.institutobushido.mappers.admin.AdminMapper;
 import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.repositories.AdminRepositorio;
-import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
 
 @Service
 public class AdminServices implements AdminServicesInterface, UserDetailsService {

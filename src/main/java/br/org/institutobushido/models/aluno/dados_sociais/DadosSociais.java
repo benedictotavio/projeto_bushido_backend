@@ -3,7 +3,7 @@ package br.org.institutobushido.models.aluno.dados_sociais;
 import java.io.Serializable;
 
 import br.org.institutobushido.enums.aluno.Imovel;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

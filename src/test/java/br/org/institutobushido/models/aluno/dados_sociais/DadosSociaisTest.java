@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+
+import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 
 @SpringBootTest
 class DadosSociaisTest {

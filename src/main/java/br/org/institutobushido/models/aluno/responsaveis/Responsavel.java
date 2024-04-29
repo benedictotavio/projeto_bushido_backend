@@ -2,8 +2,8 @@ package br.org.institutobushido.models.aluno.responsaveis;
 
 import java.io.Serializable;
 import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
-import br.org.institutobushido.resources.exceptions.InvalidFormatDataException;
-import br.org.institutobushido.utils.ValoresPadraoResponsavel;
+import br.org.institutobushido.utils.default_values.ValoresPadraoResponsavel;
+import br.org.institutobushido.utils.resources.exceptions.InvalidFormatDataException;
 import lombok.Getter;
 
 @Getter

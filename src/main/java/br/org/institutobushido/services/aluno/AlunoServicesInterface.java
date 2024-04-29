@@ -13,28 +13,28 @@ import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTO
 public interface AlunoServicesInterface {
     String adicionarAluno(AlunoDTORequest alunoDTORequest);
 
-    List<AlunoDTOResponse> buscarAluno(String nome, String rg, int pagina, int tamanho, String ordenarPor,
+    List<AlunoDTOResponse> buscarAluno(String nome, String cpf, int pagina, int tamanho, String ordenarPor,
             String sequenciaOrdenacao);
 
-    public String editarAlunoPorRg(String rg, UpdateAlunoDTORequest updateAlunoDTORequest);
+    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest);
 
-    public String adicionarFaltaDoAluno(String rg, FaltaDTORequest faltas, long novaFalta);
+    public String adicionarFaltaDoAluno(String cpf, FaltaDTORequest faltas, long novaFalta);
 
-    public String retirarFaltaDoAluno(String rg, String faltasId);
+    public String retirarFaltaDoAluno(String cpf, String faltasId);
 
-    public ResponsavelDTOResponse adicionarResponsavel(String rg, ResponsavelDTORequest responsavelDTORequest);
+    public ResponsavelDTOResponse adicionarResponsavel(String cpf, ResponsavelDTORequest responsavelDTORequest);
 
-    public String removerResponsavel(String rg, String cpf);
+    public String removerResponsavel(String cpf, String cpfResponsavel);
 
-    public String adicionarDeficiencia(String rg, String deficiencia);
+    public String adicionarDeficiencia(String cpf, String deficiencia);
 
-    public String removerDeficiencia(String rg, String deficiencia);
+    public String removerDeficiencia(String cpf, String deficiencia);
 
-    public String adicionarAcompanhamentoSaude(String rg, String acompanhamentoSaude);
+    public String adicionarAcompanhamentoSaude(String cpf, String acompanhamentoSaude);
 
-    public String removerAcompanhamentoSaude(String rg, String acompanhamentoSaude);
+    public String removerAcompanhamentoSaude(String cpf, String acompanhamentoSaude);
 
-    public GraduacaoDTOResponse aprovarAluno(String rg, int nota);
+    public GraduacaoDTOResponse aprovarAluno(String cpf, int nota);
 
-    public GraduacaoDTOResponse reprovarAluno(String rg, int nota);
+    public GraduacaoDTOResponse reprovarAluno(String cpf, int nota);
 }

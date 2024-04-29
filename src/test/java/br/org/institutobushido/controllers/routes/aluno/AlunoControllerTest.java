@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -163,7 +162,7 @@ class AlunoControllerTest {
                                 new GraduacaoDTORequest(7, 2));
 
                 alunoDTOResponse = AlunoDTOResponse.builder()
-                                .withRg(aluno.getRg())
+                                .withCpf(aluno.getCpf())
                                 .withNome(aluno.getNome())
                                 .withDataNascimento(aluno.getDataNascimento())
                                 .withGenero(aluno.getGenero())
@@ -187,7 +186,7 @@ class AlunoControllerTest {
         void deveCriarAluno() throws URISyntaxException {
 
                 // Act
-                when(alunoServices.adicionarAluno(alunoDTORequest)).thenReturn(aluno.getRg());
+                when(alunoServices.adicionarAluno(alunoDTORequest)).thenReturn(aluno.getCpf());
                 ResponseEntity<SuccessPostResponse> response = alunoController.adicionarAluno(alunoDTORequest);
 
                 assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -200,7 +199,7 @@ class AlunoControllerTest {
                 SuccessPostResponse responseBody = response.getBody();
 
                 assert responseBody != null;
-                assertEquals(aluno.getRg(), responseBody.getId());
+                assertEquals(aluno.getCpf(), responseBody.getId());
                 assertEquals("Aluno adicionado com sucesso", responseBody.getMessage());
                 assertEquals("Aluno", responseBody.getEntity());
         }
@@ -209,18 +208,18 @@ class AlunoControllerTest {
         void deveBuscarAluno() {
                 // Arrange
                 String nome = "John";
-                String rg = "123456";
+                String cpf = "123456";
                 int page = 0;
                 int size = 10;
                 String sortBy = "nome";
                 String sortOrder = "asc";// Add some mock aluno objects
 
                 // Mock the service method to return a list of alunos
-                when(alunoServices.buscarAluno(nome, rg, page, size, sortOrder, sortBy))
+                when(alunoServices.buscarAluno(nome, cpf, page, size, sortOrder, sortBy))
                                 .thenReturn(List.of(alunoDTOResponse));
 
                 // Act
-                ResponseEntity<List<AlunoDTOResponse>> responseEntity = alunoController.buscarAluno(rg, nome, page,
+                ResponseEntity<List<AlunoDTOResponse>> responseEntity = alunoController.buscarAluno(cpf, nome, page,
                                 size, sortBy, sortOrder);
 
                 // Assert
@@ -260,23 +259,23 @@ class AlunoControllerTest {
                                                 new CirurgiaDTORequest("Cirurgia"),
                                                 new DoencaCronicaDTORequest("Doenca")));
 
-                when(alunoServices.editarAlunoPorRg(aluno.getRg(), updateAlunoDTORequest))
+                when(alunoServices.editarAlunoPorCpf(aluno.getCpf(), updateAlunoDTORequest))
                                 .thenReturn("Aluno editado com sucesso!");
 
                 // Act
-                ResponseEntity<SuccessPutResponse> responseEntity = alunoController.editarAluno(aluno.getRg(),
+                ResponseEntity<SuccessPutResponse> responseEntity = alunoController.editarAluno(aluno.getCpf(),
                                 updateAlunoDTORequest);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).editarAlunoPorRg(aluno.getRg(), updateAlunoDTORequest);
+                verify(alunoServices).editarAlunoPorCpf(aluno.getCpf(), updateAlunoDTORequest);
 
                 // Verify response body
                 SuccessPutResponse responseBody = responseEntity.getBody();
                 assert responseBody != null;
-                assertEquals(aluno.getRg(), responseBody.getId());
+                assertEquals(aluno.getCpf(), responseBody.getId());
                 assertEquals("Aluno editado com sucesso!", responseBody.getMessage());
                 assertEquals("Aluno", responseBody.getEntity());
         }
@@ -290,7 +289,7 @@ class AlunoControllerTest {
                                 "RG",
                                 FiliacaoResposavel.OUTRO);
 
-                when(alunoServices.adicionarResponsavel(aluno.getRg(), responsavelDTORequest))
+                when(alunoServices.adicionarResponsavel(aluno.getCpf(), responsavelDTORequest))
                                 .thenReturn(new ResponsavelDTOResponse(
                                                 responsavelDTORequest.nome(),
                                                 responsavelDTORequest.cpf(),
@@ -299,14 +298,14 @@ class AlunoControllerTest {
                                                 responsavelDTORequest.filiacao().name()));
 
                 // Act
-                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.adicionarResponsavel(aluno.getRg(),
+                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.adicionarResponsavel(aluno.getCpf(),
                                 responsavelDTORequest);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).adicionarResponsavel(aluno.getRg(), responsavelDTORequest);
+                verify(alunoServices).adicionarResponsavel(aluno.getCpf(), responsavelDTORequest);
 
                 // Verify response body
                 SuccessPostResponse responseBody = responseEntity.getBody();
@@ -328,18 +327,18 @@ class AlunoControllerTest {
                                 FiliacaoResposavel.OUTRO);
 
                 // Mock service method
-                when(alunoServices.removerResponsavel(aluno.getRg(), responsavelDTORequest.cpf()))
+                when(alunoServices.removerResponsavel(aluno.getCpf(), responsavelDTORequest.cpf()))
                                 .thenReturn(String.valueOf(aluno.getResponsaveis().size()));
 
                 // Act
-                ResponseEntity<SuccessDeleteResponse> responseEntity = alunoController.removerResponsavel(aluno.getRg(),
+                ResponseEntity<SuccessDeleteResponse> responseEntity = alunoController.removerResponsavel(aluno.getCpf(),
                                 responsavelDTORequest.cpf());
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).removerResponsavel(aluno.getRg(), responsavelDTORequest.cpf());
+                verify(alunoServices).removerResponsavel(aluno.getCpf(), responsavelDTORequest.cpf());
 
                 // Verify response body
                 SuccessDeleteResponse responseBody = responseEntity.getBody();
@@ -351,7 +350,7 @@ class AlunoControllerTest {
 
         @Test
         void deveAdicionarFaltaAoAluno() {
-                String rg = "123456789";
+                String cpf = "123456789";
                 long data = System.currentTimeMillis();
                 FaltaDTORequest faltaDTORequest = new FaltaDTORequest(
                                 "Motivo",
@@ -360,17 +359,17 @@ class AlunoControllerTest {
                 String additionMessage = String.valueOf(aluno.getGraduacao().size()); // Mock addition message
 
                 // Mock service method
-                when(alunoServices.adicionarFaltaDoAluno(rg, faltaDTORequest, data)).thenReturn(additionMessage);
+                when(alunoServices.adicionarFaltaDoAluno(cpf, faltaDTORequest, data)).thenReturn(additionMessage);
 
                 // Act
                 ResponseEntity<SuccessPostResponse> responseEntity = alunoController
-                                .adicionarFaltaAoAluno(faltaDTORequest, rg, data);
+                                .adicionarFaltaAoAluno(faltaDTORequest, cpf, data);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).adicionarFaltaDoAluno(rg, faltaDTORequest, data);
+                verify(alunoServices).adicionarFaltaDoAluno(cpf, faltaDTORequest, data);
 
                 // Verify response body
                 SuccessPostResponse responseBody = responseEntity.getBody();
@@ -383,22 +382,22 @@ class AlunoControllerTest {
         @Test
         void deveRetirarFaltaAoAluno() {
                 // Arrange
-                String rg = "123456789";
+                String cpf = "123456789";
                 String data = "2024-04-18"; // Mock data value
 
                 String removalMessage = "0"; // Mock removal message
 
                 // Mock service method
-                when(alunoServices.retirarFaltaDoAluno(rg, data)).thenReturn(removalMessage);
+                when(alunoServices.retirarFaltaDoAluno(cpf, data)).thenReturn(removalMessage);
 
                 // Act
-                ResponseEntity<SuccessDeleteResponse> responseEntity = alunoController.retirarFaltaAoAluno(data, rg);
+                ResponseEntity<SuccessDeleteResponse> responseEntity = alunoController.retirarFaltaAoAluno(data, cpf);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).retirarFaltaDoAluno(rg, data);
+                verify(alunoServices).retirarFaltaDoAluno(cpf, data);
 
                 // Verify response body
                 SuccessDeleteResponse responseBody = responseEntity.getBody();
@@ -411,21 +410,21 @@ class AlunoControllerTest {
         @Test
         void deveAdicionarDeficiencia() {
                 // Arrange
-                String rg = "123456789";
+                String cpf = "123456789";
                 String deficiencia = "Visual impairment";
 
                 // Mock service method
-                when(alunoServices.adicionarDeficiencia(rg, deficiencia)).thenReturn(deficiencia);
+                when(alunoServices.adicionarDeficiencia(cpf, deficiencia)).thenReturn(deficiencia);
 
                 // Act
-                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.adicionarDeficiencia(rg,
+                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.adicionarDeficiencia(cpf,
                                 deficiencia);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).adicionarDeficiencia(rg, deficiencia);
+                verify(alunoServices).adicionarDeficiencia(cpf, deficiencia);
 
                 // Verify response body
                 SuccessPostResponse responseBody = responseEntity.getBody();
@@ -438,21 +437,21 @@ class AlunoControllerTest {
         @Test
         void deveRemoverDeficiencia() {
                 // Arrange
-                String rg = "123456789";
+                String cpf = "123456789";
                 String deficiencia = "Visual impairment"; // Mock removal message
 
                 // Mock service method
-                when(alunoServices.removerDeficiencia(rg, deficiencia)).thenReturn(deficiencia);
+                when(alunoServices.removerDeficiencia(cpf, deficiencia)).thenReturn(deficiencia);
 
                 // Act
-                ResponseEntity<SuccessDeleteResponse> responseEntity = alunoController.removerDeficiencia(rg,
+                ResponseEntity<SuccessDeleteResponse> responseEntity = alunoController.removerDeficiencia(cpf,
                                 deficiencia);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).removerDeficiencia(rg, deficiencia);
+                verify(alunoServices).removerDeficiencia(cpf, deficiencia);
 
                 // Verify response body
                 SuccessDeleteResponse responseBody = responseEntity.getBody();
@@ -465,21 +464,21 @@ class AlunoControllerTest {
         @Test
         void deveAdicionarAcompanhamentoSaude() {
                 // Arrange
-                String rg = "123456789";
+                String cpf = "123456789";
                 String acompanhamento = "Physical therapy";
 
                 // Mock service method
-                when(alunoServices.adicionarAcompanhamentoSaude(rg, acompanhamento)).thenReturn(acompanhamento);
+                when(alunoServices.adicionarAcompanhamentoSaude(cpf, acompanhamento)).thenReturn(acompanhamento);
 
                 // Act
-                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.adicionarAcompanhamentoSaude(rg,
+                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.adicionarAcompanhamentoSaude(cpf,
                                 acompanhamento);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).adicionarAcompanhamentoSaude(rg, acompanhamento);
+                verify(alunoServices).adicionarAcompanhamentoSaude(cpf, acompanhamento);
 
                 // Verify response body
                 SuccessPostResponse responseBody = responseEntity.getBody();
@@ -493,20 +492,20 @@ class AlunoControllerTest {
         @Test
         void deveAprovarAluno() {
                 // Arrange
-                String rg = "123456789";
+                String cpf = "123456789";
                 int nota = 10;
 
                 // Mock service method
-                when(alunoServices.aprovarAluno(rg, nota)).thenReturn(graduacaoDTOResponse);
+                when(alunoServices.aprovarAluno(cpf, nota)).thenReturn(graduacaoDTOResponse);
 
                 // Act
-                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.aprovarAluno(rg, nota);
+                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.aprovarAluno(cpf, nota);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct argument
-                verify(alunoServices).aprovarAluno(rg, nota);
+                verify(alunoServices).aprovarAluno(cpf, nota);
 
                 // Verify response body
                 SuccessPostResponse responseBody = responseEntity.getBody();
@@ -519,20 +518,20 @@ class AlunoControllerTest {
         @Test
         void deveReprovarAluno() {
                 // Arrange
-                String rg = "123456789";
+                String cpf = "123456789";
                 int nota = 5;
 
                 // Mock service method
-                when(alunoServices.reprovarAluno(rg, nota)).thenReturn(graduacaoDTOResponse);
+                when(alunoServices.reprovarAluno(cpf, nota)).thenReturn(graduacaoDTOResponse);
 
                 // Act
-                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.reprovarAluno(rg, nota);
+                ResponseEntity<SuccessPostResponse> responseEntity = alunoController.reprovarAluno(cpf, nota);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct argument
-                verify(alunoServices).reprovarAluno(rg, nota);
+                verify(alunoServices).reprovarAluno(cpf, nota);
 
                 // Verify response body
                 SuccessPostResponse responseBody = responseEntity.getBody();
@@ -545,19 +544,19 @@ class AlunoControllerTest {
         @Test
         void deveRemoverAcompanhamentoSaude() {
                 // Arrange
-                String rg = "123456789";
+                String cpf = "123456789";
                 String acompanhamento = "Physical therapy";
 
                 // Mock service method
-                when(alunoServices.removerAcompanhamentoSaude(rg, acompanhamento)).thenReturn(acompanhamento);
+                when(alunoServices.removerAcompanhamentoSaude(cpf, acompanhamento)).thenReturn(acompanhamento);
 
                 // Act
-                ResponseEntity<SuccessDeleteResponse> responseEntity = alunoController.removerAcompanhamentoSaude(rg,
+                ResponseEntity<SuccessDeleteResponse> responseEntity = alunoController.removerAcompanhamentoSaude(cpf,
                                 acompanhamento);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-                verify(alunoServices).removerAcompanhamentoSaude(rg, acompanhamento);
+                verify(alunoServices).removerAcompanhamentoSaude(cpf, acompanhamento);
 
                 // Verify response body
                 SuccessDeleteResponse responseBody = responseEntity.getBody();

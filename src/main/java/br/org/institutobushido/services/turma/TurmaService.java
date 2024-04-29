@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import br.org.institutobushido.controllers.dtos.turma.DadosTurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
@@ -26,9 +25,9 @@ import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.models.turma.tutor.Tutor;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
-import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 
 @Service
 public class TurmaService implements TurmaServiceInterface {
@@ -129,7 +128,7 @@ public class TurmaService implements TurmaServiceInterface {
 
         AggregationOperation project = Aggregation.project()
                 .and("alunos_turma.nome").as("nome")
-                .and("alunos_turma._id").as("rg")
+                .and("alunos_turma._id").as("cpf")
                 .and("alunos_turma.genero").as("genero")
                 .and("alunos_turma.dataNascimento").as("dataNascimento")
                 .andExclude("_id");

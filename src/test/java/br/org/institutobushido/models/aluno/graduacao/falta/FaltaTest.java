@@ -7,15 +7,15 @@ import java.util.Date;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 
 @SpringBootTest
 class FaltaTest {
-    // Creating a new instance of 'Falta' with valid parameters should set the
-    // 'data', 'motivo', and 'observacao' attributes correctly.
+    private final Date DATA_FUTURA = new Date(new Date().getTime() + 2000 * 60 * 60 * 24 * 4);
+
     @Test
     void test_valid_parameters() {
         assertThrows(LimitQuantityException.class,
-            () -> new Falta("motivo", "observacao", new Date(new Date().getTime() + 2000 * 60 * 60 * 24 * 4)));
+                () -> new Falta("motivo", "observacao", DATA_FUTURA));
     }
 }

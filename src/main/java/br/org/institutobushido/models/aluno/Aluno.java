@@ -17,19 +17,22 @@ import br.org.institutobushido.models.aluno.endereco.Endereco;
 import br.org.institutobushido.models.aluno.graduacao.Graduacao;
 import br.org.institutobushido.models.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
-import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
-import br.org.institutobushido.utils.ValoresPadraoResponsavel;
+import br.org.institutobushido.utils.default_values.ValoresPadraoResponsavel;
+import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 import lombok.Getter;
 
 @Getter
 @Document(collection = "alunos")
 public class Aluno implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 2405172041950251807L;
+
     @Id
-    private String rg;
+    private String cpf;
+
     @Indexed(unique = true, background = true)
     private String nome;
     private Date dataNascimento;
@@ -43,7 +46,7 @@ public class Aluno implements Serializable {
     private List<Graduacao> graduacao;
     private HistoricoSaude historicoSaude;
 
-    public Aluno(String rg, String nome, Date dataNascimento, Genero genero, String turma) {
+    public Aluno(String cpf, String nome, Date dataNascimento, Genero genero, String turma) {
         this.graduacao = new ArrayList<>();
         this.historicoSaude = new HistoricoSaude();
         this.dadosEscolares = new DadosEscolares();
@@ -54,7 +57,7 @@ public class Aluno implements Serializable {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.genero = genero;
-        this.rg = rg;
+        this.cpf = cpf;
         this.turma = turma;
     }
 
