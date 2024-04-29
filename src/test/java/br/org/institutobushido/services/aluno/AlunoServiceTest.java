@@ -68,8 +68,8 @@ import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.models.turma.tutor.Tutor;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
-import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
 
 @SpringBootTest
 class AlunoServiceTest {
@@ -446,12 +446,10 @@ class AlunoServiceTest {
                 assertEquals(1, result.size());
         }
 
-        // should raise an EntityNotFoundException when buscarAlunoPorcpf returns an
-        // empty list
         @Test
-        void test_empty_list() {
+        void deveRetornarExcecaoQuandoAlunoNaoEncontrado() {
                 try {
-                        alunoServices.encontrarAlunoPorCpf("invalid_rg");
+                        alunoServices.encontrarAlunoPorCpf("invalid_cpf");
                         fail("Expected EntityNotFoundException to be thrown");
                 } catch (EntityNotFoundException e) {
                         assertEquals("Aluno com o cpf invalid_cpf nao encontrado!", e.getMessage());

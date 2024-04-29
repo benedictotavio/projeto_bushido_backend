@@ -12,9 +12,9 @@ import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.models.aluno.graduacao.Graduacao;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
-import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 
 @SpringBootTest
 class AlunoTest {

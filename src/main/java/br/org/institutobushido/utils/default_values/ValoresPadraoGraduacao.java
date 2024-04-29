@@ -1,4 +1,4 @@
-package br.org.institutobushido.utils;
+package br.org.institutobushido.utils.default_values;
 
 public class ValoresPadraoGraduacao {
     private ValoresPadraoGraduacao() {}

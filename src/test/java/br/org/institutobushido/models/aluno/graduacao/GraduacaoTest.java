@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import br.org.institutobushido.models.aluno.graduacao.falta.Falta;
-import br.org.institutobushido.resources.exceptions.InactiveUserException;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.utils.resources.exceptions.InactiveUserException;
+import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 
 @SpringBootTest
 class GraduacaoTest {
@@ -35,12 +35,15 @@ class GraduacaoTest {
 
     @Test
     void deveDefinirCargaHoraria() {
+        graduacao.setCargaHoraria(30);
+        graduacao.setFimGraduacao(LocalDate.now().plusMonths(3));
         graduacao.aprovacao(10);
         assertEquals(37, graduacao.getCargaHoraria());
     }
 
     @Test
     void deveDefinirFrequencias() {
+        graduacao.setCargaHoraria(30);
         graduacao.aprovacao(6);
         assertEquals(94, graduacao.getFrequencia());
     }
@@ -77,7 +80,7 @@ class GraduacaoTest {
     void deveLancarExcecaoQuandoCargaHorariaOuInicioDaGraduaçãoForBaixo() {
         Graduacao graduacao = new Graduacao(4, 0);
         graduacao.setCargaHoraria(0);
-        assertThrows(InactiveUserException.class, () -> graduacao.aprovacao(8));
+        assertThrows(LimitQuantityException.class, () -> graduacao.aprovacao(8));
     }
 
     @Test

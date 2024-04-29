@@ -17,10 +17,10 @@ import br.org.institutobushido.models.aluno.endereco.Endereco;
 import br.org.institutobushido.models.aluno.graduacao.Graduacao;
 import br.org.institutobushido.models.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
-import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
-import br.org.institutobushido.utils.ValoresPadraoResponsavel;
+import br.org.institutobushido.utils.default_values.ValoresPadraoResponsavel;
+import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 import lombok.Getter;
 
 @Getter

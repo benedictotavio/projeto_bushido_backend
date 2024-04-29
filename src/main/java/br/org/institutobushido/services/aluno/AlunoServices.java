@@ -40,8 +40,8 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
-import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
 
 @Service
 public class AlunoServices implements AlunoServicesInterface {
@@ -327,7 +327,7 @@ public class AlunoServices implements AlunoServicesInterface {
         List<AlunoDTOResponse> alunoEncontrado = buscarAlunoPorCpf(cpfAluno);
 
         if (alunoEncontrado.isEmpty()) {
-            throw new EntityNotFoundException("Aluno com o rg " + cpfAluno + " nao encontrado!");
+            throw new EntityNotFoundException("Aluno com o cpf " + cpfAluno + " nao encontrado!");
         }
 
         return AlunoMapper.mapToAluno(alunoEncontrado.get(0));

@@ -1,4 +1,4 @@
-package br.org.institutobushido.resources.handlers;
+package br.org.institutobushido.utils.resources.handlers;
 
 import java.time.Instant;
 import java.util.Map;
@@ -16,11 +16,11 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 
 import br.org.institutobushido.controllers.response.error.StandardError;
-import br.org.institutobushido.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.resources.exceptions.InactiveUserException;
-import br.org.institutobushido.resources.exceptions.InvalidFormatDataException;
-import br.org.institutobushido.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.utils.resources.exceptions.InactiveUserException;
+import br.org.institutobushido.utils.resources.exceptions.InvalidFormatDataException;
+import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
 

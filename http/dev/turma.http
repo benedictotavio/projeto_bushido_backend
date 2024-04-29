@@ -1,7 +1,6 @@
 @url = http://0.0.0.0:8080/api/V1/turma
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDI0NTY3Mn0.f6XoYftEU5doKTDX1SFn_uYxzBNXo43D-jTJeVrGMCI
-@rg=123456789
-@nomeTurma=Primeiro Horario
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDQxOTg3M30.t_IrsZMqDQ51s8-FcyjTGiFuZWRpqMDUKK0k_byXtsU
+@nomeTurma=Primeiro
 @emailTutor=tutor@email.com.br
 @emailAdmin=super_admin@email.com.br
 
@@ -23,7 +22,7 @@ DELETE {{url}}/{{nomeTurma}}/{{emailAdmin}} HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}?dataInicial=1519404260000&dataFinal=1719404260000 HTTP/1.1
+GET {{url}}?dataInicial=1710404260000&dataFinal=1719404260000 HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
