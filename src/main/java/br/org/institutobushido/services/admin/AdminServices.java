@@ -46,7 +46,7 @@ public class AdminServices implements AdminServicesInterface, UserDetailsService
 
         if (adminEncontrado != null) {
             throw new AlreadyRegisteredException(
-                    "O Administrador com o rg " + adminDTORequest.email() + " ja esta cadastrado!");
+                    "O Administrador com o email " + adminDTORequest.email() + " ja esta cadastrado!");
         }
 
         Admin admin = new Admin(

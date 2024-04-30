@@ -82,11 +82,11 @@ public class Aluno implements Serializable {
         this.nome = nome;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
-        if (dataNascimento == null || dataNascimento.after(new Date())) {
+    public void setDataNascimento(long dataNascimento) {
+        if (dataNascimento == 0 || new Date(dataNascimento).after(new Date())) {
             return;
         }
-        this.dataNascimento = dataNascimento;
+        this.dataNascimento = new Date(dataNascimento);
     }
 
     public void setGenero(Genero genero) {

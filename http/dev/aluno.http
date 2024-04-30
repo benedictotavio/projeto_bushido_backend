@@ -1,6 +1,6 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDQxODY2Mn0.oM6MnInZYezXZBEs4JmbEdHcz1e288C0Dh83GBQyR3A
-@cpf=45963166608
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDQ0NjU4NH0.1teuFWa5crVu4tIzF7HGvyYYa092qIhUInyml_gEPXE
+@cpf=45612344550
 
 GET {{url}}?nome=Otavio HTTP/1.1
 Authorization: Bearer {{token}}
