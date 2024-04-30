@@ -3,7 +3,6 @@ package br.org.institutobushido.controllers.routes.aluno;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
@@ -18,7 +17,6 @@ import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;

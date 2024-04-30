@@ -122,120 +122,8 @@ public class Graduacao implements Serializable {
         this.inicioGraduacao = inicioGraduacao;
     }
 
-    public Falta adicionarFalta(String motivo, String observacao, long data) {
-
-        if (!this.isStatus()) {
-            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
-        }
-
-        if (data < this.getInicioGraduacao().atStartOfDay()
-                .toInstant(ZoneOffset.UTC).toEpochMilli()) {
-            throw new LimitQuantityException("A data deve ser maior ou igual a data de inicio da graduacao");
-        }
-
-        Falta novaFalta = new Falta(motivo, observacao, new Date(data));
-
-        boolean faltaEstaRegistrada = this.getFaltas().stream()
-                .anyMatch(falta -> falta.getData().equals(novaFalta.getData()));
-
-        if (faltaEstaRegistrada) {
-            throw new AlreadyRegisteredException("Ja existe uma falta para esta data");
-        }
-
-        if (this.definirQuantidadeSemanasNaGraduacao(this.getInicioGraduacao(),
-                this.getFimGraduacao()) > ValoresPadraoGraduacao.NUMERO_MINIMO_DE_SEMANAS
-                && this.getCargaHoraria() <= ValoresPadraoGraduacao.CARGA_HORARIA_INICIAL + 1) {
-            throw new LimitQuantityException("Aulas insuficientes para o aluno");
-        }
-
-        this.faltas.add(novaFalta);
-        return novaFalta;
-    }
-
-    public Falta removerFalta(String dataFalta) {
-        Falta falta = this.getFaltas().stream().filter(f -> f.getData().equals(dataFalta)).findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Falta no dia " + dataFalta + " foi não encontrada"));
-
-        this.getFaltas().remove(falta);
-        return falta;
-    }
-
     public void setAprovado(boolean aprovado) {
         this.aprovado = aprovado;
-    }
-
-    public Graduacao aprovacao(int notaDaProva) {
-
-        if (!this.status) {
-            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
-        }
-
-        if (notaDaProva < ValoresPadraoGraduacao.NOTA_MINIMA_APROVACAO) {
-            throw new LimitQuantityException("Para aprovar o aluno, a nota deve ser maior que 6");
-        }
-
-        if (this.getCargaHoraria() < ValoresPadraoGraduacao.CARGA_HORARIA_MINIMA_PROVA) {
-            throw new LimitQuantityException("Carga horaria insuficiente para realizar a prova.");
-        }
-
-        setFimGraduacao(LocalDate.now());
-        setStatus(false);
-        setAprovado(true);
-        setCargaHoraria(definirCargaHoraria());
-        setFrequencia(definirFrequencia());
-        setNota(notaDaProva);
-        return this;
-    }
-
-    public void reprovacao(int notaDaProva) {
-
-        if (notaDaProva > ValoresPadraoGraduacao.NOTA_MINIMA_APROVACAO) {
-            throw new LimitQuantityException("Para reprovar o aluno, a nota ser menor que 6");
-        }
-
-        if (this.getCargaHoraria() < ValoresPadraoGraduacao.CARGA_HORARIA_MINIMA_PROVA) {
-            throw new LimitQuantityException("Carga horaria insuficiente para realizar a prova.");
-        }
-
-        setFimGraduacao(LocalDate.now());
-        setStatus(false);
-        setAprovado(false);
-        setCargaHoraria(definirCargaHoraria());
-        setFrequencia(definirFrequencia());
-        setNota(notaDaProva);
-    }
-
-    public int definirFrequencia() {
-
-        long quantidadeSemanasNaGraduacao = this.definirQuantidadeSemanasNaGraduacao(this.getInicioGraduacao(),
-                this.getFimGraduacao());
-
-        if (quantidadeSemanasNaGraduacao < ValoresPadraoGraduacao.NUMERO_MINIMO_DE_SEMANAS) {
-            return ValoresPadraoGraduacao.FREQUENCIA_TOTAL;
-        }
-
-        long totalHoursInGraduation = (quantidadeSemanasNaGraduacao
-                * ValoresPadraoGraduacao.CARGA_HORARIA_SEMANAL_HORAS);
-        setFrequencia((int) ((this.cargaHoraria * 100) / totalHoursInGraduation));
-        return this.frequencia;
-    }
-
-    public int definirCargaHoraria() {
-
-        long quantidadeSemanasNaGraduacao = this.definirQuantidadeSemanasNaGraduacao(this.getInicioGraduacao(),
-                this.getFimGraduacao());
-
-        if (quantidadeSemanasNaGraduacao <= ValoresPadraoGraduacao.NUMERO_MINIMO_DE_SEMANAS) {
-            return ValoresPadraoGraduacao.CARGA_HORARIA_INICIAL;
-        }
-
-        setCargaHoraria((int) ((quantidadeSemanasNaGraduacao * ValoresPadraoGraduacao.CARGA_HORARIA_SEMANAL_HORAS)
-                - (this.faltas.size() * 1)));
-        return this.cargaHoraria;
-    }
-
-    private long definirQuantidadeSemanasNaGraduacao(LocalDate inicioGraduacao, LocalDate fimGraduacao) {
-        return ChronoUnit.WEEKS.between(inicioGraduacao, fimGraduacao);
     }
 
     public int getKyu() {
@@ -278,6 +166,178 @@ public class Graduacao implements Serializable {
         return dan;
     }
 
+    /**
+     * Adiciona uma nova Falta a graduação atual
+     *
+     * @param motivo     motivo da Falta
+     * @param observacao coment[ario sobre a Falta
+     * @param data       data da Falta
+     * @return a Falta criada
+     * @throws InactiveUserException      caso aluno esteja inativo
+     * @throws LimitQuantityException     caso data da Falta seja anterior a data de inico da graduacao
+     * @throws AlreadyRegisteredException caso ja exista uma Falta para esta data
+     * @throws LimitQuantityException     caso a graduação possua determinada quantidade de dias ativos
+     */
+    public Falta adicionarFalta(String motivo, String observacao, long data) {
+
+        if (!this.isStatus()) {
+            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
+        }
+
+        if (data < this.getInicioGraduacao().atStartOfDay()
+                .toInstant(ZoneOffset.UTC).toEpochMilli()) {
+            throw new LimitQuantityException("A data deve ser maior ou igual a data de inicio da graduacao");
+        }
+
+        Falta novaFalta = new Falta(motivo, observacao, new Date(data));
+
+        boolean faltaEstaRegistrada = this.getFaltas().stream()
+                .anyMatch(falta -> falta.getData().equals(novaFalta.getData()));
+
+        if (faltaEstaRegistrada) {
+            throw new AlreadyRegisteredException("Ja existe uma falta para esta data");
+        }
+
+        if (this.definirQuantidadeSemanasNaGraduacao(this.getInicioGraduacao(),
+                this.getFimGraduacao()) > ValoresPadraoGraduacao.NUMERO_MINIMO_DE_SEMANAS
+                && this.getCargaHoraria() <= ValoresPadraoGraduacao.CARGA_HORARIA_INICIAL + 1) {
+            throw new LimitQuantityException("Aulas insuficientes para o aluno");
+        }
+
+        this.faltas.add(novaFalta);
+        return novaFalta;
+    }
+
+    /**
+     * Remover a Falta de um determinado dia
+     *
+     * @param dataFalta a data da falta
+     * @return a Falta removida
+     * @throws EntityNotFoundException se a falta nao for encontrada
+     */
+    public Falta removerFalta(String dataFalta) {
+        Falta falta = this.getFaltas().stream().filter(f -> f.getData().equals(dataFalta)).findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Falta no dia " + dataFalta + " foi não encontrada"));
+
+        this.getFaltas().remove(falta);
+        return falta;
+    }
+
+    /**
+     * metodo para realizar o processo de aprovação da graduação a partir da
+     * nota da prova
+     *
+     * @param notaDaProva a nota da prova
+     * @return a graduação aprovada
+     * @throws InactiveUserException  se o aluno estiver inativo
+     * @throws LimitQuantityException se o aluno tiver mais de 5 faltas
+     */
+    public Graduacao aprovacao(int notaDaProva) {
+
+        if (!this.status) {
+            throw new InactiveUserException("O Aluno esta inativo. Pois o mesmo se encontra com mais de 5 faltas");
+        }
+
+        if (notaDaProva < ValoresPadraoGraduacao.NOTA_MINIMA_APROVACAO) {
+            throw new LimitQuantityException("Para aprovar o aluno, a nota deve ser maior que 6");
+        }
+
+        if (this.getCargaHoraria() < ValoresPadraoGraduacao.CARGA_HORARIA_MINIMA_PROVA) {
+            throw new LimitQuantityException("Carga horaria insuficiente para realizar a prova.");
+        }
+
+        setFimGraduacao(LocalDate.now());
+        setStatus(false);
+        setAprovado(true);
+        setCargaHoraria(definirCargaHoraria());
+        setFrequencia(definirFrequencia());
+        setNota(notaDaProva);
+        return this;
+    }
+
+    /**
+     * metodo para realizar o processo de reprovação da graduação a partir da
+     * nota da prova
+     *
+     * @param notaDaProva a nota da prova
+     * @throws InactiveUserException  se o aluno estiver inativo
+     * @throws LimitQuantityException se o aluno tiver mais de 5 faltas
+     */
+    public void reprovacao(int notaDaProva) {
+
+        if (notaDaProva > ValoresPadraoGraduacao.NOTA_MINIMA_APROVACAO) {
+            throw new LimitQuantityException("Para reprovar o aluno, a nota ser menor que 6");
+        }
+
+        if (this.getCargaHoraria() < ValoresPadraoGraduacao.CARGA_HORARIA_MINIMA_PROVA) {
+            throw new LimitQuantityException("Carga horaria insuficiente para realizar a prova.");
+        }
+
+        setFimGraduacao(LocalDate.now());
+        setStatus(false);
+        setAprovado(false);
+        setCargaHoraria(definirCargaHoraria());
+        setFrequencia(definirFrequencia());
+        setNota(notaDaProva);
+    }
+
+    /**
+     * metodo para definir a frequencia da graduação
+     *
+     * @return a frequencia da graduação
+     */
+    public int definirFrequencia() {
+
+        long quantidadeSemanasNaGraduacao = this.definirQuantidadeSemanasNaGraduacao(this.getInicioGraduacao(),
+                this.getFimGraduacao());
+
+        if (quantidadeSemanasNaGraduacao < ValoresPadraoGraduacao.NUMERO_MINIMO_DE_SEMANAS) {
+            return ValoresPadraoGraduacao.FREQUENCIA_TOTAL;
+        }
+
+        long totalHoursInGraduation = (quantidadeSemanasNaGraduacao
+                * ValoresPadraoGraduacao.CARGA_HORARIA_SEMANAL_HORAS);
+        setFrequencia((int) ((this.cargaHoraria * 100) / totalHoursInGraduation));
+        return this.frequencia;
+    }
+
+    /**
+     * metodo para definir a carga horaria da graduação
+     *
+     * @return a carga horaria da graduação
+     */
+    public int definirCargaHoraria() {
+
+        long quantidadeSemanasNaGraduacao = this.definirQuantidadeSemanasNaGraduacao(this.getInicioGraduacao(),
+                this.getFimGraduacao());
+
+        if (quantidadeSemanasNaGraduacao <= ValoresPadraoGraduacao.NUMERO_MINIMO_DE_SEMANAS) {
+            return ValoresPadraoGraduacao.CARGA_HORARIA_INICIAL;
+        }
+
+        setCargaHoraria((int) ((quantidadeSemanasNaGraduacao * ValoresPadraoGraduacao.CARGA_HORARIA_SEMANAL_HORAS)
+                - (this.faltas.size() * 1)));
+        return this.cargaHoraria;
+    }
+
+    /**
+     * metodo para definir a quantidade de semanas na graduação
+     *
+     * @param inicioGraduacao o inicio da graduação
+     * @param fimGraduacao    o fim da graduação
+     * @return a quantidade de semanas na graduação
+     */
+    private long definirQuantidadeSemanasNaGraduacao(LocalDate inicioGraduacao, LocalDate fimGraduacao) {
+        return ChronoUnit.WEEKS.between(inicioGraduacao, fimGraduacao);
+    }
+
+    /**
+     * metodo para gerar uma nova graduação a partir de uma aprovação
+     *
+     * @param kyu o kyu da nova graduação
+     * @param dan o dan da nova graduação
+     * @return a nova graduação
+     */
     public static Graduacao gerarNovaGraduacaoCasoAprovado(int kyu, int dan) {
 
         Graduacao novaGraduacao = new Graduacao(kyu, dan);
@@ -296,8 +356,15 @@ public class Graduacao implements Serializable {
         novaGraduacao.setKyu(kyu - 1);
         return novaGraduacao;
     }
-    
+
+    /**
+     * metodo para gerar uma nova graduação a partir de uma reprovação
+     *
+     * @param kyu o kyu da nova graduação
+     * @param dan o dan da nova graduação
+     * @return a nova graduação
+     */
     public static Graduacao gerarNovaGraduacaoCasoReprovado(int kyu, int dan) {
-       return new Graduacao(kyu, dan);
+        return new Graduacao(kyu, dan);
     }
 }

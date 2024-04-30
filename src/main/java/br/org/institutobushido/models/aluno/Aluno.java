@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
@@ -77,7 +79,7 @@ public class Aluno implements Serializable {
 
     public void setNome(String nome) {
         if (nome == null || nome.isEmpty()) {
-           return;
+            return;
         }
         this.nome = nome;
     }
@@ -125,13 +127,36 @@ public class Aluno implements Serializable {
         this.graduacao = graduacao;
     }
 
-    public void adicionarGraduacao(Graduacao graduacao) {
+    public void setHistoricoSaude(HistoricoSaude historicoSaude) {
+        if (historicoSaude == null) {
+            return;
+        }
+        this.historicoSaude = historicoSaude;
+    }
+
+    /**
+     * Adiciona uma nova graduacao ao aluno
+     *
+     * @param graduacao Graduacao a ser adicionada
+     */
+    public void adicionarGraduacao(Graduacao novaGraduacao) {
         if (graduacao == null) {
             return;
         }
-        this.graduacao.add(graduacao);
+        this.graduacao.add(novaGraduacao);
     }
 
+    /**
+     * Adiciona um novo Responsavel ao Aluno
+     *
+     * @param novoResponsavel Responsavel a ser adicionado
+     * @return o responsavel adicionado
+     * @throws LimitQuantityException     se ja possuir 5 responsaveis
+     * @throws AlreadyRegisteredException caso o responsavel ja esteja cadastrado ao
+     *                                    aluno
+     * @throws AlreadyRegisteredException caso o responsavel ja tenha a filiacao
+     *                                    especificada
+     */
     public Responsavel adicionarResponsavel(Responsavel novoResponsavel) {
 
         if (this.getResponsaveis().size() >= ValoresPadraoResponsavel.MAXIMO_DE_RESPONSAVEIS) {
@@ -156,6 +181,14 @@ public class Aluno implements Serializable {
         return novoResponsavel;
     }
 
+    /**
+     * Remove o responsavel do Aluno
+     *
+     * @param cpf CPF do responsavel
+     * @return CPF do responsavel removido
+     * @throws EntityNotFoundException se o responsavel nao for encontrado
+     * @throws LimitQuantityException  se o Aluno tiver menos de 1 responsavel
+     */
     public String removerResponsavel(String cpf) {
 
         if (this.getResponsaveis().size() == ValoresPadraoResponsavel.MINIMO_DE_RESPONSAVEIS) {
@@ -172,13 +205,12 @@ public class Aluno implements Serializable {
         return responsavel.getCpf();
     }
 
-    public void setHistoricoSaude(HistoricoSaude historicoSaude) {
-        if (historicoSaude == null) {
-            return;
-        }
-        this.historicoSaude = historicoSaude;
-    }
-
+    /**
+     * Encontra o responsavel pelo seu CPF
+     *
+     * @param cpf CPF do responsavel
+     * @return Responsavel encontrado
+     */
     private Responsavel encontrarResponsavelPorCpf(String cpf) {
         Optional<Responsavel> encontrado = this.getResponsaveis().stream()
                 .filter(responsavel -> responsavel.getCpf().equals(cpf))
@@ -187,11 +219,21 @@ public class Aluno implements Serializable {
         return encontrado.orElse(null);
     }
 
-    public Graduacao getGraduacaoAtual(){
+    /**
+     * Retorna a ultima graduacao(graduacao atual)
+     *
+     * @return Graduacao atual
+     */
+    public Graduacao getGraduacaoAtual() {
         return this.getGraduacao().get(this.getGraduacao().size() - 1);
     }
 
-    public int getGraduacaoAtualIndex(){
+    /**
+     * Retorna o index da ultima graduacao(graduacao atual)
+     *
+     * @return index da ultima graduacao
+     */
+    public int getGraduacaoAtualIndex() {
         return this.getGraduacao().size() - 1;
     }
 }
