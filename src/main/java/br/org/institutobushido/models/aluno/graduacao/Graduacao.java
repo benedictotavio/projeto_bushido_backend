@@ -278,7 +278,7 @@ public class Graduacao implements Serializable {
         return dan;
     }
 
-    public static Graduacao gerarNovaGraduacao(int kyu, int dan) {
+    public static Graduacao gerarNovaGraduacaoCasoAprovado(int kyu, int dan) {
 
         Graduacao novaGraduacao = new Graduacao(kyu, dan);
 
@@ -295,5 +295,9 @@ public class Graduacao implements Serializable {
 
         novaGraduacao.setKyu(kyu - 1);
         return novaGraduacao;
+    }
+    
+    public static Graduacao gerarNovaGraduacaoCasoReprovado(int kyu, int dan) {
+       return new Graduacao(kyu, dan);
     }
 }

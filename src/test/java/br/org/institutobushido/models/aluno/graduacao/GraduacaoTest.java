@@ -120,7 +120,7 @@ class GraduacaoTest {
         int dan = 0;
 
         // Act
-        Graduacao result = Graduacao.gerarNovaGraduacao(kyu, dan);
+        Graduacao result = Graduacao.gerarNovaGraduacaoCasoAprovado(kyu, dan);
 
         // Assert
         assertEquals(kyu - 1, result.getKyu());
@@ -134,7 +134,7 @@ class GraduacaoTest {
         int dan = 0;
 
         // Act
-        Graduacao result = Graduacao.gerarNovaGraduacao(kyu, dan);
+        Graduacao result = Graduacao.gerarNovaGraduacaoCasoAprovado(kyu, dan);
 
         // Assert
         assertEquals(kyu - 1, result.getKyu());
@@ -148,7 +148,7 @@ class GraduacaoTest {
         int dan = 5;
 
         // Act
-        Graduacao result = Graduacao.gerarNovaGraduacao(kyu, dan);
+        Graduacao result = Graduacao.gerarNovaGraduacaoCasoAprovado(kyu, dan);
 
         // Assert
         assertEquals(kyu, result.getKyu());

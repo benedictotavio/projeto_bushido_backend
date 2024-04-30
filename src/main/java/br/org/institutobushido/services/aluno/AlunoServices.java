@@ -1,6 +1,5 @@
 package br.org.institutobushido.services.aluno;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.cache.annotation.CachePut;
@@ -53,7 +52,7 @@ public class AlunoServices implements AlunoServicesInterface {
         this.alunoRepositorio = alunoRepositorio;
         this.mongoTemplate = mongoTemplate;
     }
-    
+
     private static final String GRADUACAO = "graduacao";
     private static final String HISTORICO_SAUDE = "historicoSaude.";
 
@@ -63,7 +62,7 @@ public class AlunoServices implements AlunoServicesInterface {
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByCpf(alunoDTORequest.cpf());
 
         if (alunoEncontrado.isPresent()) {
-            throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.cpf() + " ja esta cadastrado!");
+            throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja esta cadastrado!");
         }
 
         Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest));
@@ -120,7 +119,8 @@ public class AlunoServices implements AlunoServicesInterface {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(aluno.getCpf()));
-        Update update = new Update().addToSet(GRADUACAO + "." + (aluno.getGraduacaoAtualIndex()) + ".faltas", novaFalta);
+        Update update = new Update().addToSet(GRADUACAO + "." + (aluno.getGraduacaoAtualIndex()) + ".faltas",
+                novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
 
         if (aluno.getGraduacaoAtual().getFaltas().size() == 5) {
@@ -199,8 +199,8 @@ public class AlunoServices implements AlunoServicesInterface {
         // Nome
         alunoEncontrado.setNome(updateAlunoDTORequest.nome());
 
-        //  Data de Nascimento
-        alunoEncontrado.setDataNascimento(new Date(updateAlunoDTORequest.dataNascimento()));
+        // Data de Nascimento
+        alunoEncontrado.setDataNascimento(updateAlunoDTORequest.dataNascimento());
 
         // Genero
         alunoEncontrado.setGenero(updateAlunoDTORequest.genero());
@@ -255,10 +255,10 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set(GRADUACAO + "." + (alunoEncontrado.getGraduacaoAtualIndex()), graduacaoAtual);
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
 
-        adicionarNovaGraduacao(alunoEncontrado.getCpf(), graduacaoAtual.getKyu(), graduacaoAtual.getDan());
+        adicionarNovaGraduacaoAprovado(alunoEncontrado.getCpf(), graduacaoAtual.getKyu(), graduacaoAtual.getDan());
 
         return GraduacaoMapper.mapToGraduacaoDTOResponse(
-                alunoEncontrado.getGraduacao().get(alunoEncontrado.getGraduacao().size() - 1));
+                alunoEncontrado.getGraduacaoAtual());
     }
 
     @Override
@@ -271,9 +271,9 @@ public class AlunoServices implements AlunoServicesInterface {
         Update update = new Update();
         update.set(GRADUACAO, alunoEncontrado.getGraduacao());
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
-        adicionarNovaGraduacao(alunoEncontrado.getCpf(), graduacaoAtual.getKyu(), graduacaoAtual.getDan() - 1);
+        adicionarNovaGraduacaoReprovado(alunoEncontrado.getCpf(), graduacaoAtual.getKyu(), graduacaoAtual.getDan());
         return GraduacaoMapper.mapToGraduacaoDTOResponse(
-                alunoEncontrado.getGraduacao().get(alunoEncontrado.getGraduacao().size() - 1));
+                alunoEncontrado.getGraduacaoAtual());
     }
 
     protected void mudarStatusGraduacaoAluno(Aluno aluno, boolean status) {
@@ -283,11 +283,19 @@ public class AlunoServices implements AlunoServicesInterface {
         mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
-    public void adicionarNovaGraduacao(String cpf, int kyu, int danAtual) {
+    public void adicionarNovaGraduacaoAprovado(String cpf, int kyu, int danAtual) {
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(cpf));
         Update update = new Update();
-        update.push(GRADUACAO, Graduacao.gerarNovaGraduacao(kyu, danAtual));
+        update.push(GRADUACAO, Graduacao.gerarNovaGraduacaoCasoAprovado(kyu, danAtual));
+        this.mongoTemplate.updateFirst(query, update, Aluno.class);
+    }
+
+    public void adicionarNovaGraduacaoReprovado(String cpf, int kyu, int danAtual) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(cpf));
+        Update update = new Update();
+        update.push(GRADUACAO, Graduacao.gerarNovaGraduacaoCasoReprovado(kyu, danAtual));
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
