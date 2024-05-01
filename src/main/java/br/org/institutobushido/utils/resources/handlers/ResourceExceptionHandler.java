@@ -8,6 +8,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -110,8 +111,6 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleSecurityException(Exception e) {
 
-        System.out.println(e.getMessage());
-
         if (e instanceof BadCredentialsException) {
             problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), e.getMessage());
             problem.setTitle("Erro de Autenticação");
@@ -136,6 +135,13 @@ public class ResourceExceptionHandler {
             problem.setTitle("JWT Signature error");
             problem.setProperty("jwt_error", "JWT Token não está no formato correto");
         }
+
+        if (e instanceof AuthenticationException) {
+            problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), e.getMessage());
+            problem.setTitle("Not Authorized");
+            problem.setProperty("Authentication Error", "Login e senha não conferem");
+        }
+
         return problem;
     }
 }
