@@ -154,4 +154,18 @@ class GraduacaoTest {
         assertEquals(kyu, result.getKyu());
         assertEquals(dan + 1, result.getDan());
     }
+
+    @Test
+    void deveGerarUmaNovaGraduacaoQuandoAlunoForReprovado() {
+        // Arrange
+        int kyu = 3;
+        int dan = 0;
+
+        // Act
+        Graduacao result = Graduacao.gerarNovaGraduacaoCasoReprovado(kyu, dan);
+
+        // Assert
+        assertEquals(kyu, result.getKyu());
+        assertEquals(dan, result.getDan());
+    }
 }
