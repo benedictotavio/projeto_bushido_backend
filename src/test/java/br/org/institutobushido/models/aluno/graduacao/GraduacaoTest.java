@@ -34,11 +34,9 @@ class GraduacaoTest {
     }
 
     @Test
-    void deveDefinirCargaHoraria() {
-        graduacao.setCargaHoraria(30);
+    void deveLancarExcecaoQuandoCargaHorariaForMaiorQueCargaHoraria() {
         graduacao.setFimGraduacao(LocalDate.now().plusMonths(3));
-        graduacao.aprovacao(10);
-        assertEquals(37, graduacao.getCargaHoraria());
+        assertThrows(LimitQuantityException.class, () ->  graduacao.aprovacao(10));
     }
 
     @Test
@@ -153,5 +151,19 @@ class GraduacaoTest {
         // Assert
         assertEquals(kyu, result.getKyu());
         assertEquals(dan + 1, result.getDan());
+    }
+
+    @Test
+    void deveGerarUmaNovaGraduacaoQuandoAlunoForReprovado() {
+        // Arrange
+        int kyu = 3;
+        int dan = 0;
+
+        // Act
+        Graduacao result = Graduacao.gerarNovaGraduacaoCasoReprovado(kyu, dan);
+
+        // Assert
+        assertEquals(kyu, result.getKyu());
+        assertEquals(dan, result.getDan());
     }
 }
