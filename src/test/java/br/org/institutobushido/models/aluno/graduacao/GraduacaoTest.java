@@ -34,11 +34,9 @@ class GraduacaoTest {
     }
 
     @Test
-    void deveDefinirCargaHoraria() {
-        graduacao.setCargaHoraria(30);
+    void deveLancarExcecaoQuandoCargaHorariaForMaiorQueCargaHoraria() {
         graduacao.setFimGraduacao(LocalDate.now().plusMonths(3));
-        graduacao.aprovacao(10);
-        assertEquals(37, graduacao.getCargaHoraria());
+        assertThrows(LimitQuantityException.class, () ->  graduacao.aprovacao(10));
     }
 
     @Test
