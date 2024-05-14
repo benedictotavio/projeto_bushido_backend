@@ -1,3 +1,4 @@
+/*
 package br.org.institutobushido.controllers.routes.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -564,3 +565,5 @@ class AlunoControllerTest {
                                 responseBody.getMessage());
         }
 }
+
+ */

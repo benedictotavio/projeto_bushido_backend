@@ -5,12 +5,14 @@ import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTORequ
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.DadosEscolaresDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.HistoricoSaudeDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.imagem_aluno.ImagemAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.models.turma.Turma;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
+import org.springframework.web.multipart.MultipartFile;
 
 @Builder(setterPrefix = "with")
 public record AlunoDTORequest(
@@ -40,5 +42,9 @@ public record AlunoDTORequest(
 
                 @NotNull(message = "Historico de Saude é obrigatório!") HistoricoSaudeDTORequest historicoSaude,
 
-                @NotNull(message = "Graduacao é obrigatório!") GraduacaoDTORequest graduacao) {
+                @NotNull(message = "Graduacao é obrigatório!") GraduacaoDTORequest graduacao,
+
+                ImagemAlunoDTORequest imagemMultpart
+
+               ) {
 }

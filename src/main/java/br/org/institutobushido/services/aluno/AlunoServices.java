@@ -1,7 +1,11 @@
 package br.org.institutobushido.services.aluno;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import br.org.institutobushido.controllers.dtos.aluno.imagem_aluno.ImagemAlunoDTORequest;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +45,7 @@ import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AlunoServices implements AlunoServicesInterface {
@@ -57,7 +62,7 @@ public class AlunoServices implements AlunoServicesInterface {
     private static final String HISTORICO_SAUDE = "historicoSaude.";
 
     @Override
-    public String adicionarAluno(AlunoDTORequest alunoDTORequest) {
+    public String adicionarAluno(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) {
 
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByCpf(alunoDTORequest.cpf());
 
@@ -65,7 +70,7 @@ public class AlunoServices implements AlunoServicesInterface {
             throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja esta cadastrado!");
         }
 
-        Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest));
+        Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest, imagemAluno));
 
         return novoAluno.getCpf();
     }
@@ -227,6 +232,9 @@ public class AlunoServices implements AlunoServicesInterface {
         alunoEncontrado.setEndereco(endereco);
         alunoEncontrado.setDadosEscolares(dadosEscolares);
 
+        // Imagem Aluno
+        //alunoEncontrado.setImagemAluno(updateAlunoDTORequest.imagemAluno());
+
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(alunoEncontrado.getCpf()));
         Update update = new Update();
@@ -238,6 +246,7 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set("dadosSociais", alunoEncontrado.getDadosSociais());
         update.set("endereco", alunoEncontrado.getEndereco());
         update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
+        update.set("imgemlAuno", alunoEncontrado.getImagemAluno());
 
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
 

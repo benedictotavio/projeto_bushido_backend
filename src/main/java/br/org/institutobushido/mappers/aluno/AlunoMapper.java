@@ -7,12 +7,14 @@ import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.graduacao.Graduacao;
+import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
+import org.springframework.web.multipart.MultipartFile;
 
 public class AlunoMapper {
         private AlunoMapper() {
         }
 
-        public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest) {
+        public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno){
 
                 if (alunoDTORequest == null) {
                         return null;
@@ -21,7 +23,7 @@ public class AlunoMapper {
                 Aluno aluno = new Aluno(
                                 alunoDTORequest.cpf(),
                                 alunoDTORequest.nome(),
-                                new Date(alunoDTORequest.dataNascimento()),
+                                new Date(),
                                 alunoDTORequest.genero(),
                                 alunoDTORequest.turma());
 
@@ -29,6 +31,7 @@ public class AlunoMapper {
                                 new Graduacao(alunoDTORequest.graduacao().kyu(), alunoDTORequest.graduacao().dan()));
                 aluno.adicionarResponsavel(ResponsavelMapper.mapToResponsavel(alunoDTORequest.responsaveis()));
                 aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
+                aluno.setImagemAluno(ImagemAluno.converterParaBase64(imagemAluno));
                 aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
                 aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
                 aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));
@@ -62,6 +65,8 @@ public class AlunoMapper {
                                 HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTOResponse.historicoSaude()));
                 aluno.setGraduacao(
                                 GraduacaoMapper.mapToListGraduacao(alunoDTOResponse.graduacao()));
+                aluno.setImagemAluno(
+                        ImagemAlunoMapper.mapToImagemAluno(alunoDTOResponse.imagemAluno()));
 
                 return aluno;
 
@@ -92,6 +97,9 @@ public class AlunoMapper {
                                 .withHistoricoSaude(
                                                 HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(
                                                                 aluno.getHistoricoSaude()))
+                                .withImagemAluno(
+                                         ImagemAlunoMapper.mapToImagemAlunoDTOResponse(
+                                                aluno.getImagemAluno()))
                                 .build();
         }
 

@@ -1,5 +1,6 @@
 package br.org.institutobushido.services.aluno;
 
+import java.io.IOException;
 import java.util.List;
 
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
@@ -9,9 +10,10 @@ import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResp
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface AlunoServicesInterface {
-    String adicionarAluno(AlunoDTORequest alunoDTORequest);
+    String adicionarAluno(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) throws IOException;
 
     List<AlunoDTOResponse> buscarAluno(String nome, String cpf, int pagina, int tamanho, String ordenarPor,
             String sequenciaOrdenacao);

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -47,6 +48,7 @@ public class Aluno implements Serializable {
     private List<Responsavel> responsaveis = new ArrayList<>();
     private List<Graduacao> graduacao;
     private HistoricoSaude historicoSaude;
+    private ImagemAluno imagemAluno;
 
     public Aluno(String cpf, String nome, Date dataNascimento, Genero genero, String turma) {
         this.graduacao = new ArrayList<>();
@@ -61,6 +63,7 @@ public class Aluno implements Serializable {
         this.genero = genero;
         this.cpf = cpf;
         this.turma = turma;
+        this.imagemAluno = new ImagemAluno();
     }
 
     public void setResponsaveis(List<Responsavel> responsaveis) {
@@ -132,6 +135,13 @@ public class Aluno implements Serializable {
             return;
         }
         this.historicoSaude = historicoSaude;
+    }
+
+    public void setImagemAluno(ImagemAluno imagemAluno) {
+        if (imagemAluno == null) {
+            return;
+        }
+        this.imagemAluno = imagemAluno;
     }
 
     /**
