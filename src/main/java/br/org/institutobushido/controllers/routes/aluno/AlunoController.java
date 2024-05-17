@@ -62,10 +62,11 @@ public class AlunoController {
                                                 Aluno.class.getSimpleName()));
         }
 
-        @PutMapping("{cpf}")
+        @PutMapping(value = "{cpf}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
         public ResponseEntity<SuccessPutResponse> editarAluno(@PathVariable String cpf,
-                        @RequestBody UpdateAlunoDTORequest aluno) {
-                String alunoEditado = this.alunoServices.editarAlunoPorCpf(cpf, aluno);
+                        @RequestPart("aluno") UpdateAlunoDTORequest aluno,
+                        @RequestPart MultipartFile updateImagemAluno                                      ) {
+                String alunoEditado = this.alunoServices.editarAlunoPorCpf(cpf, aluno, updateImagemAluno);
                 return ResponseEntity.ok().body(
                                 new SuccessPutResponse(cpf, alunoEditado, Aluno.class.getSimpleName()));
         }

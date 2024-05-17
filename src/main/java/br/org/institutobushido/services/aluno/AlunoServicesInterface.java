@@ -18,7 +18,7 @@ public interface AlunoServicesInterface {
     List<AlunoDTOResponse> buscarAluno(String nome, String cpf, int pagina, int tamanho, String ordenarPor,
             String sequenciaOrdenacao);
 
-    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest);
+    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest, MultipartFile imagemAluno);
 
     public String adicionarFaltaDoAluno(String cpf, FaltaDTORequest faltas, long novaFalta);
 

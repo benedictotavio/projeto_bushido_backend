@@ -14,7 +14,6 @@ import java.util.Base64;
 public class ImagemAluno implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
 
-    private String nomeImagem;
     private String tipoImagem;
     private String DadosImagem;
 
@@ -32,19 +31,18 @@ public class ImagemAluno implements Serializable {
         this.DadosImagem = dadosImagem;
     }
 
-    public static ImagemAluno converterParaBase64(MultipartFile file) {
+    public static String converterParaStringBase64(MultipartFile file) {
 
-        ImagemAluno imagemAluno = new ImagemAluno();
+        String dados;
 
         try {
             byte[] byteArr = file.getBytes();
-            imagemAluno.setTipoImagem(file.getContentType().split("\\/")[1]);
-            imagemAluno.setDadosImagem("data:image/" + file.getContentType().split("\\/")[1] + ";base64," + Base64.getEncoder().encodeToString(byteArr));
+            dados = "data:image/" + file.getContentType().split("\\/")[1] + ";base64," + Base64.getEncoder().encodeToString(byteArr);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        return imagemAluno;
+        return dados;
     }
 
 }

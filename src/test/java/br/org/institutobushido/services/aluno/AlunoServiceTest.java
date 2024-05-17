@@ -1,4 +1,3 @@
-/*
 package br.org.institutobushido.services.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -71,6 +70,7 @@ import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 class AlunoServiceTest {
@@ -87,6 +87,7 @@ class AlunoServiceTest {
         private AlunoServices alunoServices;
         private AlunoDTORequest alunoDTORequest;
         private Aluno aluno;
+        private MultipartFile imagemAluno;
 
         @BeforeEach
         void setUp() {
@@ -187,7 +188,7 @@ class AlunoServiceTest {
                 when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
 
                 // Act
-                String cpf = alunoServices.adicionarAluno(alunoDTORequest);
+                String cpf = alunoServices.adicionarAluno(alunoDTORequest, imagemAluno);
 
                 // Assert
                 assertEquals(alunoDTORequest.cpf(), cpf);
@@ -202,7 +203,7 @@ class AlunoServiceTest {
 
                 // Assert
                 assertThrows(AlreadyRegisteredException.class,
-                                () -> alunoServices.adicionarAluno(alunoDTORequest));
+                                () -> alunoServices.adicionarAluno(alunoDTORequest, imagemAluno));
         }
 
         @Test
@@ -357,7 +358,7 @@ class AlunoServiceTest {
                 when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
-                String result = alunoServices.editarAlunoPorCpf(cpf, updateAlunoDTORequest);
+                String result = alunoServices.editarAlunoPorCpf(cpf, updateAlunoDTORequest, imagemAluno);
 
                 // Assert
                 assertEquals("Aluno editado com sucesso!", result);
@@ -458,4 +459,3 @@ class AlunoServiceTest {
         }
 }
 
- */

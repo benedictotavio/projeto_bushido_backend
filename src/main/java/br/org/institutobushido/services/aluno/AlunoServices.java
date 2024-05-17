@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import br.org.institutobushido.controllers.dtos.aluno.imagem_aluno.ImagemAlunoDTORequest;
+import br.org.institutobushido.mappers.aluno.*;
+import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -25,12 +27,6 @@ import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTOR
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.mappers.aluno.AlunoMapper;
-import br.org.institutobushido.mappers.aluno.DadosEscolaresMapper;
-import br.org.institutobushido.mappers.aluno.DadosSociaisMapper;
-import br.org.institutobushido.mappers.aluno.EnderecoMapper;
-import br.org.institutobushido.mappers.aluno.GraduacaoMapper;
-import br.org.institutobushido.mappers.aluno.ResponsavelMapper;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
@@ -198,7 +194,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Override
     @CachePut(value = "aluno", key = "#cpf")
-    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest) {
+    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest, MultipartFile updateImagemAluno) {
         Aluno alunoEncontrado = encontrarAlunoPorCpf(cpf);
 
         // Nome
@@ -228,12 +224,15 @@ public class AlunoServices implements AlunoServicesInterface {
         // Historico de Saude
         this.editarHistoricoDeSaude(updateAlunoDTORequest.historicoDeSaude(), alunoEncontrado);
 
+        // Imagem Aluno
+        ImagemAluno imagemAluno = ImagemAlunoMapper.updateImagemAluno(updateImagemAluno, alunoEncontrado);
+
         alunoEncontrado.setDadosSociais(dadosSociais);
         alunoEncontrado.setEndereco(endereco);
         alunoEncontrado.setDadosEscolares(dadosEscolares);
+        alunoEncontrado.setImagemAluno(imagemAluno);
 
-        // Imagem Aluno
-        //alunoEncontrado.setImagemAluno(updateAlunoDTORequest.imagemAluno());
+
 
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(alunoEncontrado.getCpf()));

@@ -42,9 +42,7 @@ public record AlunoDTORequest(
 
                 @NotNull(message = "Historico de Saude é obrigatório!") HistoricoSaudeDTORequest historicoSaude,
 
-                @NotNull(message = "Graduacao é obrigatório!") GraduacaoDTORequest graduacao,
-
-                ImagemAlunoDTORequest imagemMultpart
+                @NotNull(message = "Graduacao é obrigatório!") GraduacaoDTORequest graduacao
 
                ) {
 }

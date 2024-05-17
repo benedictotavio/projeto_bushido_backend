@@ -7,7 +7,6 @@ import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.graduacao.Graduacao;
-import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import org.springframework.web.multipart.MultipartFile;
 
 public class AlunoMapper {
@@ -31,7 +30,7 @@ public class AlunoMapper {
                                 new Graduacao(alunoDTORequest.graduacao().kyu(), alunoDTORequest.graduacao().dan()));
                 aluno.adicionarResponsavel(ResponsavelMapper.mapToResponsavel(alunoDTORequest.responsaveis()));
                 aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
-                aluno.setImagemAluno(ImagemAluno.converterParaBase64(imagemAluno));
+                aluno.setImagemAluno(ImagemAlunoMapper.mapToImagemAluno(imagemAluno));
                 aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
                 aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
                 aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));

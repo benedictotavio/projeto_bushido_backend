@@ -1,9 +1,10 @@
-/*
 package br.org.institutobushido.controllers.routes.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
@@ -58,6 +59,7 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.services.aluno.AlunoServicesInterface;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(SpringExtension.class)
 class AlunoControllerTest {
@@ -67,7 +69,7 @@ class AlunoControllerTest {
         private UpdateAlunoDTORequest updateAlunoDTORequest;
         private ResponsavelDTORequest responsavelDTORequest;
         private GraduacaoDTOResponse graduacaoDTOResponse;
-
+        private MultipartFile imagemAluno;
         @InjectMocks
         private AlunoController alunoController;
 
@@ -182,15 +184,15 @@ class AlunoControllerTest {
         }
 
         @Test
-        void deveCriarAluno() throws URISyntaxException {
+        void deveCriarAluno() throws URISyntaxException, IOException {
 
                 // Act
-                when(alunoServices.adicionarAluno(alunoDTORequest)).thenReturn(aluno.getCpf());
-                ResponseEntity<SuccessPostResponse> response = alunoController.adicionarAluno(alunoDTORequest);
+                when(alunoServices.adicionarAluno(alunoDTORequest, imagemAluno)).thenReturn(aluno.getCpf());
+                ResponseEntity<SuccessPostResponse> response = alunoController.adicionarAluno(alunoDTORequest, imagemAluno);
 
                 assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
-                verify(alunoServices).adicionarAluno(alunoDTORequest);
+                verify(alunoServices).adicionarAluno(alunoDTORequest, imagemAluno);
 
                 URI expectedUri = new URI("/api/V1/aluno");
                 assertEquals(expectedUri, response.getHeaders().getLocation());
@@ -258,18 +260,18 @@ class AlunoControllerTest {
                                                 new CirurgiaDTORequest("Cirurgia"),
                                                 new DoencaCronicaDTORequest("Doenca")));
 
-                when(alunoServices.editarAlunoPorCpf(aluno.getCpf(), updateAlunoDTORequest))
+                when(alunoServices.editarAlunoPorCpf(aluno.getCpf(), updateAlunoDTORequest, imagemAluno))
                                 .thenReturn("Aluno editado com sucesso!");
 
                 // Act
                 ResponseEntity<SuccessPutResponse> responseEntity = alunoController.editarAluno(aluno.getCpf(),
-                                updateAlunoDTORequest);
+                                updateAlunoDTORequest, imagemAluno);
 
                 // Assert
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
                 // Verify that the service method was called with the correct arguments
-                verify(alunoServices).editarAlunoPorCpf(aluno.getCpf(), updateAlunoDTORequest);
+                verify(alunoServices).editarAlunoPorCpf(aluno.getCpf(), updateAlunoDTORequest, imagemAluno);
 
                 // Verify response body
                 SuccessPutResponse responseBody = responseEntity.getBody();
@@ -566,4 +568,4 @@ class AlunoControllerTest {
         }
 }
 
- */
+
