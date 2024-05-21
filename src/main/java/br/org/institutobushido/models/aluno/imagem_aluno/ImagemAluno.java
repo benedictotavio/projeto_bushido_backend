@@ -15,7 +15,7 @@ public class ImagemAluno implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
 
     private String tipoImagem;
-    private String DadosImagem;
+    private String dadosImagem;
 
     public void setTipoImagem(String tipoImagem) {
         if (tipoImagem == null) {
@@ -28,7 +28,7 @@ public class ImagemAluno implements Serializable {
         if (dadosImagem == null) {
             return;
         }
-        this.DadosImagem = dadosImagem;
+        this.dadosImagem = dadosImagem;
     }
 
     public static String converterParaStringBase64(MultipartFile file) {
@@ -37,12 +37,11 @@ public class ImagemAluno implements Serializable {
 
         try {
             byte[] byteArr = file.getBytes();
-            dados = "data:image/" + file.getContentType().split("\\/")[1] + ";base64," + Base64.getEncoder().encodeToString(byteArr);
+            dados = "data:image/" + file.getContentType().split("\\/")[1] + ";base64,"
+                    + Base64.getEncoder().encodeToString(byteArr);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         return dados;
     }
-
 }

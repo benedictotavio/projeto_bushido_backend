@@ -143,7 +143,7 @@ class AlunoMapperTest {
 
                 assertEquals(alunoDTORequest.nome(), aluno.getNome());
                 assertEquals(alunoDTORequest.cpf(), aluno.getCpf());
-               // assertEquals(alunoDTORequest.dataNascimento(), aluno.getDataNascimento().getTime());
+                assertEquals(alunoDTORequest.dataNascimento(), aluno.getDataNascimento().getTime());
                 assertEquals(alunoDTORequest.genero(), aluno.getGenero());
                 assertEquals(alunoDTORequest.dadosSociais().auxilioBrasil(), aluno.getDadosSociais().isAuxilioBrasil());
                 assertEquals(alunoDTORequest.dadosEscolares().escola(), aluno.getDadosEscolares().getEscola());

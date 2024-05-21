@@ -1,12 +1,6 @@
 package br.org.institutobushido.mappers.aluno;
-
-import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.endereco.EnderecoDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.imagem_aluno.ImagemAlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.imagem_aluno.ImagemAlunoDTOResponse;
 import br.org.institutobushido.models.aluno.Aluno;
-import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
-import br.org.institutobushido.models.aluno.endereco.Endereco;
 import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import org.springframework.web.multipart.MultipartFile;
 

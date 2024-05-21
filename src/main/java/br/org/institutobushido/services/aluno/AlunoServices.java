@@ -1,11 +1,7 @@
 package br.org.institutobushido.services.aluno;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-
-import br.org.institutobushido.controllers.dtos.aluno.imagem_aluno.ImagemAlunoDTORequest;
 import br.org.institutobushido.mappers.aluno.*;
 import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import org.springframework.cache.annotation.CachePut;

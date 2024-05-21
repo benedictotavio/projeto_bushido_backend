@@ -13,7 +13,7 @@ public class AlunoMapper {
         private AlunoMapper() {
         }
 
-        public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno){
+        public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) {
 
                 if (alunoDTORequest == null) {
                         return null;
@@ -22,7 +22,7 @@ public class AlunoMapper {
                 Aluno aluno = new Aluno(
                                 alunoDTORequest.cpf(),
                                 alunoDTORequest.nome(),
-                                new Date(),
+                                new Date(alunoDTORequest.dataNascimento()),
                                 alunoDTORequest.genero(),
                                 alunoDTORequest.turma());
 
@@ -65,7 +65,7 @@ public class AlunoMapper {
                 aluno.setGraduacao(
                                 GraduacaoMapper.mapToListGraduacao(alunoDTOResponse.graduacao()));
                 aluno.setImagemAluno(
-                        ImagemAlunoMapper.mapToImagemAluno(alunoDTOResponse.imagemAluno()));
+                                ImagemAlunoMapper.mapToImagemAluno(alunoDTOResponse.imagemAluno()));
 
                 return aluno;
 
@@ -97,8 +97,8 @@ public class AlunoMapper {
                                                 HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(
                                                                 aluno.getHistoricoSaude()))
                                 .withImagemAluno(
-                                         ImagemAlunoMapper.mapToImagemAlunoDTOResponse(
-                                                aluno.getImagemAluno()))
+                                                ImagemAlunoMapper.mapToImagemAlunoDTOResponse(
+                                                                aluno.getImagemAluno()))
                                 .build();
         }
 
