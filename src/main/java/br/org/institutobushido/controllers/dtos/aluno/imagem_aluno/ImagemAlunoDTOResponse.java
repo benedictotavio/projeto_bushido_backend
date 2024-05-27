@@ -5,6 +5,6 @@ import lombok.Builder;
 @Builder(setterPrefix = "with")
 public record ImagemAlunoDTOResponse(
         String tipoImagem,
-        String dadosImagem
+        byte[] dadosImagem
 ) {
 }

@@ -13,6 +13,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -179,7 +180,7 @@ class AlunoServiceTest {
         }
 
         @Test
-        void deveCriarAluno() {
+        void deveCriarAluno(){
 
                 when(alunoRepositorio.findByCpf(anyString())).thenReturn(Optional.empty());
                 when(turmaRepositorio.findByNome(anyString()))
@@ -188,7 +189,7 @@ class AlunoServiceTest {
                 when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
 
                 // Act
-                String cpf = alunoServices.adicionarAluno(alunoDTORequest, imagemAluno);
+                String cpf = alunoServices.adicionarAluno(alunoDTORequest);
 
                 // Assert
                 assertEquals(alunoDTORequest.cpf(), cpf);
@@ -203,7 +204,7 @@ class AlunoServiceTest {
 
                 // Assert
                 assertThrows(AlreadyRegisteredException.class,
-                                () -> alunoServices.adicionarAluno(alunoDTORequest, imagemAluno));
+                                () -> alunoServices.adicionarAluno(alunoDTORequest));
         }
 
         @Test
@@ -358,7 +359,7 @@ class AlunoServiceTest {
                 when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
-                String result = alunoServices.editarAlunoPorCpf(cpf, updateAlunoDTORequest, imagemAluno);
+                String result = alunoServices.editarAlunoPorCpf(cpf, updateAlunoDTORequest);
 
                 // Assert
                 assertEquals("Aluno editado com sucesso!", result);

@@ -13,12 +13,15 @@ import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTO
 import org.springframework.web.multipart.MultipartFile;
 
 public interface AlunoServicesInterface {
-    String adicionarAluno(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) throws IOException;
+
+    String adicionarAlunoComImagem(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) throws IOException;
+
+    String adicionarAluno(AlunoDTORequest alunoDTORequest);
 
     List<AlunoDTOResponse> buscarAluno(String nome, String cpf, int pagina, int tamanho, String ordenarPor,
             String sequenciaOrdenacao);
 
-    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest, MultipartFile imagemAluno);
+    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest);
 
     public String adicionarFaltaDoAluno(String cpf, FaltaDTORequest faltas, long novaFalta);
 

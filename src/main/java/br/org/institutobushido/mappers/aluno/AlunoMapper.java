@@ -1,5 +1,6 @@
 package br.org.institutobushido.mappers.aluno;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +14,7 @@ public class AlunoMapper {
         private AlunoMapper() {
         }
 
-        public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) {
+        public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) throws IOException {
 
                 if (alunoDTORequest == null) {
                         return null;
@@ -31,6 +32,31 @@ public class AlunoMapper {
                 aluno.adicionarResponsavel(ResponsavelMapper.mapToResponsavel(alunoDTORequest.responsaveis()));
                 aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
                 aluno.setImagemAluno(ImagemAlunoMapper.mapToImagemAluno(imagemAluno));
+                aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
+                aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
+                aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));
+
+                return aluno;
+
+        }
+
+        public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest){
+
+                if (alunoDTORequest == null) {
+                        return null;
+                }
+
+                Aluno aluno = new Aluno(
+                        alunoDTORequest.cpf(),
+                        alunoDTORequest.nome(),
+                        new Date(alunoDTORequest.dataNascimento()),
+                        alunoDTORequest.genero(),
+                        alunoDTORequest.turma());
+
+                aluno.adicionarGraduacao(
+                        new Graduacao(alunoDTORequest.graduacao().kyu(), alunoDTORequest.graduacao().dan()));
+                aluno.adicionarResponsavel(ResponsavelMapper.mapToResponsavel(alunoDTORequest.responsaveis()));
+                aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
                 aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
                 aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
                 aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));

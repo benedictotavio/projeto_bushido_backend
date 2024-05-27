@@ -4,30 +4,32 @@ import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 public class ImagemAlunoMapper {
 
     private ImagemAlunoMapper() {
     }
 
-    public static ImagemAluno updateImagemAluno(MultipartFile updateImagemAlunoDTORequest, Aluno aluno) {
+    public static ImagemAluno updateImagemAluno(MultipartFile updateImagemAluno, Aluno aluno) throws IOException {
 
-        if (updateImagemAlunoDTORequest == null) {
+        if (updateImagemAluno == null) {
             return null;
         }
-        aluno.getImagemAluno().setTipoImagem(updateImagemAlunoDTORequest.getContentType());
-        aluno.getImagemAluno().setDadosImagem(ImagemAluno.converterParaStringBase64(updateImagemAlunoDTORequest));
+        aluno.getImagemAluno().setTipoImagem(updateImagemAluno.getContentType());
+        aluno.getImagemAluno().setDadosImagem(updateImagemAluno.getBytes());
 
         return aluno.getImagemAluno();
     }
 
 
-    public static ImagemAluno mapToImagemAluno(MultipartFile imagemAlunoRequest){
+    public static ImagemAluno mapToImagemAluno(MultipartFile imagemAlunoRequest) throws IOException {
         if (imagemAlunoRequest == null) {
             return null;
         }
         ImagemAluno imagemAluno = new ImagemAluno();
         imagemAluno.setTipoImagem(imagemAlunoRequest.getContentType());
-        imagemAluno.setDadosImagem(ImagemAluno.converterParaStringBase64(imagemAlunoRequest));
+        imagemAluno.setDadosImagem(imagemAlunoRequest.getBytes());
         return imagemAluno;
     }
 

@@ -49,23 +49,35 @@ public class AlunoController {
                 return ResponseEntity.ok().body(alunoServices.buscarAluno(nome, cpf, page, size, sortOrder, sortBy));
         }
 
-        @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-        ResponseEntity<SuccessPostResponse> adicionarAluno(
+        @PostMapping(value = "comImagem",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+        ResponseEntity<SuccessPostResponse> adicionarAlunoComImagem(
                         @Valid @RequestPart("alunoDTORequest") AlunoDTORequest alunoDTORequest,
-                        @RequestPart("imagemAluno") MultipartFile imagemAluno)
+                        @RequestPart(value = "imagemAluno", required = false) MultipartFile imagemAluno)
                         throws URISyntaxException, IOException {
-                String alunoAdicionado = this.alunoServices.adicionarAluno(alunoDTORequest, imagemAluno);
+                String alunoAdicionado = this.alunoServices.adicionarAlunoComImagem(alunoDTORequest, imagemAluno);
                 return ResponseEntity.created(
                                 new URI(URI_ALUNO))
                                 .body(new SuccessPostResponse(alunoAdicionado, "Aluno adicionado com sucesso",
                                                 Aluno.class.getSimpleName()));
         }
 
+        @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+        ResponseEntity<SuccessPostResponse> adicionarAluno(
+                @Valid @RequestPart("alunoDTORequest") AlunoDTORequest alunoDTORequest
+                )
+                throws URISyntaxException{
+                String alunoAdicionado = this.alunoServices.adicionarAluno(alunoDTORequest);
+                return ResponseEntity.created(
+                                new URI(URI_ALUNO))
+                        .body(new SuccessPostResponse(alunoAdicionado, "Aluno adicionado com sucesso",
+                                Aluno.class.getSimpleName()));
+        }
+
         @PutMapping(value = "{cpf}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
         public ResponseEntity<SuccessPutResponse> editarAluno(@PathVariable String cpf,
-                        @RequestPart("aluno") UpdateAlunoDTORequest aluno,
-                        @RequestPart MultipartFile updateImagemAluno) {
-                String alunoEditado = this.alunoServices.editarAlunoPorCpf(cpf, aluno, updateImagemAluno);
+                        @RequestPart("aluno") UpdateAlunoDTORequest aluno
+                       ) {
+                String alunoEditado = this.alunoServices.editarAlunoPorCpf(cpf, aluno);
                 return ResponseEntity.ok().body(
                                 new SuccessPutResponse(cpf, alunoEditado, Aluno.class.getSimpleName()));
         }

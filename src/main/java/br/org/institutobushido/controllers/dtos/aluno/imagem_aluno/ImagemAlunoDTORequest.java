@@ -6,5 +6,5 @@ import lombok.Builder;
 public record ImagemAlunoDTORequest(
 
         String tipoImagem,
-        String dadosImagem
+        byte[] dadosImagem
 ) { }

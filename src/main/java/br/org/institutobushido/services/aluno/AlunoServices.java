@@ -1,5 +1,6 @@
 package br.org.institutobushido.services.aluno;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import br.org.institutobushido.mappers.aluno.*;
@@ -54,7 +55,7 @@ public class AlunoServices implements AlunoServicesInterface {
     private static final String HISTORICO_SAUDE = "historicoSaude.";
 
     @Override
-    public String adicionarAluno(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) {
+    public String adicionarAlunoComImagem(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) throws IOException {
 
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByCpf(alunoDTORequest.cpf());
 
@@ -63,6 +64,20 @@ public class AlunoServices implements AlunoServicesInterface {
         }
 
         Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest, imagemAluno));
+
+        return novoAluno.getCpf();
+    }
+
+    @Override
+    public String adicionarAluno(AlunoDTORequest alunoDTORequest){
+
+        Optional<Aluno> alunoEncontrado = alunoRepositorio.findByCpf(alunoDTORequest.cpf());
+
+        if (alunoEncontrado.isPresent()) {
+            throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja esta cadastrado!");
+        }
+
+        Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest));
 
         return novoAluno.getCpf();
     }
@@ -190,7 +205,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Override
     @CachePut(value = "aluno", key = "#cpf")
-    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest, MultipartFile updateImagemAluno) {
+    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest) {
         Aluno alunoEncontrado = encontrarAlunoPorCpf(cpf);
 
         // Nome
@@ -220,14 +235,10 @@ public class AlunoServices implements AlunoServicesInterface {
         // Historico de Saude
         this.editarHistoricoDeSaude(updateAlunoDTORequest.historicoDeSaude(), alunoEncontrado);
 
-        // Imagem Aluno
-        ImagemAluno imagemAluno = ImagemAlunoMapper.updateImagemAluno(updateImagemAluno, alunoEncontrado);
 
         alunoEncontrado.setDadosSociais(dadosSociais);
         alunoEncontrado.setEndereco(endereco);
         alunoEncontrado.setDadosEscolares(dadosEscolares);
-        alunoEncontrado.setImagemAluno(imagemAluno);
-
 
 
         Query query = new Query();
@@ -241,7 +252,6 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set("dadosSociais", alunoEncontrado.getDadosSociais());
         update.set("endereco", alunoEncontrado.getEndereco());
         update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
-        update.set("imgemlAuno", alunoEncontrado.getImagemAluno());
 
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
 
