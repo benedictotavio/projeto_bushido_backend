@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import br.org.institutobushido.mappers.aluno.*;
-import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
