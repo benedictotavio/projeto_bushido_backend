@@ -13,7 +13,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -71,7 +70,6 @@ import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
 import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
-import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 class AlunoServiceTest {
@@ -88,7 +86,6 @@ class AlunoServiceTest {
         private AlunoServices alunoServices;
         private AlunoDTORequest alunoDTORequest;
         private Aluno aluno;
-        private MultipartFile imagemAluno;
 
         @BeforeEach
         void setUp() {

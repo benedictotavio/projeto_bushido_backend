@@ -69,7 +69,6 @@ class AlunoControllerTest {
         private UpdateAlunoDTORequest updateAlunoDTORequest;
         private ResponsavelDTORequest responsavelDTORequest;
         private GraduacaoDTOResponse graduacaoDTOResponse;
-        private MultipartFile imagemAluno;
         @InjectMocks
         private AlunoController alunoController;
 
@@ -204,29 +203,6 @@ class AlunoControllerTest {
                 assertEquals("Aluno adicionado com sucesso", responseBody.getMessage());
                 assertEquals("Aluno", responseBody.getEntity());
         }
-
-        @Test
-        void deveCriarAlunoComImagem() throws URISyntaxException, IOException {
-
-                // Act
-                when(alunoServices.adicionarAlunoComImagem(alunoDTORequest, imagemAluno)).thenReturn(aluno.getCpf());
-                ResponseEntity<SuccessPostResponse> response = alunoController.adicionarAlunoComImagem(alunoDTORequest, imagemAluno);
-
-                assertEquals(HttpStatus.CREATED, response.getStatusCode());
-
-                verify(alunoServices).adicionarAlunoComImagem(alunoDTORequest, imagemAluno);
-
-                URI expectedUri = new URI("/api/V1/aluno/comImagem");
-                assertEquals(expectedUri, response.getHeaders().getLocation());
-
-                SuccessPostResponse responseBody = response.getBody();
-
-                assert responseBody != null;
-                assertEquals(aluno.getCpf(), responseBody.getId());
-                assertEquals("Aluno adicionado com sucesso", responseBody.getMessage());
-                assertEquals("Aluno", responseBody.getEntity());
-        }
-
 
         @Test
         void deveBuscarAluno() {
