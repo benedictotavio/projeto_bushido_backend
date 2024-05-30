@@ -8,6 +8,7 @@ import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResp
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.DadosEscolaresDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.HistoricoSaudeDTOResponse;
+import br.org.institutobushido.controllers.dtos.aluno.imagem_aluno.ImagemAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.enums.aluno.Genero;
 import lombok.Builder;
@@ -25,5 +26,7 @@ public record AlunoDTOResponse(
                 String cpf,
                 List<ResponsavelDTOResponse> responsaveis,
                 List<GraduacaoDTOResponse> graduacao,
-                HistoricoSaudeDTOResponse historicoSaude) {
+                HistoricoSaudeDTOResponse historicoSaude,
+                ImagemAlunoDTOResponse imagemAluno
+                ) {
 }

@@ -3,6 +3,8 @@ package br.org.institutobushido.controllers.routes.aluno;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
@@ -57,6 +59,7 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.services.aluno.AlunoServicesInterface;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(SpringExtension.class)
 class AlunoControllerTest {
@@ -66,7 +69,6 @@ class AlunoControllerTest {
         private UpdateAlunoDTORequest updateAlunoDTORequest;
         private ResponsavelDTORequest responsavelDTORequest;
         private GraduacaoDTOResponse graduacaoDTOResponse;
-
         @InjectMocks
         private AlunoController alunoController;
 
@@ -181,7 +183,7 @@ class AlunoControllerTest {
         }
 
         @Test
-        void deveCriarAluno() throws URISyntaxException {
+        void deveCriarAluno() throws URISyntaxException, IOException {
 
                 // Act
                 when(alunoServices.adicionarAluno(alunoDTORequest)).thenReturn(aluno.getCpf());
@@ -226,7 +228,7 @@ class AlunoControllerTest {
         }
 
         @Test
-        void deveEditarAluno() {
+        void deveEditarAluno() throws IOException {
                 updateAlunoDTORequest = new UpdateAlunoDTORequest(
                                 "NOME 1",
                                 new Date().getTime(),
@@ -564,3 +566,5 @@ class AlunoControllerTest {
                                 responseBody.getMessage());
         }
 }
+
+

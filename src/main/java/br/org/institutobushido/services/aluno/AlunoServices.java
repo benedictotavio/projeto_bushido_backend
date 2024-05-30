@@ -1,7 +1,9 @@
 package br.org.institutobushido.services.aluno;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import br.org.institutobushido.mappers.aluno.*;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -21,12 +23,6 @@ import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTOR
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.mappers.aluno.AlunoMapper;
-import br.org.institutobushido.mappers.aluno.DadosEscolaresMapper;
-import br.org.institutobushido.mappers.aluno.DadosSociaisMapper;
-import br.org.institutobushido.mappers.aluno.EnderecoMapper;
-import br.org.institutobushido.mappers.aluno.GraduacaoMapper;
-import br.org.institutobushido.mappers.aluno.ResponsavelMapper;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
@@ -41,6 +37,7 @@ import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AlunoServices implements AlunoServicesInterface {
@@ -57,7 +54,21 @@ public class AlunoServices implements AlunoServicesInterface {
     private static final String HISTORICO_SAUDE = "historicoSaude.";
 
     @Override
-    public String adicionarAluno(AlunoDTORequest alunoDTORequest) {
+    public String adicionarAlunoComImagem(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) throws IOException {
+
+        Optional<Aluno> alunoEncontrado = alunoRepositorio.findByCpf(alunoDTORequest.cpf());
+
+        if (alunoEncontrado.isPresent()) {
+            throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja esta cadastrado!");
+        }
+
+        Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest, imagemAluno));
+
+        return novoAluno.getCpf();
+    }
+
+    @Override
+    public String adicionarAluno(AlunoDTORequest alunoDTORequest){
 
         Optional<Aluno> alunoEncontrado = alunoRepositorio.findByCpf(alunoDTORequest.cpf());
 
@@ -223,9 +234,11 @@ public class AlunoServices implements AlunoServicesInterface {
         // Historico de Saude
         this.editarHistoricoDeSaude(updateAlunoDTORequest.historicoDeSaude(), alunoEncontrado);
 
+
         alunoEncontrado.setDadosSociais(dadosSociais);
         alunoEncontrado.setEndereco(endereco);
         alunoEncontrado.setDadosEscolares(dadosEscolares);
+
 
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(alunoEncontrado.getCpf()));

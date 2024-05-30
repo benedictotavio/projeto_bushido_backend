@@ -14,31 +14,29 @@ import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public record AlunoDTORequest(
-                @NotNull(message = "Nome é obrigatório")
-                @NotEmpty(message = "Nome é obrigatório") String nome,
+        @NotNull(message = "Nome é obrigatório") @NotEmpty(message = "Nome é obrigatório") String nome,
 
-                @NotNull(message = "Data de nascimento é obrigatória")
-                @Min(value = 10000, message = "Data de nascimento deve ser no passado!")
-                long dataNascimento,
+        @NotNull(message = "Data de nascimento é obrigatória") @Min(value = 10000, message = "Data de nascimento deve ser no passado!") long dataNascimento,
 
-                @NotNull(message = "Genero é obrigatório")
-                Genero genero,
+        @NotNull(message = "Genero é obrigatório") Genero genero,
 
-                @NotNull(message = "Turma é obrigatório", groups = {Turma.class})
-                String turma,
+        @NotNull(message = "Turma é obrigatório", groups = {
+                Turma.class }) String turma,
 
-                @NotNull(message = "Dados sociais é obrigatório")
-                DadosSociaisDTORequest dadosSociais,
+        @NotNull(message = "Dados sociais é obrigatório") DadosSociaisDTORequest dadosSociais,
 
-                @NotNull(message = "Dados escolares é obrigatório") DadosEscolaresDTORequest dadosEscolares,
+        @NotNull(message = "Dados escolares é obrigatório") DadosEscolaresDTORequest dadosEscolares,
 
-                @NotNull(message = "Endereço é obrigatório!") EnderecoDTORequest endereco,
+        @NotNull(message = "Endereço é obrigatório!") EnderecoDTORequest endereco,
 
-                @NotNull(message = "Cpf é obrigatório!") @NotEmpty(message = "Cpf é obrigatório!") @Pattern(regexp = "^\\d{11}$", message = "Cpf inválido! Ex: 12345678910") String cpf,
+        @NotNull(message = "Cpf é obrigatório!") @NotEmpty(message = "Cpf é obrigatório!") @Pattern(regexp = "^\\d{11}$", message = "Cpf inválido! Ex: 12345678910") String cpf,
 
-                @NotEmpty(message = "Insira pelo menos um Responsavel!", groups = {Responsavel.class}) ResponsavelDTORequest responsaveis,
+        @NotEmpty(message = "Insira pelo menos um Responsavel!", groups = {
+                Responsavel.class }) ResponsavelDTORequest responsaveis,
 
-                @NotNull(message = "Historico de Saude é obrigatório!") HistoricoSaudeDTORequest historicoSaude,
+        @NotNull(message = "Historico de Saude é obrigatório!") HistoricoSaudeDTORequest historicoSaude,
 
-                @NotNull(message = "Graduacao é obrigatório!") GraduacaoDTORequest graduacao) {
+        @NotNull(message = "Graduacao é obrigatório!") GraduacaoDTORequest graduacao
+
+    ){
 }

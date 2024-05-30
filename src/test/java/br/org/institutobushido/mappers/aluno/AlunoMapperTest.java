@@ -138,7 +138,6 @@ class AlunoMapperTest {
         @Test
         void deveMapearAlunoDTORequestToAluno() {
                 aluno = AlunoMapper.mapToAluno(alunoDTORequest);
-
                 assertEquals(alunoDTORequest.nome(), aluno.getNome());
                 assertEquals(alunoDTORequest.cpf(), aluno.getCpf());
                 assertEquals(alunoDTORequest.dataNascimento(), aluno.getDataNascimento().getTime());

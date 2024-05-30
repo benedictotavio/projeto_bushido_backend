@@ -1,5 +1,6 @@
 package br.org.institutobushido.mappers.aluno;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,12 +8,13 @@ import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.graduacao.Graduacao;
+import org.springframework.web.multipart.MultipartFile;
 
 public class AlunoMapper {
         private AlunoMapper() {
         }
 
-        public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest) {
+        public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) throws IOException {
 
                 if (alunoDTORequest == null) {
                         return null;
@@ -27,6 +29,32 @@ public class AlunoMapper {
 
                 aluno.adicionarGraduacao(
                                 new Graduacao(alunoDTORequest.graduacao().kyu(), alunoDTORequest.graduacao().dan()));
+                aluno.adicionarResponsavel(ResponsavelMapper.mapToResponsavel(alunoDTORequest.responsaveis()));
+                aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
+                aluno.setImagemAluno(ImagemAlunoMapper.mapToImagemAluno(imagemAluno));
+                aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
+                aluno.setDadosEscolares(DadosEscolaresMapper.mapToDadosEscolares(alunoDTORequest.dadosEscolares()));
+                aluno.setHistoricoSaude(HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTORequest.historicoSaude()));
+
+                return aluno;
+
+        }
+
+        public static Aluno mapToAluno(AlunoDTORequest alunoDTORequest){
+
+                if (alunoDTORequest == null) {
+                        return null;
+                }
+
+                Aluno aluno = new Aluno(
+                        alunoDTORequest.cpf(),
+                        alunoDTORequest.nome(),
+                        new Date(alunoDTORequest.dataNascimento()),
+                        alunoDTORequest.genero(),
+                        alunoDTORequest.turma());
+
+                aluno.adicionarGraduacao(
+                        new Graduacao(alunoDTORequest.graduacao().kyu(), alunoDTORequest.graduacao().dan()));
                 aluno.adicionarResponsavel(ResponsavelMapper.mapToResponsavel(alunoDTORequest.responsaveis()));
                 aluno.setEndereco(EnderecoMapper.mapToEndereco(alunoDTORequest.endereco()));
                 aluno.setDadosSociais(DadosSociaisMapper.mapToDadosSociais(alunoDTORequest.dadosSociais()));
@@ -62,6 +90,8 @@ public class AlunoMapper {
                                 HistoricoSaudeMapper.mapToHistoricoSaude(alunoDTOResponse.historicoSaude()));
                 aluno.setGraduacao(
                                 GraduacaoMapper.mapToListGraduacao(alunoDTOResponse.graduacao()));
+                aluno.setImagemAluno(
+                                ImagemAlunoMapper.mapToImagemAluno(alunoDTOResponse.imagemAluno()));
 
                 return aluno;
 
@@ -92,6 +122,9 @@ public class AlunoMapper {
                                 .withHistoricoSaude(
                                                 HistoricoSaudeMapper.mapToHistoricoSaudeDTOResponse(
                                                                 aluno.getHistoricoSaude()))
+                                .withImagemAluno(
+                                                ImagemAlunoMapper.mapToImagemAlunoDTOResponse(
+                                                                aluno.getImagemAluno()))
                                 .build();
         }
 

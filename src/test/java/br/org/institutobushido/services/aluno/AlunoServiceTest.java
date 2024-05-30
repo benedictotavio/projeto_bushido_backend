@@ -177,7 +177,7 @@ class AlunoServiceTest {
         }
 
         @Test
-        void deveCriarAluno() {
+        void deveCriarAluno(){
 
                 when(alunoRepositorio.findByCpf(anyString())).thenReturn(Optional.empty());
                 when(turmaRepositorio.findByNome(anyString()))
@@ -456,3 +456,4 @@ class AlunoServiceTest {
                 }
         }
 }
+

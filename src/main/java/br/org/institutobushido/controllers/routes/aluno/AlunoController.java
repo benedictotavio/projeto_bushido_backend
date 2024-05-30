@@ -1,19 +1,13 @@
 package br.org.institutobushido.controllers.routes.aluno;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -31,6 +25,7 @@ import br.org.institutobushido.models.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.services.aluno.AlunoServicesInterface;
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController(value = "aluno")
 @RequestMapping("api/V1/aluno")
@@ -54,19 +49,34 @@ public class AlunoController {
                 return ResponseEntity.ok().body(alunoServices.buscarAluno(nome, cpf, page, size, sortOrder, sortBy));
         }
 
-        @PostMapping()
-        ResponseEntity<SuccessPostResponse> adicionarAluno(@Valid @RequestBody AlunoDTORequest alunoDTORequest)
-                        throws URISyntaxException {
-                String alunoAdicionado = this.alunoServices.adicionarAluno(alunoDTORequest);
+        @PostMapping(value = "comImagem",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+        ResponseEntity<SuccessPostResponse> adicionarAlunoComImagem(
+                        @Valid @RequestPart("alunoDTORequest") AlunoDTORequest alunoDTORequest,
+                        @RequestPart(value = "imagemAluno", required = false) MultipartFile imagemAluno)
+                        throws URISyntaxException, IOException {
+                String alunoAdicionado = this.alunoServices.adicionarAlunoComImagem(alunoDTORequest, imagemAluno);
                 return ResponseEntity.created(
                                 new URI(URI_ALUNO))
                                 .body(new SuccessPostResponse(alunoAdicionado, "Aluno adicionado com sucesso",
                                                 Aluno.class.getSimpleName()));
         }
 
-        @PutMapping("{cpf}")
+        @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+        ResponseEntity<SuccessPostResponse> adicionarAluno(
+                @Valid @RequestPart("alunoDTORequest") AlunoDTORequest alunoDTORequest
+                )
+                throws URISyntaxException{
+                String alunoAdicionado = this.alunoServices.adicionarAluno(alunoDTORequest);
+                return ResponseEntity.created(
+                                new URI(URI_ALUNO))
+                        .body(new SuccessPostResponse(alunoAdicionado, "Aluno adicionado com sucesso",
+                                Aluno.class.getSimpleName()));
+        }
+
+        @PutMapping(value = "{cpf}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
         public ResponseEntity<SuccessPutResponse> editarAluno(@PathVariable String cpf,
-                        @RequestBody UpdateAlunoDTORequest aluno) {
+                        @RequestPart("aluno") UpdateAlunoDTORequest aluno
+                       ) {
                 String alunoEditado = this.alunoServices.editarAlunoPorCpf(cpf, aluno);
                 return ResponseEntity.ok().body(
                                 new SuccessPutResponse(cpf, alunoEditado, Aluno.class.getSimpleName()));
