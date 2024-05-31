@@ -21,25 +21,27 @@ public interface AlunoServicesInterface {
     List<AlunoDTOResponse> buscarAluno(String nome, String cpf, int pagina, int tamanho, String ordenarPor,
             String sequenciaOrdenacao);
 
-    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest);
+    String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest);
 
-    public String adicionarFaltaDoAluno(String cpf, FaltaDTORequest faltas, long novaFalta);
+    String editarAlunoPorCpfComImagem(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest, MultipartFile imagemAluno) throws IOException;
 
-    public String retirarFaltaDoAluno(String cpf, String faltasId);
+    String adicionarFaltaDoAluno(String cpf, FaltaDTORequest faltas, long novaFalta);
 
-    public ResponsavelDTOResponse adicionarResponsavel(String cpf, ResponsavelDTORequest responsavelDTORequest);
+    String retirarFaltaDoAluno(String cpf, String faltasId);
 
-    public String removerResponsavel(String cpf, String cpfResponsavel);
+    ResponsavelDTOResponse adicionarResponsavel(String cpf, ResponsavelDTORequest responsavelDTORequest);
 
-    public String adicionarDeficiencia(String cpf, String deficiencia);
+    String removerResponsavel(String cpf, String cpfResponsavel);
 
-    public String removerDeficiencia(String cpf, String deficiencia);
+    String adicionarDeficiencia(String cpf, String deficiencia);
 
-    public String adicionarAcompanhamentoSaude(String cpf, String acompanhamentoSaude);
+    String removerDeficiencia(String cpf, String deficiencia);
 
-    public String removerAcompanhamentoSaude(String cpf, String acompanhamentoSaude);
+    String adicionarAcompanhamentoSaude(String cpf, String acompanhamentoSaude);
 
-    public GraduacaoDTOResponse aprovarAluno(String cpf, int nota);
+    String removerAcompanhamentoSaude(String cpf, String acompanhamentoSaude);
 
-    public GraduacaoDTOResponse reprovarAluno(String cpf, int nota);
+    GraduacaoDTOResponse aprovarAluno(String cpf, int nota);
+
+    GraduacaoDTOResponse reprovarAluno(String cpf, int nota);
 }

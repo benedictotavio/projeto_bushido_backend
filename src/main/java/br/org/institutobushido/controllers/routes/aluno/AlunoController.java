@@ -82,6 +82,17 @@ public class AlunoController {
                                 new SuccessPutResponse(cpf, alunoEditado, Aluno.class.getSimpleName()));
         }
 
+        @PutMapping(value = "comImagem/{cpf}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+        public ResponseEntity<SuccessPutResponse> editarAlunoComImagem(@PathVariable String cpf,
+                                                                        @RequestPart("aluno") UpdateAlunoDTORequest aluno,
+                                                                       @RequestPart("imagemAluno") MultipartFile imagemAluno
+        ) throws IOException {
+
+                String alunoEditado = this.alunoServices.editarAlunoPorCpfComImagem(cpf, aluno, imagemAluno);
+                return ResponseEntity.ok().body(
+                        new SuccessPutResponse(cpf, alunoEditado, Aluno.class.getSimpleName()));
+        }
+
         @PostMapping("responsavel/{cpf}")
         public ResponseEntity<SuccessPostResponse> adicionarResponsavel(@PathVariable String cpf,
                         @Valid @RequestBody ResponsavelDTORequest responsavelDTORequest) {

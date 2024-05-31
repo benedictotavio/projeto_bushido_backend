@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import br.org.institutobushido.mappers.aluno.*;
+import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -250,6 +251,66 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set("turma", alunoEncontrado.getTurma());
         update.set("dadosSociais", alunoEncontrado.getDadosSociais());
         update.set("endereco", alunoEncontrado.getEndereco());
+        update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
+
+        this.mongoTemplate.updateFirst(query, update, Aluno.class);
+
+        return "Aluno editado com sucesso!";
+    }
+
+    @Override
+    @CachePut(value = "aluno", key = "#cpf")
+    public String editarAlunoPorCpfComImagem(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest, MultipartFile imagemAluno) throws IOException {
+        Aluno alunoEncontrado = encontrarAlunoPorCpf(cpf);
+
+        // Nome
+        alunoEncontrado.setNome(updateAlunoDTORequest.nome());
+
+        // Data de Nascimento
+        alunoEncontrado.setDataNascimento(updateAlunoDTORequest.dataNascimento());
+
+        // Genero
+        alunoEncontrado.setGenero(updateAlunoDTORequest.genero());
+
+        // Turma
+        alunoEncontrado.setTurma(updateAlunoDTORequest.turma());
+
+        // Dados Escolares
+        DadosEscolares dadosEscolares = DadosEscolaresMapper.updateDadosEscolares(
+                updateAlunoDTORequest.dadosEscolares(),
+                alunoEncontrado);
+
+        // Endereco
+        Endereco endereco = EnderecoMapper.updateEndereco(updateAlunoDTORequest.endereco(), alunoEncontrado);
+
+        //Imagem do Aluno
+        ImagemAluno imagemAluno1 = ImagemAlunoMapper.updateImagemAluno(imagemAluno, alunoEncontrado);
+
+        // Dados Sociais
+        DadosSociais dadosSociais = DadosSociaisMapper.updateDadosSociais(updateAlunoDTORequest.dadosSociais(),
+                alunoEncontrado);
+
+        // Historico de Saude
+        this.editarHistoricoDeSaude(updateAlunoDTORequest.historicoDeSaude(), alunoEncontrado);
+
+
+        alunoEncontrado.setDadosSociais(dadosSociais);
+        alunoEncontrado.setEndereco(endereco);
+        alunoEncontrado.setDadosEscolares(dadosEscolares);
+        alunoEncontrado.setImagemAluno(imagemAluno1);
+
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(alunoEncontrado.getCpf()));
+        Update update = new Update();
+
+        update.set("nome", alunoEncontrado.getNome());
+        update.set("genero", alunoEncontrado.getGenero());
+        update.set("dataNascimento", alunoEncontrado.getDataNascimento());
+        update.set("turma", alunoEncontrado.getTurma());
+        update.set("dadosSociais", alunoEncontrado.getDadosSociais());
+        update.set("endereco", alunoEncontrado.getEndereco());
+        update.set("imagemAluno", alunoEncontrado.getImagemAluno());
         update.set("dadosEscolares", alunoEncontrado.getDadosEscolares());
 
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
