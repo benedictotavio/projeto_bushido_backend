@@ -3,8 +3,6 @@ package br.org.institutobushido.controllers.routes.aluno;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
@@ -22,31 +20,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.DadosEscolaresDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.UpdateDadosEscolaresDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.UpdateDadosSociaisDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.endereco.EnderecoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.endereco.UpdateEnderecoDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.HistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.alergia.AlergiaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.cirurgia.CirurgiaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.doenca_cronica.DoencaCronicaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPutResponse;
-import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
-import br.org.institutobushido.enums.aluno.Genero;
-import br.org.institutobushido.enums.aluno.Imovel;
-import br.org.institutobushido.enums.aluno.TipoSanguineo;
-import br.org.institutobushido.enums.aluno.Turno;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
@@ -58,8 +42,12 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
+import br.org.institutobushido.providers.enums.aluno.CorDePele;
+import br.org.institutobushido.providers.enums.aluno.FiliacaoResposavel;
+import br.org.institutobushido.providers.enums.aluno.Genero;
+import br.org.institutobushido.providers.enums.aluno.Imovel;
+import br.org.institutobushido.providers.enums.aluno.TipoSanguineo;
 import br.org.institutobushido.services.aluno.AlunoServicesInterface;
-import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(SpringExtension.class)
 class AlunoControllerTest {
@@ -77,18 +65,10 @@ class AlunoControllerTest {
 
         @BeforeEach
         void setUp() {
-                aluno = new Aluno(
-                                "123456789",
-                                "John Doe",
-                                new Date(),
-                                Genero.OUTRO,
-                                "Turma A");
+                aluno = new Aluno();
 
                 aluno.setDadosEscolares(
-                                new DadosEscolares(
-                                                Turno.MANHA,
-                                                "ESCOLA",
-                                                "SERIE"));
+                                new DadosEscolares("ESCOLA"));
 
                 aluno.setEndereco(
                                 new Endereco(
@@ -125,41 +105,17 @@ class AlunoControllerTest {
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
 
-                alunoDTORequest = new AlunoDTORequest(
-                                "John Doe",
-                                new Date(new Date().getTime() - 2000 * 60 * 60 * 24 * 4).getTime(),
-                                Genero.OUTRO,
-                                "Turma A",
-                                new DadosSociaisDTORequest(
-                                                false,
-                                                false,
-                                                Imovel.PROPRIO,
-                                                5,
-                                                2,
-                                                false,
-                                                1000),
-                                new DadosEscolaresDTORequest(
-                                                Turno.MANHA,
-                                                "ESCOLA",
-                                                "SERIE"),
-                                new EnderecoDTORequest(
-                                                "CIDADE",
-                                                "ESTADO",
-                                                "CEP",
-                                                "100",
-                                                "LOGRADOURO"),
-                                "123456789",
-                                new ResponsavelDTORequest("Nome", "12345678901", "Email", "Telefone",
-                                                FiliacaoResposavel.OUTRO),
-                                new HistoricoSaudeDTORequest(
-                                                TipoSanguineo.O_POSITIVO,
-                                                new UsoMedicamentoContinuoDTORequest("Tipo"),
-                                                new AlergiaDTORequest("Alergia"),
-                                                new CirurgiaDTORequest("Cirurgia"),
-                                                new DoencaCronicaDTORequest("Doenca"),
-                                                List.of("Deficiencia"),
-                                                List.of("Acompanhamento")),
-                                new GraduacaoDTORequest(7, 2));
+                alunoDTORequest = AlunoDTORequest.builder().
+                                withCpf(aluno.getCpf())
+                                .withNome(aluno.getNome())
+                                .withDataNascimento(aluno.getDataNascimento().getTime())
+                                .withGenero(aluno.getGenero())
+                                .withTurma(aluno.getTurma())
+                                .withCorDePele(aluno.getCorDePele())
+                                .withCartaoSus(aluno.getCartaoSus())
+                                .withEmail(aluno.getEmail())
+                                .withTelefone(aluno.getTelefone())
+                                .build();
 
                 alunoDTOResponse = AlunoDTOResponse.builder()
                                 .withCpf(aluno.getCpf())
@@ -183,7 +139,7 @@ class AlunoControllerTest {
         }
 
         @Test
-        void deveCriarAluno() throws URISyntaxException, IOException {
+        void deveCriarAluno() throws URISyntaxException {
 
                 // Act
                 when(alunoServices.adicionarAluno(alunoDTORequest)).thenReturn(aluno.getCpf());
@@ -228,36 +184,22 @@ class AlunoControllerTest {
         }
 
         @Test
-        void deveEditarAluno() throws IOException {
+        void deveEditarAluno(){
                 updateAlunoDTORequest = new UpdateAlunoDTORequest(
-                                "NOME 1",
-                                new Date().getTime(),
-                                Genero.M,
-                                "TURMA 1",
-                                new UpdateDadosSociaisDTORequest(
-                                                false,
-                                                false,
-                                                Imovel.PROPRIO,
-                                                5,
-                                                2,
-                                                false,
-                                                1000),
-                                new UpdateDadosEscolaresDTORequest(
-                                                Turno.MANHA,
-                                                "ESCOLA",
-                                                "SERIE"),
-                                new UpdateEnderecoDTORequest(
-                                                "CIDADE",
-                                                "ESTADO",
-                                                "CEP",
-                                                "100",
-                                                ""),
-                                new UpdateHistoricoSaudeDTORequest(
-                                                TipoSanguineo.O_POSITIVO,
-                                                new UsoMedicamentoContinuoDTORequest("Tipo"),
-                                                new AlergiaDTORequest("Alergia"),
-                                                new CirurgiaDTORequest("Cirurgia"),
-                                                new DoencaCronicaDTORequest("Doenca")));
+                        "NOME",
+                        new Date().getTime(),
+                        Genero.M,
+                        "TURMA",
+                        new UpdateDadosSociaisDTORequest(false, false, null, 0, 0, false, 0),
+                        new UpdateDadosEscolaresDTORequest("ESCOLA"),
+                        new UpdateEnderecoDTORequest("CIDADE", "ESTADO", "CEP", "100", "LOGRADOURO"),
+                        new UpdateHistoricoSaudeDTORequest(null, null, null, null, null),
+                        "12345678901",
+                        CorDePele.BRANCO,
+                        "1102345678",
+                        "123456789",
+                        "email@email.com.br"
+                );
 
                 when(alunoServices.editarAlunoPorCpf(aluno.getCpf(), updateAlunoDTORequest))
                                 .thenReturn("Aluno editado com sucesso!");

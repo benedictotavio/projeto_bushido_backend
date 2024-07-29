@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class SuccessDeleteResponseTest {
+class SuccessDeleteResponseTest {
     @Test
-    public void test_createObjectWithIdAndMessage() {
+    void deveCriarSuccessDeleteResponse() {
         String id = "123";
         String message = "Success";
 

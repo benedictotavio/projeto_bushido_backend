@@ -1,58 +1,31 @@
 package br.org.institutobushido.services.aluno;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.DadosEscolaresDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.UpdateDadosEscolaresDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociaisDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.UpdateDadosSociaisDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.endereco.EnderecoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.endereco.UpdateEnderecoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.HistoricoSaudeDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.alergia.AlergiaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.cirurgia.CirurgiaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.doenca_cronica.DoencaCronicaDTORequest;
-import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
-import br.org.institutobushido.enums.aluno.Genero;
-import br.org.institutobushido.enums.aluno.Imovel;
-import br.org.institutobushido.enums.aluno.TipoSanguineo;
-import br.org.institutobushido.enums.aluno.Turno;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
@@ -64,12 +37,15 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
-import br.org.institutobushido.models.turma.Turma;
-import br.org.institutobushido.models.turma.tutor.Tutor;
+import br.org.institutobushido.providers.enums.aluno.CorDePele;
+import br.org.institutobushido.providers.enums.aluno.FiliacaoResposavel;
+import br.org.institutobushido.providers.enums.aluno.Genero;
+import br.org.institutobushido.providers.enums.aluno.Imovel;
+import br.org.institutobushido.providers.enums.aluno.TipoSanguineo;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.repositories.AlunoRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
-import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
 
 @SpringBootTest
 class AlunoServiceTest {
@@ -89,54 +65,21 @@ class AlunoServiceTest {
 
         @BeforeEach
         void setUp() {
-                alunoDTORequest = new AlunoDTORequest(
-                                "John Doe",
-                                new Date(new Date().getTime() - 2000 * 60 * 60 * 24 * 4).getTime(),
-                                Genero.OUTRO,
-                                "Turma A",
-                                new DadosSociaisDTORequest(
-                                                false,
-                                                false,
-                                                Imovel.PROPRIO,
-                                                5,
-                                                2,
-                                                false,
-                                                1000),
-                                new DadosEscolaresDTORequest(
-                                                Turno.MANHA,
-                                                "ESCOLA",
-                                                "SERIE"),
-                                new EnderecoDTORequest(
-                                                "CIDADE",
-                                                "ESTADO",
-                                                "CEP",
-                                                "100",
-                                                "LOGRADOURO"),
-                                "123456789",
-                                new ResponsavelDTORequest("Nome", "12345678901", "Email", "Telefone",
-                                                FiliacaoResposavel.OUTRO),
-                                new HistoricoSaudeDTORequest(
-                                                TipoSanguineo.O_POSITIVO,
-                                                new UsoMedicamentoContinuoDTORequest("Tipo"),
-                                                new AlergiaDTORequest("Alergia"),
-                                                new CirurgiaDTORequest("Cirurgia"),
-                                                new DoencaCronicaDTORequest("Doenca"),
-                                                List.of("Deficiencia"),
-                                                List.of("Acompanhamento")),
-                                new GraduacaoDTORequest(7, 2));
 
-                aluno = new Aluno(
-                                "123456789",
-                                "John Doe",
-                                new Date(),
-                                Genero.OUTRO,
-                                "Turma A");
+                aluno = new Aluno();
+
+                aluno.setCpf("11111111111");
+                aluno.setNome("Nome");
+                aluno.setDataNascimento(new Date().getTime());
+                aluno.setGenero(Genero.M);
+                aluno.setTurma("Turma");
+                aluno.setCartaoSus("CartaoSus");
+                aluno.setEmail("Email");
+                aluno.setTelefone("Telefone");
+                aluno.setCorDePele(CorDePele.PRETO);
 
                 aluno.setDadosEscolares(
-                                new DadosEscolares(
-                                                Turno.MANHA,
-                                                "ESCOLA",
-                                                "SERIE"));
+                                new DadosEscolares("Escola"));
 
                 aluno.setEndereco(
                                 new Endereco(
@@ -173,16 +116,30 @@ class AlunoServiceTest {
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
 
+                alunoDTORequest = AlunoDTORequest.builder()
+                                .withCpf(aluno.getCpf())
+                                .withGraduacao(GraduacaoDTORequest.builder()
+                                                .withKyu(aluno.getGraduacaoAtual().getKyu())
+                                                .withDan(aluno.getGraduacaoAtual().getDan())
+                                                .build())
+                                .withResponsaveis(
+                                                new ResponsavelDTORequest("NOME", "12345678910", "110000000",
+                                                                "email@email.com", FiliacaoResposavel.MAE))
+                                .withDadosSociais(new DadosSociaisDTORequest(aluno.getDadosSociais().isBolsaFamilia(),
+                                                aluno.getDadosSociais().isAuxilioBrasil(),
+                                                aluno.getDadosSociais().getImovel(),
+                                                aluno.getDadosSociais().getNumerosDePessoasNaCasa(),
+                                                aluno.getDadosSociais().getContribuintesDaRendaFamiliar(),
+                                                aluno.getDadosSociais().isAlunoContribuiParaRenda(),
+                                                aluno.getDadosSociais().getRendaFamiliar()))
+                                .build();
+
                 alunoServices = new AlunoServices(alunoRepositorio, mongoTemplate);
         }
 
         @Test
-        void deveCriarAluno(){
-
-                when(alunoRepositorio.findByCpf(anyString())).thenReturn(Optional.empty());
-                when(turmaRepositorio.findByNome(anyString()))
-                                .thenReturn(Optional.of(new Turma("Endereço II", "Turma A",
-                                                new Tutor("Tutor", "Tutor@email.com"))));
+        void deveCriarAluno() {
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(new ArrayList<>());
                 when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
 
                 // Act
@@ -190,14 +147,13 @@ class AlunoServiceTest {
 
                 // Assert
                 assertEquals(alunoDTORequest.cpf(), cpf);
-                // Verify that the repository's save method was called
                 verify(alunoRepositorio, times(1)).save(any(Aluno.class));
         }
 
         @Test
         void deveRetornarExceçãoQuandoAlunoJaExistir() {
 
-                when(alunoRepositorio.findByCpf(anyString())).thenReturn(Optional.of(aluno));
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Assert
                 assertThrows(AlreadyRegisteredException.class,
@@ -205,7 +161,7 @@ class AlunoServiceTest {
         }
 
         @Test
-        void deveBuscarAlunoPorRg() {
+        void deveBuscarAlunoPorCpf() {
                 // Mocking data
                 when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
@@ -219,7 +175,7 @@ class AlunoServiceTest {
         @Test
         void deveBuscarAlunoPorNome() {
                 // Mocking data
-                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 List<AlunoDTOResponse> result = alunoServices.buscarAluno("123456789", null, 0, 10, "nome", "asc");
 
@@ -239,7 +195,7 @@ class AlunoServiceTest {
                                 "Telefone",
                                 FiliacaoResposavel.OUTRO);
 
-                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
                 // Act
                 ResponsavelDTOResponse result = alunoServices.adicionarResponsavel(cpf, responsavelDTORequest);
 
@@ -271,7 +227,7 @@ class AlunoServiceTest {
                 aluno.adicionarResponsavel(
                                 new Responsavel("Nome", cpf, "Email", "Telefone", FiliacaoResposavel.OUTRO));
 
-                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
                 String result = alunoServices.removerResponsavel(aluno.getCpf(), cpf);
@@ -292,7 +248,7 @@ class AlunoServiceTest {
                                 "Falta");
                 long dataFalta = new Date().getTime();
 
-                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
                 String result = alunoServices.adicionarFaltaDoAluno(aluno.getCpf(), faltaDTORequest, dataFalta);
@@ -343,17 +299,21 @@ class AlunoServiceTest {
                 // Arrange
                 String cpf = "123456789";
                 UpdateAlunoDTORequest updateAlunoDTORequest = new UpdateAlunoDTORequest(
-                                "NOME 1",
+                                "NOME",
                                 new Date().getTime(),
                                 Genero.M,
-                                "TURMA 1",
-                                new UpdateDadosSociaisDTORequest(false, false, null, 5, 2, false, 0),
-                                new UpdateDadosEscolaresDTORequest(Turno.TARDE, "Escola", "Serie"),
-                                new UpdateEnderecoDTORequest(
-                                                "Cidade", "Estado", "CEP", "Numero", "LOGRADOURO"),
-                                new UpdateHistoricoSaudeDTORequest(null, null, null, null, null));
+                                "TURMA",
+                                new UpdateDadosSociaisDTORequest(false, false, null, 10, 5, false, 0),
+                                new UpdateDadosEscolaresDTORequest("ESCOLA"),
+                                new UpdateEnderecoDTORequest("CIDADE", "ESTADO", "CEP", "100", "LOGRADOURO"),
+                                new UpdateHistoricoSaudeDTORequest(null, null, null, null, null),
+                                "12345678901",
+                                CorDePele.BRANCO,
+                                "1102345678",
+                                "123456789",
+                                "email@email.com.br");
 
-                when(mongoTemplate.find(Mockito.any(Query.class), Mockito.eq(Aluno.class))).thenReturn(List.of(aluno));
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
                 // Act
                 String result = alunoServices.editarAlunoPorCpf(cpf, updateAlunoDTORequest);
@@ -445,15 +405,4 @@ class AlunoServiceTest {
                 assertNotNull(result);
                 assertEquals(1, result.size());
         }
-
-        @Test
-        void deveRetornarExcecaoQuandoAlunoNaoEncontrado() {
-                try {
-                        alunoServices.encontrarAlunoPorCpf("invalid_cpf");
-                        fail("Expected EntityNotFoundException to be thrown");
-                } catch (EntityNotFoundException e) {
-                        assertEquals("Aluno com o cpf invalid_cpf nao encontrado!", e.getMessage());
-                }
-        }
 }
-

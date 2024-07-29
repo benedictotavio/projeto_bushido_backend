@@ -10,23 +10,28 @@ import br.org.institutobushido.controllers.dtos.aluno.dados_sociais.DadosSociais
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.HistoricoSaudeDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.imagem_aluno.ImagemAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
-import br.org.institutobushido.enums.aluno.Genero;
+import br.org.institutobushido.providers.enums.aluno.CorDePele;
+import br.org.institutobushido.providers.enums.aluno.Genero;
 import lombok.Builder;
 
 @Builder(setterPrefix = "with")
 public record AlunoDTOResponse(
-                String nome,
-                Date dataNascimento,
-                Genero genero,
-                String turma,
-                DadosSociaisDTOResponse dadosSociais,
-                DadosEscolaresDTOResponse dadosEscolares,
-                Date dataPreenchimento,
-                EnderecoDTOResponse endereco,
-                String cpf,
-                List<ResponsavelDTOResponse> responsaveis,
-                List<GraduacaoDTOResponse> graduacao,
-                HistoricoSaudeDTOResponse historicoSaude,
-                ImagemAlunoDTOResponse imagemAluno
-                ) {
+        String matricula,
+        String nome,
+        Date dataNascimento,
+        Genero genero,
+        String turma,
+        DadosSociaisDTOResponse dadosSociais,
+        DadosEscolaresDTOResponse dadosEscolares,
+        Date dataPreenchimento,
+        EnderecoDTOResponse endereco,
+        String cpf,
+        List<ResponsavelDTOResponse> responsaveis,
+        List<GraduacaoDTOResponse> graduacao,
+        HistoricoSaudeDTOResponse historicoSaude,
+        ImagemAlunoDTOResponse imagemAluno,
+        CorDePele corDePele,
+        String telefone,
+        String cartaoSus,
+        String email) {
 }

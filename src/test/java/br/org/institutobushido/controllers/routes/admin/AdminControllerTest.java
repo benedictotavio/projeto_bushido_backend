@@ -23,8 +23,8 @@ import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
 import br.org.institutobushido.controllers.response.success.SuccessLoginAuthenticated;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
-import br.org.institutobushido.enums.admin.UserRole;
 import br.org.institutobushido.models.admin.Admin;
+import br.org.institutobushido.providers.enums.admin.UserRole;
 import br.org.institutobushido.services.admin.AdminServicesInterface;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -105,7 +105,8 @@ class AdminControllerTest {
 
         // Act
         when(adminServices.buscarAdminPorNome(validName)).thenReturn(List.of(adminDTOResponse));
-        List<AdminDTOResponse> result = new AdminController(adminServices, authenticationManager).buscarAdmins(validName);
+        List<AdminDTOResponse> result = new AdminController(adminServices, authenticationManager)
+                .buscarAdmins(validName);
 
         // Assert
         assertNotNull(result);

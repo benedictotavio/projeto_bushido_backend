@@ -7,7 +7,7 @@ import java.util.Date;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.providers.utils.resources.exceptions.LimitQuantityException;
 
 @SpringBootTest
 class FaltaTest {

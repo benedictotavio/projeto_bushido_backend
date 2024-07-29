@@ -1,6 +1,6 @@
 @url = http://0.0.0.0:8080/api/V1/aluno
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcxNDQ0NjU4NH0.1teuFWa5crVu4tIzF7HGvyYYa092qIhUInyml_gEPXE
-@cpf=45612344550
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzZWNyZXQiLCJlbWFpbCI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsInN1YiI6InN1cGVyX2FkbWluQGVtYWlsLmNvbS5iciIsImV4cCI6MTcyMjI2NTUyMn0.FhnXqXyQBwFhTz3MFQyYnfi_ZPVefwjfigkMR_B1fOY
+@cpf=45961366880
 
 GET {{url}}?nome=Otavio HTTP/1.1
 Authorization: Bearer {{token}}
@@ -17,6 +17,11 @@ Authorization: Bearer {{token}}
     "genero": "F",
     "turma": "turma",
     "dataNascimento": 842486400000,
+    "cpf": "12345678910",
+    "cartaoSus":"00011122233",
+    "email":"email@email.com",
+    "telefone":"1198585005",
+    "corDePele":"BRANCO",
     "dadosSociais": {
         "bolsaFamilia": true,
         "auxilioBrasil": true,
@@ -27,9 +32,7 @@ Authorization: Bearer {{token}}
         "rendaFamiliarEmSalariosMinimos": 3000
     },
     "dadosEscolares": {
-        "turno": "TARDE",
         "escola": "Emef Luis Ziraldo",
-        "serie": 3
     },
     "endereco": {
         "estado": "SP",

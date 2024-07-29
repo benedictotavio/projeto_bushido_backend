@@ -3,13 +3,14 @@ package br.org.institutobushido.models.aluno.historico_de_saude;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import br.org.institutobushido.enums.aluno.TipoSanguineo;
+
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.Alergia;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.Cirurgia;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
-import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.providers.enums.aluno.TipoSanguineo;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

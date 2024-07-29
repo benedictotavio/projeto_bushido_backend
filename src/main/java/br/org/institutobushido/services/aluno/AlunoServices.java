@@ -2,8 +2,6 @@ package br.org.institutobushido.services.aluno;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import br.org.institutobushido.mappers.aluno.*;
 import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -35,9 +33,11 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
+import br.org.institutobushido.providers.mappers.aluno.*;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.repositories.AlunoRepositorio;
-import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -55,11 +55,12 @@ public class AlunoServices implements AlunoServicesInterface {
     private static final String HISTORICO_SAUDE = "historicoSaude.";
 
     @Override
-    public String adicionarAlunoComImagem(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno) throws IOException {
+    public String adicionarAlunoComImagem(AlunoDTORequest alunoDTORequest, MultipartFile imagemAluno)
+            throws IOException {
 
-        Optional<Aluno> alunoEncontrado = alunoRepositorio.findByCpf(alunoDTORequest.cpf());
+        List<AlunoDTOResponse> alunoEncontradoCpf = this.buscarAlunoPorCpf(alunoDTORequest.cpf());
 
-        if (alunoEncontrado.isPresent()) {
+        if (!alunoEncontradoCpf.isEmpty()) {
             throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja esta cadastrado!");
         }
 
@@ -69,11 +70,11 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public String adicionarAluno(AlunoDTORequest alunoDTORequest){
+    public String adicionarAluno(AlunoDTORequest alunoDTORequest) {
 
-        Optional<Aluno> alunoEncontrado = alunoRepositorio.findByCpf(alunoDTORequest.cpf());
+        List<AlunoDTOResponse> alunoEncontradoCpf = this.buscarAlunoPorCpf(alunoDTORequest.cpf());
 
-        if (alunoEncontrado.isPresent()) {
+        if (!alunoEncontradoCpf.isEmpty()) {
             throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja esta cadastrado!");
         }
 
@@ -92,8 +93,8 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public ResponsavelDTOResponse adicionarResponsavel(String cpf, ResponsavelDTORequest responsavelDTORequest) {
-        Aluno aluno = encontrarAlunoPorCpf(cpf);
+    public ResponsavelDTOResponse adicionarResponsavel(String matricula, ResponsavelDTORequest responsavelDTORequest) {
+        Aluno aluno = this.encontrarAlunoPorMatricula(matricula);
         Responsavel novoResponsavel = aluno
                 .adicionarResponsavel(ResponsavelMapper.mapToResponsavel(responsavelDTORequest));
 
@@ -113,8 +114,9 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public String removerResponsavel(String cpf, String cpfResponsavel) {
-        Aluno aluno = encontrarAlunoPorCpf(cpf);
+    public String removerResponsavel(String matricula, String cpfResponsavel) {
+        Aluno aluno = this.encontrarAlunoPorMatricula(
+                matricula);
         String cpfRemovido = aluno.removerResponsavel(cpfResponsavel);
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(aluno.getCpf()));
@@ -124,8 +126,8 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public String adicionarFaltaDoAluno(String cpf, FaltaDTORequest falta, long dataFalta) {
-        Aluno aluno = encontrarAlunoPorCpf(cpf);
+    public String adicionarFaltaDoAluno(String matricula, FaltaDTORequest falta, long dataFalta) {
+        Aluno aluno = this.encontrarAlunoPorMatricula(matricula);
         Falta novaFalta = aluno.getGraduacaoAtual().adicionarFalta(falta.motivo(), falta.observacao(),
                 dataFalta);
 
@@ -143,8 +145,8 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public String retirarFaltaDoAluno(String cpf, String faltasId) {
-        Aluno aluno = encontrarAlunoPorCpf(cpf);
+    public String retirarFaltaDoAluno(String matricula, String faltasId) {
+        Aluno aluno = this.encontrarAlunoPorMatricula(matricula);
         Falta faltaDoAluno = aluno.getGraduacaoAtual().removerFalta(faltasId);
 
         if (aluno.getGraduacaoAtual().getFaltas().size() == 4) {
@@ -160,8 +162,8 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public String adicionarDeficiencia(String cpf, String deficiencia) {
-        Aluno aluno = encontrarAlunoPorCpf(cpf);
+    public String adicionarDeficiencia(String matricula, String deficiencia) {
+        Aluno aluno = this.encontrarAlunoPorMatricula(matricula);
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(aluno.getCpf()));
         Update update = new Update().push(HISTORICO_SAUDE + "deficiencias",
@@ -171,8 +173,8 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public String removerDeficiencia(String cpf, String deficiencia) {
-        Aluno aluno = encontrarAlunoPorCpf(cpf);
+    public String removerDeficiencia(String matricula, String deficiencia) {
+        Aluno aluno = this.encontrarAlunoPorMatricula(matricula);
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(aluno.getCpf()));
         Update update = new Update().pull(HISTORICO_SAUDE + "deficiencias",
@@ -182,8 +184,8 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public String adicionarAcompanhamentoSaude(String cpf, String acompanhamentoSaude) {
-        Aluno aluno = encontrarAlunoPorCpf(cpf);
+    public String adicionarAcompanhamentoSaude(String matricula, String acompanhamentoSaude) {
+        Aluno aluno = this.encontrarAlunoPorMatricula(matricula);
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(aluno.getCpf()));
         Update update = new Update().push(HISTORICO_SAUDE + "acompanhamentoSaude",
@@ -193,8 +195,8 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public String removerAcompanhamentoSaude(String cpf, String acompanhamentoSaude) {
-        Aluno aluno = encontrarAlunoPorCpf(cpf);
+    public String removerAcompanhamentoSaude(String matricula, String acompanhamentoSaude) {
+        Aluno aluno = this.encontrarAlunoPorMatricula(matricula);
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(aluno.getCpf()));
         Update update = new Update().pull(HISTORICO_SAUDE + "acompanhamentoSaude",
@@ -205,8 +207,23 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Override
     @CachePut(value = "aluno", key = "#cpf")
-    public String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest) {
-        Aluno alunoEncontrado = encontrarAlunoPorCpf(cpf);
+    public String editarAlunoPorCpf(String matricula, UpdateAlunoDTORequest updateAlunoDTORequest) {
+        Aluno alunoEncontrado = this.encontrarAlunoPorMatricula(matricula);
+
+        // Cartao SUS
+        alunoEncontrado.setCartaoSus(updateAlunoDTORequest.cartaoSus());
+
+        // Cpf
+        alunoEncontrado.setCpf(updateAlunoDTORequest.cpf());
+
+        // Cor de Pele
+        alunoEncontrado.setCorDePele(updateAlunoDTORequest.corDePele());
+
+        // Email
+        alunoEncontrado.setEmail(updateAlunoDTORequest.email());
+
+        // Telefone
+        alunoEncontrado.setTelefone(updateAlunoDTORequest.telefone());
 
         // Nome
         alunoEncontrado.setNome(updateAlunoDTORequest.nome());
@@ -235,11 +252,9 @@ public class AlunoServices implements AlunoServicesInterface {
         // Historico de Saude
         this.editarHistoricoDeSaude(updateAlunoDTORequest.historicoDeSaude(), alunoEncontrado);
 
-
         alunoEncontrado.setDadosSociais(dadosSociais);
         alunoEncontrado.setEndereco(endereco);
         alunoEncontrado.setDadosEscolares(dadosEscolares);
-
 
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(alunoEncontrado.getCpf()));
@@ -260,8 +275,9 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Override
     @CachePut(value = "aluno", key = "#cpf")
-    public String editarAlunoPorCpfComImagem(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest, MultipartFile imagemAluno) throws IOException {
-        Aluno alunoEncontrado = encontrarAlunoPorCpf(cpf);
+    public String editarAlunoPorCpfComImagem(String matricula, UpdateAlunoDTORequest updateAlunoDTORequest,
+            MultipartFile imagemAluno) throws IOException {
+        Aluno alunoEncontrado = this.encontrarAlunoPorMatricula(matricula);
 
         // Nome
         alunoEncontrado.setNome(updateAlunoDTORequest.nome());
@@ -283,7 +299,7 @@ public class AlunoServices implements AlunoServicesInterface {
         // Endereco
         Endereco endereco = EnderecoMapper.updateEndereco(updateAlunoDTORequest.endereco(), alunoEncontrado);
 
-        //Imagem do Aluno
+        // Imagem do Aluno
         ImagemAluno imagemAluno1 = ImagemAlunoMapper.updateImagemAluno(imagemAluno, alunoEncontrado);
 
         // Dados Sociais
@@ -293,12 +309,10 @@ public class AlunoServices implements AlunoServicesInterface {
         // Historico de Saude
         this.editarHistoricoDeSaude(updateAlunoDTORequest.historicoDeSaude(), alunoEncontrado);
 
-
         alunoEncontrado.setDadosSociais(dadosSociais);
         alunoEncontrado.setEndereco(endereco);
         alunoEncontrado.setDadosEscolares(dadosEscolares);
         alunoEncontrado.setImagemAluno(imagemAluno1);
-
 
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(alunoEncontrado.getCpf()));
@@ -319,8 +333,8 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public GraduacaoDTOResponse aprovarAluno(String cpf, int notaDaProva) {
-        Aluno alunoEncontrado = encontrarAlunoPorCpf(cpf);
+    public GraduacaoDTOResponse aprovarAluno(String matricula, int notaDaProva) {
+        Aluno alunoEncontrado = this.encontrarAlunoPorMatricula(matricula);
         Graduacao graduacaoAtual = alunoEncontrado.getGraduacaoAtual().aprovacao(notaDaProva);
 
         Query query = new Query();
@@ -336,8 +350,8 @@ public class AlunoServices implements AlunoServicesInterface {
     }
 
     @Override
-    public GraduacaoDTOResponse reprovarAluno(String cpf, int notaDaProva) {
-        Aluno alunoEncontrado = encontrarAlunoPorCpf(cpf);
+    public GraduacaoDTOResponse reprovarAluno(String matricula, int notaDaProva) {
+        Aluno alunoEncontrado = this.encontrarAlunoPorMatricula(matricula);
         Graduacao graduacaoAtual = alunoEncontrado.getGraduacaoAtual();
         graduacaoAtual.reprovacao(notaDaProva);
         Query query = new Query();
@@ -357,17 +371,17 @@ public class AlunoServices implements AlunoServicesInterface {
         mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
-    public void adicionarNovaGraduacaoAprovado(String cpf, int kyu, int danAtual) {
+    public void adicionarNovaGraduacaoAprovado(String matricula, int kyu, int danAtual) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(cpf));
+        query.addCriteria(Criteria.where("_id").is(matricula));
         Update update = new Update();
         update.push(GRADUACAO, Graduacao.gerarNovaGraduacaoCasoAprovado(kyu, danAtual));
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
-    public void adicionarNovaGraduacaoReprovado(String cpf, int kyu, int danAtual) {
+    public void adicionarNovaGraduacaoReprovado(String matricula, int kyu, int danAtual) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(cpf));
+        query.addCriteria(Criteria.where("_id").is(matricula));
         Update update = new Update();
         update.push(GRADUACAO, Graduacao.gerarNovaGraduacaoCasoReprovado(kyu, danAtual));
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
@@ -405,11 +419,11 @@ public class AlunoServices implements AlunoServicesInterface {
         mongoTemplate.updateFirst(query, update, Aluno.class);
     }
 
-    protected Aluno encontrarAlunoPorCpf(String cpfAluno) {
-        List<AlunoDTOResponse> alunoEncontrado = buscarAlunoPorCpf(cpfAluno);
+    protected Aluno encontrarAlunoPorMatricula(String matricula) {
+        List<AlunoDTOResponse> alunoEncontrado = this.buscarAlunoPorMatricula(matricula);
 
         if (alunoEncontrado.isEmpty()) {
-            throw new EntityNotFoundException("Aluno com o cpf " + cpfAluno + " nao encontrado!");
+            throw new EntityNotFoundException("Aluno com o cpf " + matricula + " nao encontrado!");
         }
 
         return AlunoMapper.mapToAluno(alunoEncontrado.get(0));
@@ -417,7 +431,13 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Cacheable(value = "aluno", key = "#cpf")
     public List<AlunoDTOResponse> buscarAlunoPorCpf(String cpf) {
-        Query query = new Query(Criteria.where("_id").is(cpf));
+        Query query = new Query(Criteria.where("cpf").is(cpf));
+        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
+    }
+
+    @Cacheable(value = "aluno", key = "#matricula")
+    public List<AlunoDTOResponse> buscarAlunoPorMatricula(String matricula) {
+        Query query = new Query(Criteria.where("_id").is(matricula));
         return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 

@@ -1,6 +1,6 @@
 package br.org.institutobushido.controllers.dtos.aluno.responsavel;
 
-import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
+import br.org.institutobushido.providers.enums.aluno.FiliacaoResposavel;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

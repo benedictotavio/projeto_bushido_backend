@@ -1,6 +1,6 @@
 package br.org.institutobushido.controllers.dtos.admin.signup;
 
-import br.org.institutobushido.enums.admin.UserRole;
+import br.org.institutobushido.providers.enums.admin.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
