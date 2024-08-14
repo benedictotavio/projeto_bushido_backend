@@ -20,5 +20,6 @@ public record UpdateAlunoDTORequest(
                 CorDePele corDePele,
                 String telefone,
                 String cartaoSus,
-                String email) {
+                String email,
+                String rg) {
 }

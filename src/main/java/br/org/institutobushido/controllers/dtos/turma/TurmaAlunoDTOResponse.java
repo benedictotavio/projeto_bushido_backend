@@ -11,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class TurmaAlunoDTOResponse implements Serializable {
     private String nome;
-    private String cpf;
+    private String matricula;
     private Genero genero;
     private Date dataNascimento;
 }

@@ -40,13 +40,13 @@ public class AlunoController {
         }
 
         @GetMapping()
-        ResponseEntity<List<AlunoDTOResponse>> buscarAluno(@RequestParam(name = "cpf", required = false) String cpf,
+        ResponseEntity<List<AlunoDTOResponse>> buscarAluno(@RequestParam(name = "matricula", required = false) String matricula,
                         @RequestParam(name = "nome", required = false) String nome,
                         @RequestParam(defaultValue = "0") int page,
                         @RequestParam(defaultValue = "10") int size,
                         @RequestParam(defaultValue = "nome") String sortBy,
                         @RequestParam(defaultValue = "asc") String sortOrder) {
-                return ResponseEntity.ok().body(alunoServices.buscarAluno(nome, cpf, page, size, sortOrder, sortBy));
+                return ResponseEntity.ok().body(alunoServices.buscarAluno(nome, matricula, page, size, sortOrder, sortBy));
         }
 
         @PostMapping(value = "comImagem",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -73,108 +73,108 @@ public class AlunoController {
                                 Aluno.class.getSimpleName()));
         }
 
-        @PutMapping(value = "{cpf}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-        public ResponseEntity<SuccessPutResponse> editarAluno(@PathVariable String cpf,
+        @PutMapping(value = "{matricula}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+        public ResponseEntity<SuccessPutResponse> editarAluno(@PathVariable String matricula,
                         @RequestPart("aluno") UpdateAlunoDTORequest aluno
-                       ) {
-                String alunoEditado = this.alunoServices.editarAlunoPorCpf(cpf, aluno);
+                       ) throws IOException {
+                String alunoEditado = this.alunoServices.editarAlunoPorMatricula(matricula, aluno);
                 return ResponseEntity.ok().body(
-                                new SuccessPutResponse(cpf, alunoEditado, Aluno.class.getSimpleName()));
+                                new SuccessPutResponse(matricula, alunoEditado, Aluno.class.getSimpleName()));
         }
 
-        @PutMapping(value = "comImagem/{cpf}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-        public ResponseEntity<SuccessPutResponse> editarAlunoComImagem(@PathVariable String cpf,
+        @PutMapping(value = "comImagem/{matricula}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+        public ResponseEntity<SuccessPutResponse> editarAlunoComImagem(@PathVariable String matricula,
                                                                         @RequestPart("aluno") UpdateAlunoDTORequest aluno,
                                                                        @RequestPart("imagemAluno") MultipartFile imagemAluno
         ) throws IOException {
 
-                String alunoEditado = this.alunoServices.editarAlunoPorCpfComImagem(cpf, aluno, imagemAluno);
+                String alunoEditado = this.alunoServices.editarAlunoPorMatriculaComImagem(matricula, aluno, imagemAluno);
                 return ResponseEntity.ok().body(
-                        new SuccessPutResponse(cpf, alunoEditado, Aluno.class.getSimpleName()));
+                        new SuccessPutResponse(matricula, alunoEditado, Aluno.class.getSimpleName()));
         }
 
-        @PostMapping("responsavel/{cpf}")
-        public ResponseEntity<SuccessPostResponse> adicionarResponsavel(@PathVariable String cpf,
+        @PostMapping("responsavel/{matricula}")
+        public ResponseEntity<SuccessPostResponse> adicionarResponsavel(@PathVariable String matricula,
                         @Valid @RequestBody ResponsavelDTORequest responsavelDTORequest) {
-                ResponsavelDTOResponse responsavel = alunoServices.adicionarResponsavel(cpf, responsavelDTORequest);
+                ResponsavelDTOResponse responsavel = alunoServices.adicionarResponsavel(matricula, responsavelDTORequest);
                 return ResponseEntity.ok().body(new SuccessPostResponse(responsavel.cpf(),
                                 "Responsável adicionado com sucesso", Responsavel.class.getSimpleName()));
         }
 
-        @DeleteMapping("responsavel/{cpf}")
-        public ResponseEntity<SuccessDeleteResponse> removerResponsavel(@PathVariable String cpf,
+        @DeleteMapping("responsavel/{matricula}")
+        public ResponseEntity<SuccessDeleteResponse> removerResponsavel(@PathVariable String matricula,
                         @RequestParam(name = "cpf") String cpfResponsavel) {
-                String res = alunoServices.removerResponsavel(cpf, cpfResponsavel);
+                String res = alunoServices.removerResponsavel(matricula, cpfResponsavel);
                 return ResponseEntity.ok().body(
                                 new SuccessDeleteResponse(res, "Responsável removido com sucesso",
                                                 Responsavel.class.getSimpleName()));
         }
 
-        @PostMapping("falta/{cpf}/{data}")
+        @PostMapping("falta/{matricula}/{data}")
         public ResponseEntity<SuccessPostResponse> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
-                        @PathVariable String cpf, @PathVariable long data) {
-                String res = alunoServices.adicionarFaltaDoAluno(cpf, faltas, data);
+                        @PathVariable String matricula, @PathVariable long data) {
+                String res = alunoServices.adicionarFaltaDoAluno(matricula, faltas, data);
                 return ResponseEntity.ok()
                                 .body(new SuccessPostResponse(res, "Falta adicionada", Falta.class.getSimpleName()));
         }
 
-        @DeleteMapping("falta/{cpf}/{data}")
+        @DeleteMapping("falta/{matricula}/{data}")
         public ResponseEntity<SuccessDeleteResponse> retirarFaltaAoAluno(@PathVariable("data") String data,
-                        @PathVariable String cpf) {
-                String res = alunoServices.retirarFaltaDoAluno(cpf, data);
+                        @PathVariable String matricula) {
+                String res = alunoServices.retirarFaltaDoAluno(matricula, data);
                 return ResponseEntity.ok()
                                 .body(new SuccessDeleteResponse(res, "Falta retirada com sucesso",
                                                 Falta.class.getSimpleName()));
         }
 
-        @PostMapping("deficiencia/{cpf}")
-        public ResponseEntity<SuccessPostResponse> adicionarDeficiencia(@PathVariable String cpf,
+        @PostMapping("deficiencia/{matricula}")
+        public ResponseEntity<SuccessPostResponse> adicionarDeficiencia(@PathVariable String matricula,
                         @RequestParam(name = "deficiencia") String deficiencia) {
-                String res = alunoServices.adicionarDeficiencia(cpf, deficiencia);
+                String res = alunoServices.adicionarDeficiencia(matricula, deficiencia);
                 return ResponseEntity.ok().body(new SuccessPostResponse(res, "Deficiência adicionada",
                                 HistoricoSaude.class.getSimpleName()));
         }
 
-        @DeleteMapping("deficiencia/{cpf}")
-        public ResponseEntity<SuccessDeleteResponse> removerDeficiencia(@PathVariable String cpf,
+        @DeleteMapping("deficiencia/{matricula}")
+        public ResponseEntity<SuccessDeleteResponse> removerDeficiencia(@PathVariable String matricula,
                         @RequestParam(name = "deficiencia") String deficiencia) {
-                String res = alunoServices.removerDeficiencia(cpf, deficiencia);
+                String res = alunoServices.removerDeficiencia(matricula, deficiencia);
                 return ResponseEntity.ok()
                                 .body(new SuccessDeleteResponse(res,
                                                 "Deficiência " + deficiencia + " foi removida com sucesso.",
                                                 HistoricoSaude.class.getSimpleName()));
         }
 
-        @PostMapping("acompanhamentoSaude/{cpf}")
-        public ResponseEntity<SuccessPostResponse> adicionarAcompanhamentoSaude(@PathVariable String cpf,
+        @PostMapping("acompanhamentoSaude/{matricula}")
+        public ResponseEntity<SuccessPostResponse> adicionarAcompanhamentoSaude(@PathVariable String matricula,
                         @RequestParam(name = "acompanhamento") String acompanhamento) {
-                String res = alunoServices.adicionarAcompanhamentoSaude(cpf, acompanhamento);
+                String res = alunoServices.adicionarAcompanhamentoSaude(matricula, acompanhamento);
                 return ResponseEntity.ok()
                                 .body(new SuccessPostResponse(res,
                                                 "Acompanhamento " + acompanhamento + " foi adicionado com sucesso.",
                                                 HistoricoSaude.class.getSimpleName()));
         }
 
-        @DeleteMapping("acompanhamentoSaude/{cpf}")
-        public ResponseEntity<SuccessDeleteResponse> removerAcompanhamentoSaude(@PathVariable String cpf,
+        @DeleteMapping("acompanhamentoSaude/{matricula}")
+        public ResponseEntity<SuccessDeleteResponse> removerAcompanhamentoSaude(@PathVariable String matricula,
                         @RequestParam(name = "acompanhamento") String acompanhamento) {
-                String res = alunoServices.removerAcompanhamentoSaude(cpf, acompanhamento);
+                String res = alunoServices.removerAcompanhamentoSaude(matricula, acompanhamento);
                 return ResponseEntity.ok().body(
                                 new SuccessDeleteResponse(res,
                                                 "Acamponhamento " + acompanhamento + " foi removido com sucesso."));
         }
 
-        @PostMapping("graduacao/{cpf}/aprovar/{nota}")
-        public ResponseEntity<SuccessPostResponse> aprovarAluno(@PathVariable String cpf, @PathVariable int nota) {
-                GraduacaoDTOResponse res = alunoServices.aprovarAluno(cpf, nota);
+        @PostMapping("graduacao/{matricula}/aprovar/{nota}")
+        public ResponseEntity<SuccessPostResponse> aprovarAluno(@PathVariable String matricula, @PathVariable int nota) {
+                GraduacaoDTOResponse res = alunoServices.aprovarAluno(matricula, nota);
                 return ResponseEntity.ok()
                                 .body(new SuccessPostResponse(String.valueOf(res.kyu()),
                                                 "Graduação concluída com sucesso.", Graduacao.class.getSimpleName()));
         }
 
-        @PostMapping("graduacao/{cpf}/reprovar/{nota}")
-        public ResponseEntity<SuccessPostResponse> reprovarAluno(@PathVariable String cpf, @PathVariable int nota) {
-                GraduacaoDTOResponse res = alunoServices.reprovarAluno(cpf, nota);
+        @PostMapping("graduacao/{matricula}/reprovar/{nota}")
+        public ResponseEntity<SuccessPostResponse> reprovarAluno(@PathVariable String matricula, @PathVariable int nota) {
+                GraduacaoDTOResponse res = alunoServices.reprovarAluno(matricula, nota);
                 return ResponseEntity.ok()
                                 .body(new SuccessPostResponse(String.valueOf(res.kyu()),
                                                 "Graduação concluída com sucesso.", Graduacao.class.getSimpleName()));

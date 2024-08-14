@@ -45,5 +45,7 @@ public record AlunoDTORequest(
 
                 String telefone,
 
-                @Pattern(regexp = "^(BRANCO|PRETO|AMARELO|INDIGENA|PARDA)$", message = "Cor de pele inválido") @NotNull(message = "Cor de pele é obrigatório!") CorDePele corDePele){
+                @NotNull(message = "Cor de pele é obrigatório!") CorDePele corDePele,
+
+                String rg){
 }

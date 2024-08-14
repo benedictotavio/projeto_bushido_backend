@@ -16,8 +16,9 @@ public class DadosEscolaresMapper {
         if (dadosEscolaresDTORequest == null) {
             return null;
         }
-
+        aluno.getDadosEscolares().setSerie(dadosEscolaresDTORequest.serie());
         aluno.getDadosEscolares().setEscola(dadosEscolaresDTORequest.escola());
+        aluno.getDadosEscolares().setTurno(dadosEscolaresDTORequest.turno());
         return aluno.getDadosEscolares();
     }
 
@@ -29,6 +30,8 @@ public class DadosEscolaresMapper {
 
         DadosEscolares dadosEscolares = new DadosEscolares();
         dadosEscolares.setEscola(dadosEscolaresDTORequest.escola());
+        dadosEscolares.setSerie(dadosEscolaresDTORequest.serie());
+        dadosEscolares.setTurno(dadosEscolaresDTORequest.turno());
 
         return dadosEscolares;
     }
@@ -41,6 +44,8 @@ public class DadosEscolaresMapper {
 
         DadosEscolares dadosEscolares = new DadosEscolares();
         dadosEscolares.setEscola(dadosEscolaresDTOResponse.escola());
+        dadosEscolares.setSerie(dadosEscolaresDTOResponse.serie());
+        dadosEscolares.setTurno(dadosEscolaresDTOResponse.turno());
 
         return dadosEscolares;
     }
@@ -50,7 +55,10 @@ public class DadosEscolaresMapper {
             return null;
         }
 
-        return DadosEscolaresDTOResponse.builder().withEscola(dadosEscolares.getEscola())
+        return DadosEscolaresDTOResponse.builder()
+                .withEscola(dadosEscolares.getEscola())
+                .withSerie(dadosEscolares.getSerie())
+                .withTurno(dadosEscolares.getTurno())
                 .build();
     }
 }

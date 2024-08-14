@@ -2,13 +2,10 @@ package br.org.institutobushido.models.aluno;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
+import br.org.institutobushido.providers.utils.default_values.ValoresPadraoMatricula;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -57,9 +54,9 @@ public class Aluno implements Serializable {
     private String cartaoSus;
     private String cpf;
     private String email;
+    private String rg;
 
     public Aluno() {
-        this.matricula = UUID.randomUUID().toString() + new Date().toInstant().toEpochMilli();
         this.graduacao = new ArrayList<>();
         this.historicoSaude = new HistoricoSaude();
         this.dadosEscolares = new DadosEscolares();
@@ -76,6 +73,13 @@ public class Aluno implements Serializable {
             return;
         }
         this.cpf = cpf;
+    }
+
+    public void setMatricula(String matricula) {
+        if (matricula == null || matricula.isEmpty()) {
+            return;
+        }
+        this.matricula = matricula;
     }
 
     public void setCartaoSus(String cartaoSus) {
@@ -184,6 +188,13 @@ public class Aluno implements Serializable {
         this.imagemAluno = imagemAluno;
     }
 
+    public void setRg(String rg) {
+        if (rg == null || rg.isEmpty()) {
+            return;
+        }
+        this.rg = rg;
+    }
+
     /**
      * Adiciona uma nova graduacao ao aluno
      *
@@ -285,5 +296,17 @@ public class Aluno implements Serializable {
      */
     public int getGraduacaoAtualIndex() {
         return this.getGraduacao().size() - 1;
+    }
+
+    public static String gerarMatricula() {
+        Random rand = new Random();
+        int max= ValoresPadraoMatricula.NUMERO_MAXIMO_MATRICULA;
+        int min=ValoresPadraoMatricula.NUMERO_MINIMO_MATRICULA;
+        Calendar cal = Calendar.getInstance();
+        String ano = Integer.toString(cal.get(Calendar.YEAR));
+        String seqAleatoria = Integer.toString(rand.nextInt(max - min + 1) + min);
+        String matricula = ano + seqAleatoria;
+
+        return matricula;
     }
 }

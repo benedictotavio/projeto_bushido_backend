@@ -131,7 +131,7 @@ public class TurmaService implements TurmaServiceInterface {
 
         AggregationOperation project = Aggregation.project()
                 .and("alunos_turma.nome").as("nome")
-                .and("alunos_turma._id").as("cpf")
+                .and("alunos_turma._id").as("matricula")
                 .and("alunos_turma.genero").as("genero")
                 .and("alunos_turma.dataNascimento").as("dataNascimento")
                 .andExclude("_id");
