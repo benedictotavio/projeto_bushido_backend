@@ -87,7 +87,7 @@ public class AlunoServices implements AlunoServicesInterface {
     public List<AlunoDTOResponse> buscarAluno(String nome, String matricula, int pagina, int tamanho, String ordenarPor,
                                               String sequenciaOrdenacao) {
         if (matricula != null) {
-            return this.buscarAlunoPorCpf(matricula);
+            return this.buscarAlunoPorMatricula(matricula);
         }
         return this.buscarAlunosPorNome(nome, pagina, tamanho, ordenarPor, sequenciaOrdenacao);
     }
@@ -386,9 +386,9 @@ public class AlunoServices implements AlunoServicesInterface {
         return AlunoMapper.mapToAluno(alunoEncontrado.get(0));
     }
 
-    @Cacheable(value = "aluno", key = "#matricula")
-    public List<AlunoDTOResponse> buscarAlunoPorCpf(String matricula) {
-        Query query = new Query(Criteria.where("matricula").is(matricula));
+    @Cacheable(value = "aluno", key = "#cpf")
+    public List<AlunoDTOResponse> buscarAlunoPorCpf(String cpf) {
+        Query query = new Query(Criteria.where("cpf").is(cpf));
         return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 
