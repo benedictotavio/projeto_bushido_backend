@@ -136,10 +136,12 @@ public class AlunoServices implements AlunoServicesInterface {
         Update update = new Update().addToSet(GRADUACAO + "." + (aluno.getGraduacaoAtualIndex()) + ".faltas",
                 novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
-
+        /*
         if (aluno.getGraduacaoAtual().getFaltas().size() == 5) {
             mudarStatusGraduacaoAluno(aluno, false);
         }
+
+         */
 
         return String.valueOf(aluno.getGraduacaoAtual().getFaltas().size());
     }
@@ -148,11 +150,11 @@ public class AlunoServices implements AlunoServicesInterface {
     public String retirarFaltaDoAluno(String matricula, String faltasId) {
         Aluno aluno = this.encontrarAlunoPorMatricula(matricula);
         Falta faltaDoAluno = aluno.getGraduacaoAtual().removerFalta(faltasId);
-
+        /*
         if (aluno.getGraduacaoAtual().getFaltas().size() == 4) {
             mudarStatusGraduacaoAluno(aluno, true);
         }
-
+        */
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(aluno.getMatricula()));
         Update update = new Update().pull(GRADUACAO + "." + (aluno.getGraduacaoAtualIndex()) +
@@ -321,11 +323,15 @@ public class AlunoServices implements AlunoServicesInterface {
                 alunoEncontrado.getGraduacaoAtual());
     }
 
-    protected void mudarStatusGraduacaoAluno(Aluno aluno, boolean status) {
+    @Override
+    public GraduacaoDTOResponse mudarStatusGraduacaoAluno(String matricula, boolean status) {
+        Aluno alunoEncontrado = this.encontrarAlunoPorMatricula(matricula);
         Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(aluno.getMatricula()));
-        Update update = new Update().set(GRADUACAO + "." + (aluno.getGraduacaoAtualIndex()) + ".status", status);
+        query.addCriteria(Criteria.where("_id").is(alunoEncontrado.getMatricula()));
+        Update update = new Update().set(GRADUACAO + "." + (alunoEncontrado.getGraduacaoAtualIndex()) + ".status", status);
         mongoTemplate.updateFirst(query, update, Aluno.class);
+        return GraduacaoMapper.mapToGraduacaoDTOResponse(
+                alunoEncontrado.getGraduacaoAtual());
     }
 
     public void adicionarNovaGraduacaoAprovado(String matricula, int kyu, int danAtual) {

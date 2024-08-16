@@ -44,4 +44,6 @@ public interface AlunoServicesInterface {
     GraduacaoDTOResponse aprovarAluno(String matricula, int nota);
 
     GraduacaoDTOResponse reprovarAluno(String matricula, int nota);
+
+    GraduacaoDTOResponse mudarStatusGraduacaoAluno(String matricula, boolean nota);
 }

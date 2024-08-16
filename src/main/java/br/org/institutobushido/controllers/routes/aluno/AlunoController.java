@@ -179,4 +179,12 @@ public class AlunoController {
                                 .body(new SuccessPostResponse(String.valueOf(res.kyu()),
                                                 "Graduação concluída com sucesso.", Graduacao.class.getSimpleName()));
         }
+
+        @PutMapping("graduacao/{matricula}/mudarStatus/{status}")
+        public ResponseEntity<SuccessPostResponse> mudarStatusAluno(@PathVariable String matricula, @PathVariable boolean status) {
+                GraduacaoDTOResponse res = alunoServices.mudarStatusGraduacaoAluno(matricula, status);
+                return ResponseEntity.ok()
+                        .body(new SuccessPostResponse(String.valueOf(res.status()),
+                                "Status do aluno alterado com sucesso.", Graduacao.class.getSimpleName()));
+        }
 }
