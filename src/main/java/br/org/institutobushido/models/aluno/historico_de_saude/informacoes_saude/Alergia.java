@@ -2,7 +2,7 @@ package br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saud
 
 import java.io.Serializable;
 
-import br.org.institutobushido.abstracts.InformacaoSaude;
+import br.org.institutobushido.providers.abstracts.InformacaoSaude;
 
 public class Alergia extends InformacaoSaude implements Serializable {
 

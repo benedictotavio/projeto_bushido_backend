@@ -9,11 +9,11 @@ import java.util.Date;
 import java.util.List;
 
 import br.org.institutobushido.models.aluno.graduacao.falta.Falta;
-import br.org.institutobushido.utils.default_values.ValoresPadraoGraduacao;
-import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.utils.resources.exceptions.InactiveUserException;
-import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.providers.utils.default_values.ValoresPadraoGraduacao;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.providers.utils.resources.exceptions.InactiveUserException;
+import br.org.institutobushido.providers.utils.resources.exceptions.LimitQuantityException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

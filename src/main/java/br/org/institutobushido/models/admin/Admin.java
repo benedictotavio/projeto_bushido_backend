@@ -3,17 +3,15 @@ package br.org.institutobushido.models.admin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import br.org.institutobushido.enums.admin.UserRole;
 import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
-import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.providers.enums.admin.UserRole;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
 import lombok.Data;
 
 @Data
@@ -43,7 +41,6 @@ public class Admin implements UserDetails {
         if (this.role == UserRole.ADMIN) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         }
-
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 

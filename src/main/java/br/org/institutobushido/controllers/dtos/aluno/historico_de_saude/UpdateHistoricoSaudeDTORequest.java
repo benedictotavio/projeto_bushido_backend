@@ -4,7 +4,7 @@ import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informa
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.cirurgia.CirurgiaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.doenca_cronica.DoencaCronicaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTORequest;
-import br.org.institutobushido.enums.aluno.TipoSanguineo;
+import br.org.institutobushido.providers.enums.aluno.TipoSanguineo;
 
 public record UpdateHistoricoSaudeDTORequest(
         TipoSanguineo tipoSanguineo,

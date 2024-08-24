@@ -17,17 +17,17 @@ import br.org.institutobushido.controllers.dtos.turma.DadosTurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaAlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
-import br.org.institutobushido.mappers.turma.TurmaMapper;
 import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.models.turma.tutor.Tutor;
+import br.org.institutobushido.providers.mappers.turma.TurmaMapper;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.providers.utils.resources.exceptions.LimitQuantityException;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
-import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 
 @Service
 public class TurmaService implements TurmaServiceInterface {
@@ -35,6 +35,9 @@ public class TurmaService implements TurmaServiceInterface {
     private final TurmaRepositorio turmaRepositorio;
     private final MongoTemplate mongoTemplate;
     private final AdminRepositorio adminRepositorio;
+
+    private static final String COLLECTION_TURMAS = "turmas";
+    private static final String COLLECTION_ALUNO = "alunos";
 
     public TurmaService(TurmaRepositorio turmaRepositorio, MongoTemplate mongoTemplate,
             AdminRepositorio adminRepositorio) {
@@ -48,7 +51,7 @@ public class TurmaService implements TurmaServiceInterface {
     public String criarNovaTurma(TurmaDTORequest turma) {
 
         if (this.verificaSeTurmaExiste(turma.nome())) {
-            throw new AlreadyRegisteredException("Turma " + turma.nome() + " ja está registrada.");
+            throw new AlreadyRegisteredException(" A Turma " + turma.nome() + " ja está registrada.");
         }
 
         Turma novaTurma = TurmaMapper.mapToTurma(turma);
@@ -122,19 +125,19 @@ public class TurmaService implements TurmaServiceInterface {
     private List<TurmaAlunoDTOResponse> listarAlunosAtivosDaTurma(String nomeTurma) {
         AggregationOperation match = Aggregation.match(Criteria.where("nome").is(nomeTurma));
 
-        AggregationOperation lookup = Aggregation.lookup("alunos", "nome", "turma", "alunos_turma");
+        AggregationOperation lookup = Aggregation.lookup(COLLECTION_ALUNO, "nome", "turma", "alunos_turma");
 
         AggregationOperation unwind = Aggregation.unwind("$alunos_turma");
 
         AggregationOperation project = Aggregation.project()
                 .and("alunos_turma.nome").as("nome")
-                .and("alunos_turma._id").as("cpf")
+                .and("alunos_turma._id").as("matricula")
                 .and("alunos_turma.genero").as("genero")
                 .and("alunos_turma.dataNascimento").as("dataNascimento")
                 .andExclude("_id");
 
         Aggregation aggregation = Aggregation.newAggregation(match, lookup, unwind, project);
-        return mongoTemplate.aggregate(aggregation, "turmas", TurmaAlunoDTOResponse.class).getMappedResults();
+        return mongoTemplate.aggregate(aggregation, COLLECTION_TURMAS, TurmaAlunoDTOResponse.class).getMappedResults();
     }
 
     private boolean verificaSeTurmaExiste(String nomeTurma) {
@@ -147,7 +150,7 @@ public class TurmaService implements TurmaServiceInterface {
         Query query = new Query();
         query.addCriteria(Criteria.where("email").is(emailAdmin));
         Update update = new Update();
-        update.push("turmas", admin.adicionarTurma(turma));
+        update.push(COLLECTION_TURMAS, admin.adicionarTurma(turma));
         this.mongoTemplate.updateFirst(query, update, Admin.class);
         return admin;
     }
@@ -158,7 +161,7 @@ public class TurmaService implements TurmaServiceInterface {
         Query query = new Query();
         query.addCriteria(Criteria.where("email").is(emailAdmin));
         Update update = new Update();
-        update.pull("turmas", Query.query(Criteria.where("nome").is(turma)));
+        update.pull(COLLECTION_TURMAS, Query.query(Criteria.where("nome").is(turma)));
         this.mongoTemplate.updateFirst(query, update, Admin.class);
     }
 

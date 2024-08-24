@@ -10,9 +10,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class SuccessLoginAuthenticatedTest {
+class SuccessLoginAuthenticatedTest {
     @Test
-    public void test_initialize_success_login_authenticated_with_fields() {
+    void deveCriarSuccessLoginAuthenticated() {
         String token = "token";
         String role = "role";
         TurmaResponsavel turma = new TurmaResponsavel("Turma responsavel", "Turma 1");
@@ -25,7 +25,7 @@ public class SuccessLoginAuthenticatedTest {
     }
 
     @Test
-    public void test_initialize_success_login_authenticated_with_null_values() {
+    void test_initialize_success_login_authenticated_with_null_values() {
         String token = null;
         String role = null;
         TurmaResponsavel turma = new TurmaResponsavel("Turma responsavel", "Turma 1");

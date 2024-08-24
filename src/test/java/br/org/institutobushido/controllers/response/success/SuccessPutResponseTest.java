@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
-public class SuccessPutResponseTest {
+class SuccessPutResponseTest {
     @Test
-    public void test_valid_id_and_message() {
+    void deveRetornarSucessoDeUmPut() {
         SuccessPutResponse response = new SuccessPutResponse("123", "Success");
         assertEquals("123", response.getId());
         assertEquals(HttpStatus.OK.value(), response.getStatus());

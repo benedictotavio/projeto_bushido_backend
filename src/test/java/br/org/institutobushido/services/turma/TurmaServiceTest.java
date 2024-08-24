@@ -23,17 +23,17 @@ import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTOResponse;
-import br.org.institutobushido.enums.admin.UserRole;
 import br.org.institutobushido.models.admin.Admin;
 import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
 import br.org.institutobushido.models.aluno.Aluno;
 import br.org.institutobushido.models.turma.Turma;
 import br.org.institutobushido.models.turma.tutor.Tutor;
+import br.org.institutobushido.providers.enums.admin.UserRole;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.providers.utils.resources.exceptions.LimitQuantityException;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
-import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
 
 @SpringBootTest
 class TurmaServiceTest {

@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .env
+**.jpeg
+**.jpg
+**.png
 
 ### STS ###
 .apt_generated

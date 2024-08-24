@@ -2,28 +2,27 @@ package br.org.institutobushido.models.aluno;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
+import br.org.institutobushido.providers.utils.default_values.ValoresPadraoMatricula;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
-import br.org.institutobushido.enums.aluno.Genero;
 import br.org.institutobushido.models.aluno.dados_escolares.DadosEscolares;
 import br.org.institutobushido.models.aluno.dados_sociais.DadosSociais;
 import br.org.institutobushido.models.aluno.endereco.Endereco;
 import br.org.institutobushido.models.aluno.graduacao.Graduacao;
 import br.org.institutobushido.models.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
-import br.org.institutobushido.utils.default_values.ValoresPadraoResponsavel;
-import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.providers.enums.aluno.CorDePele;
+import br.org.institutobushido.providers.enums.aluno.FiliacaoResposavel;
+import br.org.institutobushido.providers.enums.aluno.Genero;
+import br.org.institutobushido.providers.utils.default_values.ValoresPadraoResponsavel;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.providers.utils.resources.exceptions.LimitQuantityException;
 import lombok.Getter;
 
 @Getter
@@ -34,10 +33,11 @@ public class Aluno implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
 
     @Id
-    private String cpf;
+    private String matricula;
 
     @Indexed(unique = true, background = true)
     private String nome;
+
     private Date dataNascimento;
     private Genero genero;
     private String turma;
@@ -45,12 +45,18 @@ public class Aluno implements Serializable {
     private Date dataPreenchimento;
     private Endereco endereco;
     private DadosSociais dadosSociais;
-    private List<Responsavel> responsaveis = new ArrayList<>();
+    private List<Responsavel> responsaveis;
     private List<Graduacao> graduacao;
     private HistoricoSaude historicoSaude;
     private ImagemAluno imagemAluno;
+    private CorDePele corDePele;
+    private String telefone;
+    private String cartaoSus;
+    private String cpf;
+    private String email;
+    private String rg;
 
-    public Aluno(String cpf, String nome, Date dataNascimento, Genero genero, String turma) {
+    public Aluno() {
         this.graduacao = new ArrayList<>();
         this.historicoSaude = new HistoricoSaude();
         this.dadosEscolares = new DadosEscolares();
@@ -58,12 +64,43 @@ public class Aluno implements Serializable {
         this.endereco = new Endereco();
         this.responsaveis = new ArrayList<>();
         this.dataPreenchimento = new Date();
-        this.nome = nome;
-        this.dataNascimento = dataNascimento;
-        this.genero = genero;
-        this.cpf = cpf;
-        this.turma = turma;
         this.imagemAluno = new ImagemAluno();
+        this.responsaveis = new ArrayList<>();
+    }
+
+    public void setCpf(String cpf) {
+        if (cpf == null || cpf.isEmpty()) {
+            return;
+        }
+        this.cpf = cpf;
+    }
+
+    public void setMatricula(String matricula) {
+        if (matricula == null || matricula.isEmpty()) {
+            return;
+        }
+        this.matricula = matricula;
+    }
+
+    public void setCartaoSus(String cartaoSus) {
+        if (cartaoSus == null || cartaoSus.isEmpty()) {
+            return;
+        }
+        this.cartaoSus = cartaoSus;
+    }
+
+    public void setTelefone(String telefone) {
+        if (telefone == null || telefone.isEmpty()) {
+            return;
+        }
+        this.telefone = telefone;
+    }
+
+    public void setCorDePele(CorDePele corDePele) {
+        if (corDePele == null) {
+            return;
+        }
+        this.corDePele = corDePele;
     }
 
     public void setResponsaveis(List<Responsavel> responsaveis) {
@@ -85,6 +122,13 @@ public class Aluno implements Serializable {
             return;
         }
         this.nome = nome;
+    }
+
+    public void setEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            return;
+        }
+        this.email = email;
     }
 
     public void setDataNascimento(long dataNascimento) {
@@ -142,6 +186,13 @@ public class Aluno implements Serializable {
             return;
         }
         this.imagemAluno = imagemAluno;
+    }
+
+    public void setRg(String rg) {
+        if (rg == null || rg.isEmpty()) {
+            return;
+        }
+        this.rg = rg;
     }
 
     /**
@@ -245,5 +296,17 @@ public class Aluno implements Serializable {
      */
     public int getGraduacaoAtualIndex() {
         return this.getGraduacao().size() - 1;
+    }
+
+    public static String gerarMatricula() {
+        Random rand = new Random();
+        int max= ValoresPadraoMatricula.NUMERO_MAXIMO_MATRICULA;
+        int min=ValoresPadraoMatricula.NUMERO_MINIMO_MATRICULA;
+        Calendar cal = Calendar.getInstance();
+        String ano = Integer.toString(cal.get(Calendar.YEAR));
+        String seqAleatoria = Integer.toString(rand.nextInt(max - min + 1) + min);
+        String matricula = ano + seqAleatoria;
+
+        return matricula;
     }
 }

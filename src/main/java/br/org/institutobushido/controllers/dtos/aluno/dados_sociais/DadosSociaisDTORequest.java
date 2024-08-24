@@ -1,6 +1,6 @@
 package br.org.institutobushido.controllers.dtos.aluno.dados_sociais;
 
-import br.org.institutobushido.enums.aluno.Imovel;
+import br.org.institutobushido.providers.enums.aluno.Imovel;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

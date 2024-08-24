@@ -8,9 +8,9 @@ import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class StandardErrorTest {
+class StandardErrorTest {
     @Test
-    public void test_valid_parameters() {
+    void test_valid_parameters() {
         Instant timestamp = Instant.now();
         Integer status = 200;
         String error = "OK";

@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import br.org.institutobushido.models.aluno.graduacao.falta.Falta;
-import br.org.institutobushido.utils.resources.exceptions.InactiveUserException;
-import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.providers.utils.resources.exceptions.InactiveUserException;
+import br.org.institutobushido.providers.utils.resources.exceptions.LimitQuantityException;
 
 @SpringBootTest
 class GraduacaoTest {

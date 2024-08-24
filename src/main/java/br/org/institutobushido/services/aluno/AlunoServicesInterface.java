@@ -18,30 +18,32 @@ public interface AlunoServicesInterface {
 
     String adicionarAluno(AlunoDTORequest alunoDTORequest);
 
-    List<AlunoDTOResponse> buscarAluno(String nome, String cpf, int pagina, int tamanho, String ordenarPor,
+    List<AlunoDTOResponse> buscarAluno(String nome, String matricula, int pagina, int tamanho, String ordenarPor,
             String sequenciaOrdenacao);
 
-    String editarAlunoPorCpf(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest);
+    String editarAlunoPorMatricula(String matricula, UpdateAlunoDTORequest updateAlunoDTORequest) throws IOException;
 
-    String editarAlunoPorCpfComImagem(String cpf, UpdateAlunoDTORequest updateAlunoDTORequest, MultipartFile imagemAluno) throws IOException;
+    String editarAlunoPorMatriculaComImagem(String matricula, UpdateAlunoDTORequest updateAlunoDTORequest, MultipartFile imagemAluno) throws IOException;
 
-    String adicionarFaltaDoAluno(String cpf, FaltaDTORequest faltas, long novaFalta);
+    String adicionarFaltaDoAluno(String matricula, FaltaDTORequest faltas, long novaFalta);
 
-    String retirarFaltaDoAluno(String cpf, String faltasId);
+    String retirarFaltaDoAluno(String matricula, String faltasId);
 
-    ResponsavelDTOResponse adicionarResponsavel(String cpf, ResponsavelDTORequest responsavelDTORequest);
+    ResponsavelDTOResponse adicionarResponsavel(String matricula, ResponsavelDTORequest responsavelDTORequest);
 
-    String removerResponsavel(String cpf, String cpfResponsavel);
+    String removerResponsavel(String matricula, String cpfResponsavel);
 
-    String adicionarDeficiencia(String cpf, String deficiencia);
+    String adicionarDeficiencia(String matricula, String deficiencia);
 
-    String removerDeficiencia(String cpf, String deficiencia);
+    String removerDeficiencia(String matricula, String deficiencia);
 
-    String adicionarAcompanhamentoSaude(String cpf, String acompanhamentoSaude);
+    String adicionarAcompanhamentoSaude(String matricula, String acompanhamentoSaude);
 
-    String removerAcompanhamentoSaude(String cpf, String acompanhamentoSaude);
+    String removerAcompanhamentoSaude(String matricula, String acompanhamentoSaude);
 
-    GraduacaoDTOResponse aprovarAluno(String cpf, int nota);
+    GraduacaoDTOResponse aprovarAluno(String matricula, int nota);
 
-    GraduacaoDTOResponse reprovarAluno(String cpf, int nota);
+    GraduacaoDTOResponse reprovarAluno(String matricula, int nota);
+
+    GraduacaoDTOResponse mudarStatusGraduacaoAluno(String matricula, boolean nota);
 }

@@ -2,19 +2,16 @@ package br.org.institutobushido.models.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import br.org.institutobushido.enums.aluno.FiliacaoResposavel;
-import br.org.institutobushido.enums.aluno.Genero;
+
 import br.org.institutobushido.models.aluno.graduacao.Graduacao;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
-import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.utils.resources.exceptions.LimitQuantityException;
+import br.org.institutobushido.providers.enums.aluno.FiliacaoResposavel;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.providers.utils.resources.exceptions.LimitQuantityException;
 
 @SpringBootTest
 class AlunoTest {
@@ -22,9 +19,7 @@ class AlunoTest {
 
         @BeforeEach
         void setUp() {
-                aluno = new Aluno("123456789", "John Doe", Date.from(Instant.now().truncatedTo(ChronoUnit.DAYS)),
-                                Genero.M,
-                                "Turma A");
+                aluno = new Aluno();
         }
 
         @Test

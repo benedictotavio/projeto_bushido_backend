@@ -24,10 +24,10 @@ import com.auth0.jwt.algorithms.Algorithm;
 import br.org.institutobushido.controllers.dtos.admin.AdminDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
-import br.org.institutobushido.enums.admin.UserRole;
 import br.org.institutobushido.models.admin.Admin;
+import br.org.institutobushido.providers.enums.admin.UserRole;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.repositories.AdminRepositorio;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
 
 @SpringBootTest
 class AdminServicesTest {

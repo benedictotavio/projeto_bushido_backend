@@ -17,11 +17,11 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import br.org.institutobushido.controllers.dtos.admin.AdminDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
 import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
-import br.org.institutobushido.mappers.admin.AdminMapper;
 import br.org.institutobushido.models.admin.Admin;
+import br.org.institutobushido.providers.mappers.admin.AdminMapper;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.repositories.AdminRepositorio;
-import br.org.institutobushido.utils.resources.exceptions.AlreadyRegisteredException;
-import br.org.institutobushido.utils.resources.exceptions.EntityNotFoundException;
 
 @Service
 public class AdminServices implements AdminServicesInterface, UserDetailsService {
@@ -30,7 +30,7 @@ public class AdminServices implements AdminServicesInterface, UserDetailsService
     private String secret;
 
     private static final long ONE_HOUR_IN_MILLIS = 3600000;
-    
+
     private AdminRepositorio adminRepositorio;
     private MongoTemplate mongoTemplate;
 
@@ -50,12 +50,11 @@ public class AdminServices implements AdminServicesInterface, UserDetailsService
         }
 
         Admin admin = new Admin(
-            adminDTORequest.nome(),
-            adminDTORequest.email(),
-            new BCryptPasswordEncoder().encode(adminDTORequest.senha()),
-            adminDTORequest.cargo(),
-            adminDTORequest.role()
-        );
+                adminDTORequest.nome(),
+                adminDTORequest.email(),
+                new BCryptPasswordEncoder().encode(adminDTORequest.senha()),
+                adminDTORequest.cargo(),
+                adminDTORequest.role());
 
         adminRepositorio.save(admin);
     }
@@ -88,9 +87,9 @@ public class AdminServices implements AdminServicesInterface, UserDetailsService
             throw new JWTCreationException("Error ao gerar token", e);
         }
     }
-      
+
     public String validateToken(String token) {
-         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
+        Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         DecodedJWT decodedJWT = JWT.require(algorithm).withIssuer(secret).build().verify(token);
         return decodedJWT.getSubject();
     }
