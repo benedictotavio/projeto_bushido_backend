@@ -9,7 +9,9 @@ import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informa
 import br.org.institutobushido.providers.enums.aluno.TipoSanguineo;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 
+@Builder(setterPrefix = "with")
 public record HistoricoSaudeDTORequest(
         @NotNull(message = "Tipo Sanguineo é obrigatório") @Pattern(regexp = "^(B_POSITIVO, A_POSITIVO, O_POSITIVO, B_NEGATIVO, A_NEGATIVO, O_NEGATIVO, AB_POSITIVO, AB_NEGATIVO)$", message = "Tipo Sanguineo inválido!") TipoSanguineo tipoSanguineo,
         UsoMedicamentoContinuoDTORequest usoMedicamentoContinuo,
