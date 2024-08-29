@@ -2,7 +2,7 @@ package br.org.institutobushido.services.aluno;
 
 import java.io.IOException;
 import java.util.List;
-import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
+
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +14,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -32,13 +34,18 @@ import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.Cirurgia;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
 import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
+import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
-import br.org.institutobushido.providers.mappers.aluno.*;
+import br.org.institutobushido.providers.mappers.aluno.AlunoMapper;
+import br.org.institutobushido.providers.mappers.aluno.DadosEscolaresMapper;
+import br.org.institutobushido.providers.mappers.aluno.DadosSociaisMapper;
+import br.org.institutobushido.providers.mappers.aluno.EnderecoMapper;
+import br.org.institutobushido.providers.mappers.aluno.GraduacaoMapper;
+import br.org.institutobushido.providers.mappers.aluno.ImagemAlunoMapper;
+import br.org.institutobushido.providers.mappers.aluno.ResponsavelMapper;
 import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.repositories.AlunoRepositorio;
-
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AlunoServices implements AlunoServicesInterface {
@@ -60,9 +67,13 @@ public class AlunoServices implements AlunoServicesInterface {
 
         List<AlunoDTOResponse> alunoEncontradoCpf = this.buscarAlunoPorCpf(alunoDTORequest.cpf());
 
-        if (!alunoEncontradoCpf.isEmpty()) {
-            throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja está registrado!");
-        }
+        if (!alunoEncontradoCpf.isEmpty())
+            throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja esta registrado!");
+
+        List<AlunoDTOResponse> alunoEncontradoRg = this.buscarAlunoPorRg(alunoDTORequest.rg());
+
+        if (!alunoEncontradoRg.isEmpty())
+            throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta registrado!");
 
         Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest, imagemAluno));
 
@@ -77,7 +88,7 @@ public class AlunoServices implements AlunoServicesInterface {
         if (!alunoEncontradoCpf.isEmpty())
             throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja esta cadastrado!");
 
-        List<AlunoDTOResponse> alunoEncontradoRg = this.buscarAlunoPorMatricula(alunoDTORequest.rg());
+        List<AlunoDTOResponse> alunoEncontradoRg = this.buscarAlunoPorRg(alunoDTORequest.rg());
 
         if (!alunoEncontradoRg.isEmpty())
             throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
