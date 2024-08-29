@@ -177,50 +177,6 @@ class AlunoControllerTest {
                 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
                 assertEquals(List.of(alunoDTOResponse), responseEntity.getBody());
         }
-        /*
-         * @Test
-         * void deveEditarAluno() throws IOException {
-         * updateAlunoDTORequest = new UpdateAlunoDTORequest(
-         * "NOME",
-         * new Date().getTime(),
-         * Genero.M,
-         * "TURMA",
-         * new UpdateDadosSociaisDTORequest(false, false, null, 0, 0, false, 0),
-         * new UpdateDadosEscolaresDTORequest("ESCOLA"),
-         * new UpdateEnderecoDTORequest("CIDADE", "ESTADO", "CEP", "100", "LOGRADOURO"),
-         * new UpdateHistoricoSaudeDTORequest(null, null, null, null, null),
-         * "12345678901",
-         * CorDePele.BRANCO,
-         * "1102345678",
-         * "123456789",
-         * "email@email.com.br"
-         * );
-         * 
-         * when(alunoServices.editarAlunoPorMatricula(aluno.getCpf(),
-         * updateAlunoDTORequest))
-         * .thenReturn("Aluno editado com sucesso!");
-         * 
-         * // Act
-         * ResponseEntity<SuccessPutResponse> responseEntity =
-         * alunoController.editarAluno(aluno.getCpf(),
-         * updateAlunoDTORequest);
-         * 
-         * // Assert
-         * assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-         * 
-         * // Verify that the service method was called with the correct arguments
-         * verify(alunoServices).editarAlunoPorMatricula(aluno.getCpf(),
-         * updateAlunoDTORequest);
-         * 
-         * // Verify response body
-         * SuccessPutResponse responseBody = responseEntity.getBody();
-         * assert responseBody != null;
-         * assertEquals(aluno.getCpf(), responseBody.getId());
-         * assertEquals("Aluno editado com sucesso!", responseBody.getMessage());
-         * assertEquals("Aluno", responseBody.getEntity());
-         * }
-         * 
-         */
 
         @Test
         void deveAdicnarUmNovoResponsavel() {

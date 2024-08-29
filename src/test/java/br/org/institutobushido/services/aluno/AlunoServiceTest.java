@@ -1,18 +1,28 @@
 package br.org.institutobushido.services.aluno;
-/*
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.UpdateAlunoDTORequest;
@@ -24,6 +34,10 @@ import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTORequ
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.UpdateHistoricoSaudeDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.alergia.AlergiaDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.cirurgia.CirurgiaDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.doenca_cronica.DoencaCronicaDTORequest;
+import br.org.institutobushido.controllers.dtos.aluno.historico_de_saude.informacoes_de_saude.uso_medicamento_continuo.UsoMedicamentoContinuoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
 import br.org.institutobushido.models.aluno.Aluno;
@@ -49,6 +63,8 @@ import br.org.institutobushido.repositories.TurmaRepositorio;
 
 @SpringBootTest
 class AlunoServiceTest {
+
+        UpdateAlunoDTORequest updateAlunoDTORequest;
 
         @Mock
         private AlunoRepositorio alunoRepositorio;
@@ -138,16 +154,25 @@ class AlunoServiceTest {
         }
 
         @Test
+        void deveRetornarExceçãoSeRgEstiverRegistrado() {
+                // Arrange
+                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
+                when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
+
+                // Assert
+                assertThrows(AlreadyRegisteredException.class, () -> alunoServices.adicionarAluno(alunoDTORequest));
+        }
+
+        @Test
         void deveCriarAluno() {
+                // Arrange
                 when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(new ArrayList<>());
                 when(alunoRepositorio.save(any(Aluno.class))).thenReturn(aluno);
 
                 // Act
-                String cpf = alunoServices.adicionarAluno(alunoDTORequest);
-
+                String result = alunoServices.adicionarAluno(alunoDTORequest);
                 // Assert
-                assertEquals(alunoDTORequest.cpf(), cpf);
-                verify(alunoRepositorio, times(1)).save(any(Aluno.class));
+                assertEquals(aluno.getMatricula(), result);
         }
 
         @Test
@@ -260,19 +285,6 @@ class AlunoServiceTest {
         }
 
         @Test
-        void deveMudarStatusGraduacaoAlunoAoAdicionarFalta() {
-                // Arrange
-                Graduacao graduacao = new Graduacao(7, 0);
-                graduacao.setFimGraduacao(LocalDate.now().plusMonths(2));
-                aluno.adicionarGraduacao(graduacao);
-                when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
-                // Act
-                alunoServices.mudarStatusGraduacaoAluno(aluno, true);
-                // Assert
-                assertTrue(aluno.getGraduacao().get(aluno.getGraduacao().size() - 1).isStatus());
-        }
-
-        @Test
         void deveRetirarFaltaDoAluno() {
                 // Arrange
                 String cpf = "123456789";
@@ -295,23 +307,35 @@ class AlunoServiceTest {
         }
 
         @Test
-        void deveRetornarEdiçãoDeAlunoPorRg() {
+        void deveRetornarEdiçãoDeAlunoPorRg() throws IOException {
                 // Arrange
                 String cpf = "123456789";
-                UpdateAlunoDTORequest updateAlunoDTORequest = new UpdateAlunoDTORequest(
-                                "NOME",
-                                new Date().getTime(),
-                                Genero.M,
-                                "TURMA",
-                                new UpdateDadosSociaisDTORequest(false, false, null, 10, 5, false, 0),
-                                new UpdateDadosEscolaresDTORequest("ESCOLA"),
-                                new UpdateEnderecoDTORequest("CIDADE", "ESTADO", "CEP", "100", "LOGRADOURO"),
-                                new UpdateHistoricoSaudeDTORequest(null, null, null, null, null),
-                                "12345678901",
-                                CorDePele.BRANCO,
-                                "1102345678",
-                                "123456789",
-                                "email@email.com.br");
+                updateAlunoDTORequest = UpdateAlunoDTORequest.builder()
+                                .withCartaoSus("11111111111")
+                                .withCorDePele(CorDePele.BRANCO)
+                                .withCpf(cpf)
+                                .withDadosEscolares(
+                                                new UpdateDadosEscolaresDTORequest("ESCOLA"))
+                                .withDadosSociais(
+                                                new UpdateDadosSociaisDTORequest(false, false, Imovel.PROPRIO, 4, 3,
+                                                                false, 0))
+                                .withDataNascimento(new Date().getTime() - 2000 * 60 * 60 * 24 * 4)
+                                .withEmail("email@email.com")
+                                .withEndereco(
+                                                new UpdateEnderecoDTORequest("CIDADE", "ESTADO", "CEP", "100",
+                                                                "LOGRADOURO"))
+                                .withGenero(Genero.M)
+                                .withHistoricoDeSaude(
+                                                new UpdateHistoricoSaudeDTORequest(TipoSanguineo.O_POSITIVO,
+                                                                new UsoMedicamentoContinuoDTORequest("MEDICAMENTO"),
+                                                                new AlergiaDTORequest("ALERGIA"),
+                                                                new CirurgiaDTORequest("CIRURGIA"),
+                                                                new DoencaCronicaDTORequest("DOENCA")))
+                                .withNome("NOME")
+                                .withRg("564544498499")
+                                .withTelefone("11111111111")
+                                .withTurma("TURMA")
+                                .build();
 
                 when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
@@ -406,5 +430,3 @@ class AlunoServiceTest {
                 assertEquals(1, result.size());
         }
 }
-
- */

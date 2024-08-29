@@ -61,7 +61,7 @@ public class AlunoServices implements AlunoServicesInterface {
         List<AlunoDTOResponse> alunoEncontradoCpf = this.buscarAlunoPorCpf(alunoDTORequest.cpf());
 
         if (!alunoEncontradoCpf.isEmpty()) {
-            throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja esta cadastrado!");
+            throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja está registrado!");
         }
 
         Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest, imagemAluno));
@@ -74,9 +74,13 @@ public class AlunoServices implements AlunoServicesInterface {
 
         List<AlunoDTOResponse> alunoEncontradoCpf = this.buscarAlunoPorCpf(alunoDTORequest.cpf());
 
-        if (!alunoEncontradoCpf.isEmpty()) {
+        if (!alunoEncontradoCpf.isEmpty())
             throw new AlreadyRegisteredException("O Aluno com o cpf " + alunoDTORequest.cpf() + " ja esta cadastrado!");
-        }
+
+        List<AlunoDTOResponse> alunoEncontradoRg = this.buscarAlunoPorMatricula(alunoDTORequest.rg());
+
+        if (!alunoEncontradoRg.isEmpty())
+            throw new AlreadyRegisteredException("O Aluno com o rg " + alunoDTORequest.rg() + " ja esta cadastrado!");
 
         Aluno novoAluno = alunoRepositorio.save(AlunoMapper.mapToAluno(alunoDTORequest));
 
@@ -85,7 +89,7 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Override
     public List<AlunoDTOResponse> buscarAluno(String nome, String matricula, int pagina, int tamanho, String ordenarPor,
-                                              String sequenciaOrdenacao) {
+            String sequenciaOrdenacao) {
         if (matricula != null) {
             return this.buscarAlunoPorMatricula(matricula);
         }
@@ -136,12 +140,6 @@ public class AlunoServices implements AlunoServicesInterface {
         Update update = new Update().addToSet(GRADUACAO + "." + (aluno.getGraduacaoAtualIndex()) + ".faltas",
                 novaFalta);
         mongoTemplate.updateFirst(query, update, Aluno.class);
-        /*
-        if (aluno.getGraduacaoAtual().getFaltas().size() == 5) {
-            mudarStatusGraduacaoAluno(aluno, false);
-        }
-
-         */
 
         return String.valueOf(aluno.getGraduacaoAtual().getFaltas().size());
     }
@@ -150,11 +148,6 @@ public class AlunoServices implements AlunoServicesInterface {
     public String retirarFaltaDoAluno(String matricula, String faltasId) {
         Aluno aluno = this.encontrarAlunoPorMatricula(matricula);
         Falta faltaDoAluno = aluno.getGraduacaoAtual().removerFalta(faltasId);
-        /*
-        if (aluno.getGraduacaoAtual().getFaltas().size() == 4) {
-            mudarStatusGraduacaoAluno(aluno, true);
-        }
-        */
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(aluno.getMatricula()));
         Update update = new Update().pull(GRADUACAO + "." + (aluno.getGraduacaoAtualIndex()) +
@@ -209,19 +202,20 @@ public class AlunoServices implements AlunoServicesInterface {
 
     @Override
     @CachePut(value = "aluno", key = "#matricula")
-    public String editarAlunoPorMatricula(String matricula, UpdateAlunoDTORequest updateAlunoDTORequest) throws IOException {
+    public String editarAlunoPorMatricula(String matricula, UpdateAlunoDTORequest updateAlunoDTORequest)
+            throws IOException {
         return editarAlunoPorMatriculaInterno(matricula, updateAlunoDTORequest, null);
     }
 
     @Override
     @CachePut(value = "aluno", key = "#matricula")
     public String editarAlunoPorMatriculaComImagem(String matricula, UpdateAlunoDTORequest updateAlunoDTORequest,
-                                                   MultipartFile imagemAluno) throws IOException {
+            MultipartFile imagemAluno) throws IOException {
         return editarAlunoPorMatriculaInterno(matricula, updateAlunoDTORequest, imagemAluno);
     }
 
     private String editarAlunoPorMatriculaInterno(String matricula, UpdateAlunoDTORequest updateAlunoDTORequest,
-                                                  MultipartFile imagemAluno) throws IOException {
+            MultipartFile imagemAluno) throws IOException {
         Aluno alunoEncontrado = this.encontrarAlunoPorMatricula(matricula);
 
         // Atualização dos campos do Aluno
@@ -255,7 +249,7 @@ public class AlunoServices implements AlunoServicesInterface {
         // Atualização no banco de dados
         atualizarBancoDeDados(alunoEncontrado);
 
-        return "Aluno" + (imagemAluno != null ? " " + alunoEncontrado.getNome() : "") + " editado com sucesso!" ;
+        return "Aluno" + (imagemAluno != null ? " " + alunoEncontrado.getNome() : "") + " editado com sucesso!";
     }
 
     private void atualizarCamposDoAluno(Aluno aluno, UpdateAlunoDTORequest updateAlunoDTORequest) {
@@ -302,7 +296,8 @@ public class AlunoServices implements AlunoServicesInterface {
         update.set(GRADUACAO + "." + (alunoEncontrado.getGraduacaoAtualIndex()), graduacaoAtual);
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
 
-        adicionarNovaGraduacaoAprovado(alunoEncontrado.getMatricula(), graduacaoAtual.getKyu(), graduacaoAtual.getDan());
+        adicionarNovaGraduacaoAprovado(alunoEncontrado.getMatricula(), graduacaoAtual.getKyu(),
+                graduacaoAtual.getDan());
 
         return GraduacaoMapper.mapToGraduacaoDTOResponse(
                 alunoEncontrado.getGraduacaoAtual());
@@ -318,7 +313,8 @@ public class AlunoServices implements AlunoServicesInterface {
         Update update = new Update();
         update.set(GRADUACAO, alunoEncontrado.getGraduacao());
         this.mongoTemplate.updateFirst(query, update, Aluno.class);
-        adicionarNovaGraduacaoReprovado(alunoEncontrado.getMatricula(), graduacaoAtual.getKyu(), graduacaoAtual.getDan());
+        adicionarNovaGraduacaoReprovado(alunoEncontrado.getMatricula(), graduacaoAtual.getKyu(),
+                graduacaoAtual.getDan());
         return GraduacaoMapper.mapToGraduacaoDTOResponse(
                 alunoEncontrado.getGraduacaoAtual());
     }
@@ -328,7 +324,8 @@ public class AlunoServices implements AlunoServicesInterface {
         Aluno alunoEncontrado = this.encontrarAlunoPorMatricula(matricula);
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(alunoEncontrado.getMatricula()));
-        Update update = new Update().set(GRADUACAO + "." + (alunoEncontrado.getGraduacaoAtualIndex()) + ".status", status);
+        Update update = new Update().set(GRADUACAO + "." + (alunoEncontrado.getGraduacaoAtualIndex()) + ".status",
+                status);
         mongoTemplate.updateFirst(query, update, Aluno.class);
         return GraduacaoMapper.mapToGraduacaoDTOResponse(
                 alunoEncontrado.getGraduacaoAtual());
@@ -395,6 +392,12 @@ public class AlunoServices implements AlunoServicesInterface {
     @Cacheable(value = "aluno", key = "#cpf")
     public List<AlunoDTOResponse> buscarAlunoPorCpf(String cpf) {
         Query query = new Query(Criteria.where("cpf").is(cpf));
+        return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
+    }
+
+    @Cacheable(value = "aluno", key = "#rg")
+    public List<AlunoDTOResponse> buscarAlunoPorRg(String rg) {
+        Query query = new Query(Criteria.where("rg").is(rg));
         return AlunoMapper.mapToListAlunoDTOResponse(mongoTemplate.find(query, Aluno.class));
     }
 
