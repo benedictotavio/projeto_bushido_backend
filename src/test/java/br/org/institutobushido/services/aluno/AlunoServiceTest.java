@@ -107,13 +107,14 @@ class AlunoServiceTest {
 
                 aluno.setDadosSociais(
                                 new DadosSociais(
-                                                false,
-                                                false,
-                                                Imovel.PROPRIO,
-                                                5,
-                                                2,
-                                                false,
-                                                0));
+                                        Imovel.PROPRIO,
+                                        4,
+                                        2,
+                                        2000,
+                                        false,
+                                        false,
+                                        false
+                                ));
 
                 aluno.setHistoricoSaude(
                                 new HistoricoSaude(

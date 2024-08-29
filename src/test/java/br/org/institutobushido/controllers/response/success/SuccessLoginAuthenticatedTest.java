@@ -1,39 +1,40 @@
 package br.org.institutobushido.controllers.response.success;
 
 import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
+import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class SuccessLoginAuthenticatedTest {
-    @Test
-    void deveCriarSuccessLoginAuthenticated() {
-        String token = "token";
-        String role = "role";
-        TurmaResponsavel turma = new TurmaResponsavel("Turma responsavel", "Turma 1");
-        SuccessLoginAuthenticated successLoginAuthenticated = new SuccessLoginAuthenticated(token, role, List.of(turma));
 
-        assertEquals(token, successLoginAuthenticated.getToken());
-        assertEquals(role, successLoginAuthenticated.getRole());
-        assertEquals(HttpStatus.OK.value(), successLoginAuthenticated.getStatus());
-        assertTrue(successLoginAuthenticated.isSuccess());
+    private SuccessLoginAuthenticated successLoginAuthenticated;
+
+    @BeforeEach
+    void setUp() {
+        successLoginAuthenticated = new SuccessLoginAuthenticated("token", "role", List.of(new TurmaResponsavel("Turma responsavel", "Turma 1")));
     }
 
     @Test
-    void test_initialize_success_login_authenticated_with_null_values() {
-        String token = null;
-        String role = null;
-        TurmaResponsavel turma = new TurmaResponsavel("Turma responsavel", "Turma 1");
-        SuccessLoginAuthenticated successLoginAuthenticated = new SuccessLoginAuthenticated(token, role, List.of(turma));
+    void deveInstanciarASuccessLoginAuthenticated() {
+        successLoginAuthenticated.setSuccess(true);
+        successLoginAuthenticated.setRole("user");
+        successLoginAuthenticated.setToken("123456789");
+        successLoginAuthenticated.setStatus(HttpStatus.OK.value());
+        successLoginAuthenticated.setTurmas(new ArrayList<>());
 
-        assertNull(successLoginAuthenticated.getToken());
-        assertNull(successLoginAuthenticated.getRole());
+        assertNotNull(successLoginAuthenticated);
+        assertEquals("123456789", successLoginAuthenticated.getToken());
+        assertEquals("user", successLoginAuthenticated.getRole());
         assertEquals(HttpStatus.OK.value(), successLoginAuthenticated.getStatus());
+        assertEquals(new ArrayList<>(), successLoginAuthenticated.getTurmas());
         assertTrue(successLoginAuthenticated.isSuccess());
     }
 }

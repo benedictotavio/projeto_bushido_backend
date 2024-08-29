@@ -14,7 +14,7 @@ public class DadosEscolares implements Serializable {
     private String escola;
 
     public void setEscola(String escola) {
-        if (escola == null) {
+        if (escola == null || escola.isEmpty()) {
             return;
         }
         this.escola = escola;

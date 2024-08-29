@@ -198,7 +198,7 @@ public class Aluno implements Serializable {
     /**
      * Adiciona uma nova graduacao ao aluno
      *
-     * @param graduacao Graduacao a ser adicionada
+     * @param novaGraduacao Graduacao a ser adicionada
      */
     public void adicionarGraduacao(Graduacao novaGraduacao) {
         if (graduacao == null) {

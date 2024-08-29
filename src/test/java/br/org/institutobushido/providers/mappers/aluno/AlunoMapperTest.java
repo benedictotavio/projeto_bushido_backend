@@ -27,7 +27,6 @@ import br.org.institutobushido.providers.enums.aluno.TipoSanguineo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -89,14 +88,13 @@ class AlunoMapperTest {
                                                 "LOGRADOURO"));
 
                 aluno.setDadosSociais(
-                                new DadosSociais(
-                                                false,
-                                                false,
-                                                Imovel.PROPRIO,
-                                                5,
-                                                2,
-                                                false,
-                                                0));
+                                new DadosSociais(Imovel.PROPRIO,
+                                        4,
+                                        2,
+                                        2000,
+                                        false,
+                                        false,
+                                        false));
 
                 aluno.setHistoricoSaude(
                                 new HistoricoSaude(
@@ -131,6 +129,9 @@ class AlunoMapperTest {
                 assertEquals(alunoDTORequest.endereco().estado(), aluno.getEndereco().getEstado());
                 assertEquals(alunoDTORequest.historicoSaude().alergia().tipo(),
                                 aluno.getHistoricoSaude().getAlergia().getTipo());
+                assertEquals(alunoDTORequest.cartaoSus(), aluno.getCartaoSus());
+                assertEquals(alunoDTORequest.corDePele(), aluno.getCorDePele());
+                assertEquals(alunoDTORequest.rg(), aluno.getRg());
         }
 
         @Test
@@ -146,6 +147,9 @@ class AlunoMapperTest {
                 assertEquals(aluno.getEndereco().getEstado(), alunoDTOResponse.endereco().estado());
                 assertEquals(aluno.getHistoricoSaude().getAlergia().getTipo(),
                                 alunoDTOResponse.historicoSaude().alergia().tipo());
+                assertEquals(aluno.getCartaoSus(), alunoDTOResponse.cartaoSus());
+                assertEquals(aluno.getCorDePele(), alunoDTOResponse.corDePele());
+                assertEquals(aluno.getRg(), alunoDTOResponse.rg());
         }
 
         @Test

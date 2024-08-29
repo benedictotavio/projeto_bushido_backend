@@ -36,14 +36,20 @@ public class DadosSociaisMapper {
             return null;
         }
 
-        return new DadosSociais(
-                dadosSociaisDTORequest.bolsaFamilia(),
-                dadosSociaisDTORequest.auxilioBrasil(),
-                dadosSociaisDTORequest.imovel(),
-                dadosSociaisDTORequest.numerosDePessoasNaCasa(),
-                dadosSociaisDTORequest.contribuintesDaRendaFamiliar(),
-                dadosSociaisDTORequest.alunoContribuiParaRenda(),
-                dadosSociaisDTORequest.rendaFamiliar());
+        DadosSociais dadosSociais = new DadosSociais();
+
+        dadosSociais.setImovel(dadosSociaisDTORequest.imovel());
+        dadosSociais.setBolsaFamilia(dadosSociaisDTORequest.bolsaFamilia());
+        dadosSociais.setAuxilioBrasil(dadosSociaisDTORequest.auxilioBrasil());
+        dadosSociais
+                .setNumerosDePessoasNaCasa(dadosSociaisDTORequest.numerosDePessoasNaCasa());
+        dadosSociais
+                .setAlunoContribuiParaRenda(dadosSociaisDTORequest.alunoContribuiParaRenda());
+        dadosSociais
+                .setContribuintesDaRendaFamiliar(dadosSociaisDTORequest.contribuintesDaRendaFamiliar());
+        dadosSociais.setRendaFamiliar(dadosSociaisDTORequest.rendaFamiliar());
+
+        return dadosSociais;
     }
 
     public static DadosSociais mapToDadosSociais(DadosSociaisDTOResponse dadosSociaisDTOResponse) {
@@ -53,13 +59,13 @@ public class DadosSociaisMapper {
         }
 
         return new DadosSociais(
-                dadosSociaisDTOResponse.bolsaFamilia(),
-                dadosSociaisDTOResponse.auxilioBrasil(),
                 dadosSociaisDTOResponse.imovel(),
                 dadosSociaisDTOResponse.numerosDePessoasNaCasa(),
                 dadosSociaisDTOResponse.contribuintesDaRendaFamiliar(),
-                dadosSociaisDTOResponse.alunoContribuiParaRenda(),
-                dadosSociaisDTOResponse.rendaFamiliar());
+                dadosSociaisDTOResponse.rendaFamiliar(),
+                dadosSociaisDTOResponse.bolsaFamilia(),
+                dadosSociaisDTOResponse.auxilioBrasil(),
+                dadosSociaisDTOResponse.alunoContribuiParaRenda());
     }
 
     public static DadosSociaisDTOResponse mapToDadosSociaisDTOResponse(DadosSociais dadosSociais) {

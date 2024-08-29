@@ -2,17 +2,22 @@ package br.org.institutobushido.controllers.response.success;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import lombok.Data;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 public class SuccessDeleteResponse implements Serializable {
     private String id;
-    private int status;
-    private boolean success;
     private String message;
     private String entity;
+    private int status;
+    private boolean success;
 
     public SuccessDeleteResponse(String id, String message) {
         this.id = id;

@@ -4,23 +4,22 @@ import java.io.Serializable;
 
 import br.org.institutobushido.providers.enums.aluno.Imovel;
 import br.org.institutobushido.providers.utils.resources.exceptions.LimitQuantityException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class DadosSociais implements Serializable {
     private static final long serialVersionUID = 2405172041950251807L;
 
-    private boolean bolsaFamilia;
-    private boolean auxilioBrasil;
     private Imovel imovel;
     private int numerosDePessoasNaCasa;
     private int contribuintesDaRendaFamiliar;
-    private boolean alunoContribuiParaRenda;
     private int rendaFamiliar;
+    private boolean alunoContribuiParaRenda;
+    private boolean bolsaFamilia;
+    private boolean auxilioBrasil;
 
     public DadosSociais(Imovel imovel, int numerosDePessoasNaCasa, int contribuintesDaRendaFamiliar,
             int rendaFamiliar) {
@@ -41,14 +40,6 @@ public class DadosSociais implements Serializable {
         this.alunoContribuiParaRenda = false;
         this.bolsaFamilia = false;
         this.auxilioBrasil = false;
-    }
-
-    public void setBolsaFamilia(boolean bolsaFamilia) {
-        this.bolsaFamilia = bolsaFamilia;
-    }
-
-    public void setAuxilioBrasil(boolean auxilioBrasil) {
-        this.auxilioBrasil = auxilioBrasil;
     }
 
     public void setImovel(Imovel imovel) {
@@ -72,13 +63,4 @@ public class DadosSociais implements Serializable {
         }
         this.contribuintesDaRendaFamiliar = contribuintesDaRendaFamiliar;
     }
-
-    public void setAlunoContribuiParaRenda(boolean alunoContribuiParaRenda) {
-        this.alunoContribuiParaRenda = alunoContribuiParaRenda;
-    }
-
-    public void setRendaFamiliar(int rendaFamiliar) {
-        this.rendaFamiliar = rendaFamiliar;
-    }
-
 }

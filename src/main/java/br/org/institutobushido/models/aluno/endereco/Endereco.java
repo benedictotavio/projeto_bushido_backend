@@ -18,35 +18,35 @@ public class Endereco implements Serializable {
     private String logradouro;
 
     public void setLogradouro(String logradouro) {
-        if (logradouro == null) {
+        if (logradouro == null || logradouro.isEmpty()) {
             return;
         }
         this.logradouro = logradouro;
     }
 
     public void setCidade(String cidade) {
-        if (cidade == null) {
+        if (cidade == null || cidade.isEmpty()) {
             return;
         }
         this.cidade = cidade;
     }
 
     public void setEstado(String estado) {
-        if (estado == null) {
+        if (estado == null || estado.isEmpty()) {
             return;
         }
         this.estado = estado;
     }
 
     public void setCep(String cep) {
-        if (cep == null) {
+        if (cep == null || cep.isEmpty()) {
             return;
         }
         this.cep = cep;
     }
 
     public void setNumero(String numero) {
-        if (numero == null) {
+        if (numero == null || numero.isEmpty()) {
             return;
         }
         this.numero = numero;

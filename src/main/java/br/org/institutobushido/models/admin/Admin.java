@@ -3,6 +3,9 @@ package br.org.institutobushido.models.admin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +17,8 @@ import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegis
 import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
 import lombok.Data;
 
-@Data
+@Getter
+@Setter
 @Document(collection = "admin")
 public class Admin implements UserDetails {
     private String nome;
@@ -46,7 +50,7 @@ public class Admin implements UserDetails {
 
     @Override
     public String getPassword() {
-        return senha;
+        return this.senha;
     }
 
     @Override
@@ -76,6 +80,7 @@ public class Admin implements UserDetails {
 
     public TurmaResponsavel adicionarTurma(TurmaResponsavel novaTurma) {
         for (TurmaResponsavel turma : this.turmas) {
+            System.out.println(turma.getNome());
             if (turma.getNome().equalsIgnoreCase(novaTurma.getNome())) {
                 throw new AlreadyRegisteredException("Turma ja existe");
             }
@@ -91,6 +96,6 @@ public class Admin implements UserDetails {
                 return turmaResponsavel.getNome();
             }
         }
-        throw new EntityNotFoundException(this.getCargo() + " nao possui turma com o nome " + nomeTurma);
+        throw new EntityNotFoundException(this.getCargo() + " não possui turma com o nome " + nomeTurma);
     }
 }

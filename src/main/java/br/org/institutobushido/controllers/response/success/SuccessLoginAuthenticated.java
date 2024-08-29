@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.util.List;
 
 import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import lombok.Data;
 
-@Data
+@Getter
+@Setter
 public class SuccessLoginAuthenticated implements Serializable {
     private String token;
     private String role;
