@@ -5,10 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.Alergia;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.Cirurgia;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.DoencaCronica;
+import br.org.institutobushido.models.aluno.historico_de_saude.informacoes_saude.UsoMedicamentoContinuo;
+import br.org.institutobushido.providers.enums.aluno.TipoSanguineo;
 import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
 
@@ -60,7 +67,6 @@ class HistoricoSaudeTest {
 
     @Test
     void deveAdicionarAcompanhamento() {
-        HistoricoSaude historicoSaude = new HistoricoSaude();
         String acompanhamento = "Acompanhamento 1";
 
         String result = historicoSaude.adicionarAcompanhamento(acompanhamento);
@@ -81,7 +87,6 @@ class HistoricoSaudeTest {
 
     @Test
     void deveRemoverAcompanhamento() {
-        HistoricoSaude historicoSaude = new HistoricoSaude();
         String acompanhamento = "Acompanhamento 1";
 
         historicoSaude.adicionarAcompanhamento(acompanhamento);
@@ -95,5 +100,37 @@ class HistoricoSaudeTest {
     void deveRetornarExcecaoSeAcompanhamentoNãoExistir() {
         assertThrows(AlreadyRegisteredException.class,
                 () -> historicoSaude.removerAcompanhamento("acompanhamento"));
+    }
+
+    @Test
+    void deveManterValoresSeForemMudadosComoNulo() {
+
+        String medicamentoContinuo = "med1";
+        String alergia = "ale1";
+        String doencaCronica = "doe1";
+        String cirurgia = "cir1";
+
+        historicoSaude = new HistoricoSaude(
+                TipoSanguineo.AB_POSITIVO, new UsoMedicamentoContinuo(medicamentoContinuo),
+                new DoencaCronica(doencaCronica),
+                new Alergia(alergia), new Cirurgia(cirurgia),
+                List.of(
+                        "def1", "def2", "def3"),
+                List.of(
+                        "aco1", "aco2", "aco3"));
+
+        historicoSaude.setAlergia(
+                null);
+
+        historicoSaude.setCirurgia(null);
+        historicoSaude.setDoencaCronica(null);
+        historicoSaude.setTipoSanguineo(null);
+        historicoSaude.setUsoMedicamentoContinuo(null);
+        historicoSaude.setAlergia(null);
+
+        assertEquals(cirurgia, historicoSaude.getCirurgia().getTipo());
+        assertEquals(doencaCronica, historicoSaude.getDoencaCronica().getTipo());
+        assertEquals(medicamentoContinuo, historicoSaude.getUsoMedicamentoContinuo().getTipo());
+        assertEquals(alergia, historicoSaude.getAlergia().getTipo());
     }
 }

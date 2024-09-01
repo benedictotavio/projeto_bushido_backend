@@ -299,14 +299,11 @@ public class Aluno implements Serializable {
     }
 
     public static String gerarMatricula() {
-        Random rand = new Random();
         int max= ValoresPadraoMatricula.NUMERO_MAXIMO_MATRICULA;
         int min=ValoresPadraoMatricula.NUMERO_MINIMO_MATRICULA;
         Calendar cal = Calendar.getInstance();
         String ano = Integer.toString(cal.get(Calendar.YEAR));
-        String seqAleatoria = Integer.toString(rand.nextInt(max - min + 1) + min);
-        String matricula = ano + seqAleatoria;
-
-        return matricula;
+        String seqAleatoria = Integer.toString(new Random().nextInt(max - min + 1) + min);
+        return ano + seqAleatoria;
     }
 }

@@ -23,7 +23,7 @@ public class ImagemAluno implements Serializable {
     }
 
     public void setDadosImagem(byte[] dadosImagem) {
-        if (dadosImagem == null) {
+        if (dadosImagem == null || dadosImagem.length == 0) {
             return;
         }
         this.dadosImagem = dadosImagem;

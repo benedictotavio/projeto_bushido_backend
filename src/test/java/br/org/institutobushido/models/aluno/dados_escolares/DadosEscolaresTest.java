@@ -20,7 +20,7 @@ class DadosEscolaresTest {
     }
 
     @Test
-    void deveInstanciarClasse() {
+    void deveSetarValorDeEscola() {
         dadosEscolares.setEscola("ESCOLA1");
         assertEquals("ESCOLA1", dadosEscolares.getEscola());
     }

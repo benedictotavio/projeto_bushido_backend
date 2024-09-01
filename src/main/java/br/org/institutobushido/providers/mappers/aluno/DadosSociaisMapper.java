@@ -72,6 +72,9 @@ public class DadosSociaisMapper {
         if (dadosSociais == null) {
             return null;
         }
+
+        System.out.println(dadosSociais.toString());
+
         return new DadosSociaisDTOResponse(
                 dadosSociais.isBolsaFamilia(),
                 dadosSociais.isAuxilioBrasil(),

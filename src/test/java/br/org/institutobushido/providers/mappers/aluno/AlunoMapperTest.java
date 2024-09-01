@@ -1,5 +1,19 @@
 package br.org.institutobushido.providers.mappers.aluno;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.AlunoDTOResponse;
 import br.org.institutobushido.controllers.dtos.aluno.dados_escolares.DadosEscolaresDTORequest;
@@ -24,21 +38,14 @@ import br.org.institutobushido.providers.enums.aluno.FiliacaoResposavel;
 import br.org.institutobushido.providers.enums.aluno.Genero;
 import br.org.institutobushido.providers.enums.aluno.Imovel;
 import br.org.institutobushido.providers.enums.aluno.TipoSanguineo;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class AlunoMapperTest {
         private AlunoDTORequest alunoDTORequest;
         private Aluno aluno;
         private AlunoDTOResponse alunoDTOResponse;
+
+        private MockMultipartFile imagemAluno;
 
         @BeforeEach
         void setUp() {
@@ -50,7 +57,7 @@ class AlunoMapperTest {
                                 .withDadosEscolares(
                                                 new DadosEscolaresDTORequest("ESCOLA"))
                                 .withDadosSociais(
-                                                new DadosSociaisDTORequest(false, false, Imovel.PROPRIO, 0, 0, false,
+                                                new DadosSociaisDTORequest(false, false, Imovel.PROPRIO, 4, 2, false,
                                                                 0))
                                 .withEndereco(
                                                 new EnderecoDTORequest("CIDADE", "ESTADO", "06140140", "100",
@@ -89,12 +96,12 @@ class AlunoMapperTest {
 
                 aluno.setDadosSociais(
                                 new DadosSociais(Imovel.PROPRIO,
-                                        4,
-                                        2,
-                                        2000,
-                                        false,
-                                        false,
-                                        false));
+                                                4,
+                                                2,
+                                                2000,
+                                                false,
+                                                false,
+                                                false));
 
                 aluno.setHistoricoSaude(
                                 new HistoricoSaude(
@@ -114,6 +121,27 @@ class AlunoMapperTest {
                                 new Responsavel("Nome", "12345678901", "Email", "Telefone", FiliacaoResposavel.OUTRO));
 
                 alunoDTOResponse = AlunoDTOResponse.builder().build();
+        }
+
+        @Test
+        void deveMapearAlunoDTORequestToAlunoComImagem() throws IOException {
+                imagemAluno = new MockMultipartFile("imagem", "imagem".getBytes());
+                aluno = AlunoMapper.mapToAluno(alunoDTORequest, imagemAluno);
+                
+                assertEquals(alunoDTORequest.nome(), aluno.getNome());
+                assertEquals(alunoDTORequest.cpf(), aluno.getCpf());
+                assertEquals(new Date(alunoDTORequest.dataNascimento()), aluno.getDataNascimento());
+                assertEquals(alunoDTORequest.genero(), aluno.getGenero());
+                assertEquals(alunoDTORequest.dadosSociais().auxilioBrasil(),
+                                aluno.getDadosSociais().isAuxilioBrasil());
+                assertEquals(alunoDTORequest.dadosEscolares().escola(), aluno.getDadosEscolares().getEscola());
+                assertEquals(alunoDTORequest.endereco().estado(), aluno.getEndereco().getEstado());
+                assertEquals(alunoDTORequest.historicoSaude().alergia().tipo(),
+                                aluno.getHistoricoSaude().getAlergia().getTipo());
+                assertEquals(alunoDTORequest.cartaoSus(), aluno.getCartaoSus());
+                assertEquals(alunoDTORequest.corDePele(), aluno.getCorDePele());
+                assertEquals(alunoDTORequest.rg(), aluno.getRg());
+                assertNotNull(aluno.getImagemAluno());
         }
 
         @Test

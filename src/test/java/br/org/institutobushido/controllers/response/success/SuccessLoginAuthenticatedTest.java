@@ -1,7 +1,6 @@
 package br.org.institutobushido.controllers.response.success;
 
 import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
-import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

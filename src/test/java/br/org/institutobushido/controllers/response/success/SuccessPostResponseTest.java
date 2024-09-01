@@ -1,12 +1,12 @@
 package br.org.institutobushido.controllers.response.success;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class SuccessPostResponseTest {
@@ -35,6 +35,15 @@ class SuccessPostResponseTest {
         response = new SuccessPostResponse("123", "Sucesso", "Aluno");
         assertEquals("123", response.getId());
         assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals("Sucesso", response.getMessage());
+        assertNotNull(response.getEntity());
+    }
+
+    @Test
+    void deveInstanciarTodosOsParametrosComStatus() {
+        response = new SuccessPostResponse("123", "Sucesso", HttpStatus.CREATED.value(), "Aluno");
+        assertEquals("123", response.getId());
+        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
         assertEquals("Sucesso", response.getMessage());
         assertNotNull(response.getEntity());
     }

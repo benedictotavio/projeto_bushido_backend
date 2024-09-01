@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
-import lombok.Data;
-
 @Getter
 @Setter
 public class SuccessLoginAuthenticated implements Serializable {

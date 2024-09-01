@@ -1,14 +1,24 @@
 package br.org.institutobushido.models.aluno;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import br.org.institutobushido.models.aluno.graduacao.Graduacao;
+import br.org.institutobushido.models.aluno.imagem_aluno.ImagemAluno;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
+import br.org.institutobushido.providers.enums.aluno.CorDePele;
 import br.org.institutobushido.providers.enums.aluno.FiliacaoResposavel;
+import br.org.institutobushido.providers.enums.aluno.Genero;
 import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
 import br.org.institutobushido.providers.utils.resources.exceptions.LimitQuantityException;
@@ -135,5 +145,66 @@ class AlunoTest {
                 aluno.adicionarGraduacao(new Graduacao(7, 1));
                 aluno.adicionarGraduacao(new Graduacao(5, 5));
                 assertEquals(5, aluno.getGraduacao().get(aluno.getGraduacaoAtualIndex()).getKyu());
+        }
+
+        @Test
+        void deveManterValoresSeSetsForemNulos() {
+
+                byte[] dadosImagem = {
+                                Byte.MAX_VALUE
+                };
+
+                ImagemAluno imagemAluno = new ImagemAluno(
+                                "Jpeg",
+                                dadosImagem);
+
+                List<Responsavel> responsavels = List.of(
+                                new Responsavel("Nome Test", "001112223", "323232323",
+                                                "email@email.com", FiliacaoResposavel.PAI));
+
+                // Arrange
+                aluno.setCpf("000000000");
+                aluno.setMatricula("123abc");
+                aluno.setCartaoSus("12345678910");
+                aluno.setTelefone("11009099909");
+                aluno.setCorDePele(CorDePele.BRANCO);
+                aluno.setResponsaveis(responsavels);
+                aluno.setTurma("Turma1");
+                aluno.setNome("Test 1");
+                aluno.setEmail("email@email.com.br");
+                aluno.setDataNascimento(
+                                Instant.now().getEpochSecond() - 1000000);
+                aluno.setGenero(Genero.M);
+                aluno.setImagemAluno(imagemAluno);
+
+                // Act
+
+                aluno.setCartaoSus(null);
+                aluno.setCorDePele(null);
+                aluno.setCpf(null);
+                aluno.setDataNascimento(0);
+                aluno.setEmail(null);
+                aluno.setEndereco(null);
+                aluno.setGenero(null);
+                aluno.setImagemAluno(null);
+                aluno.setMatricula(null);
+                aluno.setResponsaveis(new ArrayList<Responsavel>());
+
+                assertEquals(imagemAluno, aluno.getImagemAluno());
+                assertEquals("Test 1", aluno.getNome());
+                assertEquals(new Date(Instant.now().getEpochSecond() - 1000000), aluno.getDataNascimento());
+                assertEquals(Genero.M, aluno.getGenero());
+                assertEquals("Turma1", aluno.getTurma());
+                assertEquals("123abc", aluno.getMatricula());
+                assertEquals(CorDePele.BRANCO, aluno.getCorDePele());
+                assertEquals("email@email.com.br", aluno.getEmail());
+                assertEquals("11009099909", aluno.getTelefone());
+                assertEquals("000000000", aluno.getCpf());
+                assertEquals(responsavels, aluno.getResponsaveis());
+        }
+
+        @Test
+        void deveGerarUmNomeroDeMatriculaAleatorio() {
+                assertNotNull(Aluno.gerarMatricula());
         }
 }

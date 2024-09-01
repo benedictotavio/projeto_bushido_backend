@@ -15,7 +15,6 @@ import br.org.institutobushido.models.admin.turmas.TurmaResponsavel;
 import br.org.institutobushido.providers.enums.admin.UserRole;
 import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
 import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
-import lombok.Data;
 
 @Getter
 @Setter
@@ -80,7 +79,6 @@ public class Admin implements UserDetails {
 
     public TurmaResponsavel adicionarTurma(TurmaResponsavel novaTurma) {
         for (TurmaResponsavel turma : this.turmas) {
-            System.out.println(turma.getNome());
             if (turma.getNome().equalsIgnoreCase(novaTurma.getNome())) {
                 throw new AlreadyRegisteredException("Turma ja existe");
             }
