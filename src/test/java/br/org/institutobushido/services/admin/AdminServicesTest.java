@@ -100,7 +100,7 @@ class AdminServicesTest {
 
         when(adminRepositorio.findByEmail(validEmail)).thenReturn(expectedUserDetails);
 
-        AdminServices adminServices = new AdminServices(adminRepositorio, mongoTemplate);
+        adminServices = new AdminServices(adminRepositorio, mongoTemplate);
 
         UserDetails actualUserDetails = adminServices.loadUserByUsername(validEmail);
 
@@ -116,7 +116,7 @@ class AdminServicesTest {
         when(adminRepositorio.findByEmail(invalidEmail)).thenReturn(null);
 
         // Create an instance of AdminServices
-        AdminServices adminServices = new AdminServices(adminRepositorio, mongoTemplate);
+        adminServices = new AdminServices(adminRepositorio, mongoTemplate);
 
         // Act and Assert
         assertThrows(EntityNotFoundException.class, () -> {
@@ -133,7 +133,7 @@ class AdminServicesTest {
 
         // Act
         List<AdminDTOResponse> result = adminServices.buscarAdminPorNome(nome);
-    
+
         // Assert
         assertEquals(1, result.size());
         assertEquals(result.get(0).nome(), admin.getNome());
@@ -146,11 +146,11 @@ class AdminServicesTest {
         // Arrange
         String nome = "invalid";
         List<AdminDTOResponse> expected = new ArrayList<>();
-         when(mongoTemplate.find(any(Query.class), eq(Admin.class))).thenReturn(new ArrayList<>());
-    
+        when(mongoTemplate.find(any(Query.class), eq(Admin.class))).thenReturn(new ArrayList<>());
+
         // Act
         List<AdminDTOResponse> result = adminServices.buscarAdminPorNome(nome);
-    
+
         // Assert
         assertEquals(expected, result);
     }

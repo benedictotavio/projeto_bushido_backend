@@ -187,7 +187,7 @@ class AlunoServiceTest {
         }
 
         @Test
-        void deveBuscarAlunoPorCpf() {
+        void deveBuscarAlunoPorMatricula() {
                 // Mocking data
                 when(mongoTemplate.find(any(Query.class), eq(Aluno.class))).thenReturn(List.of(aluno));
 
