@@ -1,15 +1,16 @@
 package br.org.institutobushido.services.admin;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import br.org.institutobushido.controllers.dtos.admin.AdminDTOResponse;
+import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
+import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
+import br.org.institutobushido.models.admin.Admin;
+import br.org.institutobushido.providers.enums.admin.UserRole;
+import br.org.institutobushido.providers.utils.resources.exceptions.AlreadyRegisteredException;
+import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
+import br.org.institutobushido.repositories.AdminRepositorio;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -20,14 +21,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.auth0.jwt.algorithms.Algorithm;
-import br.org.institutobushido.controllers.dtos.admin.AdminDTOResponse;
-import br.org.institutobushido.controllers.dtos.admin.login.LoginDTOResponse;
-import br.org.institutobushido.controllers.dtos.admin.signup.SignUpDTORequest;
-import br.org.institutobushido.models.admin.Admin;
-import br.org.institutobushido.providers.enums.admin.UserRole;
-import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFoundException;
-import br.org.institutobushido.repositories.AdminRepositorio;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class AdminServicesTest {
@@ -50,6 +52,9 @@ class AdminServicesTest {
 
     private Admin admin;
 
+    @Mock
+    private Algorithm algorithm;
+
     @BeforeEach
     void setUp() {
         adminServices = new AdminServices(adminRepositorio, mongoTemplate);
@@ -67,17 +72,26 @@ class AdminServicesTest {
     }
 
     @Test
-    void deveCadastrarAdmin() {
+    void deveRetornarErroQuandoAdminJaCadastrado() {
 
         // Act
         adminServices.signup(signUpDTORequest);
 
         // Assert
-        when(adminRepositorio.findByEmailAdmin(anyString())).thenReturn(Optional.of(admin));
+        when(adminRepositorio.findByEmail(anyString())).thenReturn(expectedUserDetails);
 
+        assertThrows(
+                AlreadyRegisteredException.class,
+                () -> adminServices.signup(signUpDTORequest)
+        );
+    }
+
+    @Test
+    void deveAdicionarAdminQuandoNaoCadastrado() {
         adminServices.signup(signUpDTORequest);
-
-        assertNotNull(admin);
+        when(adminRepositorio.findByEmail(anyString())).thenReturn(null);
+        when(adminRepositorio.save(any(Admin.class))).thenReturn(admin);
+        assertDoesNotThrow(() -> adminServices.signup(signUpDTORequest));
     }
 
     @Test

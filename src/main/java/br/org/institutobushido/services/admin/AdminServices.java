@@ -31,8 +31,8 @@ public class AdminServices implements AdminServicesInterface, UserDetailsService
 
     private static final long ONE_HOUR_IN_MILLIS = 3600000;
 
-    private AdminRepositorio adminRepositorio;
-    private MongoTemplate mongoTemplate;
+    private final AdminRepositorio adminRepositorio;
+    private final MongoTemplate mongoTemplate;
 
     public AdminServices(AdminRepositorio adminRepositorio, MongoTemplate mongoTemplate) {
         this.adminRepositorio = adminRepositorio;

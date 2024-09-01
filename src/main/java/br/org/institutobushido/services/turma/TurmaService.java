@@ -173,7 +173,7 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Cacheable(value = "turma", key = "#nomeTurma")
-    private Turma encontrarTurmaPeloNome(String nomeTurma) {
+    public Turma encontrarTurmaPeloNome(String nomeTurma) {
         Query query = new Query(Criteria.where("nome").regex(nomeTurma, "si"));
         Turma turma = this.mongoTemplate.findOne(query, Turma.class);
 
@@ -185,7 +185,7 @@ public class TurmaService implements TurmaServiceInterface {
     }
 
     @Cacheable(value = "admin", key = "#email")
-    private Admin encontrarAdminPeloEmail(String email) {
+    public Admin encontrarAdminPeloEmail(String email) {
         return this.adminRepositorio.findByEmailAdmin(email).orElseThrow(
                 () -> new EntityNotFoundException("Admin com esse email não existe"));
     }

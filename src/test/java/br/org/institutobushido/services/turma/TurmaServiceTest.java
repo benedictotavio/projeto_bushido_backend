@@ -1,24 +1,5 @@
 package br.org.institutobushido.services.turma;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
-
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTORequest;
 import br.org.institutobushido.controllers.dtos.turma.TurmaDTOResponse;
 import br.org.institutobushido.controllers.dtos.turma.tutor.TutorDTORequest;
@@ -34,6 +15,20 @@ import br.org.institutobushido.providers.utils.resources.exceptions.EntityNotFou
 import br.org.institutobushido.providers.utils.resources.exceptions.LimitQuantityException;
 import br.org.institutobushido.repositories.AdminRepositorio;
 import br.org.institutobushido.repositories.TurmaRepositorio;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class TurmaServiceTest {
@@ -49,7 +44,8 @@ class TurmaServiceTest {
 
     private TurmaService turmaServices;
 
-    private TurmaResponsavel turmaResponsavel;
+    private final TurmaResponsavel turmaResponsavel = new TurmaResponsavel("Rua A", "Turma A");
+
     private TurmaDTORequest turmaDTORequest;
     private TurmaDTOResponse turmaDTOResponse;
     private Turma turma;
@@ -59,8 +55,6 @@ class TurmaServiceTest {
     void setUp() {
 
         turmaServices = new TurmaService(turmaRepositorio, mongoTemplate, adminRepositorio);
-
-        turmaResponsavel = new TurmaResponsavel("Rua A", "Turma A");
 
         admin = new Admin("admin", "admin@email.com", "admin", "admin", UserRole.ADMIN);
         admin.adicionarTurma(turmaResponsavel);
@@ -95,14 +89,13 @@ class TurmaServiceTest {
 
     @Test
     void deveLancarExcecaoQuandoTurmaJaExiste() {
-        when(turmaRepositorio.findByNome(anyString())).thenReturn(Optional.of(turma));
-        when(adminRepositorio.findByEmailAdmin(anyString())).thenReturn(Optional.of(admin));
+        when(mongoTemplate.exists(any(Query.class), eq(Turma.class))).thenReturn(true);
         assertThrows(AlreadyRegisteredException.class, () -> turmaServices.criarNovaTurma(turmaDTORequest));
     }
 
     @Test
     void deveLancarExcecaoQuandoAdminNaoExiste() {
-        when(turmaRepositorio.findByNome(anyString())).thenReturn(Optional.empty());
+        when(mongoTemplate.exists(any(Query.class), eq(Admin.class))).thenReturn(false);
         when(adminRepositorio.findByEmailAdmin(anyString())).thenReturn(Optional.empty());
         TurmaDTORequest novaTurma = new TurmaDTORequest("Turma B", new TutorDTORequest("Tutor", "Tutor@email.com"),
                 "Endereço II");
@@ -161,6 +154,29 @@ class TurmaServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(3, result.size());
+    }
+
+    @Test
+    void deveRetornarExcecaoQuandoDataInicialForMaiorQueHoje() {
+        assertThrows(LimitQuantityException.class, () -> turmaServices.listarTurmas(System.currentTimeMillis() + 1, 0L));
+    }
+
+
+    @Test
+    void deveRetornarListaTotalQuandoDataFinalDataInicialForZero() {
+        when(turmaRepositorio.findAll()).thenReturn(List.of(turma));
+        List<TurmaDTOResponse> result = turmaServices.listarTurmas(0L, 0L);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void deveRetornarExcecaoQuandoDataInicialForMaiorQueDataFinal() {
+        assertThrows(LimitQuantityException.class, () -> turmaServices.listarTurmas(System.currentTimeMillis() - 10000000 + 1, System.currentTimeMillis() - 10000000 - 1));
+    }
+
+    @Test
+    void deveRetornarExcecaoQuandoDataInicialForIgualQueDataFinal() {
+        assertThrows(LimitQuantityException.class, () -> turmaServices.listarTurmas(System.currentTimeMillis() + 1, System.currentTimeMillis() + 1));
     }
 
     @Test
