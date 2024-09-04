@@ -36,6 +36,7 @@ public class SecurityConfigurations {
         return httpSecurity.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers(HttpMethod.POST, "api/V1/admin/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/V1/admin/signup").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/api/V1/turma").hasRole("ADMIN")
@@ -58,4 +59,11 @@ public class SecurityConfigurations {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    private static final String[] AUTH_WHITELIST = {
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    };
 }

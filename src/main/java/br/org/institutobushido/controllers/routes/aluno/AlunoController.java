@@ -7,6 +7,7 @@ import br.org.institutobushido.controllers.dtos.aluno.graduacao.GraduacaoDTOResp
 import br.org.institutobushido.controllers.dtos.aluno.graduacao.faltas.FaltaDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTORequest;
 import br.org.institutobushido.controllers.dtos.aluno.responsavel.ResponsavelDTOResponse;
+import br.org.institutobushido.controllers.response.error.StandardError;
 import br.org.institutobushido.controllers.response.success.SuccessDeleteResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPostResponse;
 import br.org.institutobushido.controllers.response.success.SuccessPutResponse;
@@ -16,6 +17,10 @@ import br.org.institutobushido.models.aluno.graduacao.falta.Falta;
 import br.org.institutobushido.models.aluno.historico_de_saude.HistoricoSaude;
 import br.org.institutobushido.models.aluno.responsaveis.Responsavel;
 import br.org.institutobushido.services.aluno.AlunoServicesInterface;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -41,6 +46,15 @@ public class AlunoController {
                 this.alunoServices = alunoServices;
         }
 
+        @Operation(summary = "Buscar alunos",
+                responses = {
+                        @ApiResponse(description = "Lista de alunos retornada com sucesso", responseCode = "200",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = AlunoDTOResponse.class))),
+                        @ApiResponse(description = "Erro ao buscar alunos", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @GetMapping()
         ResponseEntity<List<AlunoDTOResponse>> buscarAluno(
                         @RequestParam(name = "matricula", required = false) String matricula,
@@ -53,6 +67,15 @@ public class AlunoController {
                                 .body(alunoServices.buscarAluno(nome, matricula, page, size, sortOrder, sortBy));
         }
 
+        @Operation(summary = "Adicionar aluno com imagem",
+                responses = {
+                        @ApiResponse(description = "Aluno adicionado com sucesso", responseCode = "201",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPostResponse.class))),
+                        @ApiResponse(description = "Erro ao adicionar aluno", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                schema = @Schema(implementation = StandardError.class)))
+                })
         @PostMapping(value = "comImagem", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
         ResponseEntity<SuccessPostResponse> adicionarAlunoComImagem(
                         @Valid @RequestPart("alunoDTORequest") AlunoDTORequest alunoDTORequest,
@@ -66,6 +89,15 @@ public class AlunoController {
                                                 Aluno.class.getSimpleName()));
         }
 
+        @Operation(summary = "Adicionar aluno",
+                responses = {
+                        @ApiResponse(description = "Aluno adicionado com sucesso", responseCode = "201",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPostResponse.class))),
+                        @ApiResponse(description = "Erro ao adicionar aluno", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
         ResponseEntity<SuccessPostResponse> adicionarAluno(
                         @Valid @RequestPart("alunoDTORequest") AlunoDTORequest alunoDTORequest)
@@ -78,6 +110,15 @@ public class AlunoController {
                                                 Aluno.class.getSimpleName()));
         }
 
+        @Operation(summary = "Editar aluno",
+                responses = {
+                        @ApiResponse(description = "Aluno editado com sucesso", responseCode = "200",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPutResponse.class))),
+                        @ApiResponse(description = "Erro ao editar aluno", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @PutMapping(value = "{matricula}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
         public ResponseEntity<SuccessPutResponse> editarAluno(@PathVariable String matricula,
                         @RequestPart("aluno") UpdateAlunoDTORequest aluno) throws IOException {
@@ -86,6 +127,15 @@ public class AlunoController {
                                 new SuccessPutResponse(matricula, alunoEditado, Aluno.class.getSimpleName()));
         }
 
+        @Operation(summary = "Editar aluno com imagem",
+                responses = {
+                        @ApiResponse(description = "Aluno editado com imagem com sucesso", responseCode = "200",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPutResponse.class))),
+                        @ApiResponse(description = "Erro ao editar aluno com imagem", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @PutMapping(value = "comImagem/{matricula}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
         public ResponseEntity<SuccessPutResponse> editarAlunoComImagem(@PathVariable String matricula,
                         @RequestPart("aluno") UpdateAlunoDTORequest aluno,
@@ -97,6 +147,15 @@ public class AlunoController {
                                 new SuccessPutResponse(matricula, alunoEditado, Aluno.class.getSimpleName()));
         }
 
+        @Operation(summary = "Adicionar responsável ao aluno",
+                responses = {
+                        @ApiResponse(description = "Responsável adicionado com sucesso", responseCode = "200",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPostResponse.class))),
+                        @ApiResponse(description = "Erro ao adicionar responsável", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @PostMapping("responsavel/{matricula}")
         public ResponseEntity<SuccessPostResponse> adicionarResponsavel(@PathVariable String matricula,
                         @Valid @RequestBody ResponsavelDTORequest responsavelDTORequest) {
@@ -106,6 +165,15 @@ public class AlunoController {
                                 "Responsável adicionado com sucesso", Responsavel.class.getSimpleName()));
         }
 
+        @Operation(summary = "Remover responsável do aluno",
+                responses = {
+                        @ApiResponse(description = "Responsável removido com sucesso", responseCode = "204",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessDeleteResponse.class))),
+                        @ApiResponse(description = "Erro ao remover responsável", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @DeleteMapping("responsavel/{matricula}")
         public ResponseEntity<SuccessDeleteResponse> removerResponsavel(@PathVariable String matricula,
                         @RequestParam(name = "cpf") String cpfResponsavel) {
@@ -115,6 +183,15 @@ public class AlunoController {
                                                 Responsavel.class.getSimpleName()));
         }
 
+        @Operation(summary = "Adicionar falta ao aluno",
+                responses = {
+                        @ApiResponse(description = "Falta adicionada com sucesso", responseCode = "200",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPostResponse.class))),
+                        @ApiResponse(description = "Erro ao adicionar falta", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @PostMapping("falta/{matricula}/{data}")
         public ResponseEntity<SuccessPostResponse> adicionarFaltaAoAluno(@Valid @RequestBody FaltaDTORequest faltas,
                         @PathVariable String matricula, @PathVariable long data) {
@@ -123,6 +200,15 @@ public class AlunoController {
                                 .body(new SuccessPostResponse(res, "Falta adicionada", Falta.class.getSimpleName()));
         }
 
+        @Operation(summary = "Retirar falta do aluno",
+                responses = {
+                        @ApiResponse(description = "Falta retirada com sucesso", responseCode = "204",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessDeleteResponse.class))),
+                        @ApiResponse(description = "Erro ao retirar falta", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @DeleteMapping("falta/{matricula}/{data}")
         public ResponseEntity<SuccessDeleteResponse> retirarFaltaAoAluno(@PathVariable("data") String data,
                         @PathVariable String matricula) {
@@ -132,6 +218,15 @@ public class AlunoController {
                                                 Falta.class.getSimpleName()));
         }
 
+        @Operation(summary = "Adicionar deficiência ao aluno",
+                responses = {
+                        @ApiResponse(description = "Deficiência adicionada com sucesso", responseCode = "200",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPostResponse.class))),
+                        @ApiResponse(description = "Erro ao adicionar deficiência", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @PostMapping("deficiencia/{matricula}")
         public ResponseEntity<SuccessPostResponse> adicionarDeficiencia(@PathVariable String matricula,
                         @RequestParam(name = "deficiencia") String deficiencia) {
@@ -140,6 +235,15 @@ public class AlunoController {
                                 HistoricoSaude.class.getSimpleName()));
         }
 
+        @Operation(summary = "Remover deficiência do aluno",
+                responses = {
+                        @ApiResponse(description = "Deficiência removida com sucesso", responseCode = "204",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessDeleteResponse.class))),
+                        @ApiResponse(description = "Erro ao remover deficiência", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @DeleteMapping("deficiencia/{matricula}")
         public ResponseEntity<SuccessDeleteResponse> removerDeficiencia(@PathVariable String matricula,
                         @RequestParam(name = "deficiencia") String deficiencia) {
@@ -150,6 +254,15 @@ public class AlunoController {
                                                 HistoricoSaude.class.getSimpleName()));
         }
 
+        @Operation(summary = "Adicionar acompanhamento de saúde ao aluno",
+                responses = {
+                        @ApiResponse(description = "Acompanhamento de saúde adicionado com sucesso", responseCode = "200",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPostResponse.class))),
+                        @ApiResponse(description = "Erro ao adicionar acompanhamento de saúde", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @PostMapping("acompanhamentoSaude/{matricula}")
         public ResponseEntity<SuccessPostResponse> adicionarAcompanhamentoSaude(@PathVariable String matricula,
                         @RequestParam(name = "acompanhamento") String acompanhamento) {
@@ -160,6 +273,15 @@ public class AlunoController {
                                                 HistoricoSaude.class.getSimpleName()));
         }
 
+        @Operation(summary = "Remover acompanhamento de saúde do aluno",
+                responses = {
+                        @ApiResponse(description = "Acompanhamento de saúde removido com sucesso", responseCode = "204",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessDeleteResponse.class))),
+                        @ApiResponse(description = "Erro ao remover acompanhamento de saúde", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @DeleteMapping("acompanhamentoSaude/{matricula}")
         public ResponseEntity<SuccessDeleteResponse> removerAcompanhamentoSaude(@PathVariable String matricula,
                         @RequestParam(name = "acompanhamento") String acompanhamento) {
@@ -169,6 +291,15 @@ public class AlunoController {
                                                 "Acamponhamento " + acompanhamento + " foi removido com sucesso."));
         }
 
+        @Operation(summary = "Aprovar aluno",
+                responses = {
+                        @ApiResponse(description = "Aluno aprovado com sucesso", responseCode = "200",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPostResponse.class))),
+                        @ApiResponse(description = "Erro ao aprovar aluno", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @PostMapping("graduacao/{matricula}/aprovar/{nota}")
         public ResponseEntity<SuccessPostResponse> aprovarAluno(@PathVariable String matricula,
                         @PathVariable int nota) {
@@ -178,6 +309,16 @@ public class AlunoController {
                                                 "Graduação concluída com sucesso.", Graduacao.class.getSimpleName()));
         }
 
+
+        @Operation(summary = "Reprovar aluno",
+                responses = {
+                        @ApiResponse(description = "Aluno reprovado com sucesso", responseCode = "200",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPostResponse.class))),
+                        @ApiResponse(description = "Erro ao reprovar aluno", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @PostMapping("graduacao/{matricula}/reprovar/{nota}")
         public ResponseEntity<SuccessPostResponse> reprovarAluno(@PathVariable String matricula,
                         @PathVariable int nota) {
@@ -187,6 +328,15 @@ public class AlunoController {
                                                 "Graduação concluída com sucesso.", Graduacao.class.getSimpleName()));
         }
 
+        @Operation(summary = "Mudar status do aluno",
+                responses = {
+                        @ApiResponse(description = "Status do aluno alterado com sucesso", responseCode = "200",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = SuccessPostResponse.class))),
+                        @ApiResponse(description = "Erro ao mudar status do aluno", responseCode = "400",
+                                content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = StandardError.class)))
+                })
         @PutMapping("graduacao/{matricula}/mudarStatus/{status}")
         public ResponseEntity<SuccessPostResponse> mudarStatusAluno(@PathVariable String matricula,
                         @PathVariable boolean status) {
